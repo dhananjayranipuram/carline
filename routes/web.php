@@ -21,6 +21,11 @@ use App\Http\Controllers\SiteController;
 Auth::routes();
 
 Route::get('/', [SiteController::class, 'index']);
+Route::get('/about', [SiteController::class, 'aboutUs']);
+Route::get('/cars', [SiteController::class, 'ourCars']);
+Route::get('/offers', [SiteController::class, 'offers']);
+Route::get('/news', [SiteController::class, 'news']);
+Route::get('/contact', [SiteController::class, 'contactUs']);
 
 // Auth::routes();
 

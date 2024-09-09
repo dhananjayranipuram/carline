@@ -51,7 +51,7 @@
 			<nav class="navbar navbar-expand-lg">
 				<div class="container">
 					<!-- Logo Start -->
-					<a class="navbar-brand" href="./">
+					<a class="navbar-brand" href="{{ url('/') }}">
 						<img src="{{asset('assets/images/logo.png')}}" alt="Logo">
 					</a>
 					<!-- Logo End -->
@@ -60,12 +60,12 @@
 					<div class="collapse navbar-collapse main-menu">
                         <div class="nav-menu-wrapper">
                             <ul class="navbar-nav mr-auto" id="menu">
-                                <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-                                <li class="nav-item"><a class="nav-link" href="about.html">About Us</a></li>
-                                <li class="nav-item"><a class="nav-link" href="cars.html">Our Cars</a></li>
-                                <li class="nav-item"><a class="nav-link" href="offers.html">Special Offers</a></li>
-                                <li class="nav-item"><a class="nav-link" href="news.html">News</a></li>
-                                <li class="nav-item"><a class="nav-link" href="contact.html">Contact Us</a></li>
+                                <li class="nav-item"><a class="nav-link" href="{{ url('/') }}">Home</a></li>
+                                <li class="nav-item"><a class="nav-link" href="{{ url('/about') }}">About Us</a></li>
+                                <li class="nav-item"><a class="nav-link" href="{{ url('/cars') }}">Our Cars</a></li>
+                                <li class="nav-item"><a class="nav-link" href="{{ url('/offers') }}">Special Offers</a></li>
+                                <li class="nav-item"><a class="nav-link" href="{{ url('/news') }}">News</a></li>
+                                <li class="nav-item"><a class="nav-link" href="{{ url('/contact') }}">Contact Us</a></li>
                             </ul>
                         </div>
                         <!-- Let’s Start Button Start -->
@@ -127,11 +127,11 @@
                     <div class="footer-links footer-menu">
                         <h3>quick links</h3>
                         <ul>                            
-                            <li><a href="index.html">home</a></li>
-                            <li><a href="about.html">about us</a></li>
-                            <li><a href="cars.html">Our cars</a></li>
-                            <li><a href="offers.html">Special Offers</a></li>
-                            <li><a href="contact.html">Contact Us</a></li>
+                            <li><a href="{{ url('/') }}">home</a></li>
+                            <li><a href="{{ url('/about') }}">about us</a></li>
+                            <li><a href="{{ url('/cars') }}">Our cars</a></li>
+                            <li><a href="{{ url('/offers') }}">Special Offers</a></li>
+                            <li><a href="{{ url('/contact') }}">Contact Us</a></li>
                         </ul>
                     </div>
                     <!-- Footer Menu End -->
