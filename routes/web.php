@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SiteController;
+use App\Http\Controllers\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,9 +24,15 @@ Auth::routes();
 Route::get('/', [SiteController::class, 'index']);
 Route::get('/about', [SiteController::class, 'aboutUs']);
 Route::get('/cars', [SiteController::class, 'ourCars']);
+Route::get('/car-details', [SiteController::class, 'carDetails']);
 Route::get('/offers', [SiteController::class, 'offers']);
 Route::get('/news', [SiteController::class, 'news']);
 Route::get('/contact', [SiteController::class, 'contactUs']);
+
+Route::any('/admin/login', [AdminController::class, 'login']);
+Route::get('/admin/dashboard', [AdminController::class, 'dashboard']);
+Route::get('/admin/cars', [AdminController::class, 'cars']);
+Route::get('/admin/add-car', [AdminController::class, 'addCar']);
 
 // Auth::routes();
 
