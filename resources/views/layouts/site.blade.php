@@ -8,6 +8,7 @@
 	<meta name="description" content="">
 	<meta name="keywords" content="">
 	<meta name="author" content="Awaiken">
+    <meta content="{{ csrf_token() }}" name="csrf-token">
 	<!-- Page Title -->
 	<title>Home - CarLine</title>
 	<!-- Favicon Icon -->
@@ -32,10 +33,115 @@
 	<link rel="stylesheet" href="{{asset('assets/css/mousecursor.css')}}">
 	<!-- Main Custom Css -->
 	<link href="{{asset('assets/css/custom.css')}}" rel="stylesheet" media="screen">
-    
+    <script> var baseUrl = "{{ url('/') }}"; </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmX5w5ltGt09cjDod_YMamphRRgS8L-ZQ&libraries=places" async defer ></script>
 </head>
-<body>
+<style>
+#otp-section{
+    display:none;
+}
+.otp-field {
+    display: flex;
+}
+.otp-field input {
+    height: 30px;
+    width: 100%;
+    font-size: 32px;
+    padding: 10px;
+    text-align: center;
+    border-radius: 5px;
+    background-color: #d3d3d388;
+    border: 2px solid #dad4e5;
+    margin: 2px;
+    font-weight: bold;
+    color: #181313;
+    outline: none;
+    transition: all 0.1s;
+}
+.otp-field input:focus {
+    border: 2px solid #878689;
+    box-shadow: 0 0 2px 2px #878689;
+}
+.disabled {
+    opacity: 0.5;
+}
+.space {
+    margin-right: 1rem !important;
+}
 
+.otp-field-forgot {
+    display: flex;
+}
+.otp-field-forgot input {
+    height: 30px;
+    width: 100%;
+    font-size: 32px;
+    padding: 10px;
+    text-align: center;
+    border-radius: 5px;
+    background-color: #d3d3d388;
+    border: 2px solid #dad4e5;
+    margin: 2px;
+    font-weight: bold;
+    color: #181313;
+    outline: none;
+    transition: all 0.1s;
+}
+.otp-field-forgot input:focus {
+    border: 2px solid #878689;
+    box-shadow: 0 0 2px 2px #878689;
+}
+@keyframes spin {
+    100% {
+    transform: rotate(360deg);
+    }
+}
+
+
+.overlay {
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    background: #22222296;
+    display:none;
+    z-index: 10000000;
+}
+
+.overlay__inner {
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+
+.overlay__content {
+    left: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.spinner {
+    width: 75px;
+    height: 75px;
+    display: inline-block;
+    border-width: 2px;
+    border-color: rgba(255, 255, 255, 0.05);
+    border-top-color: #fff;
+    animation: spin 1s infinite linear;
+    border-radius: 100%;
+    border-style: solid;
+}
+</style>
+<body>
+    <div class="overlay">
+        <div class="overlay__inner">
+            <div class="overlay__content"><span class="spinner"></span></div>
+        </div>
+    </div>
     <!-- Preloader Start -->
 	<div class="preloader">
 		<div class="loading-container">
@@ -100,7 +206,7 @@
 
                         <!-- About Footer Content Start -->
                          <div class="about-footer-content">
-                            <p>At Carline, we’re fully flexible and client-focused, delivering cars when and where you need them. Our goal is to provide a seamless rental experience tailored to your schedule. </p>
+                            <p>At Carline, we're fully flexible and client-focused, delivering cars when and where you need them. Our goal is to provide a seamless rental experience tailored to your schedule. </p>
                          </div>
                         <!-- About Footer Content End -->
                      </div>
@@ -112,11 +218,11 @@
                     <div class="footer-links footer-quick-links">
                         <h3>Our Cars</h3>
                         <ul>                            
-                            <li><a href="cars.html">Hatchback</a></li>
-                            <li><a href="cars.html">Sedan</a></li>
-                            <li><a href="cars.html">SUV</a></li>
-                            <li><a href="cars.html">Crossover</a></li>
-                            <li><a href="cars.html">luxury cars</a></li>
+                            <li><a href="{{url('/cars')}}">Hatchback</a></li>
+                            <li><a href="{{url('/cars')}}">Sedan</a></li>
+                            <li><a href="{{url('/cars')}}">SUV</a></li>
+                            <li><a href="{{url('/cars')}}">Crossover</a></li>
+                            <li><a href="{{url('/cars')}}">luxury cars</a></li>
                         </ul>
                     </div>
                     <!-- Footer Quick Links End -->
@@ -228,4 +334,286 @@
     <!-- Main Custom js file -->
     <script src="{{asset('assets/js/function.js')}}"></script>
 </body>
+<script src="{{asset('admin_assets/js/core/jquery-3.7.1.min.js')}}"></script> 
+<script src="{{asset('assets/js/jquery.magnific-popup.min.js')}}"></script>
+
+<script>
+$(document).ready(function () {
+    $(".send-otp").click(function () {
+        var datas = {
+            'firstName': $("#firstName").val(),
+            'lastName': $("#lastName").val(),
+            'email': $("#email").val(),
+            'phone': $("#phone").val(),
+            'password': $("#password").val(),
+            'flat': $("#flat").val(),
+            'building': $("#building").val(),
+            'landmark': $("#landmark").val(),
+            'city': $("#city").val(),
+            'emirates': $("#emirates").val(),
+        };
+        
+        if(!validateForm(datas)){
+            $(".overlay").show();
+            $.ajax({
+                url: baseUrl + '/send-otp',
+                type: 'post',
+                data: datas,
+                dataType: "json",
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                success: function(res) {
+                    if(res.status == 200){
+                        $("#otp-section").show();
+                        $(".send-otp-button").hide();
+                        
+                    }else{
+                        $('#errorMessages').append('<br><span style="color:red;">OTP did not sent.</span>');
+                        setTimeout(function () {
+                            $('#errorMessages').html('');
+                        }, 2500);
+                    }
+                    $(".overlay").hide();
+                }
+            });
+        }else{
+            $('#errorMessages').append('<br><span style="color:red;">Please fill valid data.</span>');
+            setTimeout(function () {
+                $('#errorMessages').html('');
+            }, 2500);
+            $(".overlay").hide();
+        }
+    });
+
+    const inputs = document.querySelectorAll(".otp-field input");
+    inputs.forEach((input, index) => {
+        input.dataset.index = index;
+        input.addEventListener("keyup", handleOtp);
+        input.addEventListener("paste", handleOnPasteOtp);
+    });
+    function handleOtp(e) {
+        const input = e.target;
+        let value = input.value;
+        let isValidInput = value.match(/[0-9a-z]/gi);
+        input.value = "";
+        input.value = isValidInput ? value[0] : "";
+        let fieldIndex = input.dataset.index;
+        if (fieldIndex < inputs.length - 1 && isValidInput) {
+            input.nextElementSibling.focus();
+        }
+        if (e.key === "Backspace" && fieldIndex > 0) {
+            input.previousElementSibling.focus();
+        }
+        if (fieldIndex == inputs.length - 1 && isValidInput) {
+            submit();
+        }
+    }
+    function handleOnPasteOtp(e) {
+        const data = e.clipboardData.getData("text");
+        const value = data.split("");
+        if (value.length === inputs.length) {
+            inputs.forEach((input, index) => (input.value = value[index]));
+            submit();
+        }
+    }
+
+    function submit() {
+
+        let  otp = "";
+        inputs.forEach((input) => {
+            otp += input.value;
+            input.disabled = true;
+            input.classList.add("disabled");
+        });
+
+        var datas = {
+            'firstName': $("#firstName").val(),
+            'lastName': $("#lastName").val(),
+            'email': $("#email").val(),
+            'phone': $("#phone").val(),
+            'password': $("#password").val(),
+            'flat': $("#flat").val(),
+            'building': $("#building").val(),
+            'landmark': $("#landmark").val(),
+            'city': $("#city").val(),
+            'emirates': $("#emirates").val(),
+        };
+        datas.otp = otp;
+        if(!validateForm(datas)){
+            $(".overlay").show();
+            $.ajax({
+                url: baseUrl + '/verify-otp',
+                type: 'post',
+                data: datas,
+                dataType: "json",
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                success: function(res) {
+                    $('#errorMessages').append('<br><span style="color:green;">'+res.message+'</span>');
+                    setTimeout(function () {
+                        $('#errorMessages').html('');
+                    }, 2500);
+
+                    if(res.status == 200){
+                        $("#otp-section").hide();
+                        $(".send-otp-button").hide();
+                        $(".register-user").show();
+                    }else{
+                        inputs.forEach((input) => {
+                            otp += input.value;
+                            input.value = '';
+                            input.disabled = false;
+                        });
+                    }
+                    $(".overlay").hide();
+                }
+            });
+        }else{
+            $('#errorMessages').append('<br><span style="color:red;">Please fill valid data.</span>');
+            setTimeout(function () {
+                $('#errorMessages').html('');
+            }, 2500);
+            $(".overlay").hide();
+        }
+    }
+
+    $(".book-now-form").click(function () {
+        if($("#userId").val()==''){
+            $.magnificPopup.open({
+                items: {
+                    src: '#registrationForm', 
+                    type: 'inline'
+                }
+            });
+        }else{
+            $.magnificPopup.open({
+                items: {
+                    src: '#bookingform', 
+                    type: 'inline'
+                }
+            });
+        }
+    });
+
+    $(".register-button").click(function () {
+        var datas = {
+            'firstName': $("#firstName").val(),
+            'lastName': $("#lastName").val(),
+            'email': $("#email").val(),
+            'phone': $("#phone").val(),
+            'password': $("#password").val(),
+            'flat': $("#flat").val(),
+            'building': $("#building").val(),
+            'landmark': $("#landmark").val(),
+            'city': $("#city").val(),
+            'emirates': $("#emirates").val(),
+        };
+        
+        if(!validateForm(datas)){
+            $(".overlay").show();
+            $.ajax({
+                url: baseUrl + '/register-user',
+                type: 'post',
+                data: datas,
+                dataType: "json",
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                success: function(res) {
+
+                    $('#errorMessages').append('<br><span style="color:green;">'+res.message+'</span>');
+                    setTimeout(function () {
+                        $('#errorMessages').html('');
+                    }, 2500);
+
+                    if(res.status == 200){
+
+                        $("#userId").val(res.userId);
+
+                        $.magnificPopup.close();
+
+                        $.magnificPopup.open({
+                            items: {
+                                src: '#bookingform', 
+                                type: 'inline'
+                            },
+                            midClick: true 
+                        });
+                    }else{
+                        
+                    }
+                    $(".overlay").hide();
+                }
+            });
+        }else{
+            $('#errorMessages').append('<br><span style="color:red;">Please fill valid data.</span>');
+            setTimeout(function () {
+                $('#errorMessages').html('');
+            }, 2500);
+            $(".overlay").hide();
+        }
+    });
+});
+
+function validateForm(datas){
+    chk = 0;
+    if(datas.firstName == ''){
+        chk = 1;
+        $('#firstName').css('border-color', 'red');
+    }else{
+        $('#firstName').css('border-color', '');
+    }
+    if(datas.lastName == ''){
+        chk = 1;
+        $('#lastName').css('border-color', 'red');
+    }else{
+        $('#lastName').css('border-color', '');
+    }
+    if(datas.email == ''){
+        chk = 1;
+        $('#email').css('border-color', 'red');
+    }else{
+        $('#email').css('border-color', '');
+    }
+    if(datas.phone == ''){
+        chk = 1;
+        $('#phone').css('border-color', 'red');
+    }else{
+        $('#phone').css('border-color', '');
+    }
+    if(datas.password == ''){
+        chk = 1;
+        $('#password').css('border-color', 'red');
+    }else{
+        $('#password').css('border-color', '');
+    }
+    if(datas.flat == ''){
+        chk = 1;
+        $('#flat').css('border-color', 'red');
+    }else{
+        $('#flat').css('border-color', '');
+    }
+    if(datas.building == ''){
+        chk = 1;
+        $('#building').css('border-color', 'red');
+    }else{
+        $('#building').css('border-color', '');
+    }
+    if(datas.landmark == ''){
+        chk = 1;
+        $('#landmark').css('border-color', 'red');
+    }else{
+        $('#landmark').css('border-color', '');
+    }
+    if(datas.city == ''){
+        chk = 1;
+        $('#city').css('border-color', 'red');
+    }else{
+        $('#city').css('border-color', '');
+    }
+    if(datas.emirates == ''){
+        chk = 1;
+        $('#emirates').css('border-color', 'red');
+    }else{
+        $('#emirates').css('border-color', '');
+    }
+    return chk;
+}
+</script>
 </html>

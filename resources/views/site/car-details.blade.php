@@ -1,7 +1,6 @@
 @extends('layouts.site')
 
 @section('content')
-
 <!-- Page Feets Single Start -->
 <div class="page-fleets-single">
         <div class="container">
@@ -12,32 +11,129 @@
                         <div class="fleets-single-sidebar-box wow fadeInUp">
                             <!-- Feets Single Sidebar Pricing Start -->
                             <div class="fleets-single-sidebar-pricing">
-                                <h2>AED 1500<span>/rent par day</span></h2>
+                                <h2>AED {{$carDet[0]->rent}}<span>/ DAY</span></h2>
+                                @if($carDet[0]->offer_flag==1)
+                                    <h2>Offer Price {{$carDet[0]->offer_price}}<span>/ DAY</span></h2>
+                                @endif
                             </div>
                             <!-- Feets Single Sidebar Pricing End -->
 
                             <!-- Feets Single Sidebar List Start -->
                             <div class="fleets-single-sidebar-list">
                                 <ul>
-                                    <li><img src="{{asset('assets/images/icon-fleets-single-sidebar-list-1.svg')}}" alt="">Passengers <span>4</span></li>
-                                    <li><img src="{{asset('assets/images/icon-fleets-single-sidebar-list-2.svg')}}" alt="">Luggage <span>5</span></li>
-                                    <li><img src="{{asset('assets/images/icon-fleets-single-sidebar-list-3.svg')}}" alt="">Doors <span>4</span></li>
-                                    <li><img src="{{asset('assets/images/icon-fleets-single-sidebar-list-4.svg')}}" alt="">Transmission <span>auto</span></li>
-                                    <li><img src="{{asset('assets/images/icon-fleets-single-sidebar-list-5.svg')}}" alt="">Air Condition <span>yes</span></li>
-                                    <li><img src="{{asset('assets/images/icon-fleets-single-sidebar-list-6.svg')}}" alt="">Age (years) <span>5</span></li>
+                                    @foreach($specs as $key => $value)
+                                    <li><img src="{{asset($value->image)}}" alt="">{{$value->name}} <span>{{$value->details}}</span></li>
+                                    @endforeach
                                 </ul>
                             </div>
                             <!-- Feets Single Sidebar List End -->
 
                             <!-- Feets Single Sidebar Btn Start -->
                             <div class="fleets-single-sidebar-btn">
-                                <a href="#bookingform" class="btn-default popup-with-form">book now</a>
+                                <a href="#" class="btn-default popup-with-form book-now-form">book now</a>
                                 <span>or</span>
                                 <a href="#" class="wp-btn"><i class="fa-brands fa-whatsapp"></i></a>                                
                             </div>
                             <!-- Feets Single Sidebar Btn End -->
                         </div>
 
+                        <!-- Booking Form Box Start -->
+                        <div class="booking-form-box">
+                            <!-- Booking PopUp Form Start -->
+                            <div id="registrationForm" class="white-popup-block mfp-hide booking-form">
+                                <div class="section-title">
+                                    <h2>Registration</h2>
+                                </div>                                
+                                <fieldset>
+                                    <div class="row">
+                                        <div class="booking-form-group col-md-6 mb-4">
+                                            <input type="text" id="firstName" class="booking-form-control" placeholder="First Name" required>
+                                            <div class="help-block with-errors"></div>
+                                        </div>
+                                        <div class="booking-form-group col-md-6 mb-4">
+                                            <input type="text" id="lastName" class="booking-form-control" placeholder="Last Name" required>
+                                            <div class="help-block with-errors"></div>
+                                        </div>
+
+                                        <div class="booking-form-group col-md-6 mb-4">
+                                            <input type="email" id ="email" class="booking-form-control" placeholder="Enter Your Email" required>
+                                            <div class="help-block with-errors"></div>
+                                        </div>
+
+                                        <div class="booking-form-group col-md-6 mb-4">
+                                            <input type="text" id="phone" class="booking-form-control" placeholder="Enter Your Mobile Number" required>
+                                            <div class="help-block with-errors"></div>
+                                        </div>
+
+                                        <div class="booking-form-group col-md-6 mb-4">
+                                            <input type="password" id="password" class="booking-form-control" placeholder="Password" required>
+                                            <div class="help-block with-errors"></div>
+                                        </div>
+                                        <div class="booking-form-group col-md-6 mb-4">
+                                            <input type="text" id="flat" class="booking-form-control" placeholder="Flat/Villa number" required>
+                                            <div class="help-block with-errors"></div>
+                                        </div>
+                                        <div class="booking-form-group col-md-6 mb-4">
+                                            <input type="text" id="building" class="booking-form-control" placeholder="Building name" required>
+                                            <div class="help-block with-errors"></div>
+                                        </div>
+
+                                        <div class="booking-form-group col-md-6 mb-4">
+                                            <input type="text" id="landmark" class="booking-form-control" placeholder="Landmark" required>
+                                            <div class="help-block with-errors"></div>
+                                        </div>
+                                        <div class="booking-form-group col-md-6 mb-4">
+                                            <input type="text" id="city" class="booking-form-control" placeholder="City" required>
+                                            <div class="help-block with-errors"></div>
+                                        </div>
+
+                                        <div class="booking-form-group col-md-6 mb-4">
+                                            <select class="booking-form-control form-select" id="emirates" required>
+                                                <option value="" disabled selected>Emirates</option>
+                                                @foreach($emirates as $key => $value)
+                                                    <option value="{{$value->id}}">{{$value->name}}</option>
+                                                @endforeach
+                                            </select>
+                                            <div class="help-block with-errors"></div>
+                                        </div>
+
+                                        <div class="row" id="otp-section">
+                                            <div class="col-md-12 mb-12 pb-2">
+                                                <div class="otpSection">
+                                                    <p class="otpSentTo">OTP has been sent to your email address.</p>
+                                                    <!-- <p class="resend">Resend otp after <span class="countdown"></span></p> -->
+                                                    <h3>Enter OTP</h3>
+                                                    <div class="otp-field">
+                                                        <input type="text" maxlength="1" />
+                                                        <input type="text" maxlength="1" />
+                                                        <input class="space" type="text" maxlength="1" />
+                                                        <input type="text" maxlength="1" />
+                                                        <input type="text" maxlength="1" />
+                                                        <input type="text" maxlength="1" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12 mb-12 pb-2" id="errorMessages">
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 booking-form-group send-otp-button">
+                                            <button type="submit" class="btn-default send-otp">Send OTP</button>
+                                            <div id="msgSubmit" class="h3 hidden"></div>
+                                        </div>
+                                        <div class="col-md-12 booking-form-group register-user" style="display:none;">
+                                            <button type="submit" class="btn-default register-button">Register Now</button>
+                                            <div id="msgSubmit" class="h3 hidden"></div>
+                                        </div>
+                                    </div>                                    
+                                </fieldset>
+                            </div>
+                            <!-- Registration PopUp Form End -->
+                        </div>
+                        <!-- Registration Form Box End -->
+                        
                         <!-- Booking Form Box Start -->
                         <div class="booking-form-box">
                             <!-- Booking PopUp Form Start -->
@@ -48,42 +144,17 @@
                                 </div>                                
                                 <fieldset>
                                     <div class="row">
-                                        <div class="booking-form-group col-md-6 mb-4">
-                                            <input type="text" name="name" class="booking-form-control" id="name" placeholder="Full Name" required>
-                                            <div class="help-block with-errors"></div>
-                                        </div>
+                                    <input type="hidden" id="userId" value="@if(session()->has('userId')){{Session::get('userId')}}@endif">
 
-                                        <div class="booking-form-group col-md-6 mb-4">
-                                            <input type="email" name ="email" class="booking-form-control" id="email" placeholder="Enter Your Email" required>
-                                            <div class="help-block with-errors"></div>
-                                        </div>
-
-                                        <div class="booking-form-group col-md-6 mb-4">
-                                            <input type="text" name="phone" class="booking-form-control" id="phone" placeholder="Enter Your Number" required>
-                                            <div class="help-block with-errors"></div>
-                                        </div>                                        
-
-                                        <div class="booking-form-group col-md-6 mb-4">
-                                            <select name="cartype" class="booking-form-control form-select" id="cartype" required>
-                                                <option value="" disabled selected>Choose Car Type</option>
-                                                <option value="sport_car">sport car</option>
-                                                <option value="convertible_car">convertible car</option>
-                                                <option value="sedan_car">sedan car</option>
-                                                <option value="luxury_car">luxury car</option>
-                                                <option value="electric_car">electric car</option>
-                                                <option value="coupe_car">coupe car</option>
-                                            </select>
-                                            <div class="help-block with-errors"></div>
-                                        </div>
-
-                                        <div class="booking-form-group col-md-6 mb-4">
-                                            <select name="location" class="booking-form-control form-select" id="pickuplocation" required>
+                                        <div class="booking-form-group col-md-6 mb-4" id="locationField">
+                                            <input id="source" type="text" placeholder="Enter Pick Up Location" />
+                                            <!-- <select name="location" class="booking-form-control form-select" id="pickuplocation" required>
                                                 <option value="" disabled selected>Pick Up Location</option>
                                                 <option value="abu_dhabi">abu dhabi</option>
                                                 <option value="alain">alain</option>
                                                 <option value="dubai">dubai</option>
                                                 <option value="sharjah">sharjah</option>
-                                            </select>
+                                            </select> -->
                                             <div class="help-block with-errors"></div>
                                         </div>
 
@@ -104,11 +175,6 @@
 
                                         <div class="booking-form-group col-md-6 mb-4">
                                             <input type="text" name="date" class="booking-form-control datepicker" id="returndate" placeholder="Return Date" required>
-                                            <div class="help-block with-errors"></div>
-                                        </div>
-
-                                        <div class="booking-form-group col-md-12 mb-4">
-                                            <textarea name="msg" class="booking-form-control" id="msg" rows="3" placeholder="Write Your Message" required></textarea>
                                             <div class="help-block with-errors"></div>
                                         </div>
 
@@ -133,45 +199,20 @@
                         <div class="fleets-single-slider">
                             <div class="swiper">
                                 <div class="swiper-wrapper">
-                                    <!-- Fleets Image Slide Start -->
-                                    <div class="swiper-slide">
-                                        <div class="fleets-slider-image">
-                                            <figure class="image-anime">
-                                                <img src="{{asset('assets/images/car/11.jpg')}}" alt="">
-                                            </figure>
-                                        </div>
-                                    </div>
-                                    <!-- Fleets Image Slide End -->
 
+                                    @php $imgArr = explode(',',$carDet[0]->image); @endphp
+                                    @foreach($imgArr as $key => $value)
                                     <!-- Fleets Image Slide Start -->
                                     <div class="swiper-slide">
                                         <div class="fleets-slider-image">
                                             <figure class="image-anime">
-                                                <img src="{{asset('assets/images/car/12.jpg')}}" alt="">
+                                                <img src="{{asset($value)}}" alt="">
                                             </figure>
                                         </div>
                                     </div>
                                     <!-- Fleets Image Slide End -->
+                                    @endforeach
 
-                                    <!-- Fleets Image Slide Start -->
-                                    <div class="swiper-slide">
-                                        <div class="fleets-slider-image">
-                                            <figure class="image-anime">
-                                                <img src="{{asset('assets/images/car/13.jpg')}}" alt="">
-                                            </figure>
-                                        </div>
-                                    </div>
-                                    <!-- Fleets Image Slide End -->
-
-                                    <!-- Fleets Image Slide Start -->
-                                    <div class="swiper-slide">
-                                        <div class="fleets-slider-image">
-                                            <figure class="image-anime">
-                                                <img src="{{asset('assets/images/car/14.jpg')}}" alt="">
-                                            </figure>
-                                        </div>
-                                    </div>
-                                    <!-- Fleets Image Slide End -->
                                 </div>
                                 <div class="swiper-pagination"></div>
                             </div>
@@ -179,26 +220,10 @@
                         <!-- Feets Single Slider End -->
 
                        
-
+                        <h2>{{$carDet[0]->brand_name}} {{$carDet[0]->name}} - {{$carDet[0]->model}} Model</h2>
                         <!-- Feets Information Start -->
                         <div class="fleets-information">
-                            <!-- Section Title Start -->
-                            <div class="section-title">
-                                <h3 class="wow fadeInUp">general information</h3>
-                                <h2 class="text-anime-style-3" data-cursor="-opaque">Know about our car rental</h2>
-                                <p class="wow fadeInUp" data-wow-delay="0.25s">Lorem pretium fermentum quam, sit amet cursus ante sollicitudin velen morbi consesua the miss sustion consation porttitor orci sit amet iaculis nisan. Lorem pretium fermentum quam sit amet cursus ante sollicitudin velen fermen morbinetion consesua the risus consequation the porttiton.</p>
-                            </div>
-                            <!-- Section Title End -->
-
-                            <!-- Feets Information List Start -->
-                            <div class="fleets-information-list wow fadeInUp" data-wow-delay="0.5s">
-                                <ul>
-                                    <li>24/7 Roadside Assistance</li>
-                                    <li>Free Cancellation & Return</li>
-                                    <li>Rent Now Pay When You Arrive</li>
-                                </ul>
-                            </div>
-                            <!-- Feets Information List End -->
+                            {!! trim(html_entity_decode($generalInfo[0]->content)) !!} 
                         </div>
                         <!-- Feets Information End -->
 
@@ -214,22 +239,16 @@
                             <!-- Feets Amenities List Start -->
                             <div class="fleets-amenities-list wow fadeInUp" data-wow-delay="0.25s">
                                 <ul>
-                                    <li>music system</li>
-                                    <li>toolkit</li>
-                                    <li>abs system</li>
-                                    <li>bluetooth</li>
-                                    <li>full boot space</li>
-                                    <li>usb charger</li>
-                                    <li>aux input</li>
-                                    <li>spare tyre</li>
-                                    <li>power steering</li>
-                                    <li>power windows</li>
+                                    @foreach($features as $key => $value)
+                                        <li>{{$value->feature}}</li>
+                                    @endforeach
                                 </ul>
                             </div>
                             <!-- Feets Amenities List End -->
                         </div>
                         <!-- Feets Amenities End -->
 
+                        @if($carDet[0]->rental_condition_flag == 1)
                         <!-- Rental Conditions Faqs Start -->
                         <div class="rental-conditions-faqs">
                             <!-- Section Title Start -->
@@ -241,111 +260,31 @@
 
                             <!-- Rental Conditions FAQ Accordion Start -->
                             <div class="rental-condition-accordion" id="rentalaccordion">
+                                @foreach($policy as $key => $value)
                                 <!-- FAQ Item Start -->
                                 <div class="accordion-item wow fadeInUp">
                                     <h2 class="accordion-header" id="rentalheading1">
-                                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                            data-bs-target="#rentalcollapse1" aria-expanded="true" aria-controls="rentalcollapse1">
-                                            Driver's License Requirements
-                                        </button>
-                                    </h2>
-                                    <div id="rentalcollapse1" class="accordion-collapse collapse show" aria-labelledby="rentalheading1"
-                                        data-bs-parent="#rentalaccordion">
-                                        <div class="accordion-body">
-                                            <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- FAQ Item End -->
-
-                                <!-- FAQ Item Start -->
-                                <div class="accordion-item wow fadeInUp" data-wow-delay="0.25s">
-                                    <h2 class="accordion-header" id="rentalheading2">
                                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                            data-bs-target="#rentalcollapse2" aria-expanded="false" aria-controls="rentalcollapse2">
-                                            Insurance and Coverage policy
+                                            data-bs-target="#rentalcollapse{{$key}}" aria-expanded="false" aria-controls="rentalcollapse{{$key}}">
+                                            {{$value->name}}
                                         </button>
                                     </h2>
-                                    <div id="rentalcollapse2" class="accordion-collapse collapse" aria-labelledby="rentalheading2"
+                                    <div id="rentalcollapse{{$key}}" class="accordion-collapse collapse" aria-labelledby="rentalheading{{$key}}"
                                         data-bs-parent="#rentalaccordion">
                                         <div class="accordion-body">
-                                            <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal</p>
+                                            <p>{{$value->content}}</p>
                                         </div>
                                     </div>
                                 </div>
                                 <!-- FAQ Item End -->
+                                @endforeach
 
-                                <!-- FAQ Item Start -->
-                                <div class="accordion-item wow fadeInUp" data-wow-delay="0.5s">
-                                    <h2 class="accordion-header" id="rentalheading3">
-                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                            data-bs-target="#rentalcollapse3" aria-expanded="false" aria-controls="rentalcollapse3">
-                                            Available payment Methods
-                                        </button>
-                                    </h2>
-                                    <div id="rentalcollapse3" class="accordion-collapse collapse" aria-labelledby="rentalheading3"
-                                        data-bs-parent="#rentalaccordion">
-                                        <div class="accordion-body">
-                                            <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- FAQ Item End -->
-
-                                <!-- FAQ Item Start -->
-                                <div class="accordion-item wow fadeInUp" data-wow-delay="0.75s">
-                                    <h2 class="accordion-header" id="rentalheading4">
-                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                            data-bs-target="#rentalcollapse4" aria-expanded="false" aria-controls="rentalcollapse4">
-                                            Cancellation and Modification policy
-                                        </button>
-                                    </h2>
-                                    <div id="rentalcollapse4" class="accordion-collapse collapse" aria-labelledby="rentalheading4"
-                                        data-bs-parent="#rentalaccordion">
-                                        <div class="accordion-body">
-                                            <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- FAQ Item End -->
-
-                                <!-- FAQ Item Start -->
-                                <div class="accordion-item wow fadeInUp" data-wow-delay="1s">
-                                    <h2 class="accordion-header" id="rentalheading5">
-                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                            data-bs-target="#rentalcollapse5" aria-expanded="false" aria-controls="rentalcollapse5">
-                                            Smoking and Pet Policies
-                                        </button>
-                                    </h2>
-                                    <div id="rentalcollapse5" class="accordion-collapse collapse" aria-labelledby="rentalheading5"
-                                        data-bs-parent="#rentalaccordion">
-                                        <div class="accordion-body">
-                                            <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- FAQ Item End -->
-
-                                <!-- FAQ Item Start -->
-                                <div class="accordion-item wow fadeInUp" data-wow-delay="1.25s">
-                                    <h2 class="accordion-header" id="rentalheading6">
-                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                            data-bs-target="#rentalcollapse6" aria-expanded="false" aria-controls="rentalcollapse6">
-                                            The minimum age Requirements
-                                        </button>
-                                    </h2>
-                                    <div id="rentalcollapse6" class="accordion-collapse collapse" aria-labelledby="rentalheading6"
-                                        data-bs-parent="#rentalaccordion">
-                                        <div class="accordion-body">
-                                            <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- FAQ Item End -->
                             </div>
                             <!-- Rental Conditions FAQ Accordion End -->
                         </div>
                         <!-- Rental Conditions Faqs End -->
+                        @endif
+
                     </div>
                     <!-- Feets Single Content End -->
                 </div>
@@ -353,5 +292,24 @@
         </div>
     </div>
     <!-- Page Feets Single End -->
+    
+<script>
+    
+    var source = new google.maps.places.Autocomplete(document.getElementById('source'));
 
+
+
+    function fillInAddress() {
+    var place = source.getPlace();
+
+    // Get the latitude and longitude of the location
+    var lat = place.geometry.location.lat();
+    var lng = place.geometry.location.lng();
+    console.log(lat)
+    console.log(lng)
+    }
+
+    // Listen for when the user selects a location from the autocomplete dropdown
+    source.addListener('place_changed', fillInAddress);
+</script>
 @endsection

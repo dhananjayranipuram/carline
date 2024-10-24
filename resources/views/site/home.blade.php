@@ -24,7 +24,7 @@
                                         <div class="hero-content">
                                             <div class="section-title">
                                                 <h3 class="wow fadeInUp">Welcome to Carline Car Rental</h3>
-                                                <h1 class="text-anime-style-3">Dubai’s Trusted Car Rental Experts</h1>
+                                                <h1 class="text-anime-style-3">Dubai's Trusted Car Rental Experts</h1>
                                                 
                                                 <p class="wow fadeInUp" data-wow-delay="0.25s">Whether you're planning a weekend getaway, a business trip, or just need a reliable ride for the day, we offers a wide range of vehicles to suit your needs.</p>
                                             </div>
@@ -47,95 +47,34 @@
 
         <!-- Rent Details Section Start -->
         <div class="rent-details wow fadeInUp" data-wow-delay="0.75s">
-            <div class="container">
+            <div class="container" style="text-align: -webkit-center;">
                 <!-- Filter Form Start -->
-				<form action="#" method="get">
+				<form action="#" method="get" style="width:25%;">
                     <div class="row no-gutters align-items-center">
                         <div class="col-md-12">
                             <div class="rent-details-box">
                                 <div class="rent-details-form">
                                     <!-- Rent Details Item Start -->
-                                    <div class="rent-details-item">
+                                    <div class="rent-details-item" style="width: 70%;">
                                         <div class="icon-box">
                                             <img src="images/icon-rent-details-1.svg" alt="">
                                         </div>
                                         <div class="rent-details-content">
                                             <h3>car </h3>
-                                            <select class="rent-details-form form-select">
+                                            <select class="rent-details-form form-select select-type">
                                                 <option value="" disabled selected>Choose Car</option>
-                                                <option value="sport_car">sport car</option>
-                                                <option value="convertible_car">convertible car</option>
-                                                <option value="sedan_car">sedan car</option>
-                                                <option value="luxury_car">luxury car</option>
-                                                <option value="electric_car">electric car</option>
-                                                <option value="coupe_car">coupe car</option>
+                                                @foreach($carType as $key => $value)
+                                                    <option value="{{$value->id}}">{{$value->name}}</option>
+                                                @endforeach
                                             </select>
                                         </div>
                                     </div>
                                     <!-- Rent Details Item End -->
 
-                                    <!-- Rent Details Item Start -->
-                                    <div class="rent-details-item">
-                                        <div class="icon-box">
-                                            <img src="images/icon-rent-details-2.svg" alt="">
-                                        </div>
-                                        <div class="rent-details-content">
-                                            <h3>pickup location</h3>
-                                            <input id="source" placeholder="Enter your address" type="text"/>
-                                            <!-- <select class="rent-details-form form-select">
-                                                <option value="" disabled selected>Pick Up Location</option>
-                                                <option value="abu_dhabi">abu dhabi</option>
-                                                <option value="alain">alain</option>
-                                                <option value="dubai">dubai</option>
-                                                <option value="sharjah">sharjah</option>
-                                            </select> -->
-                                        </div>
-                                    </div>
-                                    <!-- Rent Details Item End -->
-
-                                    <!-- Rent Details Item Start -->
-                                    <div class="rent-details-item">
-                                        <div class="icon-box">
-                                            <img src="images/icon-rent-details-3.svg" alt="">
-                                        </div>
-                                        <div class="rent-details-content">
-                                            <h3>pickup date</h3>
-                                            <p><input type="text" name="date" placeholder="mm/dd/yyyy" class="rent-details-form datepicker" required></p>
-                                        </div>
-                                    </div>
-                                    <!-- Rent Details Item End -->
-
-                                    <!-- Rent Details Item Start -->
-                                    <div class="rent-details-item">
-                                        <div class="icon-box">
-                                            <img src="images/icon-rent-details-4.svg" alt="">
-                                        </div>
-                                        <div class="rent-details-content">
-                                            <h3>Dropoff location</h3>
-                                            <select class="rent-details-form form-select">
-                                                <option value="" disabled selected>Drop Off Location</option>
-                                                <option value="abu_dhabi">abu dhabi</option>
-                                                <option value="alain">alain</option>
-                                                <option value="sharjah">sharjah</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <!-- Rent Details Item End -->
-
-                                    <!-- Rent Details Item Start -->
-                                    <div class="rent-details-item">
-                                        <div class="icon-box">
-                                            <img src="images/icon-rent-details-5.svg" alt="">
-                                        </div>
-                                        <div class="rent-details-content">
-                                            <h3>Return Date</h3>
-                                            <p><input type="text" name="date" placeholder="mm/dd/yyyy" class="rent-details-form datepicker" required></p>
-                                        </div>
-                                    </div>
-                                    <!-- Rent Details Item End -->
+                                    
                                      
                                     <div class="rent-details-item rent-details-search">
-                                        <a href="#"><i class="fa-solid fa-magnifying-glass"></i></a>
+                                        <a href="{{url('/cars')}}" class="search-button"><i class="fa-solid fa-magnifying-glass"></i></a>
                                     </div>
                                 </div>                                
                             </div>                               
@@ -210,7 +149,7 @@
 
                                             <!-- Perfect Fleets Btn Start -->
                                             <div class="perfect-fleet-btn">
-                                                <a href="#" class="section-icon-btn"><img src="{{asset('assets/images/arrow-white.svg')}}" alt=""></a>
+                                                <a href="{{url('/car-details')}}?id={{base64_encode($value->id)}}" class="section-icon-btn"><img src="{{asset('assets/images/arrow-white.svg')}}" alt=""></a>
                                             </div>
                                             <!-- Perfect Fleets Btn End -->
                                         </div>
@@ -256,7 +195,7 @@
             @foreach($brands as $key => $value)
                 <div class="col-lg-3 col-6">
                     <!-- Partners Logo Start -->
-                    <div class="partners-logo wow fadeInUp" data-wow-delay="0.2s">
+                    <div class="partners-logo wow fadeInUp brand-click" data-wow-delay="0.2s" data-id="{{$value->id}}">
                         <img src="{{asset($value->image)}}" alt="{{asset($value->name)}}">
                     </div>
                     <!-- Partners Logo End -->
@@ -286,7 +225,7 @@
 
                     @foreach($carType as $key => $value)
                     <!-- Luxury Collection Item Start -->
-                    <div class="luxury-collection-item wow fadeInUp">
+                    <div class="luxury-collection-item wow fadeInUp type-click" data-id="{{$value->id}}">
                         <!-- Luxury Collection Image Start -->
                         <div class="luxury-collection-image" data-cursor-text="View">
                             <a href="#">
@@ -317,7 +256,7 @@
                 <div class="col-lg-12">
                     <!-- Service Box Footer Start -->
                     <div class="services-box-footer wow fadeInUp" data-wow-delay="1s">
-                        <a href="#" class="btn-default">view all Cars</a>
+                        <a href="{{url('/cars')}}" class="btn-default">view all Cars</a>
                     </div>
                     <!-- Service Box Footer End -->
                 </div>                
@@ -1133,7 +1072,7 @@
     </div>
 </div>
 <!-- Our Latest Article End -->
-
+<script src="{{asset('admin_assets/js/core/jquery-3.7.1.min.js')}}"></script> 
 <script>
 
 var source = new google.maps.places.Autocomplete(document.getElementById('source'));
@@ -1152,5 +1091,22 @@ function fillInAddress() {
 
 // Listen for when the user selects a location from the autocomplete dropdown
 source.addListener('place_changed', fillInAddress);
+
+$(document).ready(function () {
+    $(".select-type").change(function () {
+        localStorage.setItem("searchType",$(this).val());
+    });
+
+    $(".brand-click").click(function () {
+        localStorage.setItem("brandClick",$(this).attr('data-id'));
+        window.location = baseUrl + '/cars';
+    });
+
+    $(".type-click").click(function () {
+        localStorage.setItem("searchType",$(this).attr('data-id'));
+        window.location = baseUrl + '/cars';
+    });
+});
+
 </script>
 @endsection

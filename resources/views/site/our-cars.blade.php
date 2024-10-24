@@ -1,6 +1,11 @@
 @extends('layouts.site')
 
 @section('content')
+<style>
+.break-word{
+    word-wrap: break-word;
+}
+</style>
 <!-- Page Header Start -->
 <!-- <div class="page-header bg-section parallaxie">
     <div class="container">
@@ -51,7 +56,7 @@
                             <ul>
                                 @foreach($carType as $key => $value)
                                 <li class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="{{$value->id}}">
+                                    <input class="form-check-input car-type" type="checkbox" value="{{$value->id}}">
                                     <label class="form-check-label" for="checkbox1">{{$value->name}}</label>
                                 </li>
                                 @endforeach                                
@@ -68,7 +73,7 @@
                             <ul>
                                 @foreach($brands as $key => $value)
                                 <li class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="{{$value->id}}">
+                                    <input class="form-check-input car-brand" type="checkbox" value="{{$value->id}}">
                                     <label class="form-check-label" for="checkbox7">{{$value->name}}</label>
                                 </li>
                                 @endforeach
@@ -84,14 +89,21 @@
             <div class="col-lg-9">
                 <!-- Fleets Collection Box Start -->
                 <div class="fleets-collection-box">
-                    <div class="row">
+                    <div class="row" id="carList">
                         @foreach($cars as $key => $value)
                         <div class="col-lg-4 col-md-6">
                             <!-- Perfect Fleets Item Start -->
                             <div class="perfect-fleet-item fleets-collection-item wow fadeInUp">
                                 <!-- Image Box Start -->
                                 <div class="image-box">
-                                    <img src="{{asset($value->image)}}" alt="">
+                                    @if($value->image!='')
+                                        @php $imgArr = explode(',',$value->image); @endphp
+                                        @if(!empty($imgArr))
+                                            <img src="{{asset($imgArr[0])}}" alt="Image not available">
+                                        @endif
+                                    @else
+                                        <img src="" alt="Image not available">
+                                    @endif
                                 </div>
                                 <!-- Image Box End -->
 
@@ -107,10 +119,16 @@
                                     <!-- Perfect Fleets Body Start -->
                                     <div class="perfect-fleet-body">
                                         <ul>
-                                            <li><img src="{{asset('assets/images/icon-fleet-list-1.svg')}}" alt="">4 passenger</li>
-                                            <li><img src="{{asset('assets/images/icon-fleet-list-2.svg')}}" alt="">4 door</li>
-                                            <li><img src="{{asset('assets/images/icon-fleet-list-3.svg')}}" alt="">bags</li>
-                                            <li><img src="{{asset('assets/images/icon-fleet-list-4.svg')}}" alt="">auto</li>
+                                            @if(!empty($specs[$value->id]))
+                                                @foreach($specs[$value->id] as $keys => $values)
+                                                    <li class="break-word"><img src="{{asset($values->image)}}" alt="" width="21">
+                                                    @if($values->details!='Yes')
+                                                        {{$values->details}}
+                                                    @endif 
+                                                    {{$values->name}}</li>
+                                                    @if($keys==3) @break @endif
+                                                @endforeach
+                                            @endif
                                         </ul>
                                     </div>
                                     <!-- Perfect Fleets Body End -->
@@ -119,13 +137,13 @@
                                     <div class="perfect-fleet-footer">
                                         <!-- Perfect Fleets Pricing Start -->
                                         <div class="perfect-fleet-pricing">
-                                            <h2>AED 280<span>/day</span></h2>
+                                            <h2>AED {{$value->rent}}<span>/day</span></h2>
                                         </div>
                                         <!-- Perfect Fleets Pricing End -->
 
                                         <!-- Perfect Fleets Btn Start -->
                                         <div class="perfect-fleet-btn">
-                                            <a href="{{url('/car-details')}}" class="section-icon-btn"><img src="{{asset('assets/images/arrow-white.svg')}}" alt=""></a>
+                                            <a href="{{url('/car-details')}}?id={{base64_encode($value->id)}}" class="section-icon-btn"><img src="{{asset('assets/images/arrow-white.svg')}}" alt=""></a>
                                         </div>
                                         <!-- Perfect Fleets Btn End -->
                                     </div>
@@ -147,4 +165,106 @@
     </div>
 </div>
 <!-- Page Fleets End -->
+<script src="{{asset('admin_assets/js/core/jquery-3.7.1.min.js')}}"></script> 
+<script>
+$(document).ready(function () {
+    var xhr = null;
+    var carType = localStorage.getItem("searchType");
+    var carBrand = localStorage.getItem("brandClick");
+    localStorage.clear();
+
+    if(carType!=null){
+        $('.car-type').each(function() {
+            if($(this).val() == carType){
+                $(this).prop('checked', true);;
+            }
+            getCars();
+        });
+    }else if(carBrand!=null){
+        $('.car-brand').each(function() {
+            if($(this).val() == carBrand){
+                $(this).prop('checked', true);;
+            }
+            getCars();
+        });
+    }
+
+    $(".form-check-input").click(function () {
+        getCars();
+    });
+
+    function getCars(){
+        var carType = [];
+        var carBrand = [];
+        $('.car-type').each(function() {
+            if($(this).prop('checked') == true){
+                carType.push($(this).val());
+            }
+        });
+
+        $('.car-brand').each(function() {
+            if($(this).prop('checked') == true){
+                carBrand.push($(this).val());
+            }
+        });
+        if (xhr !== null) {
+            xhr.abort();
+        }
+        xhr = $.ajax({
+            url: baseUrl + '/site/filter-cars',
+            type: 'post',
+            dataType: "json",
+            data: {'type' : carType,'brand':carBrand},
+            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+            success: function(res) {
+                var html = '';
+                res.carDet.forEach(function(item) {
+                    if(item.image!=null)
+                        var image = item.image.split(',');
+                    else
+                        var image = '';
+                    // console.log(window.btoa(item.id));
+                    html += '<div class="col-lg-4 col-md-6">'
+                        +'<div class="perfect-fleet-item fleets-collection-item wow fadeInUp">'
+                                +'<div class="image-box">'
+                                        +'<img src="'+baseUrl+'/'+image[0]+'" alt="Image not available">'
+                                +'</div>'
+                                +'<div class="perfect-fleet-content">'
+                                    +'<div class="perfect-fleet-title">'
+                                        +'<h3>'+item.car_type+'</h3>'
+                                        +'<h2>'+item.brand_name+' '+item.name+' '+item.model+'</h2>'
+                                    +'</div>'
+                                    +'<div class="perfect-fleet-body">'
+                                        +'<ul>';
+                                            if(res.specs[item.id] != null){
+                                                res.specs[item.id].forEach(function(items,keys) {
+                                                    if(keys<=3){
+                                                        html+='<li class="break-word"><img src="'+baseUrl+'/'+items.image+'" alt="" width="21">';
+                                                        if(items.details!='Yes'){
+                                                            html+=items.details;
+                                                        } 
+                                                        html+=' '+items.name+'</li>';
+                                                    }
+                                                });
+                                            }
+                                        html+='</ul>'
+                                    +'</div>'
+                                    +'<div class="perfect-fleet-footer">'
+                                        +'<div class="perfect-fleet-pricing">'
+                                            +'<h2>AED '+item.rent+'<span>/day</span></h2>'
+                                        +'</div>'
+                                        +'<div class="perfect-fleet-btn">'
+                                            +"<a href='"+baseUrl+"/car-details?id="+window.btoa(item.id)+"' class='section-icon-btn'><img src='"+baseUrl+'/'+"assets/images/arrow-white.svg' alt=''></a>"
+                                        +'</div>'
+                                    +'</div>'
+                                +'</div>'
+                            +'</div>'
+                        +'</div>';
+                });
+                $("#carList").html(html)
+            }
+        });
+    }
+});
+</script>
 @endsection

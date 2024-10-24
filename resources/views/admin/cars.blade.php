@@ -27,27 +27,28 @@
                         <th>Model</th>
                         <th>Type</th>
                         <th>Rate</th>
+                        <th style="width: 10%">Actions</th>
                     </tr>
                 </thead>
-                <tfoot>
-                    <tr>
-                        <th>ID</th>
-                        <th>Brand</th>
-                        <th>Name</th>
-                        <th>Model</th>
-                        <th>Type</th>
-                        <th>Rate</th>
-                    </tr>
-                </tfoot>
                 <tbody>
                     @foreach($cars as $key => $value)
                     <tr>
                         <td>{{$value->id}}</td>
-                        <td>{{$value->brand_name}}</td>
+                        <td>{{$value->brand_name}}@if($value->offer_flag==1)<span class="btn btn-link btn-warning btn-lg"><i class="fas fa-star"></i></span>@endif</td>
                         <td>{{$value->name}}</td>
                         <td>{{$value->model}}</td>
                         <td>{{$value->car_type}}</td>
-                        <td>1000</td>
+                        <td>{{$value->rent}}</td>
+                        <td>
+                            <div class="form-button-action">
+                                <a href="{{url('/admin/edit-car')}}?id={{base64_encode($value->id)}}" data-bs-toggle="tooltip" title="Edit Brand" class="btn btn-link btn-primary btn-lg edit-brand" data-original-title="Edit Task">
+                                    <i class="fa fa-edit"></i>
+                                </a>
+                                <button type="button" data-bs-toggle="tooltip" title="Delete Brand" class="btn btn-link btn-danger delete-brand" data-original-title="Remove" data-id="{{$value->id}}">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                            </div>
+                        </td>
                     </tr>
                     @endforeach
                 </tbody>
