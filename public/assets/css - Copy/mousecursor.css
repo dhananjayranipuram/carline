@@ -1,0 +1,21 @@
+/* Reset any custom cursor */
+.cb-cursor {
+    cursor: auto; /* Reverts to the default browser cursor */
+    position: static; /* Remove custom positioning */
+    display: none; /* Hide the custom cursor design */
+}
+
+/* Standard cursor on clickable elements */
+a, button {
+    cursor: pointer; /* Shows the pointer cursor for links and buttons */
+}
+
+/* Set cursor to grab when hovering over draggable elements */
+.draggable {
+    cursor: grab; /* Indicates that the element can be dragged */
+}
+
+/* Change the cursor to 'grabbing' while the element is being dragged */
+.draggable:active {
+    cursor: grabbing; /* Shows the dragging cursor when actively dragging */
+}

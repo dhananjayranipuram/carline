@@ -12,7 +12,7 @@
 	<!-- Page Title -->
 	<title>Home - CarLine</title>
 	<!-- Favicon Icon -->
-	<link rel="shortcut icon" type="image/x-icon" href="images/favicon.png">
+	<link rel="shortcut icon" type="image/x-icon" href="{{asset('assets/images/favicon.png')}}">
 	<!-- Google Fonts Css-->
 	<link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -34,7 +34,8 @@
 	<!-- Main Custom Css -->
 	<link href="{{asset('assets/css/custom.css')}}" rel="stylesheet" media="screen">
     <script> var baseUrl = "{{ url('/') }}"; </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmX5w5ltGt09cjDod_YMamphRRgS8L-ZQ&libraries=places" async defer ></script>
+    <!-- <script src="https://maps.googleapis.com/maps/api/js?key={{env('GOOGLE_MAPS_API_KEY')}}&libraries=places" async defer ></script> -->
+    
 </head>
 <style>
 #otp-section{
@@ -200,13 +201,13 @@
                      <div class="about-footer">
                         <!-- Footer Logo Start -->
                         <div class="footer-logo">
-                            <img src="images/footer-logo.png" alt="">
+                            <img src="{{asset('assets/images/footer-logo.png')}}" alt="">
                         </div>
                         <!-- Footer Logo End -->
 
                         <!-- About Footer Content Start -->
                          <div class="about-footer-content">
-                            <p>At Carline, we're fully flexible and client-focused, delivering cars when and where you need them. Our goal is to provide a seamless rental experience tailored to your schedule. </p>
+                            <p>At Carline, we’re fully flexible and client-focused, delivering cars when and where you need them. Our goal is to provide a seamless rental experience tailored to your schedule. </p>
                          </div>
                         <!-- About Footer Content End -->
                      </div>
@@ -532,8 +533,7 @@ $(document).ready(function () {
                             items: {
                                 src: '#bookingform', 
                                 type: 'inline'
-                            },
-                            midClick: true 
+                            }
                         });
                     }else{
                         
@@ -549,7 +549,99 @@ $(document).ready(function () {
             $(".overlay").hide();
         }
     });
+
+    $("#loginPopup").click(function() {
+        $(".overlay").show();
+        $.magnificPopup.close();
+
+        setTimeout(function() {
+            $.magnificPopup.open({
+                items: {
+                    src: '#loginForm',
+                    type: 'inline'
+                }
+            });
+            $(".overlay").hide();
+        }, 150);
+    });
+
+    $("#registrationPopup").click(function() {
+        $(".overlay").show();
+        $.magnificPopup.close();
+
+        setTimeout(function() {
+            $.magnificPopup.open({
+                items: {
+                    src: '#registrationForm',
+                    type: 'inline'
+                }
+            });
+            $(".overlay").hide();
+        }, 150);
+    });
+
+    $(".login_button").click(function() {
+        var datas = {
+            'password': $("#userPassword").val(),
+            'username': $("#userName").val()
+        };
+        if(!validateLoginForm(datas)){
+            $.ajax({
+                url: baseUrl + '/login',
+                type: 'post',
+                data: datas,
+                dataType: "json",
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                success: function(res) {
+
+                    $('#errorMessages').append('<br><span style="color:green;">'+res.message+'</span>');
+                    setTimeout(function () {
+                        $('#errorMessages').html('');
+                    }, 2500);
+
+                    if(res.status == 200){
+
+                        $("#userId").val(res.userId);
+
+                        $.magnificPopup.close();
+
+                        $.magnificPopup.open({
+                            items: {
+                                src: '#bookingform', 
+                                type: 'inline'
+                            }
+                        });
+                    }
+                    $(".overlay").hide();
+                }
+            });
+        }else{
+            $('#loginErrors').append('<br><span style="color:red;">Please fill valid data.</span>');
+            setTimeout(function () {
+                $('#loginErrors').html('');
+            }, 2500);
+            $(".overlay").hide();
+        }
+    });
 });
+
+function validateLoginForm(datas){
+    chk = 0;
+    if(datas.username == ''){
+        chk = 1;
+        $('#userName').css('border-color', 'red');
+    }else{
+        $('#userName').css('border-color', '');
+    }
+    if(datas.password == ''){
+        chk = 1;
+        $('#userPassword').css('border-color', 'red');
+    }else{
+        $('#userPassword').css('border-color', '');
+    }
+
+    return chk;
+}
 
 function validateForm(datas){
     chk = 0;
@@ -615,5 +707,7 @@ function validateForm(datas){
     }
     return chk;
 }
+
+
 </script>
 </html>

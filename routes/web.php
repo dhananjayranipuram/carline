@@ -28,6 +28,12 @@ Route::get('/contact', [SiteController::class, 'contactUs']);
 Route::any('/send-otp', [SiteController::class, 'sendOtp']);
 Route::any('/verify-otp', [SiteController::class, 'verifyOtp']);
 Route::any('/register-user', [SiteController::class, 'registerUser']);
+Route::any('/login', [SiteController::class, 'loginUser']);
+Route::any('/save-car-booking', [SiteController::class, 'saveCarBooking']);
+
+Route::any('/send-contact-us', [SiteController::class, 'sendContactUs']);
+
+Route::any('/check-rate', [SiteController::class, 'checkRate']);
 
 Route::any('/site/filter-cars', [SiteController::class, 'filterCars']);
 
@@ -73,6 +79,7 @@ Route::any('/admin/save-policy-agreement', [AdminController::class, 'savePolicyA
 Route::any('/admin/edit-policy-agreement', [AdminController::class, 'editPolicyAgreement']);
 Route::any('/admin/update-policy-agreement', [AdminController::class, 'updatePolicyAgreement']);
 Route::any('/admin/delete-policy-agreement', [AdminController::class, 'deletePolicyAgreement']);
+
 
 //Clear Cache facade value:
 Route::get('/clear-cache', function() {

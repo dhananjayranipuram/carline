@@ -96,7 +96,7 @@
                                         </div>
                                         <div class="col-12 col-md-12">
                                             <div class="form-group">
-                                                <input type="file" name="carImages[]" multiple="multiple" accept="image/*">
+                                                <input type="file" name="carImages[]" id="carImages" multiple="multiple" accept="image/*">
                                             </div>
                                         </div>
                                     </div>
@@ -218,6 +218,26 @@ $(document).ready(function () {
             $(".special-offer").hide();
         }
     });
+    
+
+    var _URL = window.URL || window.webkitURL;
+    $("#carImages").change(function(e) {
+        var file, img;
+
+        $.each(this.files, function (i) {
+            if ((file = i)) {
+                img = new Image();
+                img.onload = function() {
+                    alert(this.width + " " + this.height);
+                };
+                img.onerror = function() {
+                    alert( "not a valid file: " + file.type);
+                };
+                img.src = _URL.createObjectURL(file);
+            }
+        });
+    });
+
 });
 </script>
 @endsection

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Site;
 use App\Mail\OtpVerification;
+use App\Mail\ContactUs;
 use Session;
 use Redirect;
 use Storage;
@@ -193,6 +194,131 @@ class SiteController extends Controller
         }else{
             $response['status'] = '401';
             $response['message'] = 'Registration failed.';
+        }
+        return json_encode($response);
+    }
+
+    public function checkRate(Request $request){
+        $site = new Site();
+        $credentials = $request->validate([
+            'destinationEmirate' => ['required'],
+            'sourceEmirates' => ['required'],
+            'pickupdate' => ['required'],
+            'returndate' => ['required'],
+            'pickuptime' => ['required'],
+            'returntime' => ['required'],
+            'id' => ['required'],
+        ]);
+
+        $res = $this->calculateRate($credentials);
+        
+        return json_encode($res);
+    }
+
+    public function calculateRate($credentials){
+        $site = new Site();
+        $res = [];
+        $rate = 0;
+        $pickupdate = strtotime($credentials['pickupdate'].' '.$credentials['pickuptime']);
+        $returndate = strtotime($credentials['returndate'].' '.$credentials['returntime']);
+        $datediff = $returndate - $pickupdate;
+
+        $days =  round($datediff / (60 * 60 * 24));
+        $tempDays =  $datediff / (60 * 60 * 24);
+        $extraHours =  ($tempDays - floor($tempDays)) * (24)-1;
+        $days = ceil($days + $extraHours);
+
+        $credentials['format'] = 'normal';
+        $carRes = $site->getCars($credentials);
+        // print_r($carRes);exit;
+        if(!empty($carRes)){
+            if($carRes[0]->offer_flag==1){
+                $rate += (float) str_replace(',', '', $carRes[0]->offer_price);
+            }else{
+                $rate += (float)str_replace(',', '', $carRes[0]->rent);
+            }
+        }
+        $rate = $days*$rate;
+        if($credentials['destinationEmirate'] != $credentials['sourceEmirates']){
+            $resEmirate = $site->getEmirates($credentials);
+            if(!empty($resEmirate)){
+                $rate += (float)str_replace(',', '', $resEmirate[0]->rate);
+            }
+        }
+        $vat = 0.18*$rate;
+        $res['days'] = $days;
+        $res['vat'] = $vat;
+        $res['rate'] = $rate;
+        $res['total'] = $rate+$vat;
+        return $res;
+    }
+
+    public function loginUser(Request $request){
+        $site = new Site();
+        $response = [];
+        $credentials = $request->validate([
+            'username' => ['required'],
+            'password' => ['required']
+        ]);
+
+        $res = $site->login($credentials);
+        if($res){
+            Session::put('userId', $res[0]->id);
+            Session::put('userdata', $res);
+            $response['status'] = '200';
+            $response['message'] = 'User login succesfully.';
+            $response['userId'] = $res[0]->id;
+        }else{
+            $response['status'] = '401';
+            $response['message'] = 'Login failed.';
+        }
+        return json_encode($response);
+    }
+
+    public function sendContactUs(Request $request){
+        $admin = new Site();
+        $res = [];
+        if($request->method() == 'POST'){
+            $filterData = $request->validate([
+                'first_name' => ['required'],
+                'last_name' => ['required'],
+                'email' => ['required'],
+                'phone' => ['required'],
+                'message' => ['required']
+            ]);
+            
+            Mail::to('dhananjayranipuram@gmail.com')->send(new ContactUs((object)$filterData));
+
+            return Redirect::to('/contact');
+        }
+    }
+
+    public function saveCarBooking(Request $request){
+        $site = new Site();
+        $response = [];
+        $credentials = $request->validate([
+            'destinationData' => ['required'],
+            'sourceData' => ['required'],
+            'sourceEmirates' => ['required'],
+            'destinationEmirate' => ['required'],
+            'pickupdate' => ['required'],
+            'returndate' => ['required'],
+            'pickuptime' => ['required'],
+            'returntime' => ['required'],
+            'carId' => ['required'],
+            'userId' => ['required'],
+        ]);
+        $rateData = $this->calculateRate($credentials);
+        $credentials['rate'] = $rateData['total'];
+        // print_r($credentials);exit;
+        $res = $site->saveBookingData($credentials);
+        if($res){
+            $response['status'] = '200';
+            $response['message'] = 'Booked succesfully.';
+            $response['bookingId'] = $res;
+        }else{
+            $response['status'] = '401';
+            $response['message'] = 'Booking failed.';
         }
         return json_encode($response);
     }

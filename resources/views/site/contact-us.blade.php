@@ -109,35 +109,36 @@
                 <div class="col-lg-6">
                     <!-- Contact Form Start -->
                     <div class="contact-us-form">
-                        <form id="contactForm" action="#" method="POST" data-toggle="validator" class="wow fadeInUp" data-wow-delay="0.5s">
+                        <form action="{{url('/send-contact-us')}}" method="POST" data-toggle="validator" class="wow fadeInUp" data-wow-delay="0.5s">
+                        @csrf <!-- {{ csrf_field() }} -->
                             <div class="row">
                                 <div class="form-group col-md-6 mb-4">
                                     <label>first name</label>
-                                    <input type="text" name="name" class="form-control" id="fname" placeholder="Enter Your Name" required>
+                                    <input type="text" name="first_name" class="form-control" placeholder="Enter Your Name" required>
                                     <div class="help-block with-errors"></div>
                                 </div>
 
                                 <div class="form-group col-md-6 mb-4">
                                     <label>last name</label>
-                                    <input type="text" name="name" class="form-control" id="lname" placeholder="Enter Your Name" required>
+                                    <input type="text" name="last_name" class="form-control" placeholder="Enter Your Name" required>
                                     <div class="help-block with-errors"></div>
                                 </div>
 
                                 <div class="form-group col-md-6 mb-4">
                                     <label>email</label>
-                                    <input type="email" name ="email" class="form-control" id="email" placeholder="Enter Your Email" required>
+                                    <input type="email" name ="email" class="form-control" placeholder="Enter Your Email" required>
                                     <div class="help-block with-errors"></div>
                                 </div>
 
                                 <div class="form-group col-md-6 mb-4">
                                     <label>phone</label>
-                                    <input type="text" name="phone" class="form-control" id="phone" placeholder="Enter Your Number" required>
+                                    <input type="text" name="phone" class="form-control" placeholder="Enter Your Number" required>
                                     <div class="help-block with-errors"></div>
                                 </div>
 
                                 <div class="form-group col-md-12 mb-4">
                                     <label>message</label>
-                                    <textarea name="msg" class="form-control" id="msg" rows="4" placeholder="Write Your Message" required></textarea>
+                                    <textarea name="message" class="form-control" rows="4" placeholder="Write Your Message" required></textarea>
                                     <div class="help-block with-errors"></div>
                                 </div>
 

@@ -49,7 +49,7 @@
         <div class="rent-details wow fadeInUp" data-wow-delay="0.75s">
             <div class="container" style="text-align: -webkit-center;">
                 <!-- Filter Form Start -->
-				<form action="#" method="get" style="width:25%;">
+				<form action="#" method="get" style="width:40%;">
                     <div class="row no-gutters align-items-center">
                         <div class="col-md-12">
                             <div class="rent-details-box">
@@ -57,7 +57,7 @@
                                     <!-- Rent Details Item Start -->
                                     <div class="rent-details-item" style="width: 70%;">
                                         <div class="icon-box">
-                                            <img src="images/icon-rent-details-1.svg" alt="">
+                                            <img src="{{asset('assets/images/icon-rent-details-1.svg')}}" alt="">
                                         </div>
                                         <div class="rent-details-content">
                                             <h3>car </h3>
@@ -177,8 +177,8 @@
     </div>
 </div>
 
-    <!-- Exclusive Partners Section Start -->
-    <div class="exclusive-partners bg-section">
+<!-- Exclusive Partners Section Start -->
+<div class="exclusive-partners bg-section">
     <div class="container">
         <div class="row section-row">
             <div class="col-lg-12">
@@ -206,8 +206,8 @@
 </div>
 <!-- Exclusive Partners Section End -->
 
-    <!-- Luxury Collection Section Start -->
-    <div class="luxury-collection">
+<!-- Luxury Collection Section Start -->
+<div class="luxury-collection">
     <div class="container-fluid">
         <div class="row no-gutters">
             <div class="col-lg-12">
@@ -346,7 +346,7 @@
             <div class="col-lg-12">
                 <!-- Service Box Footer Start -->
                 <div class="services-box-footer wow fadeInUp" data-wow-delay="1s">
-                    <a href="#" class="btn-default">view all Destinations</a>
+                    <a href="destinations.html" class="btn-default">view all Destinations</a>
                 </div>
                 <!-- Service Box Footer End -->
             </div>
@@ -424,7 +424,7 @@
 
                     <!-- About Content Footer Start -->
                     <div class="about-content-footer wow fadeInUp" data-wow-delay="1s">
-                        <a href="#" class="btn-default">contact us</a>
+                        <a href="contact.html" class="btn-default">contact us</a>
                     </div>
                     <!-- About Content Footer End -->
                 </div>
@@ -455,7 +455,7 @@
                 <div class="intro-video-box">
                     <!-- Video Play Button Start -->
                     <div class="video-play-button">
-                        <a href="https://www.youtube.com/watch?v=TE2tfavIo3E" class="popup-video" data-cursor-text="Play">
+                        <a href="https://www.youtube.com/watch?v=IdejM6wCkxA" class="popup-video" data-cursor-text="Play">
                             <i class="fa-solid fa-play"></i>
                         </a>
                     </div>
@@ -902,12 +902,12 @@
 <div class="cta-box bg-section">
     <div class="container">
         <div class="row align-items-center">
-            <div class="col-lg-6 col-md-7">
+            <div class="col-lg-12 col-md-12">
                 <!-- Cta Box Content Start -->
-                <div class="cta-box-content">
+                <center><div class="cta-box-content">
                     <!-- Section Title Start -->
                     <div class="section-title">
-                        <h2 class="text-anime-style-3">Ready to hit the road? Book your car today !</h2>
+                        <h2 class="text-anime-style-3">Ready to hit the road? <br>Book your car today !</h2>
                         <p class="wow fadeInUp">Our friendly customer service team is here to help. Contact us anytime for support and inquiries.</p>
                     </div>
                     <!-- Section Title End -->
@@ -917,19 +917,10 @@
                         <a href="#" class="btn-default">contact us</a>
                     </div>
                     <!-- Cta Box Btn End -->
-                </div>
+                </div></center>
                 <!-- Cta Box Content End -->
             </div>
 
-            <div class="col-lg-6 col-md-5">
-                <!-- Cta Box Image Start -->
-                <div class="cat-box-image">
-                    <figure>
-                        <img src="{{asset('assets/images/car/lam1.png')}}" alt="">
-                    </figure>
-                </div>
-                <!-- Cta Box Image End -->
-            </div>
         </div>
     </div>
 </div>
@@ -976,7 +967,7 @@
                         <!-- Highlighted Article Content Start -->
                         <div class="highlighted-article-content">
                             <h3><a href="#">Road Trip Essentials: What to Pack for a Smooth Journey</a></h3>
-                            <a href="#" class="section-icon-btn">
+                            <a href="news1.html" class="section-icon-btn">
                                 <img src="{{asset('assets/images/arrow-white.svg')}}" alt="">
                             </a>
                         </div>
@@ -1008,7 +999,7 @@
 
                         <div class="article-post-content">
                             <h3><a href="#">Exploring the City: Best Urban Destinations for a Weekend Getaway</a></h3>
-                            <a href="#" class="read-story-btn">read story</a>
+                            <a href="news1.html" class="read-story-btn">read story</a>
                         </div>
                     </div>
                 </div>
@@ -1035,7 +1026,7 @@
 
                         <div class="article-post-content">
                             <h3><a href="#">Exploring the City: Best Urban Destinations for a Weekend Getaway</a></h3>
-                            <a href="#" class="read-story-btn">read story</a>
+                            <a href="news1.html" class="read-story-btn">read story</a>
                         </div>
                     </div>
                 </div>
@@ -1062,7 +1053,7 @@
 
                         <div class="article-post-content">
                             <h3><a href="#">Exploring the City: Best Urban Destinations for a Weekend Getaway</a></h3>
-                            <a href="#" class="read-story-btn">read story</a>
+                            <a href="news1.html" class="read-story-btn">read story</a>
                         </div>
                     </div>
                 </div>

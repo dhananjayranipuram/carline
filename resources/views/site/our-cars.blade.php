@@ -5,6 +5,13 @@
 .break-word{
     word-wrap: break-word;
 }
+
+.show {
+  display: block;
+}
+.hide {
+  display: none;
+}
 </style>
 <!-- Page Header Start -->
 <!-- <div class="page-header bg-section parallaxie">
@@ -55,7 +62,7 @@
 
                             <ul>
                                 @foreach($carType as $key => $value)
-                                <li class="form-check">
+                                <li class="form-check filterLi" search-value="{{$value->name}}">
                                     <input class="form-check-input car-type" type="checkbox" value="{{$value->id}}">
                                     <label class="form-check-label" for="checkbox1">{{$value->name}}</label>
                                 </li>
@@ -72,7 +79,7 @@
 
                             <ul>
                                 @foreach($brands as $key => $value)
-                                <li class="form-check">
+                                <li class="form-check filterLi" search-value="{{$value->name}}">
                                     <input class="form-check-input car-brand" type="checkbox" value="{{$value->id}}">
                                     <label class="form-check-label" for="checkbox7">{{$value->name}}</label>
                                 </li>
@@ -122,10 +129,18 @@
                                             @if(!empty($specs[$value->id]))
                                                 @foreach($specs[$value->id] as $keys => $values)
                                                     <li class="break-word"><img src="{{asset($values->image)}}" alt="" width="21">
-                                                    @if($values->details!='Yes')
-                                                        {{$values->details}}
-                                                    @endif 
-                                                    {{$values->name}}</li>
+                                                    @if($values->name=='Transmission' || $values->details=='Manual')
+                                                        MT
+                                                    @elseif($values->name=='Transmission' || $values->details=='Automatic')
+                                                        AT
+                                                    @else
+                                                        @if($values->details!='Yes')
+                                                            {{$values->details}}
+                                                        @endif 
+                                                        {{$values->name}}
+                                                    @endif
+                                                    
+                                                    </li>
                                                     @if($keys==3) @break @endif
                                                 @endforeach
                                             @endif
@@ -265,6 +280,27 @@ $(document).ready(function () {
             }
         });
     }
+
+    $("#search").on("keyup change paste", function() {
+        var searchKeyword = $(this).val().toLowerCase(); // Convert to lowercase for case-insensitive search
+        $(".filterLi").each(function() {
+            $(this).removeClass('show')
+            $(this).removeClass('hide')
+            // $(this).addClass('active');
+        });
+        if(searchKeyword==''){
+            return false;
+        }
+        $(".filterLi").each(function() {
+            var searchValue = $(this).attr('search-value').toLowerCase(); // Convert to lowercase for comparison
+            if (searchValue.includes(searchKeyword) && searchKeyword) {
+                $(this).addClass('show').removeClass('hide');
+            } else {
+                $(this).removeClass('show').addClass('hide');
+            }
+        });
+    });
+
 });
 </script>
 @endsection
