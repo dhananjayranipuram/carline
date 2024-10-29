@@ -17,7 +17,7 @@ use App\Http\Controllers\AdminController;
 
 Auth::routes();
 
-Route::any('/', [SiteController::class, 'index']);
+Route::any('/home', [SiteController::class, 'index']);
 Route::get('/about', [SiteController::class, 'aboutUs']);
 Route::get('/cars', [SiteController::class, 'ourCars']);
 Route::get('/car-details', [SiteController::class, 'carDetails']);
