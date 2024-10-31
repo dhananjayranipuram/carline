@@ -28,9 +28,11 @@ while ($startTime <= $endTime) {
                             <!-- Feets Single Sidebar Pricing Start -->
                             <div class="fleets-single-sidebar-pricing">
                                 <input type="hidden" value="{{$carDet[0]->id}}" id="carId">
-                                <h2>AED {{$carDet[0]->rent}}<span>/ DAY</span></h2>
                                 @if($carDet[0]->offer_flag==1)
-                                    <h5>Offer Price {{$carDet[0]->offer_price}}<span>/ DAY</span></h5>
+                                    <h5>AED <del>{{$carDet[0]->rent}}</del><span>/ DAY</span></h5>
+                                    <h2>Offer Price AED {{$carDet[0]->offer_price}}<span>/ DAY</span></h2>
+                                @else
+                                    <h2>AED {{$carDet[0]->rent}}<span>/ DAY</span></h2>
                                 @endif
                             </div>
                             <!-- Feets Single Sidebar Pricing End -->
@@ -157,6 +159,7 @@ while ($startTime <= $endTime) {
                         <div class="fleets-single-sidebar-list">
                             <h2>{{$carDet[0]->brand_name}} {{$carDet[0]->name}} - {{$carDet[0]->model}} Model</h2>
                         </div>
+                        
                         <div class="fleets-single-sidebar-list">
                             <div class="row">
 
@@ -180,11 +183,6 @@ while ($startTime <= $endTime) {
                                 </div>
                             </div>
                         </div>
-                        <!-- Feets Information Start -->
-                        <div class="fleets-information">
-                            {!! trim(html_entity_decode($generalInfo[0]->content)) !!} 
-                        </div>
-                        <!-- Feets Information End -->
 
                         <!-- Feets Amenities Start -->
                         <div class="fleets-amenities">
@@ -206,6 +204,12 @@ while ($startTime <= $endTime) {
                             <!-- Feets Amenities List End -->
                         </div>
                         <!-- Feets Amenities End -->
+
+                        <!-- Feets Information Start -->
+                        <div class="fleets-information">
+                            {!! trim(html_entity_decode($generalInfo[0]->content)) !!} 
+                        </div>
+                        <!-- Feets Information End -->
 
                         @if($carDet[0]->rental_condition_flag == 1)
                         <!-- Rental Conditions Faqs Start -->
@@ -356,6 +360,7 @@ $(document).ready(function () {
 $("#source").keyup(function(){
     if($('#returnLocationToggle').is(":checked")){
         $("#destination").val($("#source").val());
+        destinationData = sourceData;
     }
 });
 
@@ -363,9 +368,11 @@ $("#returnLocationToggle").click(function() {
     if($('#returnLocationToggle').is(":checked")){
         $("#destination").prop('disabled', true);
         $("#destination").val($("#source").val());
+        destinationData = sourceData;
     }else{
         $("#destination").prop('disabled', false);
         $("#destination").val('');
+        destinationData = [];
     }
 });
 
@@ -392,7 +399,7 @@ $("#pickupdate, #returndate, #destination, #source, #returntime, #pickuptime").o
                     $("#rate-details").show();
                     $("#rent-message").html('AED '+res.rate);
                     $("#deposit-message").html('AED '+res.deposit);
-                    $("#total-message").html('AED '+total);
+                    $("#total-message").html('AED '+res.total);
                     
                 }
             });

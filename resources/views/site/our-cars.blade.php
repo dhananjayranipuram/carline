@@ -146,7 +146,7 @@
                                     @if($value->image!='')
                                         @php $imgArr = explode(',',$value->image); @endphp
                                         @if(!empty($imgArr))
-                                            <img src="{{asset($imgArr[0])}}" alt="Image not available">
+                                            <a href="{{url('/car-details')}}?id={{base64_encode($value->id)}}"><img src="{{asset($imgArr[0])}}" alt="Image not available"></a>
                                         @endif
                                     @else
                                         <img src="" alt="Image not available">
@@ -159,7 +159,7 @@
                                     <!-- Perfect Fleets Title Start -->
                                     <div class="perfect-fleet-title">
                                         <h3>{{$value->car_type}}</h3>
-                                        <h2>{{$value->brand_name}} {{$value->name}} {{$value->model}}</h2>
+                                        <a href="{{url('/car-details')}}?id={{base64_encode($value->id)}}"><h2>{{$value->brand_name}} {{$value->name}} {{$value->model}}</h2></a>
                                     </div>
                                     <!-- Perfect Fleets Content End -->
 
@@ -292,6 +292,7 @@ $(document).ready(function () {
                 'carSeats':carSeats,
                 'transId':$(".transmission-id").attr('data-value'),
                 'seatId':$(".seat-id").attr('data-value'),
+                'searchText':$("#search").val(),
             },
             headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
             success: function(res) {
@@ -352,23 +353,24 @@ $(document).ready(function () {
     }
 
     $("#search").on("keyup change paste", function() {
-        var searchKeyword = $(this).val().toLowerCase(); // Convert to lowercase for case-insensitive search
-        $(".filterLi").each(function() {
-            $(this).removeClass('show')
-            $(this).removeClass('hide')
-            // $(this).addClass('active');
-        });
-        if(searchKeyword==''){
-            return false;
-        }
-        $(".filterLi").each(function() {
-            var searchValue = $(this).attr('search-value').toLowerCase(); // Convert to lowercase for comparison
-            if (searchValue.includes(searchKeyword) && searchKeyword) {
-                $(this).addClass('show').removeClass('hide');
-            } else {
-                $(this).removeClass('show').addClass('hide');
-            }
-        });
+        getCars()
+        // var searchKeyword = $(this).val().toLowerCase(); // Convert to lowercase for case-insensitive search
+        // $(".filterLi").each(function() {
+        //     $(this).removeClass('show')
+        //     $(this).removeClass('hide')
+        //     // $(this).addClass('active');
+        // });
+        // if(searchKeyword==''){
+        //     return false;
+        // }
+        // $(".filterLi").each(function() {
+        //     var searchValue = $(this).attr('search-value').toLowerCase(); // Convert to lowercase for comparison
+        //     if (searchValue.includes(searchKeyword) && searchKeyword) {
+        //         $(this).addClass('show').removeClass('hide');
+        //     } else {
+        //         $(this).removeClass('show').addClass('hide');
+        //     }
+        // });
     });
 
 });

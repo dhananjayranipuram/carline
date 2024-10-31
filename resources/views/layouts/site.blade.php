@@ -353,10 +353,12 @@
                                     <div class="row" id="passport-section">
                                         <label for="returnLocationToggle">Passport</label>
                                         <div class="booking-form-group col-md-6 mb-4">
+                                            <label>Front</label>
                                             <input type="file" name="pass_front" class="booking-form-control" placeholder="Front" accept="image/*" required>
                                             <div class="help-block with-errors pass_front"></div>
                                         </div>
                                         <div class="booking-form-group col-md-6 mb-4">
+                                            <label>Back</label>
                                             <input type="file" name ="pass_back" class="booking-form-control" placeholder="Back" accept="image/*" required>
                                             <div class="help-block with-errors pass_back"></div>
                                         </div>
@@ -367,10 +369,12 @@
                                     <div class="row" id="dl-section">
                                         <label for="returnLocationToggle">Driving Licence</label>
                                         <div class="booking-form-group col-md-6 mb-4">
+                                            <label>Front</label>
                                             <input type="file" name="dl_front" class="booking-form-control" placeholder="Front" accept="image/*" required>
                                             <div class="help-block with-errors dl_front"></div>
                                         </div>
                                         <div class="booking-form-group col-md-6 mb-4">
+                                            <label>Back</label>
                                             <input type="file" name="dl_back" class="booking-form-control" placeholder="Back" accept="image/*" required>
                                             <div class="help-block with-errors dl_back"></div>
                                         </div>
@@ -381,10 +385,12 @@
                                     <div class="row" >
                                         <label for="returnLocationToggle">EID</label>
                                         <div class="booking-form-group col-md-6 mb-4">
+                                            <label>Front</label>
                                             <input type="file" name="eid_front" class="booking-form-control" placeholder="Front" accept="image/*" required>
                                             <div class="help-block with-errors eid_front"></div>
                                         </div>
                                         <div class="booking-form-group col-md-6 mb-4">
+                                            <label>Back</label>
                                             <input type="file" name="eid_back" class="booking-form-control" placeholder="Back" accept="image/*" required>
                                             <div class="help-block with-errors eid_back"></div>
                                         </div>

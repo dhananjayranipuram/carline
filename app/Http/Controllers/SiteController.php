@@ -84,6 +84,7 @@ class SiteController extends Controller
                 'carSeats' => [''],
                 'transId' => [''],
                 'seatId' => [''],
+                'searchText' => [''],
             ]);
             
             // $filterData['type'] = implode(',', $filterData['type']);
@@ -331,7 +332,7 @@ class SiteController extends Controller
     public function calculateRate($credentials){
         $site = new Site();
         $res = [];
-        $deposit = $rate = 0;
+        $deposit = $rate = $emirateCharges = $total = 0;
         // print_r($credentials);exit;
         $pickupdate = strtotime($credentials['pickupdate'].' '.$credentials['pickuptime']);
         $returndate = strtotime($credentials['returndate'].' '.$credentials['returntime']);
@@ -344,33 +345,37 @@ class SiteController extends Controller
 
         $credentials['format'] = 'normal';
         $carRes = $site->getCars($credentials);
-        // print_r($carRes);exit;
+        
         if(!empty($carRes)){
             if($carRes[0]->offer_flag==1){
-                $rate += (float) str_replace(',', '', $carRes[0]->offer_price);
+                $rate = (float) str_replace(',', '', $carRes[0]->offer_price);
             }else{
-                $rate += (float)str_replace(',', '', $carRes[0]->rent);
+                $rate = (float)str_replace(',', '', $carRes[0]->rent);
             }
 
             if($carRes[0]->deposit!=''){
                 $deposit = (float) str_replace(',', '', $carRes[0]->deposit);
             }
         }
-        if($days>0){
-            $rate = $days*$rate;
-        }
+        
         if($credentials['destinationEmirate'] != $credentials['sourceEmirates']){
             $resEmirate = $site->getEmirates($credentials);
             if(!empty($resEmirate)){
-                $rate += (float)str_replace(',', '', $resEmirate[0]->rate);
+                $emirateCharges = (float)str_replace(',', '', $resEmirate[0]->rate);
             }
         }
-        $vat = 0.18*$rate;
+
+        
+        if($days>0){
+            $total = ($rate*$days) + $deposit + $emirateCharges;
+        }
+
+        $vat = 0.05*$total;
         $res['days'] = $days;
         $res['vat'] = $vat;
-        $res['rate'] = $rate;
+        $res['rate'] = $total;
         $res['deposit'] = $deposit;
-        $res['total'] = $rate+$vat+$deposit;
+        $res['total'] = $vat+$total;
         return $res;
     }
 
