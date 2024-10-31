@@ -9,6 +9,15 @@
 
     
 </style>
+@php
+$timeSlots = [];
+$startTime = strtotime("12:00 AM");
+$endTime = strtotime("11:59 PM");
+while ($startTime <= $endTime) {
+    $timeSlots[] = date("g:i A", $startTime);
+    $startTime = strtotime('+30 minutes', $startTime);
+}
+@endphp
 <div class="page-fleets-single">
         <div class="container">
             <div class="row">
@@ -21,234 +30,99 @@
                                 <input type="hidden" value="{{$carDet[0]->id}}" id="carId">
                                 <h2>AED {{$carDet[0]->rent}}<span>/ DAY</span></h2>
                                 @if($carDet[0]->offer_flag==1)
-                                    <h2>Offer Price {{$carDet[0]->offer_price}}<span>/ DAY</span></h2>
+                                    <h5>Offer Price {{$carDet[0]->offer_price}}<span>/ DAY</span></h5>
                                 @endif
                             </div>
                             <!-- Feets Single Sidebar Pricing End -->
 
-                            <!-- Feets Single Sidebar List Start -->
-                            <div class="fleets-single-sidebar-list">
-                                <ul>
-                                    @foreach($specs as $key => $value)
-                                    <li><img src="{{asset($value->image)}}" alt="">{{$value->name}} <span>{{$value->details}}</span></li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                            <!-- Feets Single Sidebar List End -->
-
-                            <!-- Feets Single Sidebar Btn Start -->
-                            <div class="fleets-single-sidebar-btn">
-                                <a href="#" class="btn-default popup-with-form book-now-form">book now</a>
-                                <span>or</span>
-                                <a href="#" class="wp-btn"><i class="fa-brands fa-whatsapp"></i></a>                                
-                            </div>
-                            <!-- Feets Single Sidebar Btn End -->
-                        </div>
-
-                        <!-- Booking Form Box Start -->
-                        <div class="booking-form-box">
-                            <!-- Booking PopUp Form Start -->
-                            <div id="registrationForm" class="white-popup-block mfp-hide booking-form">
-                                <div class="section-title">
-                                    <h2>Registration</h2>
-                                </div>                                
-                                <fieldset>
+                            <div class="contact-us-form">
+                                <form id="contactForm" action="#" method="POST" data-toggle="validator" class="wow fadeInUp" data-wow-delay="0.5s" novalidate="true" style="visibility: visible; animation-delay: 0.5s; animation-name: fadeInUp;">
                                     <div class="row">
-                                        <div class="booking-form-group col-md-6 mb-4">
-                                            <input type="text" id="firstName" class="booking-form-control" placeholder="First Name" required>
+                                        
+                                        <!-- Pickup Location -->
+                                        <div class="form-group col-12 mb-4">
+                                            <input class="form-control" id="source" type="text" placeholder="Pick Up Location" />
                                             <div class="help-block with-errors"></div>
                                         </div>
-                                        <div class="booking-form-group col-md-6 mb-4">
-                                            <input type="text" id="lastName" class="booking-form-control" placeholder="Last Name" required>
+                                        
+                                        <!-- Pickup Date -->
+                                        <div class="form-group col-12 mb-4">
+                                            <label>Pickup Date</label>
+                                            <input type="date" name="pickup_date" class="form-control" id="pickupdate" required min="{{ date('Y-m-d') }}" onkeydown="return false">
                                             <div class="help-block with-errors"></div>
                                         </div>
-
-                                        <div class="booking-form-group col-md-6 mb-4">
-                                            <input type="email" id ="email" class="booking-form-control" placeholder="Enter Your Email" required>
-                                            <div class="help-block with-errors"></div>
-                                        </div>
-
-                                        <div class="booking-form-group col-md-6 mb-4">
-                                            <input type="text" id="phone" class="booking-form-control" placeholder="Enter Your Mobile Number" required>
-                                            <div class="help-block with-errors"></div>
-                                        </div>
-
-                                        <div class="booking-form-group col-md-6 mb-4">
-                                            <input type="password" id="password" class="booking-form-control" placeholder="Password" required>
-                                            <div class="help-block with-errors"></div>
-                                        </div>
-                                        <div class="booking-form-group col-md-6 mb-4">
-                                            <input type="text" id="flat" class="booking-form-control" placeholder="Flat/Villa number" required>
-                                            <div class="help-block with-errors"></div>
-                                        </div>
-                                        <div class="booking-form-group col-md-6 mb-4">
-                                            <input type="text" id="building" class="booking-form-control" placeholder="Building name" required>
-                                            <div class="help-block with-errors"></div>
-                                        </div>
-
-                                        <div class="booking-form-group col-md-6 mb-4">
-                                            <input type="text" id="landmark" class="booking-form-control" placeholder="Landmark" required>
-                                            <div class="help-block with-errors"></div>
-                                        </div>
-                                        <div class="booking-form-group col-md-6 mb-4">
-                                            <input type="text" id="city" class="booking-form-control" placeholder="City" required>
-                                            <div class="help-block with-errors"></div>
-                                        </div>
-
-                                        <div class="booking-form-group col-md-6 mb-4">
-                                            <select class="booking-form-control form-select" id="emirates" required>
-                                                <option value="" disabled selected>Emirates</option>
-                                                @foreach($emirates as $key => $value)
-                                                    <option value="{{$value->id}}">{{$value->name}}</option>
+                                        
+                                        <!-- Pickup Time -->
+                                        <div class="form-group col-12 mb-4">
+                                            <label>Pickup Time</label>
+                                            <select class="form-control" name="pickup_time" id="pickuptime">
+                                                <option selected disabled>Select Pickup Time</option>
+                                                @foreach($timeSlots as $key => $value)
+                                                    <option value="{{ date('G:i', strtotime($value))}}">{{$value}}</option>
                                                 @endforeach
                                             </select>
                                             <div class="help-block with-errors"></div>
                                         </div>
-
-                                        <div class="row" id="otp-section">
-                                            <div class="col-md-12 mb-12 pb-2">
-                                                <div class="otpSection">
-                                                    <p class="otpSentTo">OTP has been sent to your email address.</p>
-                                                    <!-- <p class="resend">Resend otp after <span class="countdown"></span></p> -->
-                                                    <h3>Enter OTP</h3>
-                                                    <div class="otp-field">
-                                                        <input type="text" maxlength="1" />
-                                                        <input type="text" maxlength="1" />
-                                                        <input class="space" type="text" maxlength="1" />
-                                                        <input type="text" maxlength="1" />
-                                                        <input type="text" maxlength="1" />
-                                                        <input type="text" maxlength="1" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-12 mb-12 pb-2" id="errorMessages">
-
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12 booking-form-group send-otp-button">
-                                            <button type="submit" class="btn-default send-otp">Send OTP</button>
-                                            <div id="msgSubmit" class="h3 hidden"></div>
-                                        </div>
-                                        <div class="col-md-12 booking-form-group register-user" style="display:none;">
-                                            <button type="submit" class="btn-default register-button">Register Now</button>
-                                            <div id="msgSubmit" class="h3 hidden"></div>
-                                        </div>
-                                        <div class="col-md-12 booking-form-group send-otp-button">
-                                            <label >Already registered? <a id="loginPopup" style="cursor:pointer; color:blue;">Login here</a></label>
-                                        </div>
-                                    </div>                                    
-                                </fieldset>
-                            </div>
-                            <!-- Registration PopUp Form End -->
-                        </div>
-                        <!-- Registration Form Box End -->
-                        
-                        <!-- Booking Form Box Start -->
-                        <div class="booking-form-box">
-                            <!-- Booking PopUp Form Start -->
-                            <div id="bookingform" class="white-popup-block mfp-hide booking-form">
-                                <div class="section-title">
-                                    <h2>Reserve your vehicle today!</h2>
-                                    <p>Fill out the form below to reserve your vehicle. Complete the necessary details to ensure a smooth rental experience.</p>
-                                </div>                                
-                                <fieldset>
-                                    <div class="row">
-                                    <input type="hidden" id="userId" value="@if(session()->has('userId')){{Session::get('userId')}}@endif">
-
-                                        <div class="booking-form-group col-md-6 mb-4" >
-                                            <input class="booking-form-control" id="source" type="text" placeholder="Pick Up Location" />
-                                            <!-- <select name="location" class="booking-form-control form-select" id="pickuplocation" required>
-                                                <option value="" disabled selected>Pick Up Location</option>
-                                                <option value="abu_dhabi">abu dhabi</option>
-                                                <option value="alain">alain</option>
-                                                <option value="dubai">dubai</option>
-                                                <option value="sharjah">sharjah</option>
-                                            </select> -->
-                                            <div class="help-block with-errors"></div>
-                                        </div>
-
-                                        <div class="booking-form-group col-md-6 mb-4">
-                                            <input class="booking-form-control" id="destination" type="text" placeholder="Drop Off Location" />
-                                            <!-- <select name="droplocation" class="booking-form-control form-select" id="droplocation" required>
-                                                <option value="" disabled selected>Drop Off Location</option>
-                                                <option value="abu_dhabi">abu dhabi</option>
-                                                <option value="alain">alain</option>
-                                                <option value="sharjah">sharjah</option>
-                                            </select> -->
-                                            <div class="help-block with-errors"></div>
-                                        </div>
-
-                                        <div class="booking-form-group col-md-6 mb-4">
-                                            <input type="text" name="date" placeholder="PickUp Date" class="booking-form-control" id="pickupdate" required min="{{ date('Y-m-d') }}" onfocus="(this.type='date')" onblur="if(!this.value) this.type='text'">
-                                            <div class="help-block with-errors"></div>
-                                        </div>
-
-                                        <div class="booking-form-group col-md-6 mb-4">
-                                            <input type="text" name="date" class="booking-form-control" id="returndate" placeholder="Return Date" required min="{{ date('Y-m-d') }}" onfocus="(this.type='date')" onblur="if(!this.value) this.type='text'">
-                                            <div class="help-block with-errors"></div>
-                                        </div>
-
-                                        <div class="booking-form-group col-md-6 mb-4">
-                                            <input type="text" name="date" placeholder="PickUp Time" class="booking-form-control" id="pickuptime" required min="{{ date('Y-m-d') }}" onfocus="(this.type='time')" onblur="if(!this.value) this.type='text'">
-                                            <div class="help-block with-errors"></div>
-                                        </div>
-
-                                        <div class="booking-form-group col-md-6 mb-4">
-                                            <input type="text" name="date" class="booking-form-control" id="returntime" placeholder="Return Time" required min="{{ date('Y-m-d') }}" onfocus="(this.type='time')" onblur="if(!this.value) this.type='text'">
-                                            <div class="help-block with-errors"></div>
-                                        </div>
-
-                                        <div class="col-md-12 booking-form-group">
                                         
-                                            <button type="submit" class="btn-default save-car-booking">Book now</button>
-                                            <div id="msgSubmit" class="h3 hidden"></div>
-                                            <div id="rent-message"></div>
+                                        <!-- Return to the Same Location Toggle -->
+                                        <div class="form-group col-12 mb-4">
+                                            <label for="returnLocationToggle">Return to the Same Location</label>
+                                            <div class="form-check form-switch">
+                                                <input type="checkbox" class="form-check-input" id="returnLocationToggle" name="return_to_same_location">
+                                                <label class="form-check-label" for="returnLocationToggle">On/Off</label>
+                                            </div>
                                         </div>
-                                    </div>                                    
-                                </fieldset>
-                            </div>
-                            <!-- Booking PopUp Form End -->
-                        </div>
-                        <!-- Booking Form Box End -->
-
-                        <!-- Login Form Box Start -->
-                        <div class="booking-form-box">
-                            <!-- Booking PopUp Form Start -->
-                            <div id="loginForm" class="white-popup-block mfp-hide booking-form">
-                                <div class="section-title">
-                                    <h2>Login</h2>
-                                </div>                                
-                                <fieldset>
-                                    <div class="row">
-                                        <div class="booking-form-group col-md-12 mb-4" >
-                                            <input class="booking-form-control" id="userName" type="text" placeholder="Enter your email" />
-                                            <div class="help-block with-errors"></div>
-                                        </div>   
-
-                                        <div class="booking-form-group col-md-12 mb-4">
-                                            <input class="booking-form-control" id="userPassword" type="password" placeholder="Enter your password." />
-                                            <div class="help-block with-errors"></div>
-                                        </div>
-
-                                        <div class="booking-form-group col-md-12 mb-4" id="loginErrors">
+                                        
+                                        <!-- Dropoff Section -->
+                                        <div id="dropoffSection">
+                                            <!-- Dropoff Location -->
+                                            <div class="form-group col-12 mb-4" id="dropoffdiv">
+                                                <input class="form-control" id="destination" type="text" placeholder="Drop Off Location" />
+                                                <div class="help-block with-errors"></div>
+                                            </div>
                                             
+                                            <!-- Dropoff Date -->
+                                            <div class="form-group col-12 mb-4">
+                                                <label>Dropoff Date</label>
+                                                <input type="date" name="dropoff_date" class="form-control" id="returndate" required min="{{ date('Y-m-d') }}" onkeydown="return false">
+                                                <div class="help-block with-errors"></div>
+                                            </div>
+                                            
+                                            <!-- Dropoff Time -->
+                                            <div class="form-group col-12 mb-4">
+                                                <label>Dropoff Time</label>
+                                                
+                                                <select class="form-control" name="dropoff_time" id="returntime">
+                                                    <option selected disabled>Select Pickup Time</option>
+                                                    @foreach($timeSlots as $key => $value)
+                                                        <option value="{{ date('G:i', strtotime($value))}}">{{$value}}</option>
+                                                    @endforeach
+                                                </select>
+                                                <div class="help-block with-errors"></div>
+                                            </div>
                                         </div>
-
-                                        <div class="booking-form-group col-md-12 mb-4">
-                                            <button type="button" class="btn-default login_button">Login</button>
-                                            <div id="login" class="h3 hidden"></div>
+                                        <div class="fleets-single-sidebar-list" id="booking-errors">
                                         </div>
-                                        <div class="col-md-12 booking-form-group send-otp-button">
-                                            <label >Not registered? <a id="registrationPopup" style="cursor:pointer; color:blue;">Register here</a></label>
+                                        <div class="fleets-single-sidebar-list" id="rate-details" style="display:none;">
+                                            <ul>
+                                                <li><img src="{{asset('assets/images/icon-how-it-work-2.svg')}}" alt="">Rent <span id="rent-message"> AED 1500</span></li>
+                                                <li><img src="{{asset('assets/images/icon-service-2.svg')}}" alt="">Deposit <span id="deposit-message">AED 100</span></li>
+                                                <li><img src="{{asset('assets/images/icon-service-2.svg')}}" alt="">Total <span id="total-message">AED 100</span></li>
+                                            </ul>
                                         </div>
-                                    </div>                                    
-                                </fieldset>
+                                        <!-- Feets Single Sidebar Btn Start -->
+                                        <div class="fleets-single-sidebar-btn">
+                                            <a href="#" class="btn-default popup-with-form book-now-form">book now</a>
+                                            <span>or</span>
+                                            <a href="#" class="wp-btn"><i class="fa-brands fa-whatsapp"></i></a>                                
+                                        </div>
+                                        <!-- Feets Single Sidebar Btn End -->
+                                    </div>
+                                </form>
                             </div>
-                            <!-- Booking PopUp Form End -->
+                            
                         </div>
-                        <!-- Login Form Box End -->
+
 
                     </div>
                     <!-- Feets Single Sidebar End -->
@@ -281,8 +155,32 @@
                         </div>
                         <!-- Feets Single Slider End -->
 
-                       
-                        <h2>{{$carDet[0]->brand_name}} {{$carDet[0]->name}} - {{$carDet[0]->model}} Model</h2>
+                        <div class="fleets-single-sidebar-list">
+                            <h2>{{$carDet[0]->brand_name}} {{$carDet[0]->name}} - {{$carDet[0]->model}} Model</h2>
+                        </div>
+                        <div class="fleets-single-sidebar-list">
+                            <div class="row">
+
+                                @php
+                                $pieces = array_chunk($specs, ceil(count($specs) / 2));
+                                @endphp
+
+                                <div class="col-md-6">
+                                    <ul>
+                                        @foreach($pieces[0] as $key => $value)
+                                        <li><img src="{{asset($value->image)}}" alt="">{{$value->name}} <span>{{$value->details}}</span></li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <ul>
+                                        @foreach($pieces[1] as $key => $value)
+                                        <li><img src="{{asset($value->image)}}" alt="">{{$value->name}} <span>{{$value->details}}</span></li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
                         <!-- Feets Information Start -->
                         <div class="fleets-information">
                             {!! trim(html_entity_decode($generalInfo[0]->content)) !!} 
@@ -356,27 +254,27 @@
     <!-- Page Feets Single End -->
 <script src="{{asset('admin_assets/js/core/jquery-3.7.1.min.js')}}"></script>  
 <!-- <script src="{{asset('assets/js/jquery.magnific-popup.min.js')}}"></script> -->
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmX5w5ltGt09cjDod_YMamphRRgS8L-ZQ&libraries=places"></script>
+<!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmX5w5ltGt09cjDod_YMamphRRgS8L-ZQ&region=ae&libraries=places"></script> -->
 <script>
-var sourceData = [];
-var destinationData = [];    
+// var sourceData = [];
+// var destinationData = [];    
 
-// var sourceData = [
-//     {
-//         "Latitude": 25.2489204,
-//         "Longitude": 55.30605509999999,
-//         "Emirates": "Dubai",
-//         "Address": "Al Karama,Dubai,Dubai,United Arab Emirates,"
-//     }
-// ];
-//     var destinationData = [
-//     {
-//         "Latitude": 25.1250606,
-//         "Longitude": 55.3837419,
-//         "Emirates": "Dubai",
-//         "Address": "Dubai Silicon Oasis,Dubai,Dubai,United Arab Emirates,"
-//     }
-// ];
+var sourceData = [
+    {
+        "Latitude": 25.2489204,
+        "Longitude": 55.30605509999999,
+        "Emirates": "Dubai",
+        "Address": "Al Karama,Dubai,Dubai,United Arab Emirates,"
+    }
+];
+    var destinationData = [
+    {
+        "Latitude": 25.1250606,
+        "Longitude": 55.3837419,
+        "Emirates": "Dubai",
+        "Address": "Dubai Silicon Oasis,Dubai,Dubai,United Arab Emirates,"
+    }
+];
 $(document).ready(function () {
 
     // Initialize the Autocomplete object for the input field
@@ -414,7 +312,7 @@ $(document).ready(function () {
                 'Emirates': emiratesName,
                 'Address': tempAddress,
             });
-            console.log(sourceData)
+            // console.log(sourceData)
         } else {
             console.log('No geometry data found for this place.');
         }
@@ -446,11 +344,20 @@ $(document).ready(function () {
                 'Emirates': emiratesName,
                 'Address': tempAddress,
             });
-            console.log( destinationData);
+            // console.log( destinationData);
         } else {
             console.log('No geometry data found for this place.');
         }
     });
+
+    $("#returnLocationToggle").click(function() {
+        if($('#returnLocationToggle').is(":checked")){
+            $("#dropoffdiv").hide();
+        }else{
+            $("#dropoffdiv").show();
+        }
+    });
+
 });
 
 
@@ -461,25 +368,36 @@ $("#pickupdate, #returndate, #destination, #source, #returntime, #pickuptime").o
     // console.log('pickupdate'+$("#pickupdate").val())
     // console.log('returndate'+$("#returndate").val())
     if(destinationData.length != 0 && sourceData.length != 0 && $("#pickupdate").val() != '' && $("#returndate").val() != '' && $("#pickuptime").val() != '' && $("#returntime").val() != ''){
-        $.ajax({
-            url: baseUrl + '/check-rate',
-            type: 'post',
-            data: { 
-                'destinationEmirate': destinationData[0].Emirates, 
-                'sourceEmirates': sourceData[0].Emirates, 
-                'pickupdate': $("#pickupdate").val(),
-                'returndate': $("#returndate").val(),
-                'pickuptime': $("#pickuptime").val(),
-                'returntime': $("#returntime").val(),
-                'id': $("#carId").val()},
-            dataType: "json",
-            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-            success: function(res) {
-                var str = '<h2>Rent : '+res.total+' AED</h2>'
-                $("#rent-message").html(str);
-                
-            }
-        });
+        if ($("#pickupdate").val() < $("#returndate").val()) {
+
+            $.ajax({
+                url: baseUrl + '/check-rate',
+                type: 'post',
+                data: { 
+                    'destinationEmirate': destinationData[0].Emirates, 
+                    'sourceEmirates': sourceData[0].Emirates, 
+                    'pickupdate': $("#pickupdate").val(),
+                    'returndate': $("#returndate").val(),
+                    'pickuptime': $("#pickuptime").val(),
+                    'returntime': $("#returntime").val(),
+                    'returntosame': $("#returnLocationToggle").val(),
+                    'id': $("#carId").val()},
+                dataType: "json",
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                success: function(res) {
+                    $("#rate-details").show();
+                    $("#rent-message").html('AED '+res.total);
+                    var total = res.total+100;
+                    $("#total-message").html('AED '+total);
+                    
+                }
+            });
+        }else{
+            $("#booking-errors").html('<span style="color:red;">Error in dates</span>');
+            setTimeout(function () {
+                $('#booking-errors').html('');
+            }, 2500);
+        }
     }
 });
 
@@ -514,6 +432,8 @@ $(".save-car-booking").click(function() {
             
         }
     });
+
+
 });
 
 

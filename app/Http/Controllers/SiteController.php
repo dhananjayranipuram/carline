@@ -16,6 +16,15 @@ use Mail;
 
 class SiteController extends Controller
 {
+    public function __construct()
+    {
+        $site = new Site();
+        $emirates = $site->getEmirates();
+
+        // Share 'emirates' with all views
+        view()->share('emirates', $emirates);
+    }
+
     public function index(){
         $site = new Site();
         $input['format'] = 'normal';
@@ -201,15 +210,18 @@ class SiteController extends Controller
     public function checkRate(Request $request){
         $site = new Site();
         $credentials = $request->validate([
-            'destinationEmirate' => ['required'],
+            'destinationEmirate' => [''],
             'sourceEmirates' => ['required'],
             'pickupdate' => ['required'],
             'returndate' => ['required'],
             'pickuptime' => ['required'],
             'returntime' => ['required'],
+            'returntosame' => ['required'],
             'id' => ['required'],
         ]);
-
+        if(isset($credentials['returntosame'])){
+            $credentials['destinationEmirate'] = $credentials['sourceEmirates'];
+        }
         $res = $this->calculateRate($credentials);
         
         return json_encode($res);
@@ -275,6 +287,11 @@ class SiteController extends Controller
         return json_encode($response);
     }
 
+    public function logout(){
+        Session::flush();
+        return Redirect::to('/home');
+    }
+
     public function sendContactUs(Request $request){
         $admin = new Site();
         $res = [];
@@ -321,5 +338,13 @@ class SiteController extends Controller
             $response['message'] = 'Booking failed.';
         }
         return json_encode($response);
+    }
+
+    public function myAccount(){
+        $site = new Site();
+        $data = [];
+        $input['id'] = Session::get('userId');
+        $data['userAccount'] = $site->getMyDetails($input);
+        return view('site/my-account',$data);
     }
 }

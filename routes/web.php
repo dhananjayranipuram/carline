@@ -24,6 +24,8 @@ Route::get('/car-details', [SiteController::class, 'carDetails']);
 Route::get('/offers', [SiteController::class, 'offers']);
 Route::get('/news', [SiteController::class, 'news']);
 Route::get('/contact', [SiteController::class, 'contactUs']);
+Route::get('/my-account', [SiteController::class, 'myAccount']);
+Route::get('/logout', [SiteController::class, 'logout']);
 
 Route::any('/send-otp', [SiteController::class, 'sendOtp']);
 Route::any('/verify-otp', [SiteController::class, 'verifyOtp']);

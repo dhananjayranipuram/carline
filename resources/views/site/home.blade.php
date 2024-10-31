@@ -113,9 +113,14 @@
                             <div class="swiper-slide">
                                 <!-- Perfect Fleets Item Start -->
                                 <div class="perfect-fleet-item">
+
+                                    @php $imgArr = explode(',',$value->image); @endphp
                                     <!-- Image Box Start -->
                                     <div class="image-box">
-                                        <img src="{{asset($value->image)}}" alt="">
+                                        @foreach($imgArr as $keys => $values)
+                                        <img src="{{asset($values)}}" alt="">
+                                        @if($keys==0) @break @endif
+                                        @endforeach
                                     </div>
                                     <!-- Image Box End -->
 

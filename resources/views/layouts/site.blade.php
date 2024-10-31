@@ -177,7 +177,11 @@
                         </div>
                         <!-- Let’s Start Button Start -->
                         <div class="header-btn d-inline-flex">
-                            <a href="#" class="btn-default">My Account</a>
+                        @if(session()->has('userdata'))
+                            <a href="{{ url('/my-account') }}" class="btn-default">My Account</a>
+                        @else
+                            <a href="#" class="btn-default register-user">My Account</a>
+                        @endif
                         </div>
                         <!-- Let’s Start Button End -->
 					</div>
@@ -188,6 +192,146 @@
 			<div class="responsive-menu"></div>
 		</div>
 	</header>
+    <input type="hidden" id="userId" value="@if(session()->has('userId')){{Session::get('userId')}}@endif">
+    
+    
+            <!-- Booking Form Box Start -->
+            <div class="booking-form-box">
+                <!-- Booking PopUp Form Start -->
+                <div id="registrationForm" class="white-popup-block mfp-hide booking-form">
+                    <div class="section-title">
+                        <h2>Registration</h2>
+                    </div>                                
+                    <fieldset>
+                        <div class="row">
+                            <div class="booking-form-group col-md-6 mb-4">
+                                <input type="text" id="firstName" class="booking-form-control" placeholder="First Name" required>
+                                <div class="help-block with-errors"></div>
+                            </div>
+                            <div class="booking-form-group col-md-6 mb-4">
+                                <input type="text" id="lastName" class="booking-form-control" placeholder="Last Name" required>
+                                <div class="help-block with-errors"></div>
+                            </div>
+
+                            <div class="booking-form-group col-md-6 mb-4">
+                                <input type="email" id ="email" class="booking-form-control" placeholder="Enter Your Email" required>
+                                <div class="help-block with-errors"></div>
+                            </div>
+
+                            <div class="booking-form-group col-md-6 mb-4">
+                                <input type="text" id="phone" class="booking-form-control" placeholder="Enter Your Mobile Number" required>
+                                <div class="help-block with-errors"></div>
+                            </div>
+
+                            <div class="booking-form-group col-md-6 mb-4">
+                                <input type="password" id="password" class="booking-form-control" placeholder="Password" required>
+                                <div class="help-block with-errors"></div>
+                            </div>
+                            <div class="booking-form-group col-md-6 mb-4">
+                                <input type="text" id="flat" class="booking-form-control" placeholder="Flat/Villa number" required>
+                                <div class="help-block with-errors"></div>
+                            </div>
+                            <div class="booking-form-group col-md-6 mb-4">
+                                <input type="text" id="building" class="booking-form-control" placeholder="Building name" required>
+                                <div class="help-block with-errors"></div>
+                            </div>
+
+                            <div class="booking-form-group col-md-6 mb-4">
+                                <input type="text" id="landmark" class="booking-form-control" placeholder="Landmark" required>
+                                <div class="help-block with-errors"></div>
+                            </div>
+                            <div class="booking-form-group col-md-6 mb-4">
+                                <input type="text" id="city" class="booking-form-control" placeholder="City" required>
+                                <div class="help-block with-errors"></div>
+                            </div>
+
+                            <div class="booking-form-group col-md-6 mb-4">
+                                <select class="booking-form-control form-select" id="emirates" required>
+                                    <option value="" disabled selected>Emirates</option>
+                                    @foreach($emirates as $key => $value)
+                                        <option value="{{$value->id}}">{{$value->name}}</option>
+                                    @endforeach
+                                </select>
+                                <div class="help-block with-errors"></div>
+                            </div>
+
+                            <div class="row" id="otp-section">
+                                <div class="col-md-12 mb-12 pb-2">
+                                    <div class="otpSection">
+                                        <p class="otpSentTo">OTP has been sent to your email address.</p>
+                                        <!-- <p class="resend">Resend otp after <span class="countdown"></span></p> -->
+                                        <h3>Enter OTP</h3>
+                                        <div class="otp-field">
+                                            <input type="text" maxlength="1" />
+                                            <input type="text" maxlength="1" />
+                                            <input class="space" type="text" maxlength="1" />
+                                            <input type="text" maxlength="1" />
+                                            <input type="text" maxlength="1" />
+                                            <input type="text" maxlength="1" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 mb-12 pb-2" id="errorMessages">
+
+                                </div>
+                            </div>
+                            <div class="col-md-12 booking-form-group send-otp-button">
+                                <button type="submit" class="btn-default send-otp">Send OTP</button>
+                                <div id="msgSubmit" class="h3 hidden"></div>
+                            </div>
+                            <div class="col-md-12 booking-form-group register-user" style="display:none;">
+                                <button type="submit" class="btn-default register-button">Register Now</button>
+                                <div id="msgSubmit" class="h3 hidden"></div>
+                            </div>
+                            <div class="col-md-12 booking-form-group send-otp-button">
+                                <label >Already registered? <a id="loginPopup" style="cursor:pointer; color:blue;">Login here</a></label>
+                            </div>
+                        </div>                                    
+                    </fieldset>
+                </div>
+                <!-- Registration PopUp Form End -->
+            </div>
+            <!-- Registration Form Box End -->
+        
+            <!-- Login Form Box Start -->
+            <div class="booking-form-box">
+                <!-- Booking PopUp Form Start -->
+                <div id="loginForm" class="white-popup-block mfp-hide booking-form">
+                    <div class="section-title">
+                        <h2>Login</h2>
+                    </div>                                
+                    <fieldset>
+                        <div class="row">
+                            <div class="booking-form-group col-md-12 mb-4" >
+                                <input class="booking-form-control" id="userName" type="text" placeholder="Enter your email" />
+                                <div class="help-block with-errors"></div>
+                            </div>   
+
+                            <div class="booking-form-group col-md-12 mb-4">
+                                <input class="booking-form-control" id="userPassword" type="password" placeholder="Enter your password." />
+                                <div class="help-block with-errors"></div>
+                            </div>
+
+                            <div class="booking-form-group col-md-12 mb-4" id="loginErrors">
+                                
+                            </div>
+
+                            <div class="booking-form-group col-md-12 mb-4">
+                                <button type="button" class="btn-default login_button">Login</button>
+                                <div id="login" class="h3 hidden"></div>
+                            </div>
+                            <div class="col-md-12 booking-form-group send-otp-button">
+                                <label >Not registered? <a id="registrationPopup" style="cursor:pointer; color:blue;">Register here</a></label>
+                            </div>
+                        </div>                                    
+                    </fieldset>
+                </div>
+                <!-- Booking PopUp Form End -->
+            </div>
+            <!-- Login Form Box End -->
+
 	<!-- Header End -->
 
     @yield('content')
@@ -476,18 +620,11 @@ $(document).ready(function () {
         }
     }
 
-    $(".book-now-form").click(function () {
+    $(".register-user, .book-now-form").click(function () {
         if($("#userId").val()==''){
             $.magnificPopup.open({
                 items: {
                     src: '#registrationForm', 
-                    type: 'inline'
-                }
-            });
-        }else{
-            $.magnificPopup.open({
-                items: {
-                    src: '#bookingform', 
                     type: 'inline'
                 }
             });
@@ -601,16 +738,8 @@ $(document).ready(function () {
 
                     if(res.status == 200){
 
-                        $("#userId").val(res.userId);
+                        location.reload();
 
-                        $.magnificPopup.close();
-
-                        $.magnificPopup.open({
-                            items: {
-                                src: '#bookingform', 
-                                type: 'inline'
-                            }
-                        });
                     }
                     $(".overlay").hide();
                 }

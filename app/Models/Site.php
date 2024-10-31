@@ -169,4 +169,8 @@ class Site extends Model
         DB::INSERT("INSERT INTO booking_details (booking_id,s_address,s_emirates,s_lat,s_lon,d_address,d_emirates,d_lat,d_lon) VALUES ('$bookingId','$temp[s_address]','$temp[s_emirates]','$temp[s_latitude]','$temp[s_longitude]','$temp[d_address]','$temp[d_emirates]','$temp[d_latitude]','$temp[d_longitude]');");
         return $bookingId;
     }
+
+    public function getMyDetails($data=[]){
+        return DB::select("SELECT id,first_name,last_name,email,phone,flat,building,landmark,city,emirates FROM enduser WHERE id='$data[id]' AND active=1;");
+    }
 }
