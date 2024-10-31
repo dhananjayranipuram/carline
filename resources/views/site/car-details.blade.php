@@ -252,28 +252,28 @@ while ($startTime <= $endTime) {
     </div>
     <!-- Page Feets Single End -->
 <script src="{{asset('admin_assets/js/core/jquery-3.7.1.min.js')}}"></script>  
-<!-- <script src="{{asset('assets/js/jquery.magnific-popup.min.js')}}"></script> -->
-<!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmX5w5ltGt09cjDod_YMamphRRgS8L-ZQ&region=ae&libraries=places"></script> -->
+<script src="{{asset('assets/js/jquery.magnific-popup.min.js')}}"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmX5w5ltGt09cjDod_YMamphRRgS8L-ZQ&region=ae&libraries=places"></script>
 <script>
-// var sourceData = [];
-// var destinationData = [];    
+var sourceData = [];
+var destinationData = [];    
 
-var sourceData = [
-    {
-        "Latitude": 25.2489204,
-        "Longitude": 55.30605509999999,
-        "Emirates": "Dubai",
-        "Address": "Al Karama,Dubai,Dubai,United Arab Emirates,"
-    }
-];
-    var destinationData = [
-    {
-        "Latitude": 25.1250606,
-        "Longitude": 55.3837419,
-        "Emirates": "Dubai",
-        "Address": "Dubai Silicon Oasis,Dubai,Dubai,United Arab Emirates,"
-    }
-];
+// var sourceData = [
+//     {
+//         "Latitude": 25.2489204,
+//         "Longitude": 55.30605509999999,
+//         "Emirates": "Dubai",
+//         "Address": "Al Karama,Dubai,Dubai,United Arab Emirates,"
+//     }
+// ];
+//     var destinationData = [
+//     {
+//         "Latitude": 25.1250606,
+//         "Longitude": 55.3837419,
+//         "Emirates": "Dubai",
+//         "Address": "Dubai Silicon Oasis,Dubai,Dubai,United Arab Emirates,"
+//     }
+// ];
 $(document).ready(function () {
 
     // Initialize the Autocomplete object for the input field
