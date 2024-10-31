@@ -87,6 +87,46 @@
                             </ul>
                         </div>
                         <!-- Fleets Sidebar List End -->
+                        <!-- Fleets Sidebar List Start -->
+                        <div class="fleets-sidebar-list">
+                            <div class="fleets-list-title">
+                                <h3>Transmission</h3>
+                            </div>
+                            @foreach($all_specs as $keyspec => $valuespec)
+                                @if($valuespec->name=='Transmission')
+                                    @php $transArr = explode('~',$valuespec->options); @endphp
+                                    @php $transId = $valuespec->id; @endphp
+                                @endif
+                                @if($valuespec->name=='Passenger')
+                                    @php $passArr = explode('~',$valuespec->options); @endphp
+                                    @php $seatId = $valuespec->id; @endphp
+                                @endif
+                            @endforeach
+                            <ul class="transmission-id" data-value="{{$transId}}">
+                                @foreach($transArr as $key1 => $value1)
+                                    <li class="form-check filterLi" search-value="{{$value1}}">
+                                        <input class="form-check-input car-transmision" type="checkbox" value="{{$value1}}">
+                                        <label class="form-check-label" for="checkbox7">{{$value1}}</label>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                        <!-- Fleets Sidebar List End -->
+                         <!-- Fleets Sidebar List Start -->
+                        <div class="fleets-sidebar-list">
+                            <div class="fleets-list-title">
+                                <h3>Seat</h3>
+                            </div>
+                            <ul class="seat-id" data-value="{{$seatId}}">
+                                @foreach($passArr as $key2 => $value2)
+                                    <li class="form-check filterLi" search-value="{{$value2}}">
+                                        <input class="form-check-input car-seats" type="checkbox" value="{{$value2}}">
+                                        <label class="form-check-label" for="checkbox7">{{$value2}}</label>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                        <!-- Fleets Sidebar List End -->
 
                     </div>                        
                 </div>
@@ -211,6 +251,8 @@ $(document).ready(function () {
     function getCars(){
         var carType = [];
         var carBrand = [];
+        var carTransmission = [];
+        var carSeats = [];
         $('.car-type').each(function() {
             if($(this).prop('checked') == true){
                 carType.push($(this).val());
@@ -222,6 +264,16 @@ $(document).ready(function () {
                 carBrand.push($(this).val());
             }
         });
+        $('.car-transmision').each(function() {
+            if($(this).prop('checked') == true){
+                carTransmission.push($(this).val());
+            }
+        });
+        $('.car-seats').each(function() {
+            if($(this).prop('checked') == true){
+                carSeats.push($(this).val());
+            }
+        });
         if (xhr !== null) {
             xhr.abort();
         }
@@ -229,7 +281,14 @@ $(document).ready(function () {
             url: baseUrl + '/site/filter-cars',
             type: 'post',
             dataType: "json",
-            data: {'type' : carType,'brand':carBrand},
+            data: {
+                'type' : carType,
+                'brand':carBrand,
+                'carTransmission':carTransmission,
+                'carSeats':carSeats,
+                'transId':$(".transmission-id").attr('data-value'),
+                'seatId':$(".seat-id").attr('data-value'),
+            },
             headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
             success: function(res) {
                 var html = '';

@@ -29,16 +29,33 @@ class Site extends Model
         switch ($data['format']) {
             case 'filter':
                 $condition = '';
+                $transJoin = '';
+                $seatJoin = '';
                 if(!empty($data['type'])){
                     $condition .= " AND ct.id IN(".implode(',', $data['type']).")";
                 }
                 if(!empty($data['brand'])){
                     $condition .= " AND cb.id IN(".implode(',', $data['brand']).")";
                 }
+                if(!empty($data['carTransmission'])){
+                    $str = '';
+                    foreach ($data['carTransmission'] as $key => $value) {
+                        $str .= "'".$value."',";
+                    }
+                    $condition .= " AND cst.details IN(".rtrim($str,',').")";
+                    $transJoin = "AND cst.spec_id=$data[transId]";
+                }
+                if(!empty($data['carSeats'])){
+                    $condition .= " AND css.details IN(".implode(',', $data['carSeats']).")";
+                    $seatJoin = "AND css.spec_id=$data[seatId]";
+                }
+                
                 return DB::select("SELECT c.id,c.name,c.model,cb.name brand_name,ct.name car_type,GROUP_CONCAT(ci.image) AS 'image',FORMAT(c.rent,0) rent,c.general_info_flag,c.rental_condition_flag,c.offer_flag,FORMAT(c.offer_price,0) offer_price FROM cars c
                     LEFT JOIN car_brand cb ON cb.id=c.brand_id
                     LEFT JOIN car_type ct ON ct.id=c.type_id
                     LEFT JOIN car_images ci ON ci.car_id=c.id
+                    LEFT JOIN car_specification cst ON cst.car_id = c.id $transJoin
+                    LEFT JOIN car_specification css ON css.car_id = c.id $seatJoin
                     WHERE c.active=1 AND c.deleted=0 $condition GROUP BY c.id;");
                 break;
             case 'offer':
@@ -66,6 +83,11 @@ class Site extends Model
         return DB::select("SELECT f.feature FROM car_features cf
                             LEFT JOIN features f ON f.id=cf.feature_id
                             WHERE cf.car_id='$data[id]';");
+    }
+
+    public function getAllSpecifications($data=[]){
+        return DB::select("SELECT s.id,s.name,CASE WHEN s.active = 1 THEN 'Active' ELSE 'Inactive' END as 'status',s.options FROM specification s
+                            WHERE s.active=1 AND s.deleted=0 ORDER BY s.name;");
     }
 
     public function getCarSpecifications($data=[]){

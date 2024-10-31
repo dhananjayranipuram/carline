@@ -41,6 +41,7 @@ class SiteController extends Controller
         $data['cars'] = $site->getCars($input);
         $data['carType'] = $site->getCarType();
         $data['specs'] = $site->getCarSpecifications($input);
+        $data['all_specs'] = $site->getAllSpecifications();
         $temp = [];
         foreach ($data['specs'] as $key => $value) {
             if(!isset($temp[$value->car_id])){
@@ -49,7 +50,7 @@ class SiteController extends Controller
             array_push($temp[$value->car_id],$value);
         }
         $data['specs'] = $temp;
-        // echo '<pre>';print_r($temp);exit;
+        // echo '<pre>';print_r($data['all_specs']);exit;
         return view('site/our-cars',$data);
     }
 
@@ -78,6 +79,10 @@ class SiteController extends Controller
             $filterData = $request->validate([
                 'type' => [''],
                 'brand' => [''],
+                'carTransmission' => [''],
+                'carSeats' => [''],
+                'transId' => [''],
+                'seatId' => [''],
             ]);
             
             // $filterData['type'] = implode(',', $filterData['type']);
