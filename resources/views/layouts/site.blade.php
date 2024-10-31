@@ -305,12 +305,12 @@
                     <fieldset>
                         <div class="row">
                             <div class="booking-form-group col-md-12 mb-4" >
-                                <input class="booking-form-control" id="userName" type="text" placeholder="Enter your email" />
+                                <input class="booking-form-control" id="userName" type="text" placeholder="Enter your email" autocomplete = "off"/>
                                 <div class="help-block with-errors"></div>
                             </div>   
 
                             <div class="booking-form-group col-md-12 mb-4">
-                                <input class="booking-form-control" id="userPassword" type="password" placeholder="Enter your password." />
+                                <input class="booking-form-control" id="userPassword" type="password" placeholder="Enter your password." autocomplete = "off"/>
                                 <div class="help-block with-errors"></div>
                             </div>
 
