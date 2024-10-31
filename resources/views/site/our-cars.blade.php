@@ -169,10 +169,8 @@
                                             @if(!empty($specs[$value->id]))
                                                 @foreach($specs[$value->id] as $keys => $values)
                                                     <li class="break-word"><img src="{{asset($values->image)}}" alt="" width="21">
-                                                    @if($values->name=='Transmission' || $values->details=='Manual')
-                                                        MT
-                                                    @elseif($values->name=='Transmission' || $values->details=='Automatic')
-                                                        AT
+                                                    @if($values->name=='Transmission')
+                                                        {{$values->details}}
                                                     @else
                                                         @if($values->details!='Yes')
                                                             {{$values->details}}
@@ -312,12 +310,19 @@ $(document).ready(function () {
                                         +'<ul>';
                                             if(res.specs[item.id] != null){
                                                 res.specs[item.id].forEach(function(items,keys) {
+                                                    // console.log(items)
                                                     if(keys<=3){
                                                         html+='<li class="break-word"><img src="'+baseUrl+'/'+items.image+'" alt="" width="21">';
-                                                        if(items.details!='Yes'){
-                                                            html+=items.details;
-                                                        } 
-                                                        html+=' '+items.name+'</li>';
+                                                        if(items.name!="Transmission"){
+                                                            if(items.details!='Yes'){
+                                                                html+=items.details;
+                                                            } 
+                                                            html+=' '+items.name+'</li>';
+                                                        }else{
+                                                            if(items.details!='Yes'){
+                                                                html+=items.details;
+                                                            } 
+                                                        }
                                                     }
                                                 });
                                             }
