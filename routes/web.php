@@ -27,6 +27,9 @@ Route::get('/contact', [SiteController::class, 'contactUs']);
 Route::get('/my-account', [SiteController::class, 'myAccount']);
 Route::get('/logout', [SiteController::class, 'logout']);
 
+Route::any('/check-document-uploaded', [SiteController::class, 'checkDocumentUploaded']);
+Route::any('/upload-docs', [SiteController::class, 'uploadDocuments']);
+
 Route::any('/send-otp', [SiteController::class, 'sendOtp']);
 Route::any('/verify-otp', [SiteController::class, 'verifyOtp']);
 Route::any('/register-user', [SiteController::class, 'registerUser']);

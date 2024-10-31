@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Site;
 use App\Mail\OtpVerification;
 use App\Mail\ContactUs;
+use Illuminate\Validation\Rule;
 use Session;
 use Redirect;
 use Storage;
@@ -232,10 +233,106 @@ class SiteController extends Controller
         return json_encode($res);
     }
 
+    public function checkDocumentUploaded(Request $request){
+        $site = new Site();
+        $input['id'] = Session::get('userId');
+        $response = [];
+        $res = $site->getDocumentUpload($input);
+
+        if($res->document_uploaded == 1){
+            $response['status'] = '200';
+            $response['message'] = 'User uploaded document';
+            $response['cnt'] = $res->document_uploaded;
+        }else{
+            $response['status'] = '200';
+            $response['message'] = 'User not uploaded document';
+            $response['cnt'] = $res->document_uploaded;
+        }
+        return json_encode($response);
+    }
+
+    public function uploadDocuments(Request $request)
+    {
+        $site = new Site();
+        $response = [];
+
+        // Validation
+        $credentials = $request->validate([
+            'rider_type' => ['required'],
+            'pass_front' => ['required', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
+            'pass_back' => ['required', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
+            'dl_front' => ['required', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
+            'dl_back' => ['required', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
+            'eid_front' => [
+                'nullable',
+                'max:2048',
+                Rule::requiredIf(function () use ($request) {
+                    return $request->rider_type === 'resident'; // Only required if rider_type is 'resident'
+                }),
+            ],
+            'eid_back' => [
+                'nullable',
+                'max:2048',
+                Rule::requiredIf(function () use ($request) {
+                    return $request->rider_type === 'resident'; // Only required if rider_type is 'resident'
+                }),
+            ],
+        ]);
+
+        // Handle file uploads using the helper function
+        $uploadedFiles = $this->handleFileUploads($request, [
+            'pass_front', 
+            'pass_back', 
+            'dl_front', 
+            'dl_back', 
+            'eid_front', 
+            'eid_back'
+        ]);
+
+        // Check for errors in uploaded files
+        if ($uploadedFiles['errors']) {
+            return response()->json(['status' => '400', 'message' => $uploadedFiles['errors']], 400);
+        }
+
+        // Add user ID to the uploaded files data
+        $uploadedFiles['id'] = $request->session()->get('userId');
+
+        // Save uploaded documents
+        $res = $site->saveUploadedDocuments($uploadedFiles);
+
+        // Prepare response
+        if ($res) {
+            return response()->json(['status' => '200', 'message' => 'Document uploaded successfully.']);
+        } else {
+            return response()->json(['status' => '500', 'message' => 'Something went wrong.'], 500);
+        }
+    }
+
+    private function handleFileUploads(Request $request, array $fields)
+    {
+        $uploadedFiles = [];
+        $errors = [];
+
+        foreach ($fields as $field) {
+            if ($request->hasFile($field)) {
+                $file = $request->file($field);
+                $uploadedFiles[$field] = 'storage/' . $file->store('uploads/documents', 'public');
+            } else {
+                // Collect errors for missing required files if needed
+                if (in_array($field, ['eid_front', 'eid_back']) && $request->rider_type === 'resident') {
+                    $errors[] = "Please select " . ucfirst(str_replace('_', ' ', $field)) . " image.";
+                }
+            }
+        }
+
+        return ['uploadedFiles' => $uploadedFiles, 'errors' => $errors];
+    }
+
     public function calculateRate($credentials){
         $site = new Site();
         $res = [];
-        $rate = 0;
+        $deposit = $rate = 0;
+        // print_r($credentials);exit;
         $pickupdate = strtotime($credentials['pickupdate'].' '.$credentials['pickuptime']);
         $returndate = strtotime($credentials['returndate'].' '.$credentials['returntime']);
         $datediff = $returndate - $pickupdate;
@@ -254,8 +351,14 @@ class SiteController extends Controller
             }else{
                 $rate += (float)str_replace(',', '', $carRes[0]->rent);
             }
+
+            if($carRes[0]->deposit!=''){
+                $deposit = (float) str_replace(',', '', $carRes[0]->deposit);
+            }
         }
-        $rate = $days*$rate;
+        if($days>0){
+            $rate = $days*$rate;
+        }
         if($credentials['destinationEmirate'] != $credentials['sourceEmirates']){
             $resEmirate = $site->getEmirates($credentials);
             if(!empty($resEmirate)){
@@ -266,7 +369,8 @@ class SiteController extends Controller
         $res['days'] = $days;
         $res['vat'] = $vat;
         $res['rate'] = $rate;
-        $res['total'] = $rate+$vat;
+        $res['deposit'] = $deposit;
+        $res['total'] = $rate+$vat+$deposit;
         return $res;
     }
 

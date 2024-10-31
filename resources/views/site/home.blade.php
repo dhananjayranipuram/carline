@@ -60,9 +60,9 @@
                                             <img src="{{asset('assets/images/icon-rent-details-1.svg')}}" alt="">
                                         </div>
                                         <div class="rent-details-content">
-                                            <h3>car </h3>
+                                            <h3>car Type</h3>
                                             <select class="rent-details-form form-select select-type">
-                                                <option value="" disabled selected>Choose Car</option>
+                                                <option value="" disabled selected>Choose Car Type</option>
                                                 @foreach($carType as $key => $value)
                                                     <option value="{{$value->id}}">{{$value->name}}</option>
                                                 @endforeach

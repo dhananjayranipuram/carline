@@ -177,13 +177,14 @@
                         </div>
                         <!-- Let’s Start Button Start -->
                         <div class="header-btn d-inline-flex">
-                        @if(session()->has('userdata'))
-                            <a href="{{ url('/my-account') }}" class="btn-default">My Account</a>
-                        @else
-                            <a href="#" class="btn-default register-user">My Account</a>
-                        @endif
+                            @if(session()->has('userdata') || session()->has('userId'))
+                                <a href="{{ url('/my-account') }}" class="btn-default">My Account</a>
+                            @else
+                                <a href="#" class="btn-default register-user">My Account</a>
+                            @endif
                         </div>
                         <!-- Let’s Start Button End -->
+
 					</div>
 					<!-- Main Menu End -->
 					<div class="navbar-toggle"></div>
@@ -192,8 +193,7 @@
 			<div class="responsive-menu"></div>
 		</div>
 	</header>
-    <input type="hidden" id="userId" value="@if(session()->has('userId')){{Session::get('userId')}}@endif">
-    
+            <input type="hidden" id="userId" value="@if(session()->has('userId')){{Session::get('userId')}}@endif">
     
             <!-- Booking Form Box Start -->
             <div class="booking-form-box">
@@ -278,7 +278,7 @@
                                 </div>
                             </div>
                             <div class="col-md-12 booking-form-group send-otp-button">
-                                <button type="submit" class="btn-default send-otp">Send OTP</button>
+                                <button type="submit" class="btn-default send-otp">Create Account</button>
                                 <div id="msgSubmit" class="h3 hidden"></div>
                             </div>
                             <div class="col-md-12 booking-form-group register-user" style="display:none;">
@@ -331,6 +331,82 @@
                 <!-- Booking PopUp Form End -->
             </div>
             <!-- Login Form Box End -->
+
+            <!-- Booking Form Box Start -->
+            <div class="booking-form-box">
+                <!-- Booking PopUp Form Start -->
+                <div id="documentUploadForm" class="white-popup-block mfp-hide booking-form">
+                    <div class="section-title">
+                        <h2>Document Upload</h2>
+                    </div>                                
+                    <fieldset>
+                        <form id="uploadDocs" enctype="multipart/form-data" method="POST">
+                            <div class="row">
+                                <div class="booking-form-group col-md-12 mb-4">
+                                    <label for="returnLocationToggle">Driver Type</label>
+                                    <input type="radio" class="form-check-input rider_type" name="rider_type" value="resident" checked>  <label for="rider_type">Resident</label>
+                                    <input type="radio" class="form-check-input rider_type" name="rider_type" value="tourist">  <label for="rider_type">Tourist</label>
+                                </div>
+
+
+                                <div class="booking-form-group col-md-12 mb-4">
+                                    <div class="row" id="passport-section">
+                                        <label for="returnLocationToggle">Passport</label>
+                                        <div class="booking-form-group col-md-6 mb-4">
+                                            <input type="file" name="pass_front" class="booking-form-control" placeholder="Front" accept="image/*" required>
+                                            <div class="help-block with-errors pass_front"></div>
+                                        </div>
+                                        <div class="booking-form-group col-md-6 mb-4">
+                                            <input type="file" name ="pass_back" class="booking-form-control" placeholder="Back" accept="image/*" required>
+                                            <div class="help-block with-errors pass_back"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="booking-form-group col-md-12 mb-4">
+                                    <div class="row" id="dl-section">
+                                        <label for="returnLocationToggle">Driving Licence</label>
+                                        <div class="booking-form-group col-md-6 mb-4">
+                                            <input type="file" name="dl_front" class="booking-form-control" placeholder="Front" accept="image/*" required>
+                                            <div class="help-block with-errors dl_front"></div>
+                                        </div>
+                                        <div class="booking-form-group col-md-6 mb-4">
+                                            <input type="file" name="dl_back" class="booking-form-control" placeholder="Back" accept="image/*" required>
+                                            <div class="help-block with-errors dl_back"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="booking-form-group col-md-12 mb-4" id="eid-section">
+                                    <div class="row" >
+                                        <label for="returnLocationToggle">EID</label>
+                                        <div class="booking-form-group col-md-6 mb-4">
+                                            <input type="file" name="eid_front" class="booking-form-control" placeholder="Front" accept="image/*" required>
+                                            <div class="help-block with-errors eid_front"></div>
+                                        </div>
+                                        <div class="booking-form-group col-md-6 mb-4">
+                                            <input type="file" name="eid_back" class="booking-form-control" placeholder="Back" accept="image/*" required>
+                                            <div class="help-block with-errors eid_back"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12 mb-12 pb-2" id="docErrorMessages">
+
+                                    </div>
+                                </div>
+                                <div class="col-md-12 booking-form-group">
+                                    <button type="button" class="btn-default upload_docs">Upload</button>
+                                    <div id="msgSubmit" class="h3 hidden"></div>
+                                </div>
+                            </div>   
+                        </form>                                 
+                    </fieldset>
+                </div>
+                <!-- Registration PopUp Form End -->
+            </div>
+            <!-- Registration Form Box End -->
 
 	<!-- Header End -->
 
@@ -600,7 +676,12 @@ $(document).ready(function () {
                     if(res.status == 200){
                         $("#otp-section").hide();
                         $(".send-otp-button").hide();
-                        $(".register-user").show();
+                        $('#errorMessages').append('<br><span style="color:red;">Please fill valid data.</span>');
+                        setTimeout(function () {
+                            $('#errorMessages').html('');
+                            createUser();
+                        }, 6000);
+                        
                     }else{
                         inputs.forEach((input) => {
                             otp += input.value;
@@ -620,7 +701,7 @@ $(document).ready(function () {
         }
     }
 
-    $(".register-user, .book-now-form").click(function () {
+    $(".register-user").click(function () {
         if($("#userId").val()==''){
             $.magnificPopup.open({
                 items: {
@@ -631,7 +712,7 @@ $(document).ready(function () {
         }
     });
 
-    $(".register-button").click(function () {
+    function createUser(){
         var datas = {
             'firstName': $("#firstName").val(),
             'lastName': $("#lastName").val(),
@@ -661,19 +742,9 @@ $(document).ready(function () {
                     }, 2500);
 
                     if(res.status == 200){
-
                         $("#userId").val(res.userId);
-
                         $.magnificPopup.close();
-
-                        $.magnificPopup.open({
-                            items: {
-                                src: '#bookingform', 
-                                type: 'inline'
-                            }
-                        });
-                    }else{
-                        
+                        checkDocumentUploaded();
                     }
                     $(".overlay").hide();
                 }
@@ -685,8 +756,7 @@ $(document).ready(function () {
             }, 2500);
             $(".overlay").hide();
         }
-    });
-
+    }
     $("#loginPopup").click(function() {
         $(".overlay").show();
         $.magnificPopup.close();
@@ -722,6 +792,7 @@ $(document).ready(function () {
             'password': $("#userPassword").val(),
             'username': $("#userName").val()
         };
+        $(".overlay").show();
         if(!validateLoginForm(datas)){
             $.ajax({
                 url: baseUrl + '/login',
@@ -731,15 +802,18 @@ $(document).ready(function () {
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 success: function(res) {
 
-                    $('#errorMessages').append('<br><span style="color:green;">'+res.message+'</span>');
+                    $('#loginErrors').append('<br><span style="color:green;">'+res.message+'</span>');
                     setTimeout(function () {
-                        $('#errorMessages').html('');
+                        $('#loginErrors').html('');
                     }, 2500);
 
                     if(res.status == 200){
-
-                        location.reload();
-
+                        if($('#pickupdate').length){
+                            checkDocumentUploaded();
+                        }else{
+                            location.reload();
+                        }
+                        
                     }
                     $(".overlay").hide();
                 }
@@ -753,6 +827,79 @@ $(document).ready(function () {
         }
     });
 });
+
+$(".rider_type").click(function() {
+    if($(this).val()=='tourist'){
+        $("#eid-section").hide();
+    }else{
+        $("#eid-section").show();
+    }
+});
+
+$(".upload_docs").click(function(e) {
+    e.preventDefault();
+    let formData = new FormData($('#uploadDocs')[0]);
+    $.ajax({
+        url: baseUrl + '/upload-docs',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+        success: function(response) {
+            $("#docErrorMessages").html('<span style="color:green;">Documents uploaded successfully.<span>');
+            setTimeout(function () {
+                $("#docErrorMessages").html('');
+                $.magnificPopup.close();
+                $('#uploadDocs')[0].reset();
+                if($('#pickupdate').length){
+                    bookCarAction();
+                }
+                
+            }, 5000);
+        },
+        error: function(xhr) {
+            if (xhr.status === 422) {
+                let errors = xhr.responseJSON.errors;
+                Object.keys(errors).forEach(function(key) {
+                    $("."+key+"").html('<span style="color:red;">'+errors[key][0]+'<span>');
+                    setTimeout(function () {
+                        $("."+key+"").html('');
+                    }, 5000);
+                });
+            } else {
+                $("#docErrorMessages").html('<span style="color:red;">An error occurred during the upload.<span>');
+                setTimeout(function () {
+                    $("#docErrorMessages").html('');
+                }, 5000);
+            }
+        }
+    });
+});
+
+function checkDocumentUploaded(){
+    $.ajax({
+        url: baseUrl + '/check-document-uploaded',
+        type: 'post',
+        data: {},
+        dataType: "json",
+        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+        success: function(res) {
+            if(res.cnt == 0){
+                $.magnificPopup.open({
+                    items: {
+                        src: '#documentUploadForm',
+                        type: 'inline'
+                    }
+                });
+            }else{
+                if($('#pickupdate').length){
+                    bookCarAction();
+                }
+            }
+        }
+    });
+}
 
 function validateLoginForm(datas){
     chk = 0;

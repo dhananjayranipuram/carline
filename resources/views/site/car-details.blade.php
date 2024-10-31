@@ -66,17 +66,16 @@ while ($startTime <= $endTime) {
                                         
                                         <!-- Return to the Same Location Toggle -->
                                         <div class="form-group col-12 mb-4">
-                                            <label for="returnLocationToggle">Return to the Same Location</label>
+                                            
                                             <div class="form-check form-switch">
-                                                <input type="checkbox" class="form-check-input" id="returnLocationToggle" name="return_to_same_location">
-                                                <label class="form-check-label" for="returnLocationToggle">On/Off</label>
+                                                <input type="checkbox" class="form-check-input" id="returnLocationToggle" name="return_to_same_location"><label for="returnLocationToggle">Return to the Same Location</label>
                                             </div>
                                         </div>
                                         
                                         <!-- Dropoff Section -->
                                         <div id="dropoffSection">
                                             <!-- Dropoff Location -->
-                                            <div class="form-group col-12 mb-4" id="dropoffdiv">
+                                            <div class="form-group col-12 mb-4">
                                                 <input class="form-control" id="destination" type="text" placeholder="Drop Off Location" />
                                                 <div class="help-block with-errors"></div>
                                             </div>
@@ -91,11 +90,11 @@ while ($startTime <= $endTime) {
                                             <!-- Dropoff Time -->
                                             <div class="form-group col-12 mb-4">
                                                 <label>Dropoff Time</label>
-                                                
+                                                <!-- <input type="time" class="form-control" name="dropoff_time" id="returntime"> -->
                                                 <select class="form-control" name="dropoff_time" id="returntime">
                                                     <option selected disabled>Select Pickup Time</option>
                                                     @foreach($timeSlots as $key => $value)
-                                                        <option value="{{ date('G:i', strtotime($value))}}">{{$value}}</option>
+                                                        <option value="{{ date('H:i', strtotime($value))}}">{{$value}}</option>
                                                     @endforeach
                                                 </select>
                                                 <div class="help-block with-errors"></div>
@@ -350,23 +349,28 @@ $(document).ready(function () {
         }
     });
 
-    $("#returnLocationToggle").click(function() {
-        if($('#returnLocationToggle').is(":checked")){
-            $("#dropoffdiv").hide();
-        }else{
-            $("#dropoffdiv").show();
-        }
-    });
+    
 
 });
 
+$("#source").keyup(function(){
+    if($('#returnLocationToggle').is(":checked")){
+        $("#destination").val($("#source").val());
+    }
+});
+
+$("#returnLocationToggle").click(function() {
+    if($('#returnLocationToggle').is(":checked")){
+        $("#destination").prop('disabled', true);
+        $("#destination").val($("#source").val());
+    }else{
+        $("#destination").prop('disabled', false);
+        $("#destination").val('');
+    }
+});
 
 $("#pickupdate, #returndate, #destination, #source, #returntime, #pickuptime").on("change paste keyup click", function() {
 
-    // console.log('source'+sourceData.length)
-    // console.log('destination'+destinationData.length)
-    // console.log('pickupdate'+$("#pickupdate").val())
-    // console.log('returndate'+$("#returndate").val())
     if(destinationData.length != 0 && sourceData.length != 0 && $("#pickupdate").val() != '' && $("#returndate").val() != '' && $("#pickuptime").val() != '' && $("#returntime").val() != ''){
         if ($("#pickupdate").val() < $("#returndate").val()) {
 
@@ -386,8 +390,8 @@ $("#pickupdate, #returndate, #destination, #source, #returntime, #pickuptime").o
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 success: function(res) {
                     $("#rate-details").show();
-                    $("#rent-message").html('AED '+res.total);
-                    var total = res.total+100;
+                    $("#rent-message").html('AED '+res.rate);
+                    $("#deposit-message").html('AED '+res.deposit);
                     $("#total-message").html('AED '+total);
                     
                 }
@@ -401,8 +405,21 @@ $("#pickupdate, #returndate, #destination, #source, #returntime, #pickuptime").o
     }
 });
 
-$(".save-car-booking").click(function() {
+    $(".book-now-form").click(function () {
+        if($("#userId").val()==''){
+            $.magnificPopup.open({
+                items: {
+                    src: '#registrationForm', 
+                    type: 'inline'
+                }
+            });
+        }else{
+            localStorage.setItem("action",'booking');
+            checkDocumentUploaded();
+        }
+    });
 
+function bookCarAction(){
     $.ajax({
         url: baseUrl + '/save-car-booking',
         type: 'post',
@@ -423,18 +440,17 @@ $(".save-car-booking").click(function() {
         success: function(res) {
             if(res.status==200){
                 var str = '<span style="color:green;">Car Booked. Booking ID:'+res.bookingId+'</span>'
-                $("#rent-message").html(str);
-                $.magnificPopup.close();
+                $("#booking-errors").html(str);
             }else{
                 var str = '<span style="color:red;">'+res.message+'</span>'
-                $("#rent-message").html(str);
+                $("#booking-errors").html(str);
             }
             
         }
     });
 
 
-});
+}
 
 
 </script>

@@ -50,7 +50,7 @@ class Site extends Model
                     $seatJoin = "AND css.spec_id=$data[seatId]";
                 }
                 
-                return DB::select("SELECT c.id,c.name,c.model,cb.name brand_name,ct.name car_type,GROUP_CONCAT(ci.image) AS 'image',FORMAT(c.rent,0) rent,c.general_info_flag,c.rental_condition_flag,c.offer_flag,FORMAT(c.offer_price,0) offer_price FROM cars c
+                return DB::select("SELECT c.id,c.name,c.model,cb.name brand_name,ct.name car_type,GROUP_CONCAT(ci.image) AS 'image',FORMAT(c.rent,0) rent,c.general_info_flag,c.rental_condition_flag,c.offer_flag,FORMAT(c.offer_price,0) offer_price,FORMAT(c.deposit,0) deposit FROM cars c
                     LEFT JOIN car_brand cb ON cb.id=c.brand_id
                     LEFT JOIN car_type ct ON ct.id=c.type_id
                     LEFT JOIN car_images ci ON ci.car_id=c.id
@@ -59,7 +59,7 @@ class Site extends Model
                     WHERE c.active=1 AND c.deleted=0 $condition GROUP BY c.id;");
                 break;
             case 'offer':
-                return DB::select("SELECT c.id,c.name,c.model,cb.name brand_name,ct.name car_type,GROUP_CONCAT(ci.image) AS 'image',FORMAT(c.rent,0) rent,c.general_info_flag,c.rental_condition_flag,c.offer_flag,FORMAT(c.offer_price,0) offer_price FROM cars c
+                return DB::select("SELECT c.id,c.name,c.model,cb.name brand_name,ct.name car_type,GROUP_CONCAT(ci.image) AS 'image',FORMAT(c.rent,0) rent,c.general_info_flag,c.rental_condition_flag,c.offer_flag,FORMAT(c.offer_price,0) offer_price,FORMAT(c.deposit,0) deposit FROM cars c
                     LEFT JOIN car_brand cb ON cb.id=c.brand_id
                     LEFT JOIN car_type ct ON ct.id=c.type_id
                     LEFT JOIN car_images ci ON ci.car_id=c.id
@@ -70,7 +70,7 @@ class Site extends Model
                 if(!empty($data['id'])){
                     $condition .= " AND c.id = $data[id]";
                 }
-                return DB::select("SELECT c.id,c.name,c.model,cb.name brand_name,ct.name car_type,GROUP_CONCAT(ci.image) AS 'image',FORMAT(c.rent,0) rent,c.general_info_flag,c.rental_condition_flag,c.offer_flag,FORMAT(c.offer_price,0) offer_price FROM cars c
+                return DB::select("SELECT c.id,c.name,c.model,cb.name brand_name,ct.name car_type,GROUP_CONCAT(ci.image) AS 'image',FORMAT(c.rent,0) rent,c.general_info_flag,c.rental_condition_flag,c.offer_flag,FORMAT(c.offer_price,0) offer_price,FORMAT(c.deposit,0) deposit FROM cars c
                                 LEFT JOIN car_brand cb ON cb.id=c.brand_id
                                 LEFT JOIN car_type ct ON ct.id=c.type_id
                                 LEFT JOIN car_images ci ON ci.car_id=c.id
@@ -194,5 +194,43 @@ class Site extends Model
 
     public function getMyDetails($data=[]){
         return DB::select("SELECT id,first_name,last_name,email,phone,flat,building,landmark,city,emirates FROM enduser WHERE id='$data[id]' AND active=1;");
+    }
+
+    public function getDocumentUpload($data=[]){
+        return DB::table('enduser')
+                        ->select('document_uploaded')
+                        ->where('id', $data['id'])
+                        ->where('active', 1)
+                        ->first();
+    }
+
+    public function saveUploadedDocuments($data = [])
+    {
+        DB::beginTransaction();
+        try {
+            // Insert document records
+            DB::table('user_documents')->insert([
+                'user_id' => $data['id'],
+                'pass_front' => $data['uploadedFiles']['pass_front'],
+                'pass_back' => $data['uploadedFiles']['pass_back'],
+                'dl_front' => $data['uploadedFiles']['dl_front'],
+                'dl_back' => $data['uploadedFiles']['dl_back'],
+                'eid_front' => $data['uploadedFiles']['eid_front'] ?? '', // Use null coalescing operator
+                'eid_back' => $data['uploadedFiles']['eid_back'] ?? '',   // Use null coalescing operator
+            ]);
+
+            // Update user record to mark documents as uploaded
+            DB::table('enduser')
+                ->where('id', $data['id'])
+                ->update([
+                    'document_uploaded' => '1',
+                ]);
+
+            DB::commit();
+            return true;
+        } catch (\Exception $e) {
+            DB::rollback();
+            return false; // Return false on failure
+        }
     }
 }
