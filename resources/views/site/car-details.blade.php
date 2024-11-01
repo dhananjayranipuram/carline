@@ -382,7 +382,7 @@ $("#pickupdate, #returndate, #destination, #source, #returntime, #pickuptime").o
 
     if(destinationData.length != 0 && sourceData.length != 0 && $("#pickupdate").val() != '' && $("#returndate").val() != '' && $("#pickuptime").val() != '' && $("#returntime").val() != ''){
         if ($("#pickupdate").val() < $("#returndate").val()) {
-            $(".overlay").show();
+            // $(".overlay").show();
             $.ajax({
                 url: baseUrl + '/check-rate',
                 type: 'post',
@@ -402,7 +402,7 @@ $("#pickupdate, #returndate, #destination, #source, #returntime, #pickuptime").o
                     $("#rent-message").html('AED '+res.rate);
                     $("#deposit-message").html('AED '+res.deposit);
                     $("#total-message").html('AED '+res.total);
-                    $(".overlay").hide();
+                    // $(".overlay").hide();
                 }
             });
         }else{
