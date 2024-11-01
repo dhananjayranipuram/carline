@@ -65,39 +65,66 @@ class Admin extends Model
         }
     }
 
-    public function saveCarData($data=[]){
+    public function saveCarData($data = [])
+    {
         DB::beginTransaction();
+
         try {
-            DB::INSERT("INSERT INTO cars (name,model,brand_id,type_id,general_info_flag,rental_condition_flag,rent,deposit,offer_flag,offer_price) VALUES ('$data[name]','$data[model]','$data[brand]','$data[cartype]','$data[general_info]','$data[rental_condition]','$data[rent]','$data[deposit]','$data[offerFlag]','$data[specialOffer]');");
+            // Insert into cars table
+            DB::insert(
+                "INSERT INTO cars (name, model, brand_id, type_id, general_info_flag, rental_condition_flag, rent, deposit, offer_flag, offer_price) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                [
+                    $data['name'],
+                    $data['model'],
+                    $data['brand'],
+                    $data['cartype'],
+                    $data['general_info'],
+                    $data['rental_condition'],
+                    $data['rent'],
+                    $data['deposit'],
+                    $data['offerFlag'],
+                    $data['specialOffer'] ?? null,
+                ]
+            );
+
             $carId = DB::getPdo()->lastInsertId();
 
-            //Insert Car Specifications
-            foreach ($data['specifications'] as $key => $value) {
-                $x = explode('~',$value);
-                if(sizeof($x)>0){
-                    DB::INSERT("INSERT INTO car_specification (car_id,spec_id,details) VALUES ('$carId','$x[0]','$x[1]');");
+            // Insert Car Specifications
+            foreach ($data['specifications'] as $spec) {
+                $specData = explode('~', $spec);
+                if (count($specData) > 1) {
+                    DB::insert(
+                        "INSERT INTO car_specification (car_id, spec_id, details) VALUES (?, ?, ?)",
+                        [$carId, $specData[0], $specData[1]]
+                    );
                 }
             }
 
-            //Insert Car features
-            foreach ($data['features'] as $key => $value) {
-                if($value!=""){
-                    DB::INSERT("INSERT INTO car_features (car_id,feature_id) VALUES ('$carId','$value');");
-                }
+            // Insert Car Features
+            foreach ($data['features'] as $feature) {
+                DB::insert(
+                    "INSERT INTO car_features (car_id, feature_id) VALUES (?, ?)",
+                    [$carId, $feature]
+                );
             }
 
-            //Insert Car images
-            foreach ($data['carImages'] as $key => $value) {
-                if($value!=""){
-                    DB::INSERT("INSERT INTO car_images (car_id,image) VALUES ('$carId','$value');");
-                }
+            // Insert Car Images
+            foreach ($data['carImages'] as $image) {
+                DB::insert(
+                    "INSERT INTO car_images (car_id, image) VALUES (?, ?)",
+                    [$carId, $image]
+                );
             }
+
             DB::commit();
             return $carId;
+
         } catch (\Exception $e) {
-            return DB::rollback();
+            DB::rollBack();
+            return false; // Return false to indicate failure
         }
     }
+
 
     public function updateCarData($data=[]){
         DB::beginTransaction();

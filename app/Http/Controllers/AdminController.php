@@ -48,18 +48,23 @@ class AdminController extends Controller
         $admin = new Admin();
 
         if ($request->isMethod('POST')) {
+            
+            $request->flash();
+            
+            
             // Validation
             $filterData = $request->validate([
-                'name' => ['required'],
+                'name' => ['required', 'string', 'max:255'],
                 'brand' => ['required'],
                 'model' => ['required'],
                 'cartype' => ['required'],
                 'features' => ['required'],
                 'specifications' => ['required'],
                 'rent' => ['required'],
-                'general_info' => ['nullable'], 
-                'rental_condition' => ['nullable'],
-                'carImages' => ['required', 'array'],
+                'general_info' => ['nullable'],
+                'rental_condition' => ['nullable', ],
+                'carImages' => ['required'],
+                'carImages.*' => ['image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
                 'specialOffer' => ['nullable'],
                 'offerFlag' => ['nullable'],
                 'deposit' => ['required'],
@@ -71,41 +76,48 @@ class AdminController extends Controller
             $filterData['offerFlag'] = !empty($filterData['offerFlag']) ? 1 : 0;
 
             // Handle file uploads
-            $temp = [];
-            if (!empty($request->file('carImages'))) {
-                $files = $request->file('carImages');
-                foreach ($files as $file) {
+            $uploadedImages = [];
+            if ($request->hasFile('carImages')) {
+                foreach ($request->file('carImages') as $file) {
                     $fileName = 'storage/' . $file->store('uploads/cars', 'public');
-                    $temp[] = $fileName;
+                    $uploadedImages[] = $fileName;
                 }
             } else {
-                return back()->withErrors(["error" => "Please select brand images."]);
+                return back()->withErrors(["error" => "Please select car images."]);
             }
-
-            // Assign uploaded file paths to the filter data
-            $filterData['carImages'] = $temp;
-
+            
+            // Assign uploaded file paths to filterData
+            $filterData['carImages'] = $uploadedImages;
+            
             // Save car data
             $res = $admin->saveCarData($filterData);
 
-            // Redirect back with success message
-            return redirect()->to('/admin/add-car')->with('success', 'Car added successfully!');
+            // Check if save was successful
+            if ($res) {
+                return redirect()->to('/admin/cars')->with('success', 'Car added successfully!');
+            } else {
+                return back()->withErrors(["error" => "An error occurred while adding the car."]);
+            }
         } else {
             // Prepare data for the view
             $data['brands'] = $admin->getBrands();
             $data['features'] = $admin->getFeatures();
             $data['type'] = $admin->getCarType();
             $data['specification'] = $admin->getSpecifications();
-            
+
             return view('admin/add-cars', $data);
         }
     }
 
-    public function editCar(Request $request){
+
+    public function editCar(Request $request)
+    {
         $admin = new Admin();
-        if($request->method() == 'POST'){
+
+        if ($request->isMethod('post')) {
+            // Validate the incoming request data
             $filterData = $request->validate([
-                'carId'=> [''],
+                'carId' => ['required'],
                 'name' => ['required'],
                 'brand' => ['required'],
                 'model' => ['required'],
@@ -114,51 +126,57 @@ class AdminController extends Controller
                 'specifications' => ['required'],
                 'rent' => ['required'],
                 'deposit' => ['required'],
-                'general_info' => [''],
-                'rental_condition' => [''],
-                'carImages' => [''],
-                'specialOffer' => [''],
-                'offerFlag' => [''],
+                'general_info' => ['nullable'],
+                'rental_condition' => ['nullable'],
+                'carImages' => ['nullable'],
+                'carImages.*' => ['image', 'mimes:jpg,jpeg,png,gif', 'max:2048'],
+                'specialOffer' => ['nullable'],
+                'offerFlag' => ['nullable'],
             ]);
+
+            // Set flags for general info and rental conditions
             $filterData['general_info'] = isset($filterData['general_info']) ? 1 : 0;
             $filterData['rental_condition'] = isset($filterData['rental_condition']) ? 1 : 0;
             $filterData['offerFlag'] = isset($filterData['offerFlag']) ? 1 : 0;
-            // echo '<pre>';print_r($filterData);exit;
-            $temp = [];
-            if(!empty($_FILES['carImages'])){
-                $file = $request->file('carImages');
-                if(!empty($file)){
-                    foreach ($file as $key => $value) {
-                        $fileName = 'storage/'.$value->store('uploads/cars', 'public');
-                        array_push($temp,$fileName);
-                    }
+
+            // Handle image uploads
+            if (!empty($filterData['carImages'])) {
+                $temp = [];
+                foreach ($filterData['carImages'] as $file) {
+                    $fileName = 'storage/' . $file->store('uploads/cars', 'public');
+                    $temp[] = $fileName;
                 }
-            }else{
-                return back()->withErrors(["error" => "Please select brand image."]);
+                $filterData['carImages'] = $temp;
             }
-            $filterData['carImages'] = $temp;
-            // if($validator->fails()) {
-            //     return Redirect::back()->withErrors($validator);
-            // }
-            // echo '<pre>';print_r($filterData);exit;
+
+            // Update car data in the database
             $res = $admin->updateCarData($filterData);
-            return Redirect::to('/admin/edit-car?id='.base64_encode($res));
-        }else{
+
+            if(!$res){
+                $res = $filterData['carId'];
+            }
+            
+            // Redirect after successful update
+            return redirect()->to('/admin/edit-car?id=' . base64_encode($filterData['carId']))
+                         ->with('success', 'Car details updated successfully!');
+        } else {
+            // Handle GET request to display the edit form
             $queries = [];
             parse_str($_SERVER['QUERY_STRING'], $queries);
             $input['id'] = base64_decode($queries['id']);
             $input['format'] = 'edit';
-            $data['cars'] = $admin->getCars($input);
-            $data['carFeatures'] = $this->getArray($admin->getCarFeatures($input),'id');
-            $data['carSpecification'] = $admin->getCarSpecifications($input);
 
+            $data['cars'] = $admin->getCars($input);
+            $data['carFeatures'] = $this->getArray($admin->getCarFeatures($input), 'id');
+            $data['carSpecification'] = $admin->getCarSpecifications($input);
             $data['brands'] = $admin->getBrands();
             $data['features'] = $admin->getFeatures();
             $data['type'] = $admin->getCarType();
-            // echo '<pre>';print_r($data);exit;
-            return view('admin/edit-cars',$data);
+
+            return view('admin/edit-cars', $data);
         }
     }
+
 
     public function getArray($array,$filter){
         $temp = [];

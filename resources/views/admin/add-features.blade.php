@@ -113,7 +113,7 @@
     $(document).ready(function () {
 
     $("#add-row").DataTable({
-        pageLength: 5,
+        pageLength: 10,
         ordering:  false,
     });
 

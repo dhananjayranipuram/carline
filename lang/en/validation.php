@@ -193,6 +193,13 @@ return [
         'dl_back' => 'Driving License Front',
         'eid_front' => 'EID Front',
         'eid_back' => 'EID Front',
+
+        'cartype' => 'Car Type',
+        'features' => 'Feature',
+        'specifications' => 'Specifications',
+        'rent' => 'Rent',
+        'deposit' => 'Deposit',
+        'carImages' => 'Car Image(s)',
     ],
 
 ];

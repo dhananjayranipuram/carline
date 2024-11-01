@@ -17,6 +17,11 @@
                 </div>
             </div>
             <div class="card-body">
+            @if(session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
             <div class="table-responsive">
                 <table id="multi-filter-select" class="display table table-striped table-hover" >
                 <thead>
@@ -65,7 +70,7 @@
 <script>
 $(document).ready(function () {
 $("#multi-filter-select").DataTable({
-        pageLength: 5,
+        pageLength: 10,
         initComplete: function () {
         this.api()
             .columns()
@@ -96,5 +101,15 @@ $("#multi-filter-select").DataTable({
         },
     });
 });
-</script>    
+</script>  
+<script>
+    setTimeout(function() {
+        const successMessage = document.getElementById('success-message');
+        if (successMessage) {
+            successMessage.style.transition = "opacity 0.5s ease";
+            successMessage.style.opacity = "0";
+            setTimeout(() => successMessage.remove(), 500); 
+        }
+    }, 5000);
+</script>  
 @endsection
