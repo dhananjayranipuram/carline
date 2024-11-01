@@ -19,7 +19,7 @@ class Admin extends Model
         if(!empty($data['id'])){
             $condition .= " AND c.id = $data[id]";
         }
-        return DB::select("SELECT c.id,c.name,c.model,cb.id brand_id,cb.name brand_name,ct.id type_id,ct.name car_type,GROUP_CONCAT(ci.image) AS 'image',c.rent,c.general_info_flag,c.rental_condition_flag,c.offer_flag,c.offer_price FROM cars c
+        return DB::select("SELECT c.id,c.name,c.model,cb.id brand_id,cb.name brand_name,ct.id type_id,ct.name car_type,GROUP_CONCAT(ci.image) AS 'image',c.rent,c.general_info_flag,c.rental_condition_flag,c.offer_flag,c.offer_price,c.deposit FROM cars c
                             LEFT JOIN car_brand cb ON cb.id=c.brand_id
                             LEFT JOIN car_type ct ON ct.id=c.type_id
                             LEFT JOIN car_images ci ON ci.car_id=c.id
@@ -103,7 +103,7 @@ class Admin extends Model
         DB::beginTransaction();
         try {
             $carId = $data['carId'];
-            DB::UPDATE("UPDATE cars SET name='$data[name]',model='$data[model]',brand_id='$data[brand]',type_id='$data[cartype]',general_info_flag='$data[general_info]',rental_condition_flag='$data[rental_condition]',rent='$data[rent]',offer_price='$data[specialOffer]',offer_flag='$data[offerFlag]' WHERE id=$carId;");
+            DB::UPDATE("UPDATE cars SET name='$data[name]',model='$data[model]',brand_id='$data[brand]',type_id='$data[cartype]',general_info_flag='$data[general_info]',rental_condition_flag='$data[rental_condition]',rent='$data[rent]',offer_price='$data[specialOffer]',offer_flag='$data[offerFlag]',deposit='$data[deposit]' WHERE id=$carId;");
 
             //Update Car Specifications
             DB::DELETE("DELETE FROM car_specification WHERE car_id='$carId';");

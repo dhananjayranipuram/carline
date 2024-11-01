@@ -101,6 +101,7 @@ class AdminController extends Controller
                 'features' => ['required'],
                 'specifications' => ['required'],
                 'rent' => ['required'],
+                'deposit' => ['required'],
                 'general_info' => [''],
                 'rental_condition' => [''],
                 'carImages' => [''],
