@@ -329,53 +329,48 @@ class SiteController extends Controller
         return ['uploadedFiles' => $uploadedFiles, 'errors' => $errors];
     }
 
-    public function calculateRate($credentials){
+    public function calculateRate($credentials) {
         $site = new Site();
         $res = [];
         $deposit = $rate = $emirateCharges = $total = 0;
-        // print_r($credentials);exit;
-        $pickupdate = strtotime($credentials['pickupdate'].' '.$credentials['pickuptime']);
-        $returndate = strtotime($credentials['returndate'].' '.$credentials['returntime']);
+    
+        // Calculate the time difference in days
+        $pickupdate = strtotime($credentials['pickupdate'] . ' ' . $credentials['pickuptime']);
+        $returndate = strtotime($credentials['returndate'] . ' ' . $credentials['returntime']);
         $datediff = $returndate - $pickupdate;
-
-        $days =  round($datediff / (60 * 60 * 24));
-        $tempDays =  $datediff / (60 * 60 * 24);
-        $extraHours =  ($tempDays - floor($tempDays)) * (24)-1;
-        $days = ceil($days + $extraHours);
-
+        
+        // Calculate the days and extra hours for partial days
+        $days = floor($datediff / (60 * 60 * 24));
+        $extraHours = ceil(($datediff % (60 * 60 * 24)) / (60 * 60));
+        if ($extraHours > 0) $days++; // Count extra hours as an additional day
+        
+        // Retrieve car details and calculate rate and deposit
         $credentials['format'] = 'normal';
         $carRes = $site->getCars($credentials);
         
-        if(!empty($carRes)){
-            if($carRes[0]->offer_flag==1){
-                $rate = (float) str_replace(',', '', $carRes[0]->offer_price);
-            }else{
-                $rate = (float)str_replace(',', '', $carRes[0]->rent);
-            }
-
-            if($carRes[0]->deposit!=''){
-                $deposit = (float) str_replace(',', '', $carRes[0]->deposit);
-            }
+        if (!empty($carRes)) {
+            // Apply offer price if available, otherwise use regular rent
+            $rate = (float) str_replace(',', '', $carRes[0]->offer_flag == 1 ? $carRes[0]->offer_price : $carRes[0]->rent);
+            $deposit = !empty($carRes[0]->deposit) ? (float) str_replace(',', '', $carRes[0]->deposit) : 0;
         }
         
-        if($credentials['destinationEmirate'] != $credentials['sourceEmirates']){
+        // Additional charge if pickup and destination emirates differ
+        if ($credentials['destinationEmirate'] != $credentials['sourceEmirates']) {
             $resEmirate = $site->getEmirates($credentials);
-            if(!empty($resEmirate)){
-                $emirateCharges = (float)str_replace(',', '', $resEmirate[0]->rate);
-            }
+            $emirateCharges = !empty($resEmirate) ? (float) str_replace(',', '', $resEmirate[0]->rate) : 0;
         }
-
-        
-        if($days>0){
-            $total = ($rate*$days) + $deposit + $emirateCharges;
-        }
-
-        $vat = 0.05*$total;
+    
+        // Calculate the total amount and VAT
+        $total = $days * $rate + $deposit + $emirateCharges;
+        $vat = 0.05 * $total;
+    
+        // Prepare result data
         $res['days'] = $days;
         $res['vat'] = $vat;
         $res['rate'] = $total;
         $res['deposit'] = $deposit;
-        $res['total'] = $vat+$total;
+        $res['total'] = $total + $vat;
+    
         return $res;
     }
 
