@@ -241,7 +241,7 @@
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="#">My Profile</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Logout</a>
+                        <a class="dropdown-item" href="{{url('/admin/logout')}}">Logout</a>
                       </li>
                     </div>
                   </ul>

@@ -666,5 +666,10 @@ class AdminController extends Controller
             return json_encode($res);
         }
     }
+
+    public function logout(){
+        Session::flush();
+        return Redirect::to('/admin/login');
+    }
     /**Policies and agreements of car End */
 }
