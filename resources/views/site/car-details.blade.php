@@ -257,7 +257,7 @@ while ($startTime <= $endTime) {
     <!-- Page Feets Single End -->
 <script src="{{asset('admin_assets/js/core/jquery-3.7.1.min.js')}}"></script>  
 <script src="{{asset('assets/js/jquery.magnific-popup.min.js')}}"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmX5w5ltGt09cjDod_YMamphRRgS8L-ZQ&region=ae&libraries=places"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmX5w5ltGt09cjDod_YMamphRRgS8L-ZQ&components=country:ae&libraries=places"></script>
 <script>
 var sourceData = [];
 var destinationData = [];    
@@ -282,10 +282,12 @@ $(document).ready(function () {
 
     // Initialize the Autocomplete object for the input field
     var source = new google.maps.places.Autocomplete(document.getElementById('source'), {
-        types: ['geocode']
+        types: ['geocode', 'establishment'],
+        componentRestrictions: { country: "AE" }
     });
     var destination = new google.maps.places.Autocomplete(document.getElementById('destination'), {
-        types: ['geocode']
+        types: ['geocode', 'establishment'],
+        componentRestrictions: { country: "AE" }
     });
 
     // Add an inline event listener for 'place_changed'
