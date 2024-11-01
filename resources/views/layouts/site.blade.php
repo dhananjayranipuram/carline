@@ -811,16 +811,17 @@ $(document).ready(function () {
                     $('#loginErrors').append('<br><span style="color:green;">'+res.message+'</span>');
                     setTimeout(function () {
                         $('#loginErrors').html('');
-                    }, 2500);
-
-                    if(res.status == 200){
-                        if($('#pickupdate').length){
-                            checkDocumentUploaded();
-                        }else{
-                            location.reload();
+                        if(res.status == 200){
+                            if($('#pickupdate').length){
+                                checkDocumentUploaded();
+                            }else{
+                                location.reload();
+                            }
+                            
                         }
-                        
-                    }
+                    }, 5000);
+
+                    
                     $(".overlay").hide();
                 }
             });
