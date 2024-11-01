@@ -33,7 +33,7 @@ Route::any('/upload-docs', [SiteController::class, 'uploadDocuments']);
 Route::any('/send-otp', [SiteController::class, 'sendOtp']);
 Route::any('/verify-otp', [SiteController::class, 'verifyOtp']);
 Route::any('/register-user', [SiteController::class, 'registerUser']);
-Route::any('/login', [SiteController::class, 'loginUser']);
+Route::any('/user-login', [SiteController::class, 'loginUser']);
 Route::any('/save-car-booking', [SiteController::class, 'saveCarBooking']);
 
 Route::any('/send-contact-us', [SiteController::class, 'sendContactUs']);

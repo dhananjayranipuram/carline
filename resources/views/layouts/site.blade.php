@@ -801,7 +801,7 @@ $(document).ready(function () {
         $(".overlay").show();
         if(!validateLoginForm(datas)){
             $.ajax({
-                url: baseUrl + '/login',
+                url: baseUrl + '/user-login',
                 type: 'post',
                 data: datas,
                 dataType: "json",
