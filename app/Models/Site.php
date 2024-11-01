@@ -133,7 +133,7 @@ class Site extends Model
 
     public function getCarType(){
         return DB::select("SELECT ct.id,ct.name,ct.image FROM car_type ct
-                            WHERE ct.active=1 AND ct.deleted=0 LIMIT 4;");
+                            WHERE ct.active=1 AND ct.deleted=0;");
     }
 
     public function getCarGeneralInfo(){

@@ -444,12 +444,10 @@
                     <!-- Footer Quick Links Start -->
                     <div class="footer-links footer-quick-links">
                         <h3>Our Cars</h3>
-                        <ul>                            
-                            <li><a href="{{url('/cars')}}">Hatchback</a></li>
-                            <li><a href="{{url('/cars')}}">Sedan</a></li>
-                            <li><a href="{{url('/cars')}}">SUV</a></li>
-                            <li><a href="{{url('/cars')}}">Crossover</a></li>
-                            <li><a href="{{url('/cars')}}">luxury cars</a></li>
+                        <ul>  
+                            @foreach($carType as $key => $value)
+                                <li><a href="{{url('/cars')}}">{{$value->name}}</a></li>
+                            @endforeach
                         </ul>
                     </div>
                     <!-- Footer Quick Links End -->
@@ -459,7 +457,7 @@
                     <!-- Footer Menu Start -->
                     <div class="footer-links footer-menu">
                         <h3>quick links</h3>
-                        <ul>                            
+                        <ul>                          
                             <li><a href="{{ url('/') }}">home</a></li>
                             <li><a href="{{ url('/about') }}">about us</a></li>
                             <li><a href="{{ url('/cars') }}">Our cars</a></li>

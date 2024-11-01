@@ -190,13 +190,12 @@
                                     <div class="perfect-fleet-footer">
                                         <!-- Perfect Fleets Pricing Start -->
                                         <div class="perfect-fleet-pricing">
-                                            <h2>AED 
-                                                @if($value->offer_flag==1) 
-                                                    <del>{{$value->rent}}</del> {{$value->offer_price}}
-                                                @else
-                                                    {{$value->rent}}
-                                                @endif
-                                                <span>/day</span></h2>
+                                            @if($value->offer_flag==1) 
+                                                <del><h6>AED {{$value->rent}}<span>/day</span></h6></del>
+                                                <h2>AED {{$value->offer_price}} <span>/day</span></h2>
+                                            @else
+                                                <h2>AED {{$value->rent}} <span>/day</span></h2>
+                                            @endif
                                         </div>
                                         <!-- Perfect Fleets Pricing End -->
 

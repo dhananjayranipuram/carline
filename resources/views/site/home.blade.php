@@ -118,8 +118,8 @@
                                     <!-- Image Box Start -->
                                     <div class="image-box">
                                         @foreach($imgArr as $keys => $values)
-                                        <img src="{{asset($values)}}" alt="">
-                                        @if($keys==0) @break @endif
+                                            <a href="{{url('/car-details')}}?id={{base64_encode($value->id)}}"><img src="{{asset($values)}}" alt=""></a>
+                                            @if($keys==0) @break @endif
                                         @endforeach
                                     </div>
                                     <!-- Image Box End -->
@@ -129,17 +129,29 @@
                                         <!-- Perfect Fleets Title Start -->
                                         <div class="perfect-fleet-title">
                                             <h3>{{$value->car_type}}</h3>
-                                            <h2>{{$value->brand_name}} {{$value->name}} {{$value->model}}</h2>
+                                            <a href="{{url('/car-details')}}?id={{base64_encode($value->id)}}"><h2>{{$value->brand_name}} {{$value->name}} {{$value->model}}</h2></a>
                                         </div>
                                         <!-- Perfect Fleets Content End -->
 
                                         <!-- Perfect Fleets Body Start -->
                                         <div class="perfect-fleet-body">
                                             <ul>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-1.svg')}}" alt="">4 passenger</li>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-2.svg')}}" alt="">4 door</li>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-3.svg')}}" alt="">bags</li>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-4.svg')}}" alt="">auto</li>
+                                                @if(!empty($specs[$value->id]))
+                                                    @foreach($specs[$value->id] as $keys => $values)
+                                                        <li class="break-word"><img src="{{asset($values->image)}}" alt="" width="21">
+                                                        @if($values->name=='Transmission')
+                                                            {{$values->details}}
+                                                        @else
+                                                            @if($values->details!='Yes')
+                                                                {{$values->details}}
+                                                            @endif 
+                                                            {{$values->name}}
+                                                        @endif
+                                                        
+                                                        </li>
+                                                        @if($keys==3) @break @endif
+                                                    @endforeach
+                                                @endif
                                             </ul>
                                         </div>
                                         <!-- Perfect Fleets Body End -->
@@ -148,7 +160,12 @@
                                         <div class="perfect-fleet-footer">
                                             <!-- Perfect Fleets Pricing Start -->
                                             <div class="perfect-fleet-pricing">
-                                                <h2>AED 280<span>/day</span></h2>
+                                                @if($value->offer_flag==1) 
+                                                    <del><h6>AED {{$value->rent}}<span>/day</span></h6></del>
+                                                    <h2>AED {{$value->offer_price}} <span>/day</span></h2>
+                                                @else
+                                                    <h2>AED {{$value->rent}} <span>/day</span></h2>
+                                                @endif
                                             </div>
                                             <!-- Perfect Fleets Pricing End -->
 
@@ -254,6 +271,7 @@
                         <!-- Luxury Collection Btn End -->
                     </div>
                     <!-- Luxury Collection Item End -->
+                    @if($key==3) @break @endif
                     @endforeach
 
                     

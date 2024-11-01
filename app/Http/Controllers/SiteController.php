@@ -21,9 +21,9 @@ class SiteController extends Controller
     {
         $site = new Site();
         $emirates = $site->getEmirates();
-
+        $layoutCarTypes = $site->getCarType();
         // Share 'emirates' with all views
-        view()->share('emirates', $emirates);
+        view()->share('emirates', $emirates,$layoutCarTypes);
     }
 
     public function index(){
@@ -32,6 +32,16 @@ class SiteController extends Controller
         $data['brands'] = $site->getBrands();
         $data['cars'] = $site->getCars($input);
         $data['carType'] = $site->getCarType();
+        $data['specs'] = $site->getCarSpecifications($input);
+        $data['all_specs'] = $site->getAllSpecifications();
+        $temp = [];
+        foreach ($data['specs'] as $key => $value) {
+            if(!isset($temp[$value->car_id])){
+                $temp[$value->car_id] = [];
+            }
+            array_push($temp[$value->car_id],$value);
+        }
+        $data['specs'] = $temp;
         return view('site/home',$data);
     }
 

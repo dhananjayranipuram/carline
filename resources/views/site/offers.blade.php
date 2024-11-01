@@ -51,6 +51,7 @@
                                 <div class="perfect-fleet-item">
                                     <!-- Image Box Start -->
                                     <div class="image-box">
+                                        <a href="{{url('/car-details')}}?id={{base64_encode($value->id)}}">
                                         @if($value->image!='')
                                             @php $imgArr = explode(',',$value->image); @endphp
                                             @if(!empty($imgArr))
@@ -58,7 +59,7 @@
                                             @endif
                                         @else
                                             <img src="" alt="Image not available">
-                                        @endif
+                                        @endif</a>
                                     </div>
                                     <!-- Image Box End -->
 
@@ -67,7 +68,7 @@
                                         <!-- Perfect Fleets Title Start -->
                                         <div class="perfect-fleet-title">
                                             <h3>{{$value->car_type}}</h3>
-                                            <h2>{{$value->brand_name}} {{$value->name}} {{$value->model}}</h2>
+                                            <a href="{{url('/car-details')}}?id={{base64_encode($value->id)}}"><h2>{{$value->brand_name}} {{$value->name}} {{$value->model}}</h2></a>
                                         </div>
                                         <!-- Perfect Fleets Content End -->
 
@@ -77,10 +78,16 @@
                                                 @if(!empty($specs[$value->id]))
                                                     @foreach($specs[$value->id] as $keys => $values)
                                                         <li class="break-word"><img src="{{asset($values->image)}}" alt="" width="21">
-                                                        @if($values->details!='Yes')
+                                                        @if($values->name=='Transmission')
                                                             {{$values->details}}
-                                                        @endif 
-                                                        {{$values->name}}</li>
+                                                        @else
+                                                            @if($values->details!='Yes')
+                                                                {{$values->details}}
+                                                            @endif 
+                                                            {{$values->name}}
+                                                        @endif
+                                                        
+                                                        </li>
                                                         @if($keys==3) @break @endif
                                                     @endforeach
                                                 @endif
@@ -92,7 +99,14 @@
                                         <div class="perfect-fleet-footer">
                                             <!-- Perfect Fleets Pricing Start -->
                                             <div class="perfect-fleet-pricing">
-                                                <h2>AED {{$value->offer_price}}<span>/day</span></h2>
+                                                 
+                                                    @if($value->offer_flag==1) 
+                                                        <del><h6>AED {{$value->rent}}<span>/day</span></h6></del>
+                                                        <h2>AED {{$value->offer_price}} <span>/day</span></h2>
+                                                    @else
+                                                        <h2>AED {{$value->rent}} <span>/day</span></h2>
+                                                    @endif
+                                                
                                             </div>
                                             <!-- Perfect Fleets Pricing End -->
 
