@@ -845,6 +845,7 @@ $(".rider_type").click(function() {
 $(".upload_docs").click(function(e) {
     e.preventDefault();
     let formData = new FormData($('#uploadDocs')[0]);
+    $(".overlay").show();
     $.ajax({
         url: baseUrl + '/upload-docs',
         type: 'POST',
@@ -863,6 +864,7 @@ $(".upload_docs").click(function(e) {
                 }
                 
             }, 5000);
+            $(".overlay").hide();
         },
         error: function(xhr) {
             if (xhr.status === 422) {
@@ -879,11 +881,13 @@ $(".upload_docs").click(function(e) {
                     $("#docErrorMessages").html('');
                 }, 5000);
             }
+            $(".overlay").hide();
         }
     });
 });
 
 function checkDocumentUploaded(){
+    $(".overlay").show();
     $.ajax({
         url: baseUrl + '/check-document-uploaded',
         type: 'post',
@@ -903,6 +907,7 @@ function checkDocumentUploaded(){
                     bookCarAction();
                 }
             }
+            $(".overlay").hide();
         }
     });
 }

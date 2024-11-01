@@ -382,7 +382,7 @@ $("#pickupdate, #returndate, #destination, #source, #returntime, #pickuptime").o
 
     if(destinationData.length != 0 && sourceData.length != 0 && $("#pickupdate").val() != '' && $("#returndate").val() != '' && $("#pickuptime").val() != '' && $("#returntime").val() != ''){
         if ($("#pickupdate").val() < $("#returndate").val()) {
-
+            $(".overlay").show();
             $.ajax({
                 url: baseUrl + '/check-rate',
                 type: 'post',
@@ -402,7 +402,7 @@ $("#pickupdate, #returndate, #destination, #source, #returntime, #pickuptime").o
                     $("#rent-message").html('AED '+res.rate);
                     $("#deposit-message").html('AED '+res.deposit);
                     $("#total-message").html('AED '+res.total);
-                    
+                    $(".overlay").hide();
                 }
             });
         }else{
@@ -429,6 +429,7 @@ $("#pickupdate, #returndate, #destination, #source, #returntime, #pickuptime").o
     });
 
 function bookCarAction(){
+    $(".overlay").show();
     $.ajax({
         url: baseUrl + '/save-car-booking',
         type: 'post',
@@ -447,6 +448,7 @@ function bookCarAction(){
         dataType: "json",
         headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
         success: function(res) {
+            $(".overlay").hide();
             if(res.status==200){
                 var str = '<span style="color:green;">Car Booked. Booking ID:'+res.bookingId+'</span>'
                 $("#booking-errors").html(str);
