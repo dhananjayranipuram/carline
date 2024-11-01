@@ -100,6 +100,35 @@
                                                 <input type="text" name="rent" class="form-control">
                                             </div>
                                         </div>
+                                        <div class="col-12 col-md-12">
+                                            <div class="form-group">
+                                                <input class="form-check-input offer-flag" type="checkbox" name="offerFlag" checked >
+                                                <label class="form-check-label" for="flexCheckDefault">
+                                                    Avail special offers
+                                                </label>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-12 col-md-12 special-offer">
+                                            <div class="form-group">
+                                                <input type="text" name="specialOffer" placeholder="Enter Offer Price" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">Deposit in AED</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-12 col-md-12">
+                                            <div class="form-group">
+                                                <input type="text" name="deposit" placeholder="Enter Deposit Amount" class="form-control">
+                                            </div>
+                                        </div>
+                                        
                                     </div>
                                 </div>
                             </div>

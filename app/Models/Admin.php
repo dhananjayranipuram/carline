@@ -68,7 +68,7 @@ class Admin extends Model
     public function saveCarData($data=[]){
         DB::beginTransaction();
         try {
-            DB::INSERT("INSERT INTO cars (name,model,brand_id,type_id,general_info_flag,rental_condition_flag,rent) VALUES ('$data[name]','$data[model]','$data[brand]','$data[cartype]','$data[general_info]','$data[rental_condition]','$data[rent]');");
+            DB::INSERT("INSERT INTO cars (name,model,brand_id,type_id,general_info_flag,rental_condition_flag,rent,deposit,offer_flag,offer_price) VALUES ('$data[name]','$data[model]','$data[brand]','$data[cartype]','$data[general_info]','$data[rental_condition]','$data[rent]','$data[deposit]','$data[offerFlag]','$data[specialOffer]');");
             $carId = DB::getPdo()->lastInsertId();
 
             //Insert Car Specifications

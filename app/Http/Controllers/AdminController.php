@@ -43,9 +43,12 @@ class AdminController extends Controller
         return view('admin/cars',$data);
     }
 
-    public function addCar(Request $request){
+    public function addCar(Request $request)
+    {
         $admin = new Admin();
-        if($request->method() == 'POST'){
+
+        if ($request->isMethod('POST')) {
+            // Validation
             $filterData = $request->validate([
                 'name' => ['required'],
                 'brand' => ['required'],
@@ -54,38 +57,47 @@ class AdminController extends Controller
                 'features' => ['required'],
                 'specifications' => ['required'],
                 'rent' => ['required'],
-                'general_info' => [''],
-                'rental_condition' => [''],
-                'carImages' => [''],
+                'general_info' => ['nullable'], 
+                'rental_condition' => ['nullable'],
+                'carImages' => ['required', 'array'],
+                'specialOffer' => ['nullable'],
+                'offerFlag' => ['nullable'],
+                'deposit' => ['required'],
             ]);
-            // echo '<pre>';print_r($filterData);exit;
-            $filterData['general_info'] = isset($filterData['general_info']) ? 1 : 0;
-            $filterData['rental_condition'] = isset($filterData['rental_condition']) ? 1 : 0;
+
+            // Handle checkbox inputs
+            $filterData['general_info'] = !empty($filterData['general_info']) ? 1 : 0;
+            $filterData['rental_condition'] = !empty($filterData['rental_condition']) ? 1 : 0;
+            $filterData['offerFlag'] = !empty($filterData['offerFlag']) ? 1 : 0;
+
+            // Handle file uploads
             $temp = [];
-            if(!empty($_FILES['carImages'])){
-                $file = $request->file('carImages');
-                
-                foreach ($file as $key => $value) {
-                    $fileName = 'storage/'.$value->store('uploads/cars', 'public');
-                    array_push($temp,$fileName);
+            if (!empty($request->file('carImages'))) {
+                $files = $request->file('carImages');
+                foreach ($files as $file) {
+                    $fileName = 'storage/' . $file->store('uploads/cars', 'public');
+                    $temp[] = $fileName;
                 }
-            }else{
-                return back()->withErrors(["error" => "Please select brand image."]);
+            } else {
+                return back()->withErrors(["error" => "Please select brand images."]);
             }
+
+            // Assign uploaded file paths to the filter data
             $filterData['carImages'] = $temp;
-            if($validator->fails()) {
-                return Redirect::back()->withErrors($validator);
-            }
-            // print_r($filterData);exit;
+
+            // Save car data
             $res = $admin->saveCarData($filterData);
-            return Redirect::to('/admin/add-car');
-        }else{
-            
+
+            // Redirect back with success message
+            return redirect()->to('/admin/add-car')->with('success', 'Car added successfully!');
+        } else {
+            // Prepare data for the view
             $data['brands'] = $admin->getBrands();
             $data['features'] = $admin->getFeatures();
             $data['type'] = $admin->getCarType();
             $data['specification'] = $admin->getSpecifications();
-            return view('admin/add-cars',$data);
+            
+            return view('admin/add-cars', $data);
         }
     }
 
