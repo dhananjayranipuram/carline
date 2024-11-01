@@ -334,16 +334,21 @@ class SiteController extends Controller
         $res = [];
         $deposit = $rate = $emirateCharges = $total = 0;
     
-        // Calculate the time difference in days
+        // Calculate the time difference in days and hours
         $pickupdate = strtotime($credentials['pickupdate'] . ' ' . $credentials['pickuptime']);
         $returndate = strtotime($credentials['returndate'] . ' ' . $credentials['returntime']);
         $datediff = $returndate - $pickupdate;
-        
-        // Calculate the days and extra hours for partial days
+    
+        // Calculate the number of complete days
         $days = floor($datediff / (60 * 60 * 24));
-        $extraHours = ceil(($datediff % (60 * 60 * 24)) / (60 * 60));
-        if ($extraHours > 0) $days++; // Count extra hours as an additional day
-        
+        // Calculate any extra hours after full days
+        $extraHours = ($datediff % (60 * 60 * 24)) / (60 * 60);
+    
+        // Add an additional day if extra hours exceed one-hour buffer
+        if ($extraHours > 1) {
+            $days++;
+        }
+    
         // Retrieve car details and calculate rate and deposit
         $credentials['format'] = 'normal';
         $carRes = $site->getCars($credentials);
