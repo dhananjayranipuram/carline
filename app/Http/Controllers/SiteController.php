@@ -23,7 +23,8 @@ class SiteController extends Controller
         $emirates = $site->getEmirates();
         $layoutCarTypes = $site->getCarType();
         // Share 'emirates' with all views
-        view()->share('emirates', $emirates,$layoutCarTypes);
+        view()->share('emirates', $emirates);
+        view()->share('layoutCarTypes', $layoutCarTypes);
     }
 
     public function index(){

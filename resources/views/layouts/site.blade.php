@@ -445,7 +445,7 @@
                     <div class="footer-links footer-quick-links">
                         <h3>Our Cars</h3>
                         <ul>  
-                            @foreach($carType as $key => $value)
+                            @foreach($layoutCarTypes as $key => $value)
                                 <li><a href="{{url('/cars')}}">{{$value->name}}</a></li>
                             @endforeach
                         </ul>
