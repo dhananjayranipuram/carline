@@ -65,6 +65,7 @@ Route::middleware(['check.session', 'prevent.back.history'])->group(function () 
     Route::get('/admin/add-features', [AdminController::class, 'addFeatures']);
     Route::any('/admin/save-feature', [AdminController::class, 'saveFeatures']);
     Route::any('/admin/delete-feature', [AdminController::class, 'deleteFeatures']);
+    Route::any('/admin/update-feature', [AdminController::class, 'updateFeatures']);
 
     Route::get('/admin/add-brand', [AdminController::class, 'addBrands']);
     Route::any('/admin/edit-brand', [AdminController::class, 'editBrand']);

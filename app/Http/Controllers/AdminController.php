@@ -226,6 +226,31 @@ class AdminController extends Controller
             return json_encode($res);
         }
     }
+    
+    public function updateFeatures(Request $request){
+        $admin = new Admin();
+        $res = [];
+        if($request->method() == 'POST'){
+            $filterData = $request->validate([
+                'id' => ['required'],
+                'name' => ['required'],
+            ]);
+            $data = $admin->updateFeatureData($filterData);
+            
+            if ($data == 0) {
+                $response['status'] = 200;
+                $response['message'] = "Nothing to update.";
+            }else if ($data == 1) {
+                $response['status'] = 200;
+                $response['message'] = "Feature updated successfully.";
+            } else {
+                $response['status'] = 500;
+                $response['message'] = "Something went wrong. Please try again.";
+            }
+            
+            return response()->json($response);
+        }
+    }
 
     /**Emirates section starts */
     public function addEmirates(){
@@ -295,13 +320,13 @@ class AdminController extends Controller
 
     public function addSpec(Request $request){
         $admin = new Admin();
-        $res = [];
+        $response = [];
         if($request->method() == 'POST'){
             $filterData = $request->validate([
                 'specName' => ['required'],
-                'specActive' => [''],
-                'options' => [''],
-                'image' => [''],
+                'specActive' => ['nullable'],
+                'options' => ['nullable'],
+                'image' => ['required','image','mimes:jpeg,png,jpg,gif,svg','max:2048']
             ]);
             
             $str = '';
@@ -317,16 +342,28 @@ class AdminController extends Controller
             
             $filterData['options'] = rtrim($str,'~');
             $filterData['specActive'] = isset($filterData['specActive']) ? 1 : 0;
-            // echo '<pre>';print_r($filterData);exit;
-            if(!empty($_FILES['image']['name'])){
+            
+            if ($request->hasFile('image')) {
                 $file = $request->file('image');
                 $filterData['image'] = 'storage/'.$file->store('uploads/specifications', 'public');
-            }else{
-                return back()->withErrors(["error" => "Please select brand image."]);
+            } else {
+                return response()->json([
+                    'status' => 422,
+                    'message' => 'Please select a valid image.'
+                ], 422);
             }
             
             $data = $admin->saveSpecData($filterData);
-            return Redirect::to('/admin/add-specifications');
+            
+            if ($data > 0) {
+                $response['status'] = 200;
+                $response['message'] = "Specification created successfully.";
+            } else {
+                $response['status'] = 500;
+                $response['message'] = "Something went wrong. Please try again.";
+            }
+            
+            return response()->json($response);
         }
     }
 
@@ -353,8 +390,9 @@ class AdminController extends Controller
             $filterData = $request->validate([
                 'specId' => ['required'],
                 'specName' => ['required'],
-                'specActive' => [''],
-                'options' => [''],
+                'specActive' => ['nullable'],
+                'options' => ['nullable'],
+                'image' => ['nullable','image','mimes:jpeg,png,jpg,gif,svg','max:2048']
             ]);
             $str = '';
             foreach ($filterData['options'] as $value) {
@@ -371,12 +409,21 @@ class AdminController extends Controller
             if(!empty($_FILES['image']['name'])){
                 $file = $request->file('image');
                 $filterData['image'] = 'storage/'.$file->store('uploads/specifications', 'public');
-            }else{
-                return back()->withErrors(["error" => "Please select brand image."]);
             }
             
             $data = $admin->updateSpecData($filterData);
-            return Redirect::to('/admin/add-specifications');
+            if ($data == 0) {
+                $response['status'] = 200;
+                $response['message'] = "Nothing to update.";
+            }else if ($data == 1) {
+                $response['status'] = 200;
+                $response['message'] = "Specification updated successfully.";
+            } else {
+                $response['status'] = 500;
+                $response['message'] = "Something went wrong. Please try again.";
+            }
+            
+            return response()->json($response);
         }
     }
 
@@ -387,6 +434,11 @@ class AdminController extends Controller
             $filterData = $request->validate([
                 'id' => ['required'],
             ]);
+
+            $imageData = $admin->getSpecifications($filterData);
+            if (isset($specData[0]->image) && File::exists(public_path($specData[0]->image))) {
+                File::delete($specData[0]->image);
+            }
             $data = $admin->deleteSpecData($filterData);
             if($data){
                 $res['status'] = 200;

@@ -196,7 +196,7 @@ class Admin extends Model
         if(!empty($data['id'])){
             $condition .= " AND s.id = $data[id]";
         }
-        return DB::select("SELECT s.id,s.name,CASE WHEN s.active = 1 THEN 'Active' ELSE 'Inactive' END as 'status',s.options FROM specification s
+        return DB::select("SELECT s.id,s.name,CASE WHEN s.active = 1 THEN 'Active' ELSE 'Inactive' END as 'status',s.options,s.image FROM specification s
                             WHERE s.active=1 AND s.deleted=0 $condition ORDER BY s.name;");
     }
 
@@ -213,6 +213,10 @@ class Admin extends Model
 
     public function deleteFeatureData($data){
         return DB::UPDATE("UPDATE features SET deleted='1' WHERE id='$data[id]';");
+    }
+    
+    public function updateFeatureData($data){
+        return DB::UPDATE("UPDATE features SET feature='$data[name]' WHERE id='$data[id]';");
     }
 
     public function deleteBrandData($data){
@@ -260,8 +264,23 @@ class Admin extends Model
         
     }
 
-    public function updateSpecData($data){
-        return DB::UPDATE("UPDATE specification SET name='$data[specName]',options='$data[options]',active='$data[specActive]',image='$data[image]' WHERE id='$data[specId]';");
+    public function updateSpecData($data) {
+        $sql = "UPDATE specification SET name = :name, options = :options, active = :active";
+        $bindings = [
+            'name' => $data['specName'],
+            'options' => $data['options'],
+            'active' => $data['specActive'],
+            'id' => $data['specId'],
+        ];
+    
+        if (isset($data['image'])) {
+            $sql .= ", image = :image";
+            $bindings['image'] = $data['image'];
+        }
+    
+        $sql .= " WHERE id = :id";
+    
+        return DB::update($sql, $bindings);
     }
 
     public function deleteSpecData($data){
