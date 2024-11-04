@@ -5,7 +5,7 @@
         <title>Carline - Admin</title>
         <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport"/>
         <meta content="{{ csrf_token() }}" name="csrf-token">
-        <link rel="icon" href="{{asset('admin_assets/img/kaiadmin/favicon.ico')}}" type="image/x-icon"/>
+        <link rel="icon" href="{{asset('admin_assets/img/kaiadmin/favicon.png')}}" type="image/x-icon"/>
 
         <!-- Fonts and icons -->
         <script> var baseUrl = "{{ url('/') }}"; </script>
@@ -37,6 +37,11 @@
 
         <!-- CSS Just for demo purpose, don't include it in your project -->
         <link rel="stylesheet" href="{{asset('admin_assets/css/demo.css')}}" />
+        <style>
+          .logo-width{
+            height:50px;
+          }
+        </style>
     </head>
     <body>
         <div class="wrapper">
@@ -46,7 +51,7 @@
                     <!-- Logo Header -->
                     <div class="logo-header" data-background-color="dark">
                         <a href="{{url('/admin/dashboard')}}" class="logo">
-                            <img src="{{asset('admin_assets/img/kaiadmin/logo_light.svg')}}" alt="navbar brand" class="navbar-brand" height="20"/>
+                            <img src="{{asset('admin_assets/img/kaiadmin/footer-logo.png')}}" alt="navbar brand" class="navbar-brand logo-width" height="20"/>
                         </a>
                         <div class="nav-toggle">
                             <button class="btn btn-toggle toggle-sidebar">
