@@ -50,6 +50,7 @@ Route::middleware(['check.session', 'prevent.back.history'])->group(function () 
     Route::get('/admin/cars', [AdminController::class, 'cars']);
     Route::any('/admin/add-car', [AdminController::class, 'addCar']);
     Route::any('/admin/edit-car', [AdminController::class, 'editCar']);
+    Route::any('/admin/delete-car', [AdminController::class, 'deleteCar']);
 
     Route::get('/admin/add-specifications', [AdminController::class, 'addSpecifications']);
     Route::any('/admin/add-spec', [AdminController::class, 'addSpec']);

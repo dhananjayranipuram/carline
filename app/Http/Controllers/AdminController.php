@@ -177,6 +177,30 @@ class AdminController extends Controller
         }
     }
 
+    public function deleteCar(Request $request){
+        $admin = new Admin();
+        $res = [];
+        if($request->method() == 'POST'){
+            $filterData = $request->validate([
+                'id' => ['required'],
+            ]);
+
+            $filterData['format'] = 'edit';
+            $carData = $admin->getCars($filterData);
+            foreach ($carData as $key => $value) {
+                if (isset($value->image) && File::exists($value->image)) {
+                    File::delete($value->image);
+                }
+            }
+            
+            $data = $admin->deleteCarData($filterData);
+            if($data){
+                $res['status'] = 200;
+                $res['data'] = "Brand deleted.";
+            }
+            return json_encode($res);
+        }
+    }
 
     public function getArray($array,$filter){
         $temp = [];
@@ -436,7 +460,7 @@ class AdminController extends Controller
             ]);
 
             $imageData = $admin->getSpecifications($filterData);
-            if (isset($specData[0]->image) && File::exists(public_path($specData[0]->image))) {
+            if (isset($specData[0]->image) && File::exists($specData[0]->image)) {
                 File::delete($specData[0]->image);
             }
             $data = $admin->deleteSpecData($filterData);
@@ -463,6 +487,12 @@ class AdminController extends Controller
             $filterData = $request->validate([
                 'id' => ['required'],
             ]);
+
+            $brandData = $admin->getBrands($filterData);
+            if (isset($brandData[0]->image) && File::exists($brandData[0]->image)) {
+                File::delete($brandData[0]->image);
+            }
+
             $data = $admin->deleteBrandData($filterData);
             if($data){
                 $res['status'] = 200;
@@ -490,22 +520,34 @@ class AdminController extends Controller
 
     public function addBrand(Request $request){
         $admin = new Admin();
-        $res = [];
+        $response = [];
         if($request->method() == 'POST'){
             $filterData = $request->validate([
                 'brName' => ['required'],
-                'brActive' => [''],
+                'brActive' => ['nullable'],
+                'brImage' => ['required', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
             ]);
             
             $filterData['brActive'] = isset($filterData['brActive']) ? 1 : 0;
+
             if(!empty($_FILES['brImage']['name'])){
                 $file = $request->file('brImage');
                 $filterData['image'] = 'storage/'.$file->store('uploads', 'public');
             }else{
                 return back()->withErrors(["error" => "Please select brand image."]);
             }
+            
             $data = $admin->saveBrandData($filterData);
-            return Redirect::to('/admin/add-brand');
+            
+            if ($data > 0) {
+                $response['status'] = 200;
+                $response['message'] = "Brand created successfully.";
+            } else {
+                $response['status'] = 500;
+                $response['message'] = "Something went wrong. Please try again.";
+            }
+            
+            return response()->json($response);
         }
     }
 
@@ -516,23 +558,35 @@ class AdminController extends Controller
             $filterData = $request->validate([
                 'brandId' => ['required'],
                 'brandName' => ['required'],
-                'brandActive' => [''],
+                'brandActive' => ['nullable'],
+                'brandImage' => ['nullable', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
             ]);
             
             $filterData['brandActive'] = isset($filterData['brandActive']) ? 1 : 0;
             if(!empty($_FILES['brandImage']['name'])){
                 $file = $request->file('brandImage');
                 $filterData['image'] = 'storage/'.$file->store('uploads', 'public');
-            }else{
-                return back()->withErrors(["error" => "Please select brand image."]);
             }
+            
             if(!empty($filterData['image'])){
                 $data = $admin->getBrands(['id'=>$filterData['brandId']]);
                 $filename = $data[0]->image;
                 File::delete($filename);
             }
             $data = $admin->updateBrandData($filterData);
-            return Redirect::to('/admin/add-brand');
+
+            if ($data == 0) {
+                $response['status'] = 200;
+                $response['message'] = "Nothing to update.";
+            }else if ($data == 1) {
+                $response['status'] = 200;
+                $response['message'] = "Brand updated successfully.";
+            } else {
+                $response['status'] = 500;
+                $response['message'] = "Something went wrong. Please try again.";
+            }
+            
+            return response()->json($response);
         }
     }
     /**Brand Related proceses End*/

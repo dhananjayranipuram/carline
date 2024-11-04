@@ -45,10 +45,10 @@
                                 <td>{{$value->rent}}</td>
                                 <td>
                                     <div class="form-button-action">
-                                        <a href="{{url('/admin/edit-car')}}?id={{base64_encode($value->id)}}" data-bs-toggle="tooltip" title="Edit Brand" class="btn btn-link btn-primary btn-lg edit-brand" data-original-title="Edit Task">
+                                        <a href="{{url('/admin/edit-car')}}?id={{base64_encode($value->id)}}" data-bs-toggle="tooltip" title="Edit Car" class="btn btn-link btn-primary btn-lg edit-brand" data-original-title="Edit Task">
                                             <i class="fa fa-edit"></i>
                                         </a>
-                                        <button type="button" data-bs-toggle="tooltip" title="Delete Brand" class="btn btn-link btn-danger delete-brand" data-original-title="Remove" data-id="{{$value->id}}">
+                                        <button type="button" data-bs-toggle="tooltip" title="Delete Car" class="btn btn-link btn-danger delete-car" data-original-title="Remove" data-id="{{$value->id}}">
                                             <i class="fa fa-times"></i>
                                         </button>
                                     </div>
@@ -99,6 +99,27 @@ $("#multi-filter-select").DataTable({
             });
         },
     });
+});
+
+$(".delete-car").click(function () {
+    var t = $('#multi-filter-select').DataTable();
+    var id = $(this).attr("data-id");
+    if(confirm("Do you want to delete this car?")){
+        $.ajax({
+            url: baseUrl + '/admin/delete-car',
+            type: 'post',
+            data: {
+                'id' : id,
+            },
+            dataType: "json",
+            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+            success: function(res) {
+                if(res.status == 200 ){
+                    t.row("#row"+id).remove().draw();
+                }
+            }
+        });
+    }
 });
 </script>  
 <script>

@@ -158,7 +158,7 @@
 			<nav class="navbar navbar-expand-lg">
 				<div class="container">
 					<!-- Logo Start -->
-					<a class="navbar-brand" href="{{ url('/') }}">
+					<a class="navbar-brand" href="{{ url('/home') }}">
 						<img src="{{asset('assets/images/logo.png')}}" alt="Logo">
 					</a>
 					<!-- Logo End -->
@@ -458,7 +458,7 @@
                     <div class="footer-links footer-menu">
                         <h3>quick links</h3>
                         <ul>                          
-                            <li><a href="{{ url('/') }}">home</a></li>
+                            <li><a href="{{ url('/home') }}">home</a></li>
                             <li><a href="{{ url('/about') }}">about us</a></li>
                             <li><a href="{{ url('/cars') }}">Our cars</a></li>
                             <li><a href="{{ url('/offers') }}">Special Offers</a></li>

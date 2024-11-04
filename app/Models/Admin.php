@@ -158,9 +158,16 @@ class Admin extends Model
             DB::commit();
             return $carId;
         } catch (\Exception $e) {
-            // echo '<pre>';print_r($e);exit;
+            
             return DB::rollback();
         }
+    }
+
+    public function deleteCarData($data) {
+        return DB::update("UPDATE cars SET deleted = :deleted WHERE id = :id", [
+            'deleted' => 1,
+            'id' => $data['id']
+        ]);
     }
 
     public function getBrands($data=[]){
@@ -223,8 +230,23 @@ class Admin extends Model
         return DB::UPDATE("UPDATE car_brand SET deleted='1' WHERE id='$data[id]';");
     }
 
-    public function updateBrandData($data){
-        return DB::UPDATE("UPDATE car_brand SET name='$data[brandName]',image='$data[image]',active='$data[brandActive]' WHERE id='$data[brandId]';");
+    public function updateBrandData($data) {
+        $query = "UPDATE car_brand SET name = :name, active = :active";
+        $bindings = [
+            'name' => $data['brandName'],
+            'active' => $data['brandActive'],
+            'id' => $data['brandId']
+        ];
+    
+        // Add the image field if it is set
+        if (isset($data['image']) && !empty($data['image'])) {
+            $query .= ", image = :image";
+            $bindings['image'] = $data['image'];
+        }
+    
+        $query .= " WHERE id = :id";
+    
+        return DB::update($query, $bindings);
     }
 
     public function saveBrandData($data){
