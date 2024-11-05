@@ -342,7 +342,7 @@ class Admin extends Model
             );
             
             // Insert options
-            foreach (array_reverse($data['options']) as $options) {
+            foreach ($data['options'] as $options) {
                 DB::insert(
                     "INSERT INTO general_informations_det (gi_id,options) VALUES (?,?)",
                     [$data['id'],$options]
