@@ -732,10 +732,26 @@ class AdminController extends Controller
     /**Car type Related proceses End*/
 
     /**General information about car Start */
-    public function generalInfo(){
+    public function generalInfo(Request $request){
         $admin = new Admin();
-        $data['content'] = $admin->getGeneralInfo();
-        return view('admin/general-info',$data);
+        if ($request->isMethod('POST')) {
+            $filterData = $request->validate([
+                'id' => ['required'],
+                'heading' => ['required'],
+                'content' => ['required'],
+                'options' => ['nullable'],
+            ]);
+            // echo '<pre>';print_r($filterData);exit;
+            $data = $admin->saveGeneralInfoData($filterData);
+            if ($data) {
+                return redirect()->to('/admin/general-info')->with('success', 'General informations added successfully!');
+            } else {
+                return back()->withErrors(["error" => "An error occurred while adding the General informations."]);
+            }
+        }else{
+            $data['content'] = $admin->getGeneralInfo();
+            return view('admin/general-info',$data);
+        }
     }
 
     public function saveGeneralInfo(Request $request){

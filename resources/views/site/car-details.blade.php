@@ -207,7 +207,37 @@ while ($startTime <= $endTime) {
 
                         <!-- Feets Information Start -->
                         <div class="fleets-information">
-                            {!! trim(html_entity_decode($generalInfo[0]->content)) !!} 
+                            <div class="section-title">
+                                <h3 class="wow fadeInUp">General Information</h3>
+                                <h2 class="text-anime-style-3" data-cursor="-opaque">{{$generalInfo[0]->heading}}</h2>
+                                <p class="wow fadeInUp" data-wow-delay="0.25s">
+                                    {{$generalInfo[0]->content}}
+                                </p>
+                            </div>
+                            <div class="fleets-information-list wow fadeInUp" data-wow-delay="0.5s">
+                                <div class="row">
+                                    @php
+                                    $options = explode('~',$generalInfo[0]->options);
+                                    $pieces = array_chunk($options, ceil(count($options) / 2));
+                                    @endphp
+
+                                    <div class="col-md-6">
+                                        <ul>
+                                            @foreach($pieces[0] as $key => $value)
+                                            <li>{{$value}}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <ul>
+                                            @foreach($pieces[1] as $key => $value)
+                                            <li>{{$value}}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                         <!-- Feets Information End -->
 

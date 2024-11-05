@@ -322,11 +322,41 @@ class Admin extends Model
     }
 
     public function getGeneralInfo($data=[]){
-        return DB::select("SELECT content FROM general_informations WHERE active=1;");
+        return DB::select("SELECT mst.id,mst.heading,mst.content,GROUP_CONCAT(det.options SEPARATOR '~') 'options'
+                FROM general_informations mst
+                LEFT JOIN general_informations_det det ON mst.id=det.gi_id
+                WHERE active=1 GROUP BY mst.id;");
     }
 
     public function saveGeneralInfoData($data){
-        return DB::UPDATE("UPDATE general_informations SET content='$data[content]' WHERE active='1';");
+        DB::beginTransaction();
+
+        try {
+
+            DB::update(
+                "UPDATE general_informations SET heading = ?, content = ? WHERE active = 1",
+                [$data['heading'], $data['content']]
+            );
+
+            DB::delete(
+                "DELETE FROM general_informations_det WHERE gi_id = ?",
+                [$data['id']]
+            );
+            
+            // Insert options
+            foreach (array_reverse($data['options']) as $options) {
+                DB::insert(
+                    "INSERT INTO general_informations_det (gi_id,options) VALUES (?,?)",
+                    [$data['id'],$options]
+                );
+            }
+
+            return true;
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return false; // Return false to indicate failure
+        }
         
     }
 

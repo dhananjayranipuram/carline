@@ -137,7 +137,10 @@ class Site extends Model
     }
 
     public function getCarGeneralInfo(){
-        return DB::select("SELECT content FROM general_informations WHERE active=1;");
+        return DB::select("SELECT mst.id,mst.heading,mst.content,GROUP_CONCAT(det.options SEPARATOR '~') 'options'
+                FROM general_informations mst
+                LEFT JOIN general_informations_det det ON mst.id=det.gi_id
+                WHERE active=1 GROUP BY mst.id;");
     }
 
     public function getPolicyAgreement($data=[]){
