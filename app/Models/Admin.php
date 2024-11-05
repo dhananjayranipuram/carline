@@ -331,12 +331,10 @@ class Admin extends Model
     public function saveGeneralInfoData($data){
         DB::beginTransaction();
 
-        try {
+        // try {
 
-            DB::update(
-                "UPDATE general_informations SET heading = ?, content = ? WHERE active = 1",
-                [$data['heading'], $data['content']]
-            );
+            DB::update("UPDATE general_informations SET heading = ?, content = ? WHERE active = 1",
+                [$data['heading'], $data['content']]);
 
             DB::delete(
                 "DELETE FROM general_informations_det WHERE gi_id = ?",
@@ -353,10 +351,10 @@ class Admin extends Model
 
             return true;
 
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return false; // Return false to indicate failure
-        }
+        // } catch (\Exception $e) {
+        //     DB::rollBack();
+        //     return false; // Return false to indicate failure
+        // }
         
     }
 

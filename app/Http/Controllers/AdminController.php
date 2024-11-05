@@ -741,7 +741,7 @@ class AdminController extends Controller
                 'content' => ['required'],
                 'options' => ['nullable'],
             ]);
-            // echo '<pre>';print_r($filterData);exit;
+            
             $data = $admin->saveGeneralInfoData($filterData);
             if ($data) {
                 return redirect()->to('/admin/general-info')->with('success', 'General informations added successfully!');
@@ -751,25 +751,6 @@ class AdminController extends Controller
         }else{
             $data['content'] = $admin->getGeneralInfo();
             return view('admin/general-info',$data);
-        }
-    }
-
-    public function saveGeneralInfo(Request $request){
-        $admin = new Admin();
-        $res = [];
-        if($request->method() == 'POST'){
-            $filterData = $request->validate([
-                'content' => ['required'],
-            ]);
-            $data = $admin->saveGeneralInfoData($filterData);
-            if($data > 0){
-                $res['status'] = 200;
-                $res['data'] = "Saved content successfully.";
-            }else{
-                $res['status'] = 200;
-                $res['data'] = "Something went wrong.";
-            }
-            return json_encode($res);
         }
     }
     /**General information about car End */

@@ -81,7 +81,6 @@ Route::middleware(['check.session', 'prevent.back.history'])->group(function () 
     Route::any('/admin/delete-type', [AdminController::class, 'deleteType']);
 
     Route::any('/admin/general-info', [AdminController::class, 'generalInfo']);
-    Route::any('/admin/save-general-info', [AdminController::class, 'saveGeneralInfo']);
 
     Route::get('/admin/policies-agreement', [AdminController::class, 'policyAgreement']);
     Route::any('/admin/save-policy-agreement', [AdminController::class, 'savePolicyAgreement']);

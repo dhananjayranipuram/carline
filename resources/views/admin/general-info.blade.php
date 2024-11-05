@@ -29,6 +29,11 @@
                 @csrf <!-- {{ csrf_field() }} -->
                     <div class="card-body">
                     <input type="hidden" name="id" value="{{ $content[0]->id }}"/>
+                        @if($errors->any())
+                            <div class="col-12 error-messages" style="color:red;">
+                                {!! implode('', $errors->all('<div>:message</div>')) !!}
+                            </div>
+                        @endif
                         <div class="row">
                             <div class="col-md-12 col-lg-12">
                                 <div class="form-group">
@@ -75,25 +80,6 @@
 </div>
 <script src="{{asset('admin_assets/js/core/jquery-3.7.1.min.js')}}"></script> 
 <script>
-$(document).ready(function () {
-    $("#save-info").click(function () {
-        $.ajax({
-            url: baseUrl + '/admin/save-general-info',
-            type: 'post',
-            data: {
-                'content' : $(".ql-editor").html(),
-            },
-            dataType: "json",
-            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-            success: function(res) {
-                
-            }
-        });
-    });
-
-    
-});
-
 $(document).on('click', '.add-row', function () {    
     var str = '<div class="row">'
                 +'<div class="col-md-12 col-lg-10">'
