@@ -290,13 +290,21 @@ class AdminController extends Controller
             $filterData = $request->validate([
                 'name' => ['required'],
                 'rate' => ['required'],
-                'active' => [''],
+                'active' => ['nullable'],
             ]);
             
             $filterData['active'] = isset($filterData['active']) ? 1 : 0;
             
             $data = $admin->saveEmiratesData($filterData);
-            return Redirect::to('/admin/add-emirates');
+            if ($data > 0) {
+                $response['status'] = 200;
+                $response['message'] = "Emirate created successfully.";
+            } else {
+                $response['status'] = 500;
+                $response['message'] = "Something went wrong. Please try again.";
+            }
+            
+            return response()->json($response);
         }
     }
 
@@ -330,7 +338,18 @@ class AdminController extends Controller
             $filterData['emActive'] = isset($filterData['emActive']) ? 1 : 0;
             
             $data = $admin->updateEmiratesData($filterData);
-            return Redirect::to('/admin/add-emirates');
+            if ($data == 0) {
+                $response['status'] = 200;
+                $response['message'] = "Nothing to update.";
+            }else if ($data == 1) {
+                $response['status'] = 200;
+                $response['message'] = "Emirate updated successfully.";
+            } else {
+                $response['status'] = 500;
+                $response['message'] = "Something went wrong. Please try again.";
+            }
+            
+            return response()->json($response);
         }
     }
     /**Emirates section ends */
@@ -605,8 +624,14 @@ class AdminController extends Controller
             $filterData = $request->validate([
                 'id' => ['required'],
             ]);
+            
             $data = $admin->deleteTypeData($filterData);
             if($data){
+                $typeData = $admin->getCarType($filterData);
+                if (isset($typeData[0]->image) && File::exists($typeData[0]->image)) {
+                    File::delete($typeData[0]->image);
+                }
+
                 $res['status'] = 200;
                 $res['data'] = "Car type deleted.";
             }
@@ -632,11 +657,12 @@ class AdminController extends Controller
 
     public function addType(Request $request){
         $admin = new Admin();
-        $res = [];
+        $response = [];
         if($request->method() == 'POST'){
             $filterData = $request->validate([
                 'tyName' => ['required'],
-                'tyActive' => [''],
+                'tyActive' => ['nullable'],
+                'tyImage' => ['required', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
             ]);
             
             $filterData['tyActive'] = isset($filterData['tyActive']) ? 1 : 0;
@@ -646,8 +672,21 @@ class AdminController extends Controller
             }else{
                 return back()->withErrors(["error" => "Please select car type image."]);
             }
+            
             $data = $admin->saveTypeData($filterData);
-            return Redirect::to('/admin/add-type');
+
+            if ($data > 0) {
+                $response['status'] = 200;
+                $response['message'] = "Car type created successfully.";
+            }else if ($data == -1) {
+                $response['status'] = 500;
+                $response['message'] = "Car type already exist.";
+            } else {
+                $response['status'] = 500;
+                $response['message'] = "Something went wrong. Please try again.";
+            }
+            
+            return response()->json($response);
         }
     }
 
@@ -658,23 +697,36 @@ class AdminController extends Controller
             $filterData = $request->validate([
                 'typeId' => ['required'],
                 'typeName' => ['required'],
-                'typeActive' => [''],
+                'typeActive' => ['nullable'],
+                'tyImage' => ['nullable', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
             ]);
             
             $filterData['typeActive'] = isset($filterData['typeActive']) ? 1 : 0;
             if(!empty($_FILES['typeImage']['name'])){
                 $file = $request->file('typeImage');
                 $filterData['image'] = 'storage/'.$file->store('uploads', 'public');
-            }else{
-                return back()->withErrors(["error" => "Please select car type image."]);
             }
+
             if(!empty($filterData['image'])){
                 $data = $admin->getCarType(['id'=>$filterData['typeId']]);
                 $filename = $data[0]->image;
                 File::delete($filename);
             }
+
             $data = $admin->updateTypedData($filterData);
-            return Redirect::to('/admin/add-type');
+
+            if ($data == 0) {
+                $response['status'] = 200;
+                $response['message'] = "Nothing to update.";
+            }else if ($data == 1) {
+                $response['status'] = 200;
+                $response['message'] = "Brand updated successfully.";
+            } else {
+                $response['status'] = 500;
+                $response['message'] = "Something went wrong. Please try again.";
+            }
+            
+            return response()->json($response);
         }
     }
     /**Car type Related proceses End*/
@@ -683,7 +735,6 @@ class AdminController extends Controller
     public function generalInfo(){
         $admin = new Admin();
         $data['content'] = $admin->getGeneralInfo();
-        // print_r($data);exit;
         return view('admin/general-info',$data);
     }
 
@@ -749,11 +800,22 @@ class AdminController extends Controller
                 'id' => ['required'],
                 'name' => ['required'],
                 'content' => ['required'],
-                'active' => [''],
+                'active' => ['nullable'],
             ]);
             $filterData['active'] = ($filterData['active']=='true') ? 1 : 0;
             $data = $admin->updatePolicyAgreementData($filterData);
-            return json_encode($data);
+            if ($data == 0) {
+                $response['status'] = 200;
+                $response['message'] = "Nothing to update.";
+            }else if ($data == 1) {
+                $response['status'] = 200;
+                $response['message'] = "Policies and Agreements updated successfully.";
+            } else {
+                $response['status'] = 500;
+                $response['message'] = "Something went wrong. Please try again.";
+            }
+            
+            return response()->json($response);
         }
     }
 

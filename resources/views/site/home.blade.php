@@ -57,11 +57,11 @@
                                     <!-- Rent Details Item Start -->
                                     <div class="rent-details-item" style="width: 70%;">
                                         <div class="icon-box">
-                                            <img src="{{asset('assets/images/icon-rent-details-1.svg')}}" alt="">
+                                            <img src="{{asset('assets/images/icon-rent-details-1.svg')}}" alt="Car Type Icon">
                                         </div>
                                         <div class="rent-details-content">
                                             <h3>car Type</h3>
-                                            <select class="rent-details-form form-select select-type">
+                                            <select class="rent-details-form form-select select-type" aria-label="Choose Car Type">
                                                 <option value="" disabled selected>Choose Car Type</option>
                                                 @foreach($carType as $key => $value)
                                                     <option value="{{$value->id}}">{{$value->name}}</option>

@@ -186,7 +186,7 @@ class Admin extends Model
             $condition .= " AND ct.id = $data[id]";
         }
         return DB::select("SELECT ct.id,ct.name,ct.image,CASE WHEN ct.active = 1 THEN 'Active' ELSE 'Inactive' END as 'status' FROM car_type ct
-                            WHERE ct.active=1 $condition ORDER BY ct.name;");
+                            WHERE ct.deleted=0 $condition ORDER BY ct.name;");
     }
 
     public function getFeatures($data=[]){
@@ -261,7 +261,7 @@ class Admin extends Model
     }
 
     public function saveTypeData($data){
-        $res = DB::select("SELECT id FROM car_type WHERE name LIKE '%$data[tyName]%';");
+        $res = DB::select("SELECT id FROM car_type WHERE name = '$data[tyName]' AND deleted=0;");
         if(empty($res)){
             DB::INSERT("INSERT INTO car_type (name,image,active) VALUES ('$data[tyName]','$data[image]','$data[tyActive]');");
             return DB::getPdo()->lastInsertId();
@@ -272,7 +272,19 @@ class Admin extends Model
     }
 
     public function updateTypedData($data){
-        return DB::UPDATE("UPDATE car_type SET name='$data[typeName]',image='$data[image]',active='$data[typeActive]' WHERE id='$data[typeId]';");
+        $updateData = [
+            'name' => $data['typeName'],
+            'active' => $data['typeActive']
+        ];
+    
+        if (!empty($data['image'])) {
+            $updateData['image'] = $data['image'];
+        }
+    
+        return DB::table('car_type')
+            ->where('id', $data['typeId'])
+            ->update($updateData);
+
     }
 
     public function saveSpecData($data){
