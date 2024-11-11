@@ -411,4 +411,40 @@ class Admin extends Model
     public function updateEmiratesData($data){
         return DB::UPDATE("UPDATE emirates SET name='$data[emName]',rate='$data[emRate]',active='$data[emActive]' WHERE id='$data[emId]';");
     }
+
+    public function getBookingHistory($data = [])
+    {
+
+        return \DB::table('booking as b')
+            ->join('booking_details as bd', 'b.id', '=', 'bd.booking_id')
+            ->leftJoin('cars as c', 'c.id', '=', 'b.car_id')
+            ->leftJoin('car_brand as cb', 'cb.id', '=', 'c.brand_id')
+            ->leftJoin('car_images as ci', 'ci.car_id', '=', 'c.id')
+            // ->where('b.active', 1)
+            ->groupBy('b.id')
+            ->select([
+                'b.id',
+                \DB::raw("DATE_FORMAT(b.pickup_date, '%Y-%m-%d') as pickup_date"),
+                \DB::raw("DATE_FORMAT(b.return_date, '%Y-%m-%d') as return_date"),
+                \DB::raw("DATE_FORMAT(b.pickup_time, '%h:%i %p') as pickup_time"),
+                \DB::raw("DATE_FORMAT(b.return_time, '%h:%i %p') as return_time"),
+                'b.rate',
+                \DB::raw("LEFT(bd.s_address, LOCATE(',', bd.s_address) - 1) as source"),
+                'bd.s_address',
+                \DB::raw("LEFT(bd.d_address, LOCATE(',', bd.d_address) - 1) as destination"),
+                'bd.d_address',
+                \DB::raw("CONCAT(cb.name, ' ', c.name, ' ', c.model) as car_name"),
+                \DB::raw("LEFT(GROUP_CONCAT(ci.image), LOCATE(',', GROUP_CONCAT(ci.image)) - 1) as image")
+            ])->get();
+    }
+
+    public function getUserList(){
+        return \DB::table('enduser')
+            ->where('active', 1)
+            ->select('id','first_name', 'last_name', 'email', 'phone', 'emirates')->get();
+    }
+
+    public function getUsersDetails($data=[]){
+        return DB::select("SELECT id,first_name,last_name,email,phone,flat,building,landmark,city,emirates FROM enduser WHERE id='$data[id]' AND active=1;");
+    }
 }

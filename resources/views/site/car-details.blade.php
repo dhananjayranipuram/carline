@@ -480,8 +480,14 @@ function bookCarAction(){
         success: function(res) {
             $(".overlay").hide();
             if(res.status==200){
+                $.magnificPopup.open({
+                    items: {
+                        src: '#bookingConfirm',
+                        type: 'inline'
+                    }
+                });
                 var str = '<span style="color:green;">Car Booked. Booking ID:'+res.bookingId+'</span>'
-                $("#booking-errors").html(str);
+                $("#booking-details").html(str);
             }else{
                 var str = '<span style="color:red;">'+res.message+'</span>'
                 $("#booking-errors").html(str);

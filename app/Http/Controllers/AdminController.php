@@ -37,6 +37,33 @@ class AdminController extends Controller
         return view('admin/dashboard');
     }
 
+    public function userList(){
+        $admin = new Admin();
+        $data['users'] = $admin->getUserList();
+        // echo '<pre>';print_r($data);exit;
+        return view('admin/users',$data);
+    }
+
+    public function viewUsers(Request $request)
+    {
+        $admin = new Admin();
+        
+        $queries = [];
+        parse_str($_SERVER['QUERY_STRING'], $queries);
+        $input['id'] = base64_decode($queries['id']);
+
+        $data['user'] = $admin->getUsersDetails($input);
+
+        return view('admin/view-user', $data);
+    }
+
+    public function bookingList(){
+        $admin = new Admin();
+        $data['bookings'] = $admin->getBookingHistory();
+        // echo '<pre>';print_r($data);exit;
+        return view('admin/bookings',$data);
+    }
+
     public function cars(){
         $admin = new Admin();
         $data['cars'] = $admin->getCars();

@@ -470,6 +470,45 @@ class SiteController extends Controller
         $data = [];
         $input['id'] = Session::get('userId');
         $data['userAccount'] = $site->getMyDetails($input);
+        $data['bookingHistory'] = $site->getBookingHistory($input);
+        // echo '<pre>';print_r($data);exit;
         return view('site/my-account',$data);
+    }
+    
+    public function myAccountDetails(){
+        $site = new Site();
+        $data = [];
+        $input['id'] = Session::get('userId');
+        $data = $site->getMyDetails($input);
+        // echo '<pre>';print_r($data);exit;
+        return response()->json($data);
+    }
+
+    public function updateUser(Request $request){
+        $site = new Site();
+        $response = [];
+        $credentials = $request->validate([
+            'firstName' => ['required'],
+            'lastName' => ['required'],
+            'phone' => ['required'],
+            'flat' => ['required'],
+            'building' => ['required'],
+            'landmark' => ['required'],
+            'city' => ['required'],
+            'emirates' => ['required'],
+        ]);
+
+        $credentials['id'] = Session::get('userId');
+
+        $res = $site->updateUserData($credentials);
+        if($res){
+            $response['status'] = '200';
+            $response['message'] = 'User data updates succesfully.';
+            $response['userId'] = $res;
+        }else{
+            $response['status'] = '401';
+            $response['message'] = 'Updation failed.';
+        }
+        return json_encode($response);
     }
 }

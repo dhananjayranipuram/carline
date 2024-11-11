@@ -25,6 +25,7 @@ Route::get('/offers', [SiteController::class, 'offers']);
 Route::get('/news', [SiteController::class, 'news']);
 Route::get('/contact', [SiteController::class, 'contactUs']);
 Route::get('/my-account', [SiteController::class, 'myAccount']);
+Route::any('/my-account-details', [SiteController::class, 'myAccountDetails']);
 Route::get('/logout', [SiteController::class, 'logout']);
 
 Route::any('/check-document-uploaded', [SiteController::class, 'checkDocumentUploaded']);
@@ -33,6 +34,7 @@ Route::any('/upload-docs', [SiteController::class, 'uploadDocuments']);
 Route::any('/send-otp', [SiteController::class, 'sendOtp']);
 Route::any('/verify-otp', [SiteController::class, 'verifyOtp']);
 Route::any('/register-user', [SiteController::class, 'registerUser']);
+Route::any('/update-user', [SiteController::class, 'updateUser']);
 Route::any('/user-login', [SiteController::class, 'loginUser']);
 Route::any('/save-car-booking', [SiteController::class, 'saveCarBooking']);
 
@@ -46,6 +48,10 @@ Route::any('/admin/login', [AdminController::class, 'login'])->name('adminLogin'
 Route::middleware(['check.session', 'prevent.back.history'])->group(function () {
     
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard']);
+
+    Route::get('/admin/users', [AdminController::class, 'userList']);
+    Route::get('/admin/view-user', [AdminController::class, 'viewUsers']);
+    Route::get('/admin/bookings', [AdminController::class, 'bookingList']);
 
     Route::get('/admin/cars', [AdminController::class, 'cars']);
     Route::any('/admin/add-car', [AdminController::class, 'addCar']);
