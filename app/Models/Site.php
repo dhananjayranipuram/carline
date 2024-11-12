@@ -177,6 +177,16 @@ class Site extends Model
                             WHERE e.deleted=0 AND e.active=1 $condition ORDER BY e.name;");
     }
 
+    public function getEmiratesForRate($data){
+        $condition = '';
+        if(!empty($data['destinationEmirate'])){
+            $condition .= " AND e.name LIKE '%$data[destinationEmirate]%'";
+        }
+        
+        return DB::select("SELECT e.id,e.name,e.rate FROM emirates e
+                            WHERE e.deleted=0 AND e.active=1 $condition ORDER BY e.name;");
+    }
+
     public function login($data){
         return DB::select("SELECT id,first_name,last_name,email,phone,flat,building,landmark,city,emirates FROM enduser WHERE email='$data[username]' AND password='$data[password]' AND active=1 AND deleted=0;");
     }

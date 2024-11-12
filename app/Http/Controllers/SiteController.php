@@ -238,7 +238,7 @@ class SiteController extends Controller
             'returntosame' => ['required'],
             'id' => ['required'],
         ]);
-        if(isset($credentials['returntosame'])){
+        if($credentials['returntosame'] == 'on'){
             $credentials['destinationEmirate'] = $credentials['sourceEmirates'];
         }
         $res = $this->calculateRate($credentials);
@@ -460,10 +460,11 @@ class SiteController extends Controller
         
         // Additional charge if pickup and destination emirates differ
         if ($credentials['destinationEmirate'] != $credentials['sourceEmirates']) {
-            $resEmirate = $site->getEmirates($credentials);
+            $resEmirate = $site->getEmiratesForRate($credentials);
+            
             $emirateCharges = !empty($resEmirate) ? (float) str_replace(',', '', $resEmirate[0]->rate) : 0;
         }
-    
+        
         // Calculate the total amount and VAT
         $total = $days * $rate + $deposit + $emirateCharges;
         $vat = 0.05 * $total;

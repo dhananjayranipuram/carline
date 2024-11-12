@@ -514,6 +514,12 @@ $("#pickupdate, #returndate, #destination, #source, #returntime, #pickuptime").o
     if(destinationData.length != 0 && sourceData.length != 0 && $("#pickupdate").val() != '' && $("#returndate").val() != '' && $("#pickuptime").val() != '' && $("#returntime").val() != ''){
         if ($("#pickupdate").val() < $("#returndate").val()) {
             // $(".overlay").show();
+
+            if($('#returnLocationToggle').is(":checked")){
+                var returnTo = 'on';
+            }else{
+                var returnTo = 'off';
+            }
             $.ajax({
                 url: baseUrl + '/check-rate',
                 type: 'post',
@@ -524,7 +530,7 @@ $("#pickupdate, #returndate, #destination, #source, #returntime, #pickuptime").o
                     'returndate': $("#returndate").val(),
                     'pickuptime': $("#pickuptime").val(),
                     'returntime': $("#returntime").val(),
-                    'returntosame': $("#returnLocationToggle").val(),
+                    'returntosame': returnTo,
                     'id': $("#carId").val()},
                 dataType: "json",
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
