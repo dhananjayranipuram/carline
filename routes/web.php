@@ -37,10 +37,12 @@ Route::any('/register-user', [SiteController::class, 'registerUser']);
 Route::any('/update-user', [SiteController::class, 'updateUser']);
 Route::any('/user-login', [SiteController::class, 'loginUser']);
 Route::any('/save-car-booking', [SiteController::class, 'saveCarBooking']);
+Route::any('/check-car-booking', [SiteController::class, 'checkCarBooking']);
 
 Route::any('/send-contact-us', [SiteController::class, 'sendContactUs']);
 
 Route::any('/check-rate', [SiteController::class, 'checkRate']);
+Route::any('/check-time', [SiteController::class, 'checkTime']);
 
 Route::any('/site/filter-cars', [SiteController::class, 'filterCars']);
 

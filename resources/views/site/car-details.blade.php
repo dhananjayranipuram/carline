@@ -50,7 +50,7 @@ while ($startTime <= $endTime) {
                                         <!-- Pickup Date -->
                                         <div class="form-group col-12 mb-4">
                                             <label>Pickup Date</label>
-                                            <input type="date" name="pickup_date" class="form-control" id="pickupdate" required min="{{ date('Y-m-d') }}" onkeydown="return false">
+                                            <input type="date" name="pickup_date" class="form-control" id="pickupdate" required min="{{ date('Y-m-d') }}" >
                                             <div class="help-block with-errors"></div>
                                         </div>
                                         
@@ -58,7 +58,7 @@ while ($startTime <= $endTime) {
                                         <div class="form-group col-12 mb-4">
                                             <label>Pickup Time</label>
                                             <select class="form-control" name="pickup_time" id="pickuptime">
-                                                <option selected disabled>Select Pickup Time</option>
+                                                <option selected disabled value="-1">Select Pickup Time</option>
                                                 @foreach($timeSlots as $key => $value)
                                                     <option value="{{ date('G:i', strtotime($value))}}">{{$value}}</option>
                                                 @endforeach
@@ -85,7 +85,7 @@ while ($startTime <= $endTime) {
                                             <!-- Dropoff Date -->
                                             <div class="form-group col-12 mb-4">
                                                 <label>Dropoff Date</label>
-                                                <input type="date" name="dropoff_date" class="form-control" id="returndate" required min="{{ date('Y-m-d') }}" onkeydown="return false">
+                                                <input type="date" name="dropoff_date" class="form-control" id="returndate" required min="{{ date('Y-m-d') }}">
                                                 <div class="help-block with-errors"></div>
                                             </div>
                                             
@@ -94,7 +94,7 @@ while ($startTime <= $endTime) {
                                                 <label>Dropoff Time</label>
                                                 <!-- <input type="time" class="form-control" name="dropoff_time" id="returntime"> -->
                                                 <select class="form-control" name="dropoff_time" id="returntime">
-                                                    <option selected disabled>Select Pickup Time</option>
+                                                    <option selected disabled value="-1">Select Dropoff Time</option>
                                                     @foreach($timeSlots as $key => $value)
                                                         <option value="{{ date('H:i', strtotime($value))}}">{{$value}}</option>
                                                     @endforeach
@@ -288,6 +288,7 @@ while ($startTime <= $endTime) {
 <script src="{{asset('admin_assets/js/core/jquery-3.7.1.min.js')}}"></script>  
 <script src="{{asset('assets/js/jquery.magnific-popup.min.js')}}"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmX5w5ltGt09cjDod_YMamphRRgS8L-ZQ&components=country:ae&libraries=places"></script>
+
 <script>
 var sourceData = [];
 var destinationData = [];    
@@ -408,6 +409,106 @@ $("#returnLocationToggle").click(function() {
     }
 });
 
+$("#pickupdate").on("change", function() {
+    var d = new Date();
+    if($("#pickupdate").val().length){
+        $('#returndate').attr( 'min',$("#pickupdate").val());
+    }else{
+        $('#returndate').attr( 'min',formatDate(d));
+    }
+    $.ajax({
+        url: baseUrl + '/check-time',
+        type: 'post',
+        data: { 
+            'returndate': $("#returndate").val(),
+            'pickupdate': $("#pickupdate").val(),
+            'type': 'pickup',
+            'id': $("#carId").val()},
+        dataType: "json",
+        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+        success: function(res) {
+            if(res){
+                if($("#returndate").val().length>0 && $("#pickupdate").val().length>0){
+                    
+                    if($("#pickuptime").val()==-1 || $("#pickuptime").val()==null){
+                        $("#pickuptime").html('');
+                        $("#pickuptime").append('<option selected disabled value="-1">Select Pickup Time</option>');
+                        $.each(res, function(key, value) {
+                            $("#pickuptime").append(`<option value="${value}">${value}</option>`);
+                        });
+                    }
+                    if($("#returntime").val()==-1 || $("#returntime").val()==null){
+                        $("#returntime").html('');
+                        $("#returntime").append('<option selected disabled value="-1">Select Pickup Time</option>');
+                        $.each(res, function(key, value) {
+                            $("#returntime").append(`<option value="${value}">${value}</option>`);
+                        });
+                    }
+                }else{
+                    $("#pickuptime").html('');
+                    $("#pickuptime").append('<option selected disabled value="-1">Select Pickup Time</option>');
+                    $.each(res, function(key, value) {
+                        $("#pickuptime").append(`<option value="${value}">${value}</option>`);
+                    });
+                }
+            }else{
+                $("#pickuptime").html('');
+            }
+        }
+    });
+});
+
+$("#returndate").on("change", function() {
+    var d = new Date();
+    if($("#returndate").val().length){
+        $('#pickupdate').attr( 'min',$("#returndate").val());
+    }else{
+        $('#pickupdate').attr( 'min',formatDate(d));
+    }
+    $.ajax({
+        url: baseUrl + '/check-time',
+        type: 'post',
+        data: { 
+            'pickupdate': $("#pickupdate").val(),
+            'returndate': $("#returndate").val(),
+            'type': 'dropoff',
+            'id': $("#carId").val()},
+        dataType: "json",
+        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+        success: function(res) {
+            if(res){
+                
+                if($("#returndate").val().length>0 && $("#pickupdate").val().length>0){
+                    
+                    if($("#pickuptime").val()==-1 || $("#pickuptime").val()==null){
+                        $("#pickuptime").html('');
+                        $("#pickuptime").append('<option selected disabled value="-1">Select Pickup Time</option>');
+                        $.each(res, function(key, value) {
+                            $("#pickuptime").append(`<option value="${value}">${value}</option>`);
+                        });
+                    }
+                    
+                    if($("#returntime").val()==-1 || $("#returntime").val()==null){
+                        $("#returntime").html('');
+                        $("#returntime").append('<option selected disabled value="-1">Select Pickup Time</option>');
+                        $.each(res, function(key, value) {
+                            $("#returntime").append(`<option value="${value}">${value}</option>`);
+                        });
+                    }
+                }else{
+                    $("#returntime").html('');
+                    $("#returntime").append('<option selected disabled value="-1">Select Drop Off Time</option>');
+                    $.each(res, function(key, value) {
+                        $("#returntime").append(`<option value="${value}">${value}</option>`);
+                    });
+                }
+            }else{
+                $("#returntime").html('');
+            }
+        }
+    });
+});
+
 $("#pickupdate, #returndate, #destination, #source, #returntime, #pickuptime").on("change paste keyup click", function() {
 
     if(destinationData.length != 0 && sourceData.length != 0 && $("#pickupdate").val() != '' && $("#returndate").val() != '' && $("#pickuptime").val() != '' && $("#returntime").val() != ''){
@@ -461,6 +562,42 @@ $("#pickupdate, #returndate, #destination, #source, #returntime, #pickuptime").o
 function bookCarAction(){
     $(".overlay").show();
     $.ajax({
+        url: baseUrl + '/check-car-booking',
+        type: 'post',
+        data: { 
+            'destinationData': destinationData[0], 
+            'sourceData': sourceData[0], 
+            'destinationEmirate': destinationData[0].Emirates, 
+            'sourceEmirates': sourceData[0].Emirates,
+            'pickupdate': $("#pickupdate").val(),
+            'returndate': $("#returndate").val(),
+            'pickuptime': $("#pickuptime").val(),
+            'returntime': $("#returntime").val(),
+            'carId': $("#carId").val(),
+            'userId': $("#userId").val()
+        },
+        dataType: "json",
+        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+        success: function(res) {
+            $(".overlay").hide();
+            if(res.status==200){
+                bookCarActionFinal()
+            }else{
+                $("#booking-errors").html('<span style="color:red;">Booking cannot be done in these days.</span>');
+                setTimeout(function () {
+                    $('#booking-errors').html('');
+                }, 2500);
+            }
+            
+        }
+    });
+
+
+}
+
+function bookCarActionFinal(){
+    $(".overlay").show();
+    $.ajax({
         url: baseUrl + '/save-car-booking',
         type: 'post',
         data: { 
@@ -488,6 +625,9 @@ function bookCarAction(){
                 });
                 var str = '<span style="color:green;">Car Booked. Booking ID:'+res.bookingId+'</span>'
                 $("#booking-details").html(str);
+                setTimeout(function () {
+                    location.reload();
+                }, 2500);
             }else{
                 var str = '<span style="color:red;">'+res.message+'</span>'
                 $("#booking-errors").html(str);
@@ -498,6 +638,7 @@ function bookCarAction(){
 
 
 }
+
 
 
 </script>

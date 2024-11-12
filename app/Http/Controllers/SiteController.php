@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Site;
 use App\Mail\OtpVerification;
+use App\Mail\BookingConfirmation;
 use App\Mail\ContactUs;
 use Illuminate\Validation\Rule;
 use Session;
@@ -244,6 +245,93 @@ class SiteController extends Controller
         
         return json_encode($res);
     }
+    
+    public function checkCarBooking(Request $request)
+    {
+        $site = new Site();
+        $response = [];
+        $credentials = $request->validate([
+            'pickupdate' => ['required'],
+            'returndate' => ['required'],
+            'pickuptime' => ['required'],
+            'returntime' => ['required'],
+            'carId' => ['required'],
+        ]);
+        
+        if($credentials['pickupdate'] < date()){
+            $response['status'] = '400';
+            $response['message'] = 'Booking not available';
+            return response()->json($response);
+        }
+        $res = $site->checkCarBooking($credentials);
+        if($res){
+            $response['status'] = '400';
+            $response['message'] = 'Booking not available';
+        }else{
+            $response['status'] = '200';
+            $response['message'] = 'Booking available';
+        }
+        return response()->json($response);
+    }
+
+    public function checkTime(Request $request)
+    {
+        $site = new Site();
+        $timeSlots = [];
+        $credentials = $request->validate([
+            'pickupdate' => ['nullable'],
+            'returndate' => ['nullable'],
+            'type' => ['required'],
+            'id' => ['required'],
+        ]);
+        
+        if($credentials['pickupdate']&&$credentials['returndate']){
+            $credentials['type'] = 'both';
+            $res = $site->getTimeAvailable($credentials);
+            if($res){
+                return response()->json($timeSlots);
+            }else{
+                $timeSlots = $this->generateTimeslot('','');
+                return response()->json($timeSlots);
+            }
+        }
+        $res = $site->getTimeAvailable($credentials);
+        $pickupTime = null;
+        $dropoffTime = null;
+
+        if ($res) {
+            foreach ($res as $value) {
+                if ($value->pickup_time) {
+                    $pickupTime = $value->pickup_time;
+                }
+                if ($value->return_time) {
+                    $dropoffTime = $value->return_time;
+                }
+            }
+        }
+
+        $timeSlots = $this->generateTimeslot($pickupTime,$dropoffTime);
+
+        return response()->json($timeSlots);
+    }
+
+    public function generateTimeslot($pickupTime,$dropoffTime){
+        $timeSlots = [];
+        $startTime = $dropoffTime ? strtotime($dropoffTime) : strtotime("12:00 AM");
+        $endTime = $pickupTime ? strtotime($pickupTime) : strtotime("11:59 PM");
+
+        if ($startTime > $endTime) {
+            return response()->json(['error' => 'Invalid time range'], 400);
+        }
+
+        $slotDuration = 30; // Slot duration in minutes
+
+        while ($startTime <= $endTime) {
+            $timeSlots[] = date("g:i A", $startTime);
+            $startTime = strtotime("+$slotDuration minutes", $startTime);
+        }
+        return $timeSlots;
+    }
 
     public function checkDocumentUploaded(Request $request){
         $site = new Site();
@@ -455,6 +543,13 @@ class SiteController extends Controller
         // print_r($credentials);exit;
         $res = $site->saveBookingData($credentials);
         if($res){
+
+            $data['id'] = $credentials['userId'];
+            $userData = $site->getMyDetails($data);
+            if($userData){
+                $credentials['user_data'] = $userData;
+                Mail::to($userData[0]->email)->send(new BookingConfirmation((object)$credentials));
+            }
             $response['status'] = '200';
             $response['message'] = 'Booked succesfully.';
             $response['bookingId'] = $res;

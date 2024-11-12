@@ -284,4 +284,38 @@ class Site extends Model
                     'emirates' => $data['emirates'],
                 ]);
     }
+
+    public function getTimeAvailable($data=[]){
+        switch ($data['type']) {
+            case 'pickup':
+                return DB::select("SELECT pickup_time,'' return_time FROM booking WHERE car_id=$data[id] AND pickup_date='$data[pickupdate]'
+                                    UNION
+                                    SELECT '' pickup_time,return_time FROM booking WHERE car_id=$data[id] AND return_date='$data[pickupdate]';");
+                break;
+
+            case 'dropoff':
+                return DB::select("SELECT pa.id,pa.name,pa.content FROM policy_agreement pa 
+                            WHERE pa.deleted=0 AND pa.active=1
+                            ORDER BY pa.name ASC;");
+                break;
+            
+            default:
+                return DB::select("SELECT * 
+                                    FROM booking
+                                    WHERE car_id=$data[id] AND ((pickup_date BETWEEN '$data[pickupdate]' AND '$data[returndate]')
+                                    OR (return_date BETWEEN '$data[pickupdate]' AND '$data[returndate]'));");
+                break;
+        }
+        
+    }
+
+    public function checkCarBooking($data=[]){
+
+        return DB::select("SELECT * 
+                            FROM booking
+                            WHERE car_id=$data[carId] AND ((STR_TO_DATE(CONCAT(pickup_date, ' ', pickup_time), '%Y-%m-%d %H:%i:%s') BETWEEN STR_TO_DATE('$data[pickupdate] $data[pickuptime]', '%Y-%m-%d %h:%i %p') AND STR_TO_DATE('$data[returndate] $data[returntime]', '%Y-%m-%d %h:%i %p'))
+                            OR (STR_TO_DATE(CONCAT(return_date, ' ', return_time), '%Y-%m-%d %H:%i:%s') BETWEEN STR_TO_DATE('$data[pickupdate] $data[pickuptime]', '%Y-%m-%d %h:%i %p') AND STR_TO_DATE('$data[returndate] $data[returntime]', '%Y-%m-%d %h:%i %p')));");
+                
+        
+    }
 }
