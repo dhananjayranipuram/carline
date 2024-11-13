@@ -32,7 +32,7 @@
 	<!-- Mouse Cursor Css File -->
 	<link rel="stylesheet" href="{{asset('assets/css/mousecursor.css')}}">
 	<!-- Main Custom Css -->
-	<link href="{{asset('assets/css/custom.css')}}" rel="stylesheet" media="screen">
+	<link href="{{asset('assets/css/custom.css')}}?v={{time()}}" rel="stylesheet" media="screen">
     <script> var baseUrl = "{{ url('/') }}"; </script>
     <!-- <script src="https://maps.googleapis.com/maps/api/js?key={{env('GOOGLE_MAPS_API_KEY')}}&libraries=places" async defer ></script> -->
     
@@ -877,7 +877,9 @@ $(".upload_docs").click(function(e) {
                 $.magnificPopup.close();
                 $('#uploadDocs')[0].reset();
                 if($('#pickupdate').length){
-                    bookCarAction();
+                    if(!bookCarAction()){
+                        location.reload();
+                    }
                 }
                 
             }, 5000);
@@ -921,7 +923,9 @@ function checkDocumentUploaded(){
                 });
             }else{
                 if($('#pickupdate').length){
-                    bookCarAction();
+                    if(!bookCarAction()){
+                        // location.reload();
+                    }
                 }
             }
             $(".overlay").hide();

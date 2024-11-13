@@ -71,8 +71,8 @@ class Site extends Model
                 break;
             default:
                 $condition = '';
-                if(!empty($data['id'])){
-                    $condition .= " AND c.id = $data[id]";
+                if(!empty($data['carId'])){
+                    $condition .= " AND c.id = $data[carId]";
                 }
                 return DB::select("SELECT c.id,c.name,c.model,cb.name brand_name,ct.name car_type,GROUP_CONCAT(ci.image) AS 'image',FORMAT(c.rent,0) rent,c.general_info_flag,c.rental_condition_flag,c.offer_flag,FORMAT(c.offer_price,0) offer_price,FORMAT(c.deposit,0) deposit FROM cars c
                                 LEFT JOIN car_brand cb ON cb.id=c.brand_id
@@ -298,21 +298,21 @@ class Site extends Model
     public function getTimeAvailable($data=[]){
         switch ($data['type']) {
             case 'pickup':
-                return DB::select("SELECT pickup_time,'' return_time FROM booking WHERE car_id=$data[id] AND pickup_date='$data[pickupdate]'
+                return DB::select("SELECT pickup_time,'' return_time FROM booking WHERE car_id=$data[carId] AND pickup_date='$data[pickupdate]'
                                     UNION
-                                    SELECT '' pickup_time,return_time FROM booking WHERE car_id=$data[id] AND return_date='$data[pickupdate]';");
+                                    SELECT '' pickup_time,return_time FROM booking WHERE car_id=$data[carId] AND return_date='$data[pickupdate]';");
                 break;
 
             case 'dropoff':
-                return DB::select("SELECT pa.id,pa.name,pa.content FROM policy_agreement pa 
-                            WHERE pa.deleted=0 AND pa.active=1
-                            ORDER BY pa.name ASC;");
+                return DB::select("SELECT '' pickup_time,return_time FROM booking WHERE car_id=$data[carId] AND return_date='$data[returndate]'
+                                    UNION
+                                    SELECT pickup_time,'' return_time FROM booking WHERE car_id=$data[carId] AND return_date='$data[returndate]';");
                 break;
             
             default:
                 return DB::select("SELECT * 
                                     FROM booking
-                                    WHERE car_id=$data[id] AND ((pickup_date BETWEEN '$data[pickupdate]' AND '$data[returndate]')
+                                    WHERE car_id=$data[carId] AND ((pickup_date BETWEEN '$data[pickupdate]' AND '$data[returndate]')
                                     OR (return_date BETWEEN '$data[pickupdate]' AND '$data[returndate]'));");
                 break;
         }
@@ -320,12 +320,37 @@ class Site extends Model
     }
 
     public function checkCarBooking($data=[]){
-
-        return DB::select("SELECT * 
+        switch ($data['type']) {
+            case 'date':
+                /*return DB::select("SELECT count(*) cnt
+                    FROM booking
+                    WHERE car_id=$data[carId] AND ((STR_TO_DATE(pickup_date, '%Y-%m-%d') BETWEEN STR_TO_DATE('$data[pickupdate]', '%Y-%m-%d') AND STR_TO_DATE('$data[returndate]', '%Y-%m-%d'))
+                    OR (STR_TO_DATE(return_date, '%Y-%m-%d %H:%i:%s') BETWEEN STR_TO_DATE('$data[pickupdate]', '%Y-%m-%d') AND STR_TO_DATE('$data[returndate]', '%Y-%m-%d'))) GROUP BY car_id;");*/
+                return DB::select("SELECT count(*) cnt 
                             FROM booking
-                            WHERE car_id=$data[carId] AND ((STR_TO_DATE(CONCAT(pickup_date, ' ', pickup_time), '%Y-%m-%d %H:%i:%s') BETWEEN STR_TO_DATE('$data[pickupdate] $data[pickuptime]', '%Y-%m-%d %h:%i %p') AND STR_TO_DATE('$data[returndate] $data[returntime]', '%Y-%m-%d %h:%i %p'))
-                            OR (STR_TO_DATE(CONCAT(return_date, ' ', return_time), '%Y-%m-%d %H:%i:%s') BETWEEN STR_TO_DATE('$data[pickupdate] $data[pickuptime]', '%Y-%m-%d %h:%i %p') AND STR_TO_DATE('$data[returndate] $data[returntime]', '%Y-%m-%d %h:%i %p')));");
+                            WHERE car_id = 1
+                            AND (
+                                (pickup_date BETWEEN '2024-11-14' AND '2024-11-22')
+                                OR (return_date BETWEEN '2024-11-14' AND '2024-11-22')
+                                OR (pickup_date <= '2024-11-14' AND return_date >= '2024-11-22')
+                            );");
+                    
                 
+                break;
+
+            default:
+                return DB::select("SELECT count(*) cnt
+                    FROM booking
+                    WHERE car_id=$data[carId] AND ((STR_TO_DATE(CONCAT(pickup_date, ' ', pickup_time), '%Y-%m-%d %H:%i:%s') BETWEEN STR_TO_DATE('$data[pickupdate] $data[pickuptime]', '%Y-%m-%d %h:%i %p') AND STR_TO_DATE('$data[returndate] $data[returntime]', '%Y-%m-%d %h:%i %p'))
+                    OR (STR_TO_DATE(CONCAT(return_date, ' ', return_time), '%Y-%m-%d %H:%i:%s') BETWEEN STR_TO_DATE('$data[pickupdate] $data[pickuptime]', '%Y-%m-%d %h:%i %p') AND STR_TO_DATE('$data[returndate] $data[returntime]', '%Y-%m-%d %h:%i %p'))) GROUP BY car_id;");
+                break;
+        }
+        
+    }
+    
+    public function getCarQty($data=[]){
+        return DB::table('cars')
+                ->where('id', $data['carId'])->pluck('qty')->first();
         
     }
 }

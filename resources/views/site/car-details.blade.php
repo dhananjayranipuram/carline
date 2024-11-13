@@ -101,13 +101,21 @@ while ($startTime <= $endTime) {
                                                 </select>
                                                 <div class="help-block with-errors"></div>
                                             </div>
+
+                                            <div class="form-group col-12 mb-4">
+                                                <div class="form-check form-switch">
+                                                    <input type="checkbox" class="form-check-input" id="babySeat" name="baby_seat"><label for="babySeatToggle">Baby Seat</label>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="fleets-single-sidebar-list" id="booking-errors">
                                         </div>
                                         <div class="fleets-single-sidebar-list" id="rate-details" style="display:none;">
                                             <ul>
-                                                <li><img src="{{asset('assets/images/icon-how-it-work-2.svg')}}" alt="">Rent <span id="rent-message"> AED 1500</span></li>
+                                                <li><img src="{{asset('assets/images/icon-how-it-work-2.svg')}}" alt="">Rate <span id="rate-message"> AED 1500</span></li>
                                                 <li><img src="{{asset('assets/images/icon-service-2.svg')}}" alt="">Deposit <span id="deposit-message">AED 100</span></li>
+                                                <li><img src="{{asset('assets/images/icon-service-2.svg')}}" alt="">Dropoff Charges <span id="emirate-message">AED 100</span></li>
+                                                <li><img src="{{asset('assets/images/icon-service-2.svg')}}" alt="">VAT <span id="vat-message">AED 100</span></li>
                                                 <li><img src="{{asset('assets/images/icon-service-2.svg')}}" alt="">Total <span id="total-message">AED 100</span></li>
                                             </ul>
                                         </div>
@@ -410,20 +418,22 @@ $("#returnLocationToggle").click(function() {
 });
 
 $("#pickupdate").on("change", function() {
-    var d = new Date();
-    if($("#pickupdate").val().length){
-        $('#returndate').attr( 'min',$("#pickupdate").val());
-    }else{
-        $('#returndate').attr( 'min',formatDate(d));
-    }
+    // var d = new Date();
+    // if($("#pickupdate").val().length){
+    //     $('#returndate').attr( 'min',$("#pickupdate").val());
+    // }else{
+    //     $('#returndate').attr( 'min',formatDate(d));
+    // }
     $.ajax({
         url: baseUrl + '/check-time',
         type: 'post',
         data: { 
             'returndate': $("#returndate").val(),
             'pickupdate': $("#pickupdate").val(),
+            'pickuptime': $("#pickuptime").val(),
+            'returntime': $("#returntime").val(),
             'type': 'pickup',
-            'id': $("#carId").val()},
+            'carId': $("#carId").val()},
         dataType: "json",
         headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
         success: function(res) {
@@ -459,20 +469,22 @@ $("#pickupdate").on("change", function() {
 });
 
 $("#returndate").on("change", function() {
-    var d = new Date();
-    if($("#returndate").val().length){
-        $('#pickupdate').attr( 'min',$("#returndate").val());
-    }else{
-        $('#pickupdate').attr( 'min',formatDate(d));
-    }
+    // var d = new Date();
+    // if($("#returndate").val().length){
+    //     $('#pickupdate').attr( 'min',$("#returndate").val());
+    // }else{
+    //     $('#pickupdate').attr( 'min',formatDate(d));
+    // }
     $.ajax({
         url: baseUrl + '/check-time',
         type: 'post',
         data: { 
             'pickupdate': $("#pickupdate").val(),
             'returndate': $("#returndate").val(),
+            'pickuptime': $("#pickuptime").val(),
+            'returntime': $("#returntime").val(),
             'type': 'dropoff',
-            'id': $("#carId").val()},
+            'carId': $("#carId").val()},
         dataType: "json",
         headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
         success: function(res) {
@@ -509,7 +521,7 @@ $("#returndate").on("change", function() {
     });
 });
 
-$("#pickupdate, #returndate, #destination, #source, #returntime, #pickuptime").on("change paste keyup click", function() {
+$("#pickupdate, #returndate, #destination, #source, #returntime, #pickuptime, #babySeat").on("change paste keyup click", function() {
 
     if(destinationData.length != 0 && sourceData.length != 0 && $("#pickupdate").val() != '' && $("#returndate").val() != '' && $("#pickuptime").val() != '' && $("#returntime").val() != ''){
         if ($("#pickupdate").val() < $("#returndate").val()) {
@@ -519,6 +531,11 @@ $("#pickupdate, #returndate, #destination, #source, #returntime, #pickuptime").o
                 var returnTo = 'on';
             }else{
                 var returnTo = 'off';
+            }
+            if($('#babySeat').is(":checked")){
+                var babySeat = 'on';
+            }else{
+                var babySeat = 'off';
             }
             $.ajax({
                 url: baseUrl + '/check-rate',
@@ -531,14 +548,28 @@ $("#pickupdate, #returndate, #destination, #source, #returntime, #pickuptime").o
                     'pickuptime': $("#pickuptime").val(),
                     'returntime': $("#returntime").val(),
                     'returntosame': returnTo,
-                    'id': $("#carId").val()},
+                    'babySeat': babySeat,
+                    'carId': $("#carId").val()},
                 dataType: "json",
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 success: function(res) {
+
+                    var str = '<ul>'+
+                                '<li><img src="'+baseUrl+'/assets/images/icon-how-it-work-2.svg'+'" alt="Image not available">Rent <span id="rate-message"> AED '+res.rate+'</span></li>';
+                            if(res.deposit!=0){
+                                str += '<li><img src="'+baseUrl+'/assets/images/icon-service-6.svg'+'" alt="Image not available">Deposit <span id="deposit-message">AED '+res.deposit+'</span></li>';
+                            }
+                            if(res.emirate!=0){
+                                str += '<li><img src="'+baseUrl+'/assets/images/icon-why-choose-3.svg'+'" alt="Image not available">Pick & Drop Charges <span id="emirate-message">AED '+res.emirate+'</span></li>';
+                            }
+                            if(res.babySeat!=0){
+                                str += '<li><img src="'+baseUrl+'/assets/images/icon-service-2.svg'+'" alt="Image not available">Baby Seat Charges <span id="emirate-message">AED '+res.babySeat+'</span></li>';
+                            }
+                                str += '<li><img src="'+baseUrl+'/assets/images/icon-service-2.svg'+'" alt="Image not available">VAT <span id="vat-message">AED '+res.vat+'</span></li>'+
+                                '<li><img src="'+baseUrl+'/assets/images/icon-service-2.svg'+'" alt="Image not available">Total <span id="total-message">AED '+res.total+'</span></li>'+
+                                '</ul>';
                     $("#rate-details").show();
-                    $("#rent-message").html('AED '+res.rate);
-                    $("#deposit-message").html('AED '+res.deposit);
-                    $("#total-message").html('AED '+res.total);
+                    $("#rate-details").html(str);
                     // $(".overlay").hide();
                 }
             });
@@ -567,42 +598,51 @@ $("#pickupdate, #returndate, #destination, #source, #returntime, #pickuptime").o
 
 function bookCarAction(){
     $(".overlay").show();
-    $.ajax({
-        url: baseUrl + '/check-car-booking',
-        type: 'post',
-        data: { 
-            'destinationData': destinationData[0], 
-            'sourceData': sourceData[0], 
-            'destinationEmirate': destinationData[0].Emirates, 
-            'sourceEmirates': sourceData[0].Emirates,
-            'pickupdate': $("#pickupdate").val(),
-            'returndate': $("#returndate").val(),
-            'pickuptime': $("#pickuptime").val(),
-            'returntime': $("#returntime").val(),
-            'carId': $("#carId").val(),
-            'userId': $("#userId").val()
-        },
-        dataType: "json",
-        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-        success: function(res) {
-            $(".overlay").hide();
-            if(res.status==200){
-                bookCarActionFinal()
-            }else{
-                $("#booking-errors").html('<span style="color:red;">Booking cannot be done in these days.</span>');
-                setTimeout(function () {
-                    $('#booking-errors').html('');
-                }, 2500);
+    if(destinationData.length>0 && sourceData.length>0){
+        $.ajax({
+            url: baseUrl + '/check-car-booking',
+            type: 'post',
+            data: { 
+                'destinationData': destinationData[0], 
+                'sourceData': sourceData[0], 
+                'destinationEmirate': destinationData[0].Emirates, 
+                'sourceEmirates': sourceData[0].Emirates,
+                'pickupdate': $("#pickupdate").val(),
+                'returndate': $("#returndate").val(),
+                'pickuptime': $("#pickuptime").val(),
+                'returntime': $("#returntime").val(),
+                'carId': $("#carId").val(),
+                'userId': $("#userId").val(),
+                'type': 'default'
+            },
+            dataType: "json",
+            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+            success: function(res) {
+                $(".overlay").hide();
+                if(res.status==200){
+                    bookCarActionFinal()
+                }else{
+                    $("#booking-errors").html('<span style="color:red;">Booking cannot be done in these days.</span>');
+                    setTimeout(function () {
+                        $('#booking-errors').html('');
+                    }, 2500);
+                }
+                
             }
-            
-        }
-    });
-
+        });
+    }else{
+        return false;
+    }
 
 }
 
 function bookCarActionFinal(){
     $(".overlay").show();
+    if($('#babySeat').is(":checked")){
+        var babySeat = 'on';
+    }else{
+        var babySeat = 'off';
+    }
     $.ajax({
         url: baseUrl + '/save-car-booking',
         type: 'post',
@@ -615,6 +655,7 @@ function bookCarActionFinal(){
             'returndate': $("#returndate").val(),
             'pickuptime': $("#pickuptime").val(),
             'returntime': $("#returntime").val(),
+            'babySeat': babySeat,
             'carId': $("#carId").val(),
             'userId': $("#userId").val()
         },
@@ -632,7 +673,7 @@ function bookCarActionFinal(){
                 var str = '<span style="color:green;">Car Booked. Booking ID:'+res.bookingId+'</span>'
                 $("#booking-details").html(str);
                 setTimeout(function () {
-                    location.reload();
+                    // location.reload();
                 }, 2500);
             }else{
                 var str = '<span style="color:red;">'+res.message+'</span>'

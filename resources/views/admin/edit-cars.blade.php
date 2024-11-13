@@ -160,6 +160,15 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">Quantity</h4>
+                                </div>
+                                <div class="card-body">
+                                    <input type="text" name="qty" placeholder="Enter Quantity" class="form-control" value="{{ $cars[0]->qty }}">
+                                    @error('qty') <span class="text-danger">{{ $message }}</span> @enderror
+                                </div>
+                            </div>
                         </div>
 
                         <div class="col-md-6">

@@ -8,6 +8,7 @@ use App\Mail\OtpVerification;
 use App\Mail\BookingConfirmation;
 use App\Mail\ContactUs;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Carbon;
 use Session;
 use Redirect;
 use Storage;
@@ -236,7 +237,8 @@ class SiteController extends Controller
             'pickuptime' => ['required'],
             'returntime' => ['required'],
             'returntosame' => ['required'],
-            'id' => ['required'],
+            'babySeat' => ['required'],
+            'carId' => ['required'],
         ]);
         if($credentials['returntosame'] == 'on'){
             $credentials['destinationEmirate'] = $credentials['sourceEmirates'];
@@ -256,14 +258,19 @@ class SiteController extends Controller
             'pickuptime' => ['required'],
             'returntime' => ['required'],
             'carId' => ['required'],
+            'type' => ['nullable'],
         ]);
+
+        $now = date('Y-m-d');
         
-        if($credentials['pickupdate'] < date()){
+        if($credentials['pickupdate'] < $now){
             $response['status'] = '400';
             $response['message'] = 'Booking not available';
             return response()->json($response);
         }
         $res = $site->checkCarBooking($credentials);
+        $carCount = $site->getCarQty($credentials);
+        // print_r($res);exit;
         if($res){
             $response['status'] = '400';
             $response['message'] = 'Booking not available';
@@ -282,37 +289,47 @@ class SiteController extends Controller
             'pickupdate' => ['nullable'],
             'returndate' => ['nullable'],
             'type' => ['required'],
-            'id' => ['required'],
+            'carId' => ['required'],
         ]);
-        
-        if($credentials['pickupdate']&&$credentials['returndate']){
-            $credentials['type'] = 'both';
-            $res = $site->getTimeAvailable($credentials);
-            if($res){
-                return response()->json($timeSlots);
+        $credentials['type'] = 'date';
+        $res = $site->checkCarBooking($credentials);
+        $carCount = $site->getCarQty($credentials);
+        if(!empty($res)){
+            if($res[0]->cnt<$carCount){
+                return response()->json($this->generateTimeslot(null,null));
             }else{
-                $timeSlots = $this->generateTimeslot('','');
-                return response()->json($timeSlots);
-            }
-        }
-        $res = $site->getTimeAvailable($credentials);
-        $pickupTime = null;
-        $dropoffTime = null;
 
-        if ($res) {
-            foreach ($res as $value) {
-                if ($value->pickup_time) {
-                    $pickupTime = $value->pickup_time;
+                if($credentials['pickupdate']&&$credentials['returndate']){
+                    $credentials['type'] = 'both';
+                    $res = $site->getTimeAvailable($credentials);
+                    if($res){
+                        return response()->json($timeSlots);
+                    }else{
+                        $timeSlots = $this->generateTimeslot('','');
+                        return response()->json($timeSlots);
+                    }
                 }
-                if ($value->return_time) {
-                    $dropoffTime = $value->return_time;
+                $res = $site->getTimeAvailable($credentials);
+                $pickupTime = null;
+                $dropoffTime = null;
+        
+                if ($res) {
+                    foreach ($res as $value) {
+                        if ($value->pickup_time) {
+                            $pickupTime = $value->pickup_time;
+                        }
+                        if ($value->return_time) {
+                            $dropoffTime = $value->return_time;
+                        }
+                    }
                 }
+        
+                return response()->json($this->generateTimeslot($pickupTime,$dropoffTime));
             }
+        }else{
+            return response()->json($this->generateTimeslot(null,null));
         }
-
-        $timeSlots = $this->generateTimeslot($pickupTime,$dropoffTime);
-
-        return response()->json($timeSlots);
+        
     }
 
     public function generateTimeslot($pickupTime,$dropoffTime){
@@ -431,7 +448,7 @@ class SiteController extends Controller
     public function calculateRate($credentials) {
         $site = new Site();
         $res = [];
-        $deposit = $rate = $emirateCharges = $total = 0;
+        $deposit = $rate = $emirateCharges = $babySeatCharges = $total = 0;
     
         // Calculate the time difference in days and hours
         $pickupdate = strtotime($credentials['pickupdate'] . ' ' . $credentials['pickuptime']);
@@ -465,15 +482,21 @@ class SiteController extends Controller
             $emirateCharges = !empty($resEmirate) ? (float) str_replace(',', '', $resEmirate[0]->rate) : 0;
         }
         
+        if($credentials['babySeat']=='on'){
+            $babySeatCharges = 30;
+        }
+
         // Calculate the total amount and VAT
-        $total = $days * $rate + $deposit + $emirateCharges;
+        $total = $days * $rate + $deposit + $emirateCharges + $babySeatCharges;
         $vat = 0.05 * $total;
     
         // Prepare result data
         $res['days'] = $days;
         $res['vat'] = $vat;
-        $res['rate'] = $total;
+        $res['emirate'] = $emirateCharges;
+        $res['rate'] = $days * $rate;
         $res['deposit'] = $deposit;
+        $res['babySeat'] = $babySeatCharges;
         $res['total'] = $total + $vat;
     
         return $res;
@@ -536,6 +559,7 @@ class SiteController extends Controller
             'returndate' => ['required'],
             'pickuptime' => ['required'],
             'returntime' => ['required'],
+            'babySeat' => ['required'],
             'carId' => ['required'],
             'userId' => ['required'],
         ]);

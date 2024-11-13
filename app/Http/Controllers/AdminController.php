@@ -95,6 +95,7 @@ class AdminController extends Controller
                 'specialOffer' => ['nullable'],
                 'offerFlag' => ['nullable'],
                 'deposit' => ['required'],
+                'qty' => ['required','numeric'],
             ]);
 
             // Handle checkbox inputs
@@ -159,6 +160,7 @@ class AdminController extends Controller
                 'carImages.*' => ['image', 'mimes:jpg,jpeg,png,gif', 'max:2048'],
                 'specialOffer' => ['nullable'],
                 'offerFlag' => ['nullable'],
+                'qty' => ['required','numeric'],
             ]);
 
             // Set flags for general info and rental conditions

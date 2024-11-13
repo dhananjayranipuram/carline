@@ -119,6 +119,15 @@
                             </div>
                             <div class="card">
                                 <div class="card-header">
+                                    <h4 class="card-title">Quantity</h4>
+                                </div>
+                                <div class="card-body">
+                                    <input type="text" name="qty" placeholder="Enter Quantity" class="form-control" value="{{old('qty')}}">
+                                    @error('qty') <span class="text-danger">{{ $message }}</span> @enderror
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-header">
                                     <h4 class="card-title">Others</h4>
                                 </div>
                                 <div class="card-body">
