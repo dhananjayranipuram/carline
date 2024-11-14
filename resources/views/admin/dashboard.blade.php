@@ -21,10 +21,10 @@
                                         <i class="fas fa-ellipsis-h"></i>
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item" href="#">Today</a>
-                                        <a class="dropdown-item" href="#">Yesterday</a>
-                                        <a class="dropdown-item" href="#">This month</a>
-                                        <a class="dropdown-item" href="#">This year</a>
+                                        <a class="dropdown-item booking-stat" data-value="today">Today</a>
+                                        <a class="dropdown-item booking-stat" data-value="yesterday">Yesterday</a>
+                                        <a class="dropdown-item booking-stat" data-value="thismonth">This month</a>
+                                        <a class="dropdown-item booking-stat" data-value="thisyear">This year</a>
                                     </div>
                                 </div>
                             </div>
@@ -67,7 +67,7 @@
                         </div>
                         <div class="col col-stats ms-3 ms-sm-0">
                             <div class="numbers">
-                                <p class="card-category">Visitors</p>
+                                <p class="card-category">Customers</p>
                                 <h4 class="card-title">1,294</h4>
                             </div>
                         </div>
@@ -106,118 +106,25 @@
                     <table class="table align-items-center mb-0">
                     <thead class="thead-light">
                         <tr>
-                        <th scope="col">Payment Number</th>
-                        <th scope="col" class="text-end">Date & Time</th>
-                        <th scope="col" class="text-end">Amount</th>
-                        <th scope="col" class="text-end">Status</th>
+                        <th scope="col">Car Name</th>
+                        <th scope="col">From</th>
+                        <th scope="col">To</th>
+                        <th scope="col">Rate</th>
+                        <th scope="col">Status</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                        <th scope="row">
-                            <button
-                            class="btn btn-icon btn-round btn-success btn-sm me-2"
-                            >
-                            <i class="fa fa-check"></i>
-                            </button>
-                            Payment from #10231
-                        </th>
-                        <td class="text-end">Mar 19, 2020, 2.45pm</td>
-                        <td class="text-end">$250.00</td>
-                        <td class="text-end">
-                            <span class="badge badge-success">Completed</span>
-                        </td>
-                        </tr>
-                        <tr>
-                        <th scope="row">
-                            <button
-                            class="btn btn-icon btn-round btn-success btn-sm me-2"
-                            >
-                            <i class="fa fa-check"></i>
-                            </button>
-                            Payment from #10231
-                        </th>
-                        <td class="text-end">Mar 19, 2020, 2.45pm</td>
-                        <td class="text-end">$250.00</td>
-                        <td class="text-end">
-                            <span class="badge badge-success">Completed</span>
-                        </td>
-                        </tr>
-                        <tr>
-                        <th scope="row">
-                            <button
-                            class="btn btn-icon btn-round btn-success btn-sm me-2"
-                            >
-                            <i class="fa fa-check"></i>
-                            </button>
-                            Payment from #10231
-                        </th>
-                        <td class="text-end">Mar 19, 2020, 2.45pm</td>
-                        <td class="text-end">$250.00</td>
-                        <td class="text-end">
-                            <span class="badge badge-success">Completed</span>
-                        </td>
-                        </tr>
-                        <tr>
-                        <th scope="row">
-                            <button
-                            class="btn btn-icon btn-round btn-success btn-sm me-2"
-                            >
-                            <i class="fa fa-check"></i>
-                            </button>
-                            Payment from #10231
-                        </th>
-                        <td class="text-end">Mar 19, 2020, 2.45pm</td>
-                        <td class="text-end">$250.00</td>
-                        <td class="text-end">
-                            <span class="badge badge-success">Completed</span>
-                        </td>
-                        </tr>
-                        <tr>
-                        <th scope="row">
-                            <button
-                            class="btn btn-icon btn-round btn-success btn-sm me-2"
-                            >
-                            <i class="fa fa-check"></i>
-                            </button>
-                            Payment from #10231
-                        </th>
-                        <td class="text-end">Mar 19, 2020, 2.45pm</td>
-                        <td class="text-end">$250.00</td>
-                        <td class="text-end">
-                            <span class="badge badge-success">Completed</span>
-                        </td>
-                        </tr>
-                        <tr>
-                        <th scope="row">
-                            <button
-                            class="btn btn-icon btn-round btn-success btn-sm me-2"
-                            >
-                            <i class="fa fa-check"></i>
-                            </button>
-                            Payment from #10231
-                        </th>
-                        <td class="text-end">Mar 19, 2020, 2.45pm</td>
-                        <td class="text-end">$250.00</td>
-                        <td class="text-end">
-                            <span class="badge badge-success">Completed</span>
-                        </td>
-                        </tr>
-                        <tr>
-                        <th scope="row">
-                            <button
-                            class="btn btn-icon btn-round btn-success btn-sm me-2"
-                            >
-                            <i class="fa fa-check"></i>
-                            </button>
-                            Payment from #10231
-                        </th>
-                        <td class="text-end">Mar 19, 2020, 2.45pm</td>
-                        <td class="text-end">$250.00</td>
-                        <td class="text-end">
-                            <span class="badge badge-success">Completed</span>
-                        </td>
-                        </tr>
+                        @foreach($latest_bookings as $key => $value)
+                            <tr>
+                            <th scope="row">{{$value->car_name}}</th>
+                            <td>{{$value->source}}</td>
+                            <td>{{$value->destination}}</td>
+                            <td>AED {{$value->rate}}</td>
+                            <td>
+                                <span class="badge badge-success">Booked</span>
+                            </td>
+                            </tr>
+                        @endforeach
                     </tbody>
                     </table>
                 </div>
@@ -226,5 +133,180 @@
         </div>
     </div>
 </div>
+<script src="{{asset('admin_assets/js/core/jquery-3.7.1.min.js')}}"></script>
+<script src="{{asset('admin_assets/js/plugin/chart.js/chart.min.js')}}"></script>
+<script>
 
+var ctx = document.getElementById('statisticsChart').getContext('2d');
+var statisticsChart = null;
+var booking_stat = @php {{ echo json_encode($booking_stat);}} @endphp
+
+statisticsChart = new Chart(ctx, {
+	type: 'line',
+	data: {
+		labels: booking_stat.label,
+		datasets: [ {
+			label: "Booking Count",
+			borderColor: '#177dff',
+			pointBackgroundColor: 'rgba(23, 125, 255, 0.6)',
+			pointRadius: 0,
+			backgroundColor: 'rgba(23, 125, 255, 0.4)',
+			legendColor: '#177dff',
+			fill: true,
+			borderWidth: 2,
+			data: booking_stat.data
+		}]
+	},
+	options : {
+		responsive: true, 
+		maintainAspectRatio: false,
+		legend: {
+			display: false
+		},
+		tooltips: {
+			bodySpacing: 4,
+			mode:"nearest",
+			intersect: 0,
+			position:"nearest",
+			xPadding:10,
+			yPadding:10,
+			caretPadding:10
+		},
+		layout:{
+			padding:{left:5,right:5,top:15,bottom:15}
+		},
+		scales: {
+			yAxes: [{
+				ticks: {
+					fontStyle: "500",
+					beginAtZero: false,
+					maxTicksLimit: 5,
+					padding: 10
+				},
+				gridLines: {
+					drawTicks: false,
+					display: false
+				}
+			}],
+			xAxes: [{
+				gridLines: {
+					zeroLineColor: "transparent"
+				},
+				ticks: {
+					padding: 10,
+					fontStyle: "500"
+				}
+			}]
+		}, 
+		legendCallback: function(chart) { 
+			var text = []; 
+			text.push('<ul class="' + chart.id + '-legend html-legend">'); 
+			for (var i = 0; i < chart.data.datasets.length; i++) { 
+				text.push('<li><span style="background-color:' + chart.data.datasets[i].legendColor + '"></span>'); 
+				if (chart.data.datasets[i].label) { 
+					text.push(chart.data.datasets[i].label); 
+				} 
+				text.push('</li>'); 
+			} 
+			text.push('</ul>'); 
+			return text.join(''); 
+		}  
+	}
+});
+
+
+$(document).ready(function () { 
+    $(document).on("click", ".booking-stat" , function(e) { 
+        $(".overlay").show();
+        var dayValue = $(this).attr('data-value');
+        $.ajax({
+            url: baseUrl + '/admin/get-dashboard-booking-data',
+            type: 'post',
+            data: {'period':$(this).attr('data-value'),'card':'booking-stat'},
+            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+            success: function( html ) {
+                if(html){
+                    if (statisticsChart) {
+                        statisticsChart.destroy();
+                    }
+                    statisticsChart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: html.label,
+                            datasets: [ {
+                                label: "Booking Count",
+                                borderColor: '#177dff',
+                                pointBackgroundColor: 'rgba(23, 125, 255, 0.6)',
+                                pointRadius: 0,
+                                backgroundColor: 'rgba(23, 125, 255, 0.4)',
+                                legendColor: '#177dff',
+                                fill: true,
+                                borderWidth: 2,
+                                data: html.data
+                            }]
+                        },
+                        options : {
+                            responsive: true, 
+                            maintainAspectRatio: false,
+                            legend: {
+                                display: false
+                            },
+                            tooltips: {
+                                bodySpacing: 4,
+                                mode:"nearest",
+                                intersect: 0,
+                                position:"nearest",
+                                xPadding:10,
+                                yPadding:10,
+                                caretPadding:10
+                            },
+                            layout:{
+                                padding:{left:5,right:5,top:15,bottom:15}
+                            },
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        fontStyle: "500",
+                                        beginAtZero: false,
+                                        maxTicksLimit: 5,
+                                        padding: 10
+                                    },
+                                    gridLines: {
+                                        drawTicks: false,
+                                        display: false
+                                    }
+                                }],
+                                xAxes: [{
+                                    gridLines: {
+                                        zeroLineColor: "transparent"
+                                    },
+                                    ticks: {
+                                        padding: 10,
+                                        fontStyle: "500"
+                                    }
+                                }]
+                            }, 
+                            legendCallback: function(chart) { 
+                                var text = []; 
+                                text.push('<ul class="' + chart.id + '-legend html-legend">'); 
+                                for (var i = 0; i < chart.data.datasets.length; i++) { 
+                                    text.push('<li><span style="background-color:' + chart.data.datasets[i].legendColor + '"></span>'); 
+                                    if (chart.data.datasets[i].label) { 
+                                        text.push(chart.data.datasets[i].label); 
+                                    } 
+                                    text.push('</li>'); 
+                                } 
+                                text.push('</ul>'); 
+                                return text.join(''); 
+                            }  
+                        }
+                    });                   
+                }
+                $(".overlay").hide();
+            }
+        });
+    });
+
+});
+</script>
 @endsection

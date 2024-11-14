@@ -330,9 +330,9 @@ class Site extends Model
                             FROM booking
                             WHERE car_id = 1
                             AND (
-                                (pickup_date BETWEEN '2024-11-14' AND '2024-11-22')
-                                OR (return_date BETWEEN '2024-11-14' AND '2024-11-22')
-                                OR (pickup_date <= '2024-11-14' AND return_date >= '2024-11-22')
+                                (pickup_date BETWEEN '$data[pickupdate]' AND '$data[returndate]')
+                                OR (return_date BETWEEN '$data[pickupdate]' AND '$data[returndate]')
+                                OR (pickup_date <= '$data[pickupdate]' AND return_date >= '$data[returndate]')
                             );");
                     
                 

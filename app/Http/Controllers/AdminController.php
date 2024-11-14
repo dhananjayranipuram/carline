@@ -33,7 +33,93 @@ class AdminController extends Controller
         }
     }
 
-    public function dashboard(){
+    public function dashboard(Request $request){
+        $admin = new Admin();
+        $response = [];
+        $input = ['from' => date('Y-m-d'),'to' => date('Y-m-d'),'period'=>'today']; //Today's data
+
+        $data = $admin->getChartData($input);
+        $temp = [];
+        foreach ($data as $key => $value) {
+            if (!isset($temp['label'])) {
+                $temp['label'] = [];
+            }
+            
+            if (!isset($temp['data'])) {
+                $temp['data'] = [];
+            }
+            array_push($temp['label'],$value->label);
+            array_push($temp['data'],$value->booking_count);
+        }
+        $response['booking_stat'] = $temp;
+
+        $response['latest_bookings'] = $admin->getLatestBooking($input);
+        return view('admin/dashboard',$response);
+    }
+
+    public function dashboardAjax(Request $request){
+        $admin = new Admin();
+        $response = [];
+        $filterData = $request->validate([
+            'period' => ['required'],
+            'card' => ['required']
+        ]);
+        switch ($filterData['period']) {
+            case 'today':
+                $filterData['from'] = date('Y-m-d');
+                $filterData['to'] = date('Y-m-d');
+                break;
+            case 'yesterday':
+                $filterData['from'] =  date('Y-m-d',strtotime("-1 days"));
+                $filterData['to'] = date('Y-m-d',strtotime("-1 days"));
+                break;
+            case 'thismonth':
+                $filterData['from'] = date('Y-m-01');
+                $filterData['to'] = date('Y-m-t');
+                break;
+            case 'thisyear':
+                $filterData['from'] = date('Y-01-01');
+                $filterData['to'] = date('Y-12-31');
+                break;
+            default:
+                $filterData['from'] = date('Y-m-d');
+                $filterData['to'] = date('Y-m-d');
+                break;
+        }
+        // print_r($filterData);exit;
+        switch ($filterData['card']) {
+            case 'booking-stat':
+                $data = $admin->getChartData($filterData);
+                // print_r($data);exit;
+                foreach ($data as $key => $value) {
+                    if (!isset($response['label'])) {
+                        $response['label'] = [];
+                    }
+                    
+                    if (!isset($response['data'])) {
+                        $response['data'] = [];
+                    }
+                    array_push($response['label'],$value->label);
+                    array_push($response['data'],$value->booking_count);
+                }
+                break;
+            /*case 'customer-count':
+                $customerRes = $admin->getCustomerData($input);
+                $data['customer'] = (object)['today_cnt'=>$customerRes[0]->cnt,'increase'=>$this->increasePercentage($customerRes[1]->cnt,$customerRes[0]->cnt)];
+                break;
+            case 'pie-chart':
+                $data['doc_appt'] = $admin->getDocWiseAppointmentData($input);
+                break;
+            case 'recent-appt':
+                $data['list'] = $admin->getLatestAppointmentData($input);
+                break;*/
+            default:
+                # code...
+                break;
+        }
+
+        return response()->json($response);
+        
         return view('admin/dashboard');
     }
 
@@ -57,9 +143,23 @@ class AdminController extends Controller
         return view('admin/view-user', $data);
     }
 
-    public function bookingList(){
+    public function bookingList(Request $request){
+        $request->flash();
         $admin = new Admin();
-        $data['bookings'] = $admin->getBookingHistory();
+        if($request->method() == 'POST'){
+            $filterData = $request->validate([
+                'from' => [''],
+                'to' => [''],
+            ]);
+        }else{
+            date_default_timezone_set('Asia/Calcutta');
+            $filterData = [
+                'from' => date('Y-m-d', time()),
+                'to' => date('Y-m-d', time()),
+            ];
+        }
+        // echo '<pre>';print_r($filterData);exit;
+        $data['bookings'] = $admin->getBookingHistory($filterData);
         // echo '<pre>';print_r($data);exit;
         return view('admin/bookings',$data);
     }

@@ -50,10 +50,11 @@ Route::any('/admin/login', [AdminController::class, 'login'])->name('adminLogin'
 Route::middleware(['check.session', 'prevent.back.history'])->group(function () {
     
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard']);
+    Route::any('/admin/get-dashboard-booking-data', [AdminController::class, 'dashboardAjax']);
 
     Route::get('/admin/users', [AdminController::class, 'userList']);
     Route::get('/admin/view-user', [AdminController::class, 'viewUsers']);
-    Route::get('/admin/bookings', [AdminController::class, 'bookingList']);
+    Route::any('/admin/bookings', [AdminController::class, 'bookingList']);
 
     Route::get('/admin/cars', [AdminController::class, 'cars']);
     Route::any('/admin/add-car', [AdminController::class, 'addCar']);

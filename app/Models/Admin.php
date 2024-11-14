@@ -422,6 +422,7 @@ class Admin extends Model
             ->leftJoin('car_brand as cb', 'cb.id', '=', 'c.brand_id')
             ->leftJoin('car_images as ci', 'ci.car_id', '=', 'c.id')
             // ->where('b.active', 1)
+            ->whereBetween('b.pickup_date', [$data['from'], $data['to']])
             ->groupBy('b.id')
             ->select([
                 'b.id',
@@ -447,5 +448,168 @@ class Admin extends Model
 
     public function getUsersDetails($data=[]){
         return DB::select("SELECT id,first_name,last_name,email,phone,flat,building,landmark,city,emirates FROM enduser WHERE id='$data[id]' AND active=1;");
+    }
+
+    public function getChartData($data=[]){
+        $query = '';
+        switch ($data['period']) {
+
+            case 'thismonth':
+                $query = "SELECT 
+                            d.label AS label,
+                            COALESCE(b.booking_count, 0) AS booking_count
+                        FROM 
+                            (
+                                SELECT 1 AS label UNION ALL
+                                SELECT 2 UNION ALL
+                                SELECT 3 UNION ALL
+                                SELECT 4 UNION ALL
+                                SELECT 5 UNION ALL
+                                SELECT 6 UNION ALL
+                                SELECT 7 UNION ALL
+                                SELECT 8 UNION ALL
+                                SELECT 9 UNION ALL
+                                SELECT 10 UNION ALL
+                                SELECT 11 UNION ALL
+                                SELECT 12 UNION ALL
+                                SELECT 13 UNION ALL
+                                SELECT 14 UNION ALL
+                                SELECT 15 UNION ALL
+                                SELECT 16 UNION ALL
+                                SELECT 17 UNION ALL
+                                SELECT 18 UNION ALL
+                                SELECT 19 UNION ALL
+                                SELECT 20 UNION ALL
+                                SELECT 21 UNION ALL
+                                SELECT 22 UNION ALL
+                                SELECT 23 UNION ALL
+                                SELECT 24 UNION ALL
+                                SELECT 25 UNION ALL
+                                SELECT 26 UNION ALL
+                                SELECT 27 UNION ALL
+                                SELECT 28 UNION ALL
+                                SELECT 29 UNION ALL
+                                SELECT 30 UNION ALL
+                                SELECT 31
+                            ) d
+                        LEFT JOIN (
+                            SELECT 
+                                DAY(pickup_date) AS label,
+                                COUNT(*) AS booking_count
+                            FROM booking
+                            WHERE (
+                                (pickup_date BETWEEN '$data[from]' AND '$data[to]')
+                                OR (return_date BETWEEN '$data[from]' AND '$data[to]')
+                                OR (pickup_date <= '$data[from]' AND return_date >= '$data[to]')
+                            )
+                            GROUP BY DAY(pickup_date)
+                        ) b ON d.label = b.label
+                        WHERE d.label <= DAY(LAST_DAY('$data[from]'))
+                        ORDER BY d.label;";
+                break;
+            case 'thisyear':
+                $query = "SELECT 
+                        DATE_FORMAT(STR_TO_DATE(CONCAT(m.label, ' 1, 2024'), '%m %d, %Y'), '%b') AS label,
+                        COALESCE(b.booking_count, 0) AS booking_count
+                    FROM 
+                        (
+                            SELECT 1 AS label UNION ALL
+                            SELECT 2 UNION ALL
+                            SELECT 3 UNION ALL
+                            SELECT 4 UNION ALL
+                            SELECT 5 UNION ALL
+                            SELECT 6 UNION ALL
+                            SELECT 7 UNION ALL
+                            SELECT 8 UNION ALL
+                            SELECT 9 UNION ALL
+                            SELECT 10 UNION ALL
+                            SELECT 11 UNION ALL
+                            SELECT 12
+                        ) m
+                    LEFT JOIN (
+                        SELECT 
+                            MONTH(pickup_date) AS label,
+                            COUNT(*) AS booking_count
+                        FROM booking
+                        WHERE (
+                            (pickup_date BETWEEN '$data[from]' AND '$data[to]')
+                            OR (return_date BETWEEN '$data[from]' AND '$data[to]')
+                            OR (pickup_date <= '$data[from]' AND return_date >= '$data[to]')
+                        )
+                        GROUP BY MONTH(pickup_date)
+                    ) b ON m.label = b.label
+                    ORDER BY m.label;";
+                break;
+            default:
+            /**Today and yesterday*/
+            $query = "SELECT 
+                            d.label AS label,
+                            COALESCE(b.booking_count, 0) AS booking_count
+                        FROM 
+                            (
+                                SELECT 1 AS label UNION ALL
+                                SELECT 2 UNION ALL
+                                SELECT 3 UNION ALL
+                                SELECT 4 UNION ALL
+                                SELECT 5 UNION ALL
+                                SELECT 6 UNION ALL
+                                SELECT 7 UNION ALL
+                                SELECT 8 UNION ALL
+                                SELECT 9 UNION ALL
+                                SELECT 10 UNION ALL
+                                SELECT 11 UNION ALL
+                                SELECT 12 UNION ALL
+                                SELECT 13 UNION ALL
+                                SELECT 14 UNION ALL
+                                SELECT 15 UNION ALL
+                                SELECT 16 UNION ALL
+                                SELECT 17 UNION ALL
+                                SELECT 18 UNION ALL
+                                SELECT 19 UNION ALL
+                                SELECT 20 UNION ALL
+                                SELECT 21 UNION ALL
+                                SELECT 22 UNION ALL
+                                SELECT 23 UNION ALL
+                                SELECT 24
+                            ) d
+                        LEFT JOIN (
+                            SELECT 
+                                HOUR(created_on) AS label,
+                                COUNT(*) AS booking_count
+                            FROM booking
+                            WHERE car_id = 4 AND created_on BETWEEN '$data[from]' AND '$data[from]'
+                            
+                            GROUP BY label
+                        ) b ON d.label = b.label
+                        ORDER BY d.label;";
+                break;
+        }
+
+        return DB::select($query);
+    }
+
+    public function getLatestBooking($data=[]){
+        return \DB::table('booking as b')
+            ->join('booking_details as bd', 'b.id', '=', 'bd.booking_id')
+            ->leftJoin('cars as c', 'c.id', '=', 'b.car_id')
+            ->leftJoin('car_brand as cb', 'cb.id', '=', 'c.brand_id')
+            ->leftJoin('car_images as ci', 'ci.car_id', '=', 'c.id')
+            ->groupBy('b.id')
+            ->select([
+                'b.id',
+                \DB::raw("DATE_FORMAT(b.pickup_date, '%Y-%m-%d') as pickup_date"),
+                \DB::raw("DATE_FORMAT(b.return_date, '%Y-%m-%d') as return_date"),
+                \DB::raw("DATE_FORMAT(b.pickup_time, '%h:%i %p') as pickup_time"),
+                \DB::raw("DATE_FORMAT(b.return_time, '%h:%i %p') as return_time"),
+                'b.rate',
+                \DB::raw("LEFT(bd.s_address, LOCATE(',', bd.s_address) - 1) as source"),
+                'bd.s_address',
+                \DB::raw("LEFT(bd.d_address, LOCATE(',', bd.d_address) - 1) as destination"),
+                'bd.d_address',
+                \DB::raw("CONCAT(cb.name, ' ', c.name, ' ', c.model) as car_name")
+            ])
+            ->orderBy('b.created_on', 'desc')
+            ->limit(5)  // Limit the results to 5 records
+            ->get();
     }
 }
