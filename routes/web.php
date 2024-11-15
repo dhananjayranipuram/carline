@@ -144,13 +144,14 @@ Route::get('/sym-link', function () {
 
 Route::get('/install-dependencies', function () {
     try {
-        // Run composer install command
-        $output = shell_exec('composer install 2>&1');
+        putenv('COMPOSER_HOME=' . base_path() . '/.composer');
+        putenv('HOME=' . base_path());
+
+        // Full path to Composer
+        $output = shell_exec('/usr/local/bin/composer install 2>&1');
         
-        // Display the output
         return "<pre>{$output}</pre>";
     } catch (\Exception $e) {
-        // Handle errors
         return "<h1>Error:</h1><pre>{$e->getMessage()}</pre>";
     }
 });
