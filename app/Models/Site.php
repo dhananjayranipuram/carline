@@ -71,8 +71,8 @@ class Site extends Model
                 break;
             default:
                 $condition = '';
-                if(!empty($data['carId'])){
-                    $condition .= " AND c.id = $data[carId]";
+                if(!empty($data['id'])){
+                    $condition .= " AND c.id = $data[id]";
                 }
                 return DB::select("SELECT c.id,c.name,c.model,cb.name brand_name,ct.name car_type,GROUP_CONCAT(ci.image) AS 'image',FORMAT(c.rent,0) rent,c.general_info_flag,c.rental_condition_flag,c.offer_flag,FORMAT(c.offer_price,0) offer_price,FORMAT(c.deposit,0) deposit FROM cars c
                                 LEFT JOIN car_brand cb ON cb.id=c.brand_id
