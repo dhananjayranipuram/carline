@@ -416,35 +416,40 @@ class Admin extends Model
     public function getBookingHistory($data = [])
     {
 
-        $condition = '';
-        if(!empty($data['brand'])){
-            $condition .= " AND c.brand_id = $data[brand]";
-        }
-        if(!empty($data['type'])){
-            $condition .= " AND c.type_id = $data[type]";
-        }
-        if(!empty($data['from']) && !empty($data['to'])){
-            $condition .= " AND (b.pickup_date between '$data[from]' and '$data[to]')";
+        $query = \DB::table('booking as b')
+            ->join('booking_details as bd', 'b.id', '=', 'bd.booking_id')
+            ->leftJoin('cars as c', 'c.id', '=', 'b.car_id')
+            ->leftJoin('car_brand as cb', 'cb.id', '=', 'c.brand_id')
+            ->leftJoin('car_images as ci', 'ci.car_id', '=', 'c.id')
+            ->where('c.active', 1);
+
+        if (!empty($data['brand'])) {
+            $query->where('c.brand_id', $data['brand']);
         }
 
-        return DB::SELECT("SELECT
-                            `b`.`id`,
-                            DATE_FORMAT(b.pickup_date, '%Y-%m-%d') AS pickup_date,
-                            DATE_FORMAT(b.return_date, '%Y-%m-%d') AS return_date,
-                            DATE_FORMAT(b.pickup_time, '%h:%i %p') AS pickup_time,
-                            DATE_FORMAT(b.return_time, '%h:%i %p') AS return_time,
-                            `b`.`rate`,
-                            LEFT(bd.s_address, LOCATE(',', bd.s_address) - 1) AS source,
-                            `bd`.`s_address`,
-                            LEFT(bd.d_address, LOCATE(',', bd.d_address) - 1) AS destination,
-                            `bd`.`d_address`,
-                            CONCAT(cb.name, ' ', c.name, ' ', c.model) AS car_name
-                        FROM `booking` AS `b` 
-                        INNER JOIN `booking_details` AS `bd` ON `b`.`id` = `bd`.`booking_id` 
-                        LEFT JOIN `cars` AS `c` ON `c`.`id` = `b`.`car_id` 
-                        LEFT JOIN `car_brand` AS `cb` ON `cb`.`id` = `c`.`brand_id` 
-                        LEFT JOIN `car_images` AS `ci` ON `ci`.`car_id` = `c`.`id` 
-                        WHERE c.active= 1 $condition GROUP BY b.id");
+        if (!empty($data['type'])) {
+            $query->where('c.type_id', $data['type']);
+        }
+
+        if (!empty($data['from']) && !empty($data['to'])) {
+            $query->whereBetween('b.pickup_date', [$data['from'], $data['to']]);
+        }
+
+        return $query->groupBy('b.id')
+            ->select([
+                'b.id',
+                \DB::raw("CONCAT(cb.name, ' ', c.name, ' ', c.model) AS car_name"),
+                \DB::raw("DATE_FORMAT(b.pickup_date, '%Y-%m-%d') AS pickup_date"),
+                \DB::raw("DATE_FORMAT(b.return_date, '%Y-%m-%d') AS return_date"),
+                \DB::raw("DATE_FORMAT(b.pickup_time, '%h:%i %p') AS pickup_time"),
+                \DB::raw("DATE_FORMAT(b.return_time, '%h:%i %p') AS return_time"),
+                'b.rate',
+                \DB::raw("LEFT(bd.s_address, LOCATE(',', bd.s_address) - 1) AS source"),
+                'bd.s_address',
+                \DB::raw("LEFT(bd.d_address, LOCATE(',', bd.d_address) - 1) AS destination"),
+                'bd.d_address'
+            ])
+            ->get();
     }
 
     public function getUserList(){

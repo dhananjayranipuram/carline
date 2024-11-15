@@ -98,6 +98,7 @@ Route::middleware(['check.session', 'prevent.back.history'])->group(function () 
     Route::any('/admin/delete-policy-agreement', [AdminController::class, 'deletePolicyAgreement']);
 
     Route::any('/admin/export-users', [AdminController::class, 'exportUsers']);
+    Route::any('/admin/export-bookings', [AdminController::class, 'exportBookings']);
 
     Route::get('/admin/logout', [AdminController::class, 'logout']);
 });

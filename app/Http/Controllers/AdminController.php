@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Admin;
 use App\Exports\UserExport;
+use App\Exports\BookingsExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Session;
 use Redirect;
@@ -164,6 +165,7 @@ class AdminController extends Controller
                 'to' => date('Y-m-d', time()),
             ];
         }
+        Session::put('bookingFilter', $filterData);
         // echo '<pre>';print_r($filterData);exit;
 
         $data['brands'] = $admin->getBrands();
@@ -974,8 +976,15 @@ class AdminController extends Controller
 
         $admin = new Admin();
         $data = $admin->getUserList();
-
         return Excel::download(new UserExport($data), 'Users.xlsx');
+    }
+    
+    public function exportBookings(){
+
+        $admin = new Admin();
+        $filterData = Session::get('bookingFilter');
+        $data = $admin->getBookingHistory($filterData);
+        return Excel::download(new BookingsExport((object)$data), 'Bookings.xlsx');
     }
 
     public function logout(){
