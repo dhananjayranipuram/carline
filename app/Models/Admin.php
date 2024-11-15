@@ -416,34 +416,42 @@ class Admin extends Model
     public function getBookingHistory($data = [])
     {
 
-        return \DB::table('booking as b')
-            ->join('booking_details as bd', 'b.id', '=', 'bd.booking_id')
-            ->leftJoin('cars as c', 'c.id', '=', 'b.car_id')
-            ->leftJoin('car_brand as cb', 'cb.id', '=', 'c.brand_id')
-            ->leftJoin('car_images as ci', 'ci.car_id', '=', 'c.id')
-            // ->where('b.active', 1)
-            ->whereBetween('b.pickup_date', [$data['from'], $data['to']])
-            ->groupBy('b.id')
-            ->select([
-                'b.id',
-                \DB::raw("DATE_FORMAT(b.pickup_date, '%Y-%m-%d') as pickup_date"),
-                \DB::raw("DATE_FORMAT(b.return_date, '%Y-%m-%d') as return_date"),
-                \DB::raw("DATE_FORMAT(b.pickup_time, '%h:%i %p') as pickup_time"),
-                \DB::raw("DATE_FORMAT(b.return_time, '%h:%i %p') as return_time"),
-                'b.rate',
-                \DB::raw("LEFT(bd.s_address, LOCATE(',', bd.s_address) - 1) as source"),
-                'bd.s_address',
-                \DB::raw("LEFT(bd.d_address, LOCATE(',', bd.d_address) - 1) as destination"),
-                'bd.d_address',
-                \DB::raw("CONCAT(cb.name, ' ', c.name, ' ', c.model) as car_name"),
-                \DB::raw("LEFT(GROUP_CONCAT(ci.image), LOCATE(',', GROUP_CONCAT(ci.image)) - 1) as image")
-            ])->get();
+        $condition = '';
+        if(!empty($data['brand'])){
+            $condition .= " AND c.brand_id = $data[brand]";
+        }
+        if(!empty($data['type'])){
+            $condition .= " AND c.type_id = $data[type]";
+        }
+        if(!empty($data['from']) && !empty($data['to'])){
+            $condition .= " AND (b.pickup_date between '$data[from]' and '$data[to]')";
+        }
+
+        return DB::SELECT("SELECT
+                            `b`.`id`,
+                            DATE_FORMAT(b.pickup_date, '%Y-%m-%d') AS pickup_date,
+                            DATE_FORMAT(b.return_date, '%Y-%m-%d') AS return_date,
+                            DATE_FORMAT(b.pickup_time, '%h:%i %p') AS pickup_time,
+                            DATE_FORMAT(b.return_time, '%h:%i %p') AS return_time,
+                            `b`.`rate`,
+                            LEFT(bd.s_address, LOCATE(',', bd.s_address) - 1) AS source,
+                            `bd`.`s_address`,
+                            LEFT(bd.d_address, LOCATE(',', bd.d_address) - 1) AS destination,
+                            `bd`.`d_address`,
+                            CONCAT(cb.name, ' ', c.name, ' ', c.model) AS car_name
+                        FROM `booking` AS `b` 
+                        INNER JOIN `booking_details` AS `bd` ON `b`.`id` = `bd`.`booking_id` 
+                        LEFT JOIN `cars` AS `c` ON `c`.`id` = `b`.`car_id` 
+                        LEFT JOIN `car_brand` AS `cb` ON `cb`.`id` = `c`.`brand_id` 
+                        LEFT JOIN `car_images` AS `ci` ON `ci`.`car_id` = `c`.`id` 
+                        WHERE c.active= 1 $condition;");
     }
 
     public function getUserList(){
-        return \DB::table('enduser')
-            ->where('active', 1)
-            ->select('id','first_name', 'last_name', 'email', 'phone', 'emirates')->get();
+        return \DB::table('enduser as u')
+            ->leftJoin('emirates as e', 'e.id', '=', 'u.emirates')
+            ->where('u.active', 1)
+            ->select('u.id','u.first_name', 'u.last_name', 'u.email', 'u.phone', 'e.name AS emirates')->get();
     }
 
     public function getUsersDetails($data=[]){

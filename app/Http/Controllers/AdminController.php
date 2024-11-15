@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Admin;
+use App\Exports\UserExport;
+use Maatwebsite\Excel\Facades\Excel;
 use Session;
 use Redirect;
 use Storage;
@@ -148,17 +150,24 @@ class AdminController extends Controller
         $admin = new Admin();
         if($request->method() == 'POST'){
             $filterData = $request->validate([
+                'brand' => [''],
+                'type' => [''],
                 'from' => [''],
                 'to' => [''],
             ]);
         }else{
             date_default_timezone_set('Asia/Calcutta');
             $filterData = [
+                'brand' => '',
+                'type' => '',
                 'from' => date('Y-m-d', time()),
                 'to' => date('Y-m-d', time()),
             ];
         }
         // echo '<pre>';print_r($filterData);exit;
+
+        $data['brands'] = $admin->getBrands();
+        $data['type'] = $admin->getCarType();
         $data['bookings'] = $admin->getBookingHistory($filterData);
         // echo '<pre>';print_r($data);exit;
         return view('admin/bookings',$data);
@@ -959,6 +968,14 @@ class AdminController extends Controller
             }
             return json_encode($res);
         }
+    }
+
+    public function exportUsers(){
+
+        $admin = new Admin();
+        $data = $admin->getUserList();
+
+        return Excel::download(new UserExport($data), 'Users.xlsx');
     }
 
     public function logout(){

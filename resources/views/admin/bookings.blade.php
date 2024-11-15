@@ -27,6 +27,24 @@
                                 <input type="hidden" id="to" name="to">
                             </div>
                         </div>
+                        <div class="col-md-3">
+                            <label for="validationDefault02" class="form-label">Car Brand</label>
+                            <select name="brand" class="form-select brand-select">
+                                    <option value="">All Brand</option>
+                                    @foreach($brands as $key => $value)
+                                        <option value="{{$value->id}}" @if(old('brand') == $value->id) selected @endif>{{$value->name}}</option>
+                                    @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="validationDefault02" class="form-label">Car Type</label>
+                            <select name="type" class="form-select type-select">
+                                <option value="">All Car Type</option>
+                                @foreach($type as $key => $value)
+                                    <option value="{{$value->id}}" @if(old('type') == $value->id) selected @endif>{{$value->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
                     @if(session('success'))
                     <div class="alert alert-success">
@@ -141,6 +159,10 @@ $(document).ready(function () {
         setTimeout(function () {
             $("#booking-table").submit();
         }, 200);
+    });
+
+    $('.brand-select , .type-select').change(function(){
+        $("#booking-table").submit();
     });
 
 });

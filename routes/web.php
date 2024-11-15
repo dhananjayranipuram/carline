@@ -97,6 +97,8 @@ Route::middleware(['check.session', 'prevent.back.history'])->group(function () 
     Route::any('/admin/update-policy-agreement', [AdminController::class, 'updatePolicyAgreement']);
     Route::any('/admin/delete-policy-agreement', [AdminController::class, 'deletePolicyAgreement']);
 
+    Route::any('/admin/export-users', [AdminController::class, 'exportUsers']);
+
     Route::get('/admin/logout', [AdminController::class, 'logout']);
 });
 //Clear Cache facade value:
@@ -138,4 +140,17 @@ Route::get('/config-cache', function() {
 //To create symbolic link
 Route::get('/sym-link', function () {
     Artisan::call('storage:link');
+});
+
+Route::get('/install-dependencies', function () {
+    try {
+        // Run composer install command
+        $output = shell_exec('composer install 2>&1');
+        
+        // Display the output
+        return "<pre>{$output}</pre>";
+    } catch (\Exception $e) {
+        // Handle errors
+        return "<h1>Error:</h1><pre>{$e->getMessage()}</pre>";
+    }
 });

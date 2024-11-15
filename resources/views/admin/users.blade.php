@@ -12,7 +12,7 @@
                         <h4 class="card-title">User List</h4>
                     </div>
                     <div class="col-md-4" style="text-align: right;">
-                        <!-- <button class="btn btn-primary" onclick="location.href = '{{url('/admin/add-car')}}';">Add Car</button> -->
+                        <a class="btn btn-primary" href="{{url('/admin/export-users')}}">Export</a>
                     </div>
                 </div>
                 <div class="card-body">
