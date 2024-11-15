@@ -141,17 +141,3 @@ Route::get('/config-cache', function() {
 Route::get('/sym-link', function () {
     Artisan::call('storage:link');
 });
-
-Route::get('/install-dependencies', function () {
-    try {
-        putenv('COMPOSER_HOME=' . base_path() . '/.composer');
-        putenv('HOME=' . base_path());
-
-        // Full path to Composer
-        $output = shell_exec('/usr/local/bin/composer install 2>&1');
-        
-        return "<pre>{$output}</pre>";
-    } catch (\Exception $e) {
-        return "<h1>Error:</h1><pre>{$e->getMessage()}</pre>";
-    }
-});

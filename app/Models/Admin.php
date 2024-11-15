@@ -444,7 +444,7 @@ class Admin extends Model
                         LEFT JOIN `cars` AS `c` ON `c`.`id` = `b`.`car_id` 
                         LEFT JOIN `car_brand` AS `cb` ON `cb`.`id` = `c`.`brand_id` 
                         LEFT JOIN `car_images` AS `ci` ON `ci`.`car_id` = `c`.`id` 
-                        WHERE c.active= 1 $condition;");
+                        WHERE c.active= 1 $condition GROUP BY b.id");
     }
 
     public function getUserList(){
