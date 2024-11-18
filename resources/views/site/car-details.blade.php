@@ -346,7 +346,7 @@ $(document).ready(function () {
             var tempAddress = '';
 
             place.types.forEach(function (type) {
-                if (type === 'airport') {
+                if (type === 'airport' || place.name.toLowerCase().includes('airport')) {
                     isAirport = true;
                 }
             });
@@ -368,6 +368,7 @@ $(document).ready(function () {
             } else {
                 $("#booking-errors").html('<span style="color:red;">Cannot pickup from airports.</span>');
                 $("#source").val('');
+                sourceData = [];
                 setTimeout(function () {
                     $('#booking-errors').html('');
                 }, 2500);
@@ -393,7 +394,7 @@ $(document).ready(function () {
             var tempAddress = '';
 
             place.types.forEach(function (type) {
-                if (type === 'airport') {
+                if (type === 'airport' || place.name.toLowerCase().includes('airport')) {
                     isAirport = true;
                 }
             });
@@ -416,6 +417,7 @@ $(document).ready(function () {
             } else {
                 $("#booking-errors").html('<span style="color:red;">Cannot drop off to airports.</span>');
                 $("#destination").val('');
+                destinationData = []; 
                 setTimeout(function () {
                     $('#booking-errors').html('');
                 }, 2500);
