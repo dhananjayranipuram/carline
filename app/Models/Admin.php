@@ -288,6 +288,10 @@ class Admin extends Model
 
     }
 
+    public function deleteTypeData($data){
+        return DB::UPDATE("UPDATE car_type SET deleted='1' WHERE id='$data[id]';");
+    }
+
     public function saveSpecData($data){
         $res = DB::select("SELECT id FROM specification WHERE name LIKE '%$data[specName]%';");
         if(empty($res)){
