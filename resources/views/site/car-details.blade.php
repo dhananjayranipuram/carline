@@ -339,10 +339,18 @@ $(document).ready(function () {
             var lat = place.geometry.location.lat();
             var lng = place.geometry.location.lng();
 
+            var isAirport = false;
             var emiratesName = '';
 
             // Find the Emirates name from address components
             var tempAddress = '';
+
+            place.types.forEach(function (type) {
+                if (type === 'airport') {
+                    isAirport = true;
+                }
+            });
+
             place.address_components.forEach(function(component) {
                 if (component.types.includes('administrative_area_level_1')) {
                     emiratesName = component.long_name; // Get the Emirates name
@@ -350,13 +358,20 @@ $(document).ready(function () {
                 tempAddress += component.long_name+',';
             });
 
-            sourceData.push({
-                'Latitude': lat,
-                'Longitude': lng,
-                'Emirates': emiratesName,
-                'Address': tempAddress,
-            });
-            // console.log(sourceData)
+            if (!isAirport) {
+                sourceData.push({
+                    'Latitude': lat,
+                    'Longitude': lng,
+                    'Emirates': emiratesName,
+                    'Address': tempAddress,
+                });
+            } else {
+                $("#booking-errors").html('<span style="color:red;">Cannot pickup from airports.</span>');
+                $("#source").val('');
+                setTimeout(function () {
+                    $('#booking-errors').html('');
+                }, 2500);
+            }
         } else {
             console.log('No geometry data found for this place.');
         }
@@ -371,10 +386,18 @@ $(document).ready(function () {
             var lat = place.geometry.location.lat();
             var lng = place.geometry.location.lng();
 
+            var isAirport = false;
             var emiratesName = '';
 
             // Find the Emirates name from address components
             var tempAddress = '';
+
+            place.types.forEach(function (type) {
+                if (type === 'airport') {
+                    isAirport = true;
+                }
+            });
+
             place.address_components.forEach(function(component) {
                 if (component.types.includes('administrative_area_level_1')) {
                     emiratesName = component.long_name; // Get the Emirates name
@@ -382,13 +405,22 @@ $(document).ready(function () {
                 tempAddress += component.long_name+',';
             });
 
-            destinationData.push({
-                'Latitude': lat,
-                'Longitude': lng,
-                'Emirates': emiratesName,
-                'Address': tempAddress,
-            });
-            // console.log( destinationData);
+            if (!isAirport) {
+                destinationData.push({
+                    'Latitude': lat,
+                    'Longitude': lng,
+                    'Emirates': emiratesName,
+                    'Address': tempAddress,
+                });
+
+            } else {
+                $("#booking-errors").html('<span style="color:red;">Cannot drop off to airports.</span>');
+                $("#destination").val('');
+                setTimeout(function () {
+                    $('#booking-errors').html('');
+                }, 2500);
+            }
+            
         } else {
             console.log('No geometry data found for this place.');
         }

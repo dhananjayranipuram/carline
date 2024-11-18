@@ -21,6 +21,7 @@ class SiteController extends Controller
 {
     public function __construct()
     {
+        date_default_timezone_set('Asia/Calcutta');
         $site = new Site();
         $emirates = $site->getEmirates();
         $layoutCarTypes = $site->getCarType();
@@ -261,16 +262,17 @@ class SiteController extends Controller
             'type' => ['nullable'],
         ]);
 
-        $now = date('Y-m-d');
-        
-        if($credentials['pickupdate'] < $now){
+        $selectedTime = Carbon::parse("$credentials[pickupdate] $credentials[pickuptime]");
+
+        if ($selectedTime->isPast()) {
             $response['status'] = '400';
             $response['message'] = 'Booking not available';
             return response()->json($response);
         }
+        
         $res = $site->checkCarBooking($credentials);
         $carCount = $site->getCarQty($credentials);
-        // print_r($res);exit;
+
         if($res){
             $response['status'] = '400';
             $response['message'] = 'Booking not available';

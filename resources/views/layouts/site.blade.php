@@ -828,6 +828,7 @@ $(document).ready(function () {
                     setTimeout(function () {
                         $('#loginErrors').html('');
                         if(res.status == 200){
+                            $("#userId").val(res.userId);
                             if($('#pickupdate').length){
                                 checkDocumentUploaded();
                             }else{
@@ -926,6 +927,11 @@ function checkDocumentUploaded(){
                     if(!bookCarAction()){
                         // location.reload();
                     }
+                }else{
+                    $("#docErrorMessages").html('<span style="color:red;">Please fill up the booking details.<span>');
+                    setTimeout(function () {
+                        $("#docErrorMessages").html('');
+                    }, 5000);
                 }
             }
             $(".overlay").hide();
