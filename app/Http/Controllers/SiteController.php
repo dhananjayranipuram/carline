@@ -494,12 +494,12 @@ class SiteController extends Controller
     
         // Prepare result data
         $res['days'] = $days;
-        $res['vat'] = $vat;
-        $res['emirate'] = $emirateCharges;
-        $res['rate'] = $days * $rate;
-        $res['deposit'] = $deposit;
-        $res['babySeat'] = $babySeatCharges;
-        $res['total'] = $total + $vat;
+        $res['vat'] = number_format($vat, 2, '.', '');
+        $res['emirate'] = number_format($emirateCharges, 2, '.', '');
+        $res['rate'] = number_format($days * $rate, 2, '.', '');
+        $res['deposit'] = number_format($deposit, 2, '.', '');
+        $res['babySeat'] = number_format($babySeatCharges, 2, '.', '');
+        $res['total'] = number_format($total + $vat, 2, '.', '');
     
         return $res;
     }
