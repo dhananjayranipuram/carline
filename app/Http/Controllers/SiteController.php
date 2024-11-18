@@ -469,7 +469,7 @@ class SiteController extends Controller
     
         // Retrieve car details and calculate rate and deposit
         $credentials['format'] = 'normal';
-        $carRes = $site->getCars($credentials);
+        $carRes = $site->getCarsRate($credentials);
         
         if (!empty($carRes)) {
             // Apply offer price if available, otherwise use regular rent

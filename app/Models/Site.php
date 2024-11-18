@@ -83,6 +83,16 @@ class Site extends Model
         }
     }
 
+    public function getCarsRate($data=[]){
+        
+        return DB::select("SELECT c.id,c.name,c.model,cb.name brand_name,ct.name car_type,GROUP_CONCAT(ci.image) AS 'image',FORMAT(c.rent,0) rent,c.general_info_flag,c.rental_condition_flag,c.offer_flag,FORMAT(c.offer_price,0) offer_price,FORMAT(c.deposit,0) deposit FROM cars c
+                        LEFT JOIN car_brand cb ON cb.id=c.brand_id
+                        LEFT JOIN car_type ct ON ct.id=c.type_id
+                        LEFT JOIN car_images ci ON ci.car_id=c.id
+                        WHERE c.active=1 AND c.deleted=0 AND c.id = $data[carId] GROUP BY c.id;");
+            
+    }
+
     public function getCarFeatures($data=[]){
         return DB::select("SELECT f.feature FROM car_features cf
                             LEFT JOIN features f ON f.id=cf.feature_id
