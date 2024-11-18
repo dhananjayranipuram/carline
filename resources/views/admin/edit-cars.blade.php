@@ -133,7 +133,7 @@
                                         @enderror
                                     </div>
                                     <div class="form-group">
-                                        <input class="form-check-input offer-flag" type="checkbox" name="offerFlag" @if($cars[0]->offer_flag == 1) checked @endif>
+                                        <input class="form-check-input offer-flag" type="checkbox" name="offerFlag" id="offerFlag" @if($cars[0]->offer_flag == 1) checked @endif>
                                         <label class="form-check-label">Avail special offers</label>
                                     </div>
                                     <div class="col-12 col-md-12 special-offer" style="display: @if($cars[0]->offer_flag == 1) block; @else none; @endif;">
@@ -228,12 +228,18 @@
         </div>
     </div>
 </div>
-
+<script src="{{asset('admin_assets/js/core/jquery-3.7.1.min.js')}}"></script>
 <script>
-    $(document).ready(function() {
-        $('.offer-flag').on('change', function() {
-            $('.special-offer').toggle(this.checked);
-        });
+    document.addEventListener('DOMContentLoaded', function () {
+        const offerFlag = document.getElementById('offerFlag');
+        const specialOffer = document.querySelector('.special-offer');
+
+        function toggleSpecialOffer() {
+            specialOffer.style.display = offerFlag.checked ? 'block' : 'none';
+        }
+
+        offerFlag.addEventListener('change', toggleSpecialOffer);
+        toggleSpecialOffer();
     });
 </script>  
 
