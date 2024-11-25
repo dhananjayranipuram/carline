@@ -55,11 +55,13 @@ Route::middleware(['check.session', 'prevent.back.history'])->group(function () 
     Route::get('/admin/users', [AdminController::class, 'userList']);
     Route::get('/admin/view-user', [AdminController::class, 'viewUsers']);
     Route::any('/admin/bookings', [AdminController::class, 'bookingList']);
+    Route::any('/admin/booking-details', [AdminController::class, 'bookingDetails']);
 
     Route::get('/admin/cars', [AdminController::class, 'cars']);
     Route::any('/admin/add-car', [AdminController::class, 'addCar']);
     Route::any('/admin/edit-car', [AdminController::class, 'editCar']);
     Route::any('/admin/delete-car', [AdminController::class, 'deleteCar']);
+    Route::any('/admin/delete-car-image', [AdminController::class, 'deleteCarImage']);
 
     Route::get('/admin/add-specifications', [AdminController::class, 'addSpecifications']);
     Route::any('/admin/add-spec', [AdminController::class, 'addSpec']);

@@ -241,15 +241,15 @@
                                 <div class="help-block with-errors"></div>
                             </div>
                             <div class="booking-form-group col-md-6 mb-4">
-                                <input type="text" id="city" class="booking-form-control" placeholder="City" required>
+                                <input type="text" id="city" class="booking-form-control" placeholder="City/Emirates" required>
                                 <div class="help-block with-errors"></div>
                             </div>
 
                             <div class="booking-form-group col-md-6 mb-4">
-                                <select class="booking-form-control form-select" id="emirates" required>
-                                    <option value="" disabled selected>Emirates</option>
-                                    @foreach($emirates as $key => $value)
-                                        <option value="{{$value->id}}">{{$value->name}}</option>
+                                <select class="booking-form-control form-select" id="country" required>
+                                    <option value="" disabled selected>Country</option>
+                                    @foreach($country as $key => $value)
+                                        <option value="{{$key}}">{{$value}}</option>
                                     @endforeach
                                 </select>
                                 <div class="help-block with-errors"></div>
@@ -335,7 +335,7 @@
             <div class="booking-form-box">
                 <!-- Booking PopUp Form Start -->
                 <div id="bookingConfirm" class="white-popup-block mfp-hide booking-form">
-                    <div class="section-title">
+                    <div class="section-title" style="text-align: center;">
                         <h2>Booking Confirmation</h2>
                     </div>                                
                     <fieldset>
@@ -593,7 +593,7 @@ $(document).ready(function () {
             'building': $("#building").val(),
             'landmark': $("#landmark").val(),
             'city': $("#city").val(),
-            'emirates': $("#emirates").val(),
+            'country': $("#country").val(),
         };
         
         if(!validateForm(datas)){
@@ -678,7 +678,7 @@ $(document).ready(function () {
             'building': $("#building").val(),
             'landmark': $("#landmark").val(),
             'city': $("#city").val(),
-            'emirates': $("#emirates").val(),
+            'country': $("#country").val(),
         };
         datas.otp = otp;
         if(!validateForm(datas)){
@@ -745,7 +745,7 @@ $(document).ready(function () {
             'building': $("#building").val(),
             'landmark': $("#landmark").val(),
             'city': $("#city").val(),
-            'emirates': $("#emirates").val(),
+            'country': $("#country").val(),
         };
         
         if(!validateForm(datas)){
@@ -1018,6 +1018,12 @@ function validateForm(datas){
         $('#emirates').css('border-color', 'red');
     }else{
         $('#emirates').css('border-color', '');
+    }
+    if(datas.country == ''){
+        chk = 1;
+        $('#country').css('border-color', 'red');
+    }else{
+        $('#country').css('border-color', '');
     }
     return chk;
 }

@@ -170,6 +170,14 @@ class Admin extends Model
             'id' => $data['id']
         ]);
     }
+    
+    public function deleteCarImageData($data) {
+        return DB::DELETE("DELETE FROM car_images WHERE car_id = :id AND image = :carImage", [
+            
+            'id' => $data['carId'],
+            'carImage' => $data['image']
+        ]);
+    }
 
     public function getBrands($data=[]){
         $condition = '';
@@ -251,7 +259,7 @@ class Admin extends Model
     }
 
     public function saveBrandData($data){
-        $res = DB::select("SELECT id FROM car_brand WHERE name LIKE '%$data[brName]%';");
+        $res = DB::select("SELECT id FROM car_brand WHERE name LIKE '%$data[brName]%' AND deleted=0;");
         if(empty($res)){
             DB::INSERT("INSERT INTO car_brand (name,image,active) VALUES ('$data[brName]','$data[image]','$data[brActive]');");
             return DB::getPdo()->lastInsertId();
@@ -627,6 +635,36 @@ class Admin extends Model
             ])
             ->orderBy('b.created_on', 'desc')
             ->limit(5)  // Limit the results to 5 records
+            ->get();
+    }
+
+    public function getBookingDetails($data=[]){
+        return \DB::table('booking as b')
+            ->join('booking_details as bd', 'b.id', '=', 'bd.booking_id')
+            ->leftJoin('cars as c', 'c.id', '=', 'b.car_id')
+            ->leftJoin('car_brand as cb', 'cb.id', '=', 'c.brand_id')
+            ->leftJoin('car_images as ci', 'ci.car_id', '=', 'c.id')
+            ->leftJoin('enduser as eu', 'b.user_id', '=', 'eu.id')
+            ->where('b.id', $data['id'])
+            ->groupBy('b.id')
+            ->select([
+                'b.id',
+                \DB::raw("DATE_FORMAT(b.pickup_date, '%Y-%m-%d') as pickup_date"),
+                \DB::raw("DATE_FORMAT(b.return_date, '%Y-%m-%d') as return_date"),
+                \DB::raw("DATE_FORMAT(b.pickup_time, '%h:%i %p') as pickup_time"),
+                \DB::raw("DATE_FORMAT(b.return_time, '%h:%i %p') as return_time"),
+                'b.rate',
+                \DB::raw("LEFT(bd.s_address, LOCATE(',', bd.s_address) - 1) as source"),
+                'bd.s_address',
+                \DB::raw("LEFT(bd.d_address, LOCATE(',', bd.d_address) - 1) as destination"),
+                'bd.d_address',
+                \DB::raw("CONCAT(cb.name, ' ', c.name, ' ', c.model) as car_name"),
+                \DB::raw("CONCAT(eu.first_name, ' ', eu.last_name) as user_name"),
+                'bd.s_lat',
+                'bd.s_lon',
+                'bd.d_lat',
+                'bd.d_lon'
+            ])
             ->get();
     }
 }

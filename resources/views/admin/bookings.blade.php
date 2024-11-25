@@ -81,7 +81,7 @@
                                 <td>{{$value->rate}} AED</td>
                                 <td>
                                     <div class="form-button-action">
-                                        <a href="#" data-bs-toggle="tooltip" title="View Booking" class="btn btn-link btn-primary btn-lg edit-brand" data-original-title="View Booking">
+                                        <a href="{{url('/admin/booking-details')}}?id={{base64_encode($value->id)}}" data-bs-toggle="tooltip" title="View Booking" class="btn btn-link btn-primary btn-lg edit-brand" data-original-title="View Booking">
                                             <i class="far fa-eye"></i>
                                         </a>
                                     </div>

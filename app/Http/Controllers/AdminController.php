@@ -175,6 +175,16 @@ class AdminController extends Controller
         return view('admin/bookings',$data);
     }
 
+    public function bookingDetails(){
+        $admin = new Admin();
+        $queries = [];
+        parse_str($_SERVER['QUERY_STRING'], $queries);
+        $input['id'] = base64_decode($queries['id']);
+        $data['details'] = $admin->getBookingDetails($input);
+        return view('admin/booking-details',$data);
+        echo '<pre>';print_r($data);exit;
+    }
+
     public function cars(){
         $admin = new Admin();
         $data['cars'] = $admin->getCars();
@@ -336,7 +346,28 @@ class AdminController extends Controller
             $data = $admin->deleteCarData($filterData);
             if($data){
                 $res['status'] = 200;
-                $res['data'] = "Brand deleted.";
+                $res['data'] = "Car deleted.";
+            }
+            return json_encode($res);
+        }
+    }
+
+    public function deleteCarImage(Request $request){
+        $admin = new Admin();
+        $res = [];
+        if($request->method() == 'POST'){
+            $filterData = $request->validate([
+                'image' => ['required'],
+                'carId' => ['required'],
+            ]);
+            
+            $data = $admin->deleteCarImageData($filterData);
+            if($data){
+                if (File::exists($filterData['image'])) {
+                    File::delete($filterData['image']);
+                }
+                $res['status'] = 200;
+                $res['data'] = "Image deleted.";
             }
             return json_encode($res);
         }

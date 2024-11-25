@@ -119,7 +119,7 @@
             </div>
 
             <div class="col-lg-7">
-
+            
                 @foreach($bookingHistory as $key => $value)
                 <!-- Booking History Section Start -->
                 <div class="booking-history">
@@ -138,7 +138,7 @@
                             <!-- Pickup Details Column Start -->
                             <div class="col-md-3">
                                 <div class="booking-details">
-                                    <p><strong>Pickup Location:</strong> <span>{{$value->source}}</span></p>
+                                    <p><strong>Pickup Location:</strong> <span>{{$value->s_address}}</span></p>
                                     <p><strong>Pickup Date:</strong> <span>{{$value->pickup_date}}</span></p>
                                     <p><strong>Pickup Time:</strong> <span>{{$value->pickup_time}}</span></p>
                                 </div>
@@ -148,7 +148,7 @@
                             <!-- Dropoff Details Column Start -->
                             <div class="col-md-3">
                                 <div class="booking-details">
-                                    <p><strong>Dropoff Location:</strong> <span>{{$value->destination}}</span></p>
+                                    <p><strong>Dropoff Location:</strong> <span>{{$value->d_address}}</span></p>
                                     <p><strong>Dropoff Date:</strong> <span>{{$value->return_date}}</span></p>
                                     <p><strong>Dropoff Time:</strong> <span>{{$value->return_time}}</span></p>
                                 </div>

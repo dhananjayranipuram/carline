@@ -1,7 +1,29 @@
 @extends('layouts.admin')
 
 @section('content')
+<style>
+.delete-icon {
+    position: absolute;
+    top: 15px;
+    right: 40px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
 
+.imagecheck-figure:hover .delete-icon {
+    opacity: 1;
+}
+</style>
 <div class="row">
     <div class="col-md-12">
         <div class="card">
@@ -104,10 +126,10 @@
                                         <div class="col-12 col-md-12">
                                             @php $imgArr = explode(',', $cars[0]->image); @endphp
                                             @foreach($imgArr as $img)
-                                                <label class="imagecheck mb-4" style="width:25%;">
-                                                    <span class="imagecheck-input">X</span>
+                                                <label class="imagecheck mb-4 image-outer" style="width:25%;">
                                                     <figure class="imagecheck-figure">
                                                         <img src="{{ asset($img) }}" alt="Car Image" class="imagecheck-image">
+                                                        <a class="delete-icon delete-car-image" data-id="{{$img}}" data-car-id="{{ $cars[0]->id }}"><i class="far fa-trash-alt"></i></a>
                                                     </figure>
                                                 </label>
                                             @endforeach
@@ -241,6 +263,30 @@
         offerFlag.addEventListener('change', toggleSpecialOffer);
         toggleSpecialOffer();
     });
+
+$(".delete-car-image").click(function () {
+    
+    var image = $(this).attr("data-id");
+    var carId = $(this).attr("data-car-id");
+    
+        $.ajax({
+            url: baseUrl + '/admin/delete-car-image',
+            type: 'post',
+            data: {
+                'carId' : carId,
+                'image' : image,
+            },
+            dataType: "json",
+            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+            success: function(res) {
+                // if(res.status==200){
+                    // $(this).closest('.image-outer').hide();
+                // }
+                location.reload();
+            }
+        });
+    
+});
 </script>  
 
 @endsection

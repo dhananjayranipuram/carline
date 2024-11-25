@@ -704,10 +704,18 @@ function bookCarActionFinal(){
                         type: 'inline'
                     }
                 });
-                var str = '<span style="color:green;">Car Booked. Booking ID:'+res.bookingId+'</span>'
-                $("#booking-details").html(str);
+                // var str = '<span style="color:green;">Car Booked.<br> Booking ID:'+res.bookingId+'</span>';
+
+                var babySeat = (res.bookingData["babySeat"]=='on')?'Included':'Not Included';
+                $("#booking-details").append('<span style="color:green;">Car Booked.<br> Booking ID:'+res.bookingId+'</span>');
+                $("#booking-details").append('<span style="color:green;"><br> Booking ID:'+res.bookingId+'</span>');
+                $("#booking-details").append('<span style="color:green;"><br> Pickup Date : '+res.bookingData["pickupdate"]+'</span>');
+                $("#booking-details").append('<span style="color:green;"><br> Dropoff Date : '+res.bookingData["returndate"]+'</span>');
+                $("#booking-details").append('<span style="color:green;"><br> Pickup Time : '+res.bookingData["pickuptime"]+'</span>');
+                $("#booking-details").append('<span style="color:green;"><br> Dropoff Time : '+res.bookingData["returntime"]+'</span>');
+                $("#booking-details").append('<span style="color:green;"><br> Baby Seat : '+ babySeat +'</span>');
                 setTimeout(function () {
-                    // location.reload();
+                    location.reload();
                 }, 2500);
             }else{
                 var str = '<span style="color:red;">'+res.message+'</span>'

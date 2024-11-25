@@ -168,7 +168,7 @@ class Site extends Model
     public function registerUserData($data){
         $res = DB::select("SELECT id FROM enduser WHERE email='$data[email]';");
         if(!isset($res[0])){
-            DB::INSERT("INSERT INTO enduser (first_name,last_name,email,password,phone,flat,building,landmark,city,emirates) VALUES ('$data[firstName]','$data[lastName]','$data[email]','$data[password]','$data[phone]','$data[flat]','$data[building]','$data[landmark]','$data[city]','$data[emirates]');");
+            DB::INSERT("INSERT INTO enduser (first_name,last_name,email,password,phone,flat,building,landmark,city,country) VALUES ('$data[firstName]','$data[lastName]','$data[email]','$data[password]','$data[phone]','$data[flat]','$data[building]','$data[landmark]','$data[city]','$data[country]');");
             return DB::getPdo()->lastInsertId();
         }else{
             return $res[0]->id;
@@ -220,7 +220,7 @@ class Site extends Model
     }
 
     public function getMyDetails($data=[]){
-        return DB::select("SELECT id,first_name,last_name,email,phone,flat,building,landmark,city,emirates FROM enduser WHERE id='$data[id]' AND active=1;");
+        return DB::select("SELECT id,first_name,last_name,email,phone,flat,building,landmark,city,emirates,country FROM enduser WHERE id='$data[id]' AND active=1;");
     }
 
     public function getDocumentUpload($data=[]){
@@ -284,9 +284,12 @@ class Site extends Model
                 \DB::raw("LEFT(bd.d_address, LOCATE(',', bd.d_address) - 1) as destination"),
                 'bd.d_address',
                 \DB::raw("CONCAT(cb.name, ' ', c.name, ' ', c.model) as car_name"),
-                \DB::raw("LEFT(GROUP_CONCAT(ci.image), LOCATE(',', GROUP_CONCAT(ci.image)) - 1) as image")
+                'ci.image AS image'
+                // \DB::raw("LEFT(GROUP_CONCAT(ci.image), LOCATE(',', GROUP_CONCAT(ci.image)) - 1) as image")
             ])->get();
     }
+
+    
 
     public function updateUserData($data = [])
     {
@@ -301,7 +304,7 @@ class Site extends Model
                     'building' => $data['building'],
                     'landmark' => $data['landmark'],
                     'city' => $data['city'],
-                    'emirates' => $data['emirates'],
+                    'country' => $data['country'],
                 ]);
     }
 

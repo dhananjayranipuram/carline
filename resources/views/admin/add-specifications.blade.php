@@ -74,7 +74,7 @@
 
                                                 <div class="col-sm-12">
                                                     <div class="form-group form-group-default">
-                                                        <label>Image</label>
+                                                        <label>Icon Image</label>
                                                         <input name="image" type="file" class="form-control" accept="image/*" />
                                                     </div>
                                                 </div>
@@ -127,7 +127,7 @@
                                                 </div>
                                                 <div class="col-sm-12">
                                                     <div class="form-group form-group-default">
-                                                        <label>Image</label>
+                                                        <label>Icon Image</label>
                                                         <input name="image" type="file" class="form-control" accept="image/*" />
                                                     </div>
                                                 </div>
