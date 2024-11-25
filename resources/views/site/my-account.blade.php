@@ -136,7 +136,7 @@
                             <!-- Car Image Column End -->
             
                             <!-- Pickup Details Column Start -->
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <div class="booking-details">
                                     <p><strong>Pickup Location:</strong> <span>{{$value->s_address}}</span></p>
                                     <p><strong>Pickup Date:</strong> <span>{{$value->pickup_date}}</span></p>
@@ -146,7 +146,7 @@
                             <!-- Pickup Details Column End -->
             
                             <!-- Dropoff Details Column Start -->
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <div class="booking-details">
                                     <p><strong>Dropoff Location:</strong> <span>{{$value->d_address}}</span></p>
                                     <p><strong>Dropoff Date:</strong> <span>{{$value->return_date}}</span></p>
@@ -156,12 +156,12 @@
                             <!-- Dropoff Details Column End -->
             
                             <!-- Buttons Column Start -->
-                            <div class="col-md-2 text-right">
-                                <div class="booking-actions">
+                            <!-- <div class="col-md-2 text-right"> -->
+                                <!-- <div class="booking-actions"> -->
                                     <!-- <button class="btn btn-edit">Edit</button> -->
                                     <!-- <button class="btn btn-view">View</button> -->
-                                </div>
-                            </div>
+                                <!-- </div> -->
+                            <!-- </div> -->
                             <!-- Buttons Column End -->
                         </div>
                     </div>
