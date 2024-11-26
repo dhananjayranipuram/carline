@@ -284,7 +284,7 @@ class AdminController extends Controller
             ],[
                 'carImages.*.max' => 'Each image must not exceed 2 MB in size.',
             ]);
-
+            
             // Handle checkbox inputs
             $filterData['general_info'] = !empty($filterData['general_info']) ? 1 : 0;
             $filterData['rental_condition'] = !empty($filterData['rental_condition']) ? 1 : 0;
@@ -297,6 +297,12 @@ class AdminController extends Controller
                     if (!$file->isValid()) {
                         return back()->withErrors(["error" => "Upload error: " . $file->getErrorMessage()]);
                     }
+
+                    list($width, $height) = getimagesize($file);
+                    if ($width < 800 || $height < 600) {
+                        return back()->withErrors(['carImages' => 'Image dimensions must be at least 800x600 pixels.']);
+                    }
+
                     $fileName = 'storage/' . $file->store('uploads/cars', 'public');
                     $uploadedImages[] = $fileName;
                 }
@@ -379,6 +385,12 @@ class AdminController extends Controller
             if (!empty($filterData['carImages'])) {
                 $temp = [];
                 foreach ($filterData['carImages'] as $file) {
+
+                    list($width, $height) = getimagesize($file);
+                    if ($width < 800 || $height < 600) {
+                        return back()->withErrors(['carImages' => 'Image dimensions must be at least 800x600 pixels.']);
+                    }
+                    
                     $fileName = 'storage/' . $file->store('uploads/cars', 'public');
                     $temp[] = $fileName;
                 }
