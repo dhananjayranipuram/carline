@@ -274,29 +274,28 @@
         toggleSpecialOffer();
     });
 
-$(".delete-car-image").click(function () {
-    
-    var image = $(this).attr("data-id");
-    var carId = $(this).attr("data-car-id");
-    
-        $.ajax({
-            url: baseUrl + '/admin/delete-car-image',
-            type: 'post',
-            data: {
-                'carId' : carId,
-                'image' : image,
-            },
-            dataType: "json",
-            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-            success: function(res) {
-                // if(res.status==200){
-                    // $(this).closest('.image-outer').hide();
-                // }
-                location.reload();
-            }
-        });
-    
-});
+    $(".delete-car-image").click(function () {
+        
+        var image = $(this).attr("data-id");
+        var carId = $(this).attr("data-car-id");
+        var obj = $(this);
+            $.ajax({
+                url: baseUrl + '/admin/delete-car-image',
+                type: 'post',
+                data: {
+                    'carId' : carId,
+                    'image' : image,
+                },
+                dataType: "json",
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                success: function(res) {
+                    if(res){
+                        obj.closest('.image-outer').hide();
+                    }
+                }
+            });
+        
+    });
 </script>  
 
 @endsection

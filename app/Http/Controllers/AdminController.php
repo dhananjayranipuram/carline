@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Admin;
 use App\Exports\UserExport;
 use App\Exports\BookingsExport;
+use Illuminate\Support\Facades\Route;
 use Maatwebsite\Excel\Facades\Excel;
 use Session;
 use Redirect;
@@ -16,6 +17,14 @@ use URL;
 
 class AdminController extends Controller
 {
+
+    public function __construct(Request $request)
+    {
+        $route = Route::current()->getActionName();
+        if($route != 'App\Http\Controllers\AdminController@editCar' || $route != 'App\Http\Controllers\AdminController@deleteCarImage'){
+            Session::forget('deleteCarImageData');
+        }
+    }
     public function login(Request $request){
         $admin = new Admin();
         if($request->method() == 'POST'){
@@ -331,6 +340,22 @@ class AdminController extends Controller
             $filterData['rental_condition'] = isset($filterData['rental_condition']) ? 1 : 0;
             $filterData['offerFlag'] = isset($filterData['offerFlag']) ? 1 : 0;
 
+            if(Session::get('deleteCarImageData')){
+                $CarImageData = Session::get('deleteCarImageData');
+                // echo '<pre>';print_r($CarImageData);exit;
+                foreach ($CarImageData as $carKey => $carValue) {
+                    $img = $admin->deleteCarImageData($carValue);
+                    if($img){
+                        if (File::exists($carValue['image'])) {
+                            File::delete($carValue['image']);
+                        }
+                    }
+                }
+                Session::forget('deleteCarImageData');
+            }
+
+            
+
             // Handle image uploads
             if (!empty($filterData['carImages'])) {
                 $temp = [];
@@ -402,16 +427,12 @@ class AdminController extends Controller
                 'image' => ['required'],
                 'carId' => ['required'],
             ]);
+
+            $carImageData = Session::get('deleteCarImageData', []);
+            $carImageData[] = $filterData;
+            Session::put('deleteCarImageData', $carImageData);
             
-            $data = $admin->deleteCarImageData($filterData);
-            if($data){
-                if (File::exists($filterData['image'])) {
-                    File::delete($filterData['image']);
-                }
-                $res['status'] = 200;
-                $res['data'] = "Image deleted.";
-            }
-            return json_encode($res);
+            return json_encode(1);
         }
     }
 
