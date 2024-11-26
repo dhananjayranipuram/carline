@@ -26,64 +26,75 @@
         <div class="row">
             <div class="col-lg-6">
 
-                <div class="card">
-                    <div class="card-body">
-                    <h5 class="card-title">Booking Details</h5>
-                        <div class="row g-3">
-                            <div class="col-md-12">
-                                <p>
-                                    <strong>Car Name</strong><br>
-                                    <span>{{$details[0]->car_name}}</span>
-                                </p>
-                            </div>
+                
 
-                            <div class="col-md-6">
-                                <p>
-                                    <strong>Pickup Location</strong><br>
-                                    <span>{{$details[0]->source}}</span><br>
-                                    <span>{{$details[0]->s_address}}</span>
-                                </p>
-                            </div>
-                            <div class="col-md-6">
-                                <p>
-                                    <strong>Drop Off Location</strong><br>
-                                    <span>{{$details[0]->destination}}</span><br>
-                                    <span>{{$details[0]->d_address}}</span>
-                                </p>
-                            </div>
-
-                            <div class="col-md-6">
-                                <p>
-                                    <strong>Pickup Date</strong><br>
-                                    <span>{{$details[0]->pickup_date}}</span>
-                                </p>
-                            </div>
-                            <div class="col-md-6">
-                                <p>
-                                    <strong>Drop Off Date</strong><br>
-                                    <span>{{$details[0]->return_date}}</span>
-                                </p>
-                            </div>
-
-                            <div class="col-md-6">
-                                <p>
-                                    <strong>Pickup Time</strong><br>
-                                    <span>{{$details[0]->pickup_time}}</span>
-                                </p>
-                            </div>
-                            <div class="col-md-6">
-                                <p>
-                                    <strong>Drop Off Time</strong><br>
-                                    <span>{{$details[0]->return_time}}</span>
-                                </p>
+                <div class="card card-round">
+                    <div class="card-header">
+                        <div class="card-head-row card-tools-still-right">
+                            <div class="card-title">Booking Statistics</div>
+                                <div class="card-tools">
+                                    <a href="{{url('/admin/bookings')}}" class="btn btn-primary">
+                                        <i class="icon-action-undo"></i>
+                                        Back
+                                    </a>
+                                </div>
                             </div>
                         </div>
-                        
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-12">
+                                    <p>
+                                        <strong>Car Name</strong><br>
+                                        <span>{{$details[0]->car_name}}</span>
+                                    </p>
+                                </div>
 
+                                <div class="col-md-6">
+                                    <p>
+                                        <strong>Pickup Location</strong><br>
+                                        <span>{{$details[0]->source}}</span><br>
+                                        <span>{{$details[0]->s_address}}</span>
+                                    </p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>
+                                        <strong>Drop Off Location</strong><br>
+                                        <span>{{$details[0]->destination}}</span><br>
+                                        <span>{{$details[0]->d_address}}</span>
+                                    </p>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <p>
+                                        <strong>Pickup Date</strong><br>
+                                        <span>{{$details[0]->pickup_date}}</span>
+                                    </p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>
+                                        <strong>Drop Off Date</strong><br>
+                                        <span>{{$details[0]->return_date}}</span>
+                                    </p>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <p>
+                                        <strong>Pickup Time</strong><br>
+                                        <span>{{$details[0]->pickup_time}}</span>
+                                    </p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>
+                                        <strong>Drop Off Time</strong><br>
+                                        <span>{{$details[0]->return_time}}</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-            </div>
+        
 
             <div class="col-lg-6">
 

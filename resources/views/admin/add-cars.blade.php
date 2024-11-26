@@ -128,6 +128,15 @@
                             </div>
                             <div class="card">
                                 <div class="card-header">
+                                    <h4 class="card-title">Kilometers Driven</h4>
+                                </div>
+                                <div class="card-body">
+                                    <input type="text" name="kmeter" placeholder="Enter Kilometer" class="form-control" value="{{old('kmeter')}}">
+                                    @error('kmeter') <span class="text-danger">{{ $message }}</span> @enderror
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-header">
                                     <h4 class="card-title">Others</h4>
                                 </div>
                                 <div class="card-body">

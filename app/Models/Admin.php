@@ -19,7 +19,7 @@ class Admin extends Model
         if(!empty($data['id'])){
             $condition .= " AND c.id = $data[id]";
         }
-        return DB::select("SELECT c.id,c.name,c.model,cb.id brand_id,cb.name brand_name,ct.id type_id,ct.name car_type,GROUP_CONCAT(ci.image) AS 'image',c.rent,c.general_info_flag,c.rental_condition_flag,c.offer_flag,c.offer_price,c.deposit,c.qty FROM cars c
+        return DB::select("SELECT c.id,c.name,c.model,cb.id brand_id,cb.name brand_name,ct.id type_id,ct.name car_type,GROUP_CONCAT(ci.image) AS 'image',c.rent,c.general_info_flag,c.rental_condition_flag,c.offer_flag,c.offer_price,c.deposit,c.qty,c.kmeter FROM cars c
                             LEFT JOIN car_brand cb ON cb.id=c.brand_id
                             LEFT JOIN car_type ct ON ct.id=c.type_id
                             LEFT JOIN car_images ci ON ci.car_id=c.id
@@ -72,7 +72,7 @@ class Admin extends Model
         try {
             // Insert into cars table
             DB::insert(
-                "INSERT INTO cars (name, model, brand_id, type_id, general_info_flag, rental_condition_flag, rent, deposit, offer_flag, offer_price,qty) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                "INSERT INTO cars (name, model, brand_id, type_id, general_info_flag, rental_condition_flag, rent, deposit, offer_flag, offer_price,qty,kmeter) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 [
                     $data['name'],
                     $data['model'],
@@ -85,6 +85,7 @@ class Admin extends Model
                     $data['offerFlag'],
                     $data['specialOffer'] ?? null,
                     $data['qty'],
+                    $data['kmeter'],
                 ]
             );
 
@@ -131,7 +132,7 @@ class Admin extends Model
         DB::beginTransaction();
         try {
             $carId = $data['carId'];
-            DB::UPDATE("UPDATE cars SET name='$data[name]',model='$data[model]',brand_id='$data[brand]',type_id='$data[cartype]',general_info_flag='$data[general_info]',rental_condition_flag='$data[rental_condition]',rent='$data[rent]',offer_price='$data[specialOffer]',offer_flag='$data[offerFlag]',deposit='$data[deposit]',qty='$data[qty]' WHERE id=$carId;");
+            DB::UPDATE("UPDATE cars SET name='$data[name]',model='$data[model]',brand_id='$data[brand]',type_id='$data[cartype]',general_info_flag='$data[general_info]',rental_condition_flag='$data[rental_condition]',rent='$data[rent]',offer_price='$data[specialOffer]',offer_flag='$data[offerFlag]',deposit='$data[deposit]',qty='$data[qty]',kmeter='$data[kmeter]' WHERE id=$carId;");
 
             //Update Car Specifications
             DB::DELETE("DELETE FROM car_specification WHERE car_id='$carId';");
@@ -636,6 +637,23 @@ class Admin extends Model
             ->orderBy('b.created_on', 'desc')
             ->limit(5)  // Limit the results to 5 records
             ->get();
+    }
+
+    public function carWiseBooking($data=[]){
+        $query = "SELECT 
+                CONCAT(cb.name,' ',c.name,' ',c.model) AS label,
+                SUM(b.rate) AS booking_total
+            FROM booking b
+            LEFT JOIN cars c ON b.car_id=c.id
+            LEFT JOIN car_brand cb ON cb.id=c.brand_id
+            WHERE (
+                (b.pickup_date BETWEEN '$data[from]' AND '$data[to]')
+                OR (b.return_date BETWEEN '$data[from]' AND '$data[to]')
+                OR (b.pickup_date <= '$data[from]' AND return_date >= '$data[to]')
+            )
+            GROUP BY b.car_id;";
+
+        return DB::select($query);
     }
 
     public function getBookingDetails($data=[]){

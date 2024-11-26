@@ -220,7 +220,10 @@ class Site extends Model
     }
 
     public function getMyDetails($data=[]){
-        return DB::select("SELECT id,first_name,last_name,email,phone,flat,building,landmark,city,emirates,country FROM enduser WHERE id='$data[id]' AND active=1;");
+        return DB::select("SELECT eu.id,eu.first_name,eu.last_name,eu.email,eu.phone,eu.flat,eu.building,eu.landmark,eu.city,e.name emirates,eu.country 
+            FROM enduser eu
+            LEFT JOIN emirates e ON eu.emirates=e.id
+            WHERE eu.id='$data[id]' AND eu.active=1;");
     }
 
     public function getDocumentUpload($data=[]){

@@ -37,50 +37,7 @@
                     <div id="myChartLegend"></div>
                 </div>
             </div>
-        </div>
-        <div class="col-md-4">
-            
-            <div class="card card-stats card-round">
-                <div class="card-body">
-                    <div class="row align-items-center">
-                        <div class="col-icon">
-                            <div class="icon-big text-center icon-success bubble-shadow-small" >
-                                <i class="fas fa-luggage-cart"></i>
-                            </div>
-                        </div>
-                        <div class="col col-stats ms-3 ms-sm-0">
-                            <div class="numbers">
-                                <p class="card-category">Sales</p>
-                                <h4 class="card-title">AED 1,345</h4>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="card card-stats card-round">
-                <div class="card-body">
-                    <div class="row align-items-center">
-                        <div class="col-icon">
-                            <div class="icon-big text-center icon-primary bubble-shadow-small" >
-                                <i class="fas fa-users"></i>
-                            </div>
-                        </div>
-                        <div class="col col-stats ms-3 ms-sm-0">
-                            <div class="numbers">
-                                <p class="card-category">Customers</p>
-                                <h4 class="card-title">1,294</h4>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            
-        </div>
-    </div>
-    
-    <div class="row">
-        <div class="col-md-8">
             <div class="card card-round">
                 <div class="card-header">
                     <div class="card-head-row card-tools-still-right">
@@ -131,16 +88,128 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-4">
+            
+            <div class="card card-stats card-round">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-icon">
+                            <div class="icon-big text-center icon-success bubble-shadow-small" >
+                                <i class="fas fa-luggage-cart"></i>
+                            </div>
+                        </div>
+                        <div class="col col-stats ms-3 ms-sm-0">
+                            <div class="numbers">
+                                <p class="card-category">Sales</p>
+                                <h4 class="card-title">AED 1,345</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card card-stats card-round">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-icon">
+                            <div class="icon-big text-center icon-primary bubble-shadow-small" >
+                                <i class="fas fa-users"></i>
+                            </div>
+                        </div>
+                        <div class="col col-stats ms-3 ms-sm-0">
+                            <div class="numbers">
+                                <p class="card-category">Customers</p>
+                                <h4 class="card-title">1,294</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card card-round">
+                <div class="card-header">
+                    <div class="card-head-row card-tools-still-right">
+                        <div class="card-title">Car Wise Bookings</div>
+                            <div class="card-tools">
+                                <div class="dropdown">
+                                    <button class="btn btn-icon btn-clean me-0" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-ellipsis-h"></i>
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item carwise-booking" data-value="today">Today</a>
+                                        <a class="dropdown-item carwise-booking" data-value="yesterday">Yesterday</a>
+                                        <a class="dropdown-item carwise-booking" data-value="thismonth">This month</a>
+                                        <a class="dropdown-item carwise-booking" data-value="thisyear">This year</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas
+                            id="pieChart"
+                            style="width: 50%; height: 50%"
+                            ></canvas>
+                        </div>
+                    </div>
+            </div>
+
+            
+        </div>
     </div>
+    
 </div>
 <script src="{{asset('admin_assets/js/core/jquery-3.7.1.min.js')}}"></script>
 <script src="{{asset('admin_assets/js/plugin/chart.js/chart.min.js')}}"></script>
 <script>
 
 var ctx = document.getElementById('statisticsChart').getContext('2d');
+var pieChart = document.getElementById("pieChart").getContext("2d");
 var statisticsChart = null;
-var booking_stat = @php {{ echo json_encode($booking_stat);}} @endphp
+var myPieChart = null;
+var booking_stat = @php {{ echo json_encode($booking_stat);}} @endphp;
+var carwise_bookings = @php {{ echo json_encode($carwise_bookings);}} @endphp;
 
+
+myPieChart = new Chart(pieChart, {
+    type: "pie",
+    data: {
+        datasets: [
+            {
+                data: carwise_bookings.data,
+                backgroundColor: carwise_bookings.color,
+                borderWidth: 0,
+            },
+        ],
+        labels: carwise_bookings.label,
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        legend: {
+        position: "bottom",
+            labels: {
+                fontColor: "rgb(154, 154, 154)",
+                fontSize: 11,
+                usePointStyle: true,
+                padding: 20,
+            },
+        },
+        pieceLabel: {
+            render: "percentage",
+            fontColor: "white",
+            fontSize: 14,
+        },
+        tooltips: false,
+        layout: {
+            padding: {
+                left: 20,
+                right: 20,
+                top: 20,
+                bottom: 20,
+            },
+        },
+    },
+});
 statisticsChart = new Chart(ctx, {
 	type: 'line',
 	data: {
@@ -301,6 +370,65 @@ $(document).ready(function () {
                             }  
                         }
                     });                   
+                }
+                $(".overlay").hide();
+            }
+        });
+    });
+
+    $(document).on("click", ".carwise-booking" , function(e) { 
+        $(".overlay").show();
+        var dayValue = $(this).attr('data-value');
+        $.ajax({
+            url: baseUrl + '/admin/get-dashboard-booking-data',
+            type: 'post',
+            data: {'period':$(this).attr('data-value'),'card':'carwise-booking'},
+            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+            success: function( html ) {
+                if(html){
+                    if (myPieChart) {
+                        myPieChart.destroy();
+                    }
+                    myPieChart = new Chart(pieChart, {
+                        type: "pie",
+                        data: {
+                            datasets: [
+                                {
+                                    data: html.data,
+                                    backgroundColor: html.color,
+                                    borderWidth: 0,
+                                },
+                            ],
+                            labels: html.label,
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            legend: {
+                            position: "bottom",
+                                labels: {
+                                    fontColor: "rgb(154, 154, 154)",
+                                    fontSize: 11,
+                                    usePointStyle: true,
+                                    padding: 20,
+                                },
+                            },
+                            pieceLabel: {
+                                render: "percentage",
+                                fontColor: "white",
+                                fontSize: 14,
+                            },
+                            tooltips: false,
+                            layout: {
+                                padding: {
+                                    left: 20,
+                                    right: 20,
+                                    top: 20,
+                                    bottom: 20,
+                                },
+                            },
+                        },
+                    });              
                 }
                 $(".overlay").hide();
             }

@@ -57,6 +57,25 @@ class AdminController extends Controller
         $response['booking_stat'] = $temp;
 
         $response['latest_bookings'] = $admin->getLatestBooking($input);
+
+        $data = $admin->carWiseBooking($input);
+
+        $temp = [];
+        foreach ($data as $key => $value) {
+            if (!isset($temp['label'])) {
+                $temp['label'] = [];
+            }
+            if (!isset($temp['data'])) {
+                $temp['data'] = [];
+            }
+            if (!isset($temp['color'])) {
+                $temp['color'] = [];
+            }
+            array_push($temp['label'],$value->label);
+            array_push($temp['data'],$value->booking_total);
+            array_push($temp['color'], $this->random_color());
+        }
+        $response['carwise_bookings'] = $temp;
         return view('admin/dashboard',$response);
     }
 
@@ -104,6 +123,23 @@ class AdminController extends Controller
                     }
                     array_push($response['label'],$value->label);
                     array_push($response['data'],$value->booking_count);
+                }
+                break;
+            case 'carwise-booking':
+                $data = $admin->carWiseBooking($filterData);
+                foreach ($data as $key => $value) {
+                    if (!isset($response['label'])) {
+                        $response['label'] = [];
+                    }
+                    if (!isset($response['data'])) {
+                        $response['data'] = [];
+                    }
+                    if (!isset($response['color'])) {
+                        $response['color'] = [];
+                    }
+                    array_push($response['label'],$value->label);
+                    array_push($response['data'],$value->booking_total);
+                    array_push($response['color'], $this->random_color());
                 }
                 break;
             /*case 'customer-count':
@@ -157,16 +193,20 @@ class AdminController extends Controller
                 'to' => [''],
             ]);
         }else{
-            date_default_timezone_set('Asia/Calcutta');
-            $filterData = [
-                'brand' => '',
-                'type' => '',
-                'from' => date('Y-m-d', time()),
-                'to' => date('Y-m-d', time()),
-            ];
+            if(Session::get('bookingFilter')){
+                $filterData = Session::get('bookingFilter');
+            }else{
+                date_default_timezone_set('Asia/Calcutta');
+                $filterData = [
+                    'brand' => '',
+                    'type' => '',
+                    'from' => date('Y-m-d', time()),
+                    'to' => date('Y-m-d', time()),
+                ];
+            }
+            
         }
         Session::put('bookingFilter', $filterData);
-        // echo '<pre>';print_r($filterData);exit;
 
         $data['brands'] = $admin->getBrands();
         $data['type'] = $admin->getCarType();
@@ -217,6 +257,7 @@ class AdminController extends Controller
                 'offerFlag' => ['nullable'],
                 'deposit' => ['required'],
                 'qty' => ['required','numeric'],
+                'kmeter' => ['required','numeric'],
             ]);
 
             // Handle checkbox inputs
@@ -282,6 +323,7 @@ class AdminController extends Controller
                 'specialOffer' => ['nullable'],
                 'offerFlag' => ['nullable'],
                 'qty' => ['required','numeric'],
+                'kmeter' => ['required','numeric'],
             ]);
 
             // Set flags for general info and rental conditions
@@ -1023,4 +1065,12 @@ class AdminController extends Controller
         return Redirect::to('/admin/login');
     }
     /**Policies and agreements of car End */
+
+    function random_color_part() {
+        return str_pad( dechex( mt_rand( 0, 255 ) ), 2, '0', STR_PAD_LEFT);
+    }
+    
+    function random_color() {
+        return '#' . $this->random_color_part() . $this->random_color_part() . $this->random_color_part();
+    }
 }

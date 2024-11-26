@@ -105,8 +105,8 @@
 $(function() {
     
     // var start = moment().subtract(29, 'days');
-    var fromDate = "{{old('from')}}";
-    var toDate = "{{old('to')}}";
+    var fromDate = "{{ old('from') ?? session('bookingFilter.from') ?? '' }}";
+    var toDate = "{{ old('to') ?? session('bookingFilter.to') ?? '' }}";
 
     if(fromDate === '' ){
       var start = moment();

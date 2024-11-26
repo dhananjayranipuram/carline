@@ -428,6 +428,8 @@ class SiteController extends Controller
         $credentials = $request->validate([
             'destinationEmirate' => [''],
             'sourceEmirates' => ['required'],
+            'destinationData' => [''],
+            'sourceData' => [''],
             'pickupdate' => ['required'],
             'returndate' => ['required'],
             'pickuptime' => ['required'],
@@ -505,6 +507,14 @@ class SiteController extends Controller
                         $timeSlots = $this->generateTimeslot('','');
                         return response()->json($timeSlots);
                     }
+                }else if($credentials['pickupdate']){
+                    $time = strtotime(date('h:i a', time()));
+                    $round = 30*60;
+                    $rounded = round($time / $round) * $round;
+                    $date = date("H:i", $rounded);
+                    
+                    $timeSlots = $this->generateStartTimeslot($date,'');
+                    return response()->json($timeSlots);
                 }
                 $res = $site->getTimeAvailable($credentials);
                 $pickupTime = null;
@@ -530,10 +540,30 @@ class SiteController extends Controller
     }
 
     public function generateTimeslot($pickupTime,$dropoffTime){
+        
         $timeSlots = [];
         $startTime = $dropoffTime ? strtotime($dropoffTime) : strtotime("12:00 AM");
         $endTime = $pickupTime ? strtotime($pickupTime) : strtotime("11:59 PM");
 
+        if ($startTime > $endTime) {
+            return response()->json(['error' => 'Invalid time range'], 400);
+        }
+
+        $slotDuration = 30; // Slot duration in minutes
+
+        while ($startTime <= $endTime) {
+            $timeSlots[] = date("g:i A", $startTime);
+            $startTime = strtotime("+$slotDuration minutes", $startTime);
+        }
+        return $timeSlots;
+    }
+
+    public function generateStartTimeslot($pickupTime,$dropoffTime){
+        echo $pickupTime;
+        $timeSlots = [];
+        $startTime = $pickupTime ? strtotime($pickupTime) : strtotime("12:00 AM");
+        $endTime = $dropoffTime ? strtotime($dropoffTime) : strtotime("11:59 PM");
+        $startTime += 120*60;
         if ($startTime > $endTime) {
             return response()->json(['error' => 'Invalid time range'], 400);
         }
@@ -643,6 +673,7 @@ class SiteController extends Controller
     }
 
     public function calculateRate($credentials) {
+
         $site = new Site();
         $res = [];
         $deposit = $rate = $emirateCharges = $babySeatCharges = $total = 0;
@@ -673,7 +704,10 @@ class SiteController extends Controller
         }
         
         // Additional charge if pickup and destination emirates differ
-        if ($credentials['destinationEmirate'] != $credentials['sourceEmirates']) {
+        // if($credentials['destinationData'][0]['placeName'] == '')
+        if($credentials['sourceData'][0]['placeName'] == 'CAR LINE RENT A CAR' || $credentials['destinationData'][0]['placeName'] == 'CAR LINE RENT A CAR'){
+            $emirateCharges = 0;
+        }else if ($credentials['destinationEmirate'] != $credentials['sourceEmirates']) {
             $resEmirate = $site->getEmiratesForRate($credentials);
             
             $emirateCharges = !empty($resEmirate) ? (float) str_replace(',', '', $resEmirate[0]->rate) : 0;

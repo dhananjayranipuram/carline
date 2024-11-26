@@ -360,6 +360,7 @@ $(document).ready(function () {
 
             if (!isAirport) {
                 sourceData.push({
+                    'placeName': place.name,
                     'Latitude': lat,
                     'Longitude': lng,
                     'Emirates': emiratesName,
@@ -408,6 +409,7 @@ $(document).ready(function () {
 
             if (!isAirport) {
                 destinationData.push({
+                    'placeName': place.name,
                     'Latitude': lat,
                     'Longitude': lng,
                     'Emirates': emiratesName,
@@ -576,7 +578,9 @@ $("#pickupdate, #returndate, #destination, #source, #returntime, #pickuptime, #b
                 type: 'post',
                 data: { 
                     'destinationEmirate': destinationData[0].Emirates, 
+                    'destinationData': destinationData, 
                     'sourceEmirates': sourceData[0].Emirates, 
+                    'sourceData': sourceData, 
                     'pickupdate': $("#pickupdate").val(),
                     'returndate': $("#returndate").val(),
                     'pickuptime': $("#pickuptime").val(),

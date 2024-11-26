@@ -191,6 +191,16 @@
                                     @error('qty') <span class="text-danger">{{ $message }}</span> @enderror
                                 </div>
                             </div>
+
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">Kilometers Driven</h4>
+                                </div>
+                                <div class="card-body">
+                                    <input type="text" name="kmeter" placeholder="Enter Kilometer" class="form-control" value="{{ $cars[0]->kmeter }}">
+                                    @error('kmeter') <span class="text-danger">{{ $message }}</span> @enderror
+                                </div>
+                            </div>
                         </div>
 
                         <div class="col-md-6">
