@@ -174,8 +174,22 @@ class AdminController extends Controller
     public function userList(){
         $admin = new Admin();
         $data['users'] = $admin->getUserList();
-        // echo '<pre>';print_r($data);exit;
         return view('admin/users',$data);
+    }
+
+    public function deleteUsers(Request $request)
+    {
+        $admin = new Admin();
+        
+        $filterData = $request->validate([
+            'id' => [''],
+        ]);
+        $data = $admin->deleteUserData($filterData);
+        if($data){
+            $res['status'] = 200;
+            $res['data'] = "User deleted.";
+        }
+        return json_encode($res);
     }
 
     public function viewUsers(Request $request)
@@ -260,13 +274,15 @@ class AdminController extends Controller
                 'rent' => ['required'],
                 'general_info' => ['nullable'],
                 'rental_condition' => ['nullable', ],
-                'carImages' => ['required'],
-                'carImages.*' => ['image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
+                'carImages' => ['required', 'array'],
+                'carImages.*' => ['required', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
                 'specialOffer' => ['nullable'],
                 'offerFlag' => ['nullable'],
                 'deposit' => ['required'],
                 'qty' => ['required','numeric'],
                 'kmeter' => ['required','numeric'],
+            ],[
+                'carImages.*.max' => 'Each image must not exceed 2 MB in size.',
             ]);
 
             // Handle checkbox inputs
@@ -278,6 +294,9 @@ class AdminController extends Controller
             $uploadedImages = [];
             if ($request->hasFile('carImages')) {
                 foreach ($request->file('carImages') as $file) {
+                    if (!$file->isValid()) {
+                        return back()->withErrors(["error" => "Upload error: " . $file->getErrorMessage()]);
+                    }
                     $fileName = 'storage/' . $file->store('uploads/cars', 'public');
                     $uploadedImages[] = $fileName;
                 }

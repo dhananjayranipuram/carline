@@ -45,10 +45,10 @@
                                 <td>{{$value->emirates}}</td>
                                 <td>
                                     <div class="form-button-action">
-                                        <a href="{{url('/admin/view-user')}}?id={{base64_encode($value->id)}}" data-bs-toggle="tooltip" title="Edit User" class="btn btn-link btn-primary btn-lg edit-brand" data-original-title="Edit User">
-                                            <i class="fa fa-edit"></i>
+                                        <a href="{{url('/admin/view-user')}}?id={{base64_encode($value->id)}}" data-bs-toggle="tooltip" title="View User" class="btn btn-link btn-primary btn-lg edit-brand" data-original-title="View User">
+                                            <i class="far fa-eye"></i>
                                         </a>
-                                        <button type="button" data-bs-toggle="tooltip" title="Delete User" class="btn btn-link btn-danger delete-car" data-original-title="Remove" data-id="{{$value->id}}">
+                                        <button type="button" data-bs-toggle="tooltip" title="Delete User" class="btn btn-link btn-danger delete-user" data-original-title="Remove" data-id="{{$value->id}}">
                                             <i class="fa fa-times"></i>
                                         </button>
                                     </div>
@@ -68,9 +68,27 @@
 <script src="{{asset('admin_assets/js/core/jquery-3.7.1.min.js')}}"></script>
 <script>
 $(document).ready(function () {
-$("#multi-filter-select").DataTable({
+    $("#multi-filter-select").DataTable({
         pageLength: 10,
         
+    });
+
+    $(".delete-user").click(function () {
+        var id = $(this).attr("data-id");
+        if(confirm("Do you want to delete this user?")){
+            $.ajax({
+                url: baseUrl + '/admin/delete-user',
+                type: 'post',
+                data: {
+                    'id' : id,
+                },
+                dataType: "json",
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                success: function(res) {
+                    location.reload();
+                }
+            });
+        }
     });
 });
 

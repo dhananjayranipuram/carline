@@ -469,11 +469,19 @@ class Admin extends Model
         return \DB::table('enduser as u')
             ->leftJoin('emirates as e', 'e.id', '=', 'u.emirates')
             ->where('u.active', 1)
+            ->where('u.deleted', 0)
             ->select('u.id','u.first_name', 'u.last_name', 'u.email', 'u.phone', 'e.name AS emirates')->get();
     }
 
+    public function deleteUserData($data){
+        return DB::UPDATE("UPDATE enduser SET deleted='1' WHERE id='$data[id]';");
+    }
+
     public function getUsersDetails($data=[]){
-        return DB::select("SELECT id,first_name,last_name,email,phone,flat,building,landmark,city,emirates FROM enduser WHERE id='$data[id]' AND active=1;");
+        return DB::select("SELECT u.id,u.first_name,u.last_name,u.email,u.phone,u.flat,u.building,u.landmark,u.city,u.emirates,u.country,d.pass_front,d.pass_back,d.dl_front,d.dl_back,d.eid_front,d.eid_back
+            FROM enduser u
+            LEFT JOIN user_documents d ON d.user_id=u.id
+            WHERE u.id='$data[id]' AND u.active=1;");
     }
 
     public function getChartData($data=[]){
