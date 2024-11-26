@@ -54,7 +54,7 @@ class Site extends Model
                     $condition .= " AND CONCAT(c.name,cb.name) LIKE '%$data[searchText]%' ";
                 }
                 
-                return DB::select("SELECT c.id,c.name,c.model,cb.name brand_name,ct.name car_type,GROUP_CONCAT(ci.image) AS 'image',FORMAT(c.rent,0) rent,c.general_info_flag,c.rental_condition_flag,c.offer_flag,FORMAT(c.offer_price,0) offer_price,FORMAT(c.deposit,0) deposit FROM cars c
+                return DB::select("SELECT c.id,c.name,c.model,cb.name brand_name,ct.name car_type,GROUP_CONCAT(ci.image) AS 'image',FORMAT(c.rent,0) rent,c.general_info_flag,c.rental_condition_flag,c.offer_flag,FORMAT(c.offer_price,0) offer_price,FORMAT(c.deposit,0) deposit,c.kmeter FROM cars c
                     LEFT JOIN car_brand cb ON cb.id=c.brand_id
                     LEFT JOIN car_type ct ON ct.id=c.type_id
                     LEFT JOIN car_images ci ON ci.car_id=c.id
@@ -63,7 +63,7 @@ class Site extends Model
                     WHERE c.active=1 AND c.deleted=0 $condition GROUP BY c.id;");
                 break;
             case 'offer':
-                return DB::select("SELECT c.id,c.name,c.model,cb.name brand_name,ct.name car_type,GROUP_CONCAT(ci.image) AS 'image',FORMAT(c.rent,0) rent,c.general_info_flag,c.rental_condition_flag,c.offer_flag,FORMAT(c.offer_price,0) offer_price,FORMAT(c.deposit,0) deposit FROM cars c
+                return DB::select("SELECT c.id,c.name,c.model,cb.name brand_name,ct.name car_type,GROUP_CONCAT(ci.image) AS 'image',FORMAT(c.rent,0) rent,c.general_info_flag,c.rental_condition_flag,c.offer_flag,FORMAT(c.offer_price,0) offer_price,FORMAT(c.deposit,0) deposit,c.kmeter FROM cars c
                     LEFT JOIN car_brand cb ON cb.id=c.brand_id
                     LEFT JOIN car_type ct ON ct.id=c.type_id
                     LEFT JOIN car_images ci ON ci.car_id=c.id
@@ -74,7 +74,7 @@ class Site extends Model
                 if(!empty($data['id'])){
                     $condition .= " AND c.id = $data[id]";
                 }
-                return DB::select("SELECT c.id,c.name,c.model,cb.name brand_name,ct.name car_type,GROUP_CONCAT(ci.image) AS 'image',FORMAT(c.rent,0) rent,c.general_info_flag,c.rental_condition_flag,c.offer_flag,FORMAT(c.offer_price,0) offer_price,FORMAT(c.deposit,0) deposit FROM cars c
+                return DB::select("SELECT c.id,c.name,c.model,cb.name brand_name,ct.name car_type,GROUP_CONCAT(ci.image) AS 'image',FORMAT(c.rent,0) rent,c.general_info_flag,c.rental_condition_flag,c.offer_flag,FORMAT(c.offer_price,0) offer_price,FORMAT(c.deposit,0) deposit,c.kmeter FROM cars c
                                 LEFT JOIN car_brand cb ON cb.id=c.brand_id
                                 LEFT JOIN car_type ct ON ct.id=c.type_id
                                 LEFT JOIN car_images ci ON ci.car_id=c.id
@@ -121,20 +121,24 @@ class Site extends Model
                 //                     LEFT JOIN car_type ct ON ct.id=c.type_id
                 //                     WHERE s.deleted=0 $condition;");
                 $condition = '';
+                $union = '';
                 if(!empty($data['id'])){
                     $condition .= " AND cs.car_id = $data[id]";
+                    $union = "SELECT id,'Kilometers Driven' AS 'name',kmeter AS details,'assets/images/icon-fleets-benefits-1.svg' image FROM cars WHERE id=$data[id] UNION ";
                 }
-                return DB::select("SELECT cs.car_id,s.name,cs.details,s.image FROM car_specification cs
+                return DB::select("$union SELECT cs.car_id,s.name,cs.details,s.image FROM car_specification cs
                                     LEFT JOIN specification s ON cs.spec_id = s.id
                                     WHERE s.deleted=0 $condition;");
                 break;
             
             default:
                 $condition = '';
+                $union = '';
                 if(!empty($data['id'])){
                     $condition .= " AND cs.car_id = $data[id]";
+                    $union = "SELECT id,'Kilometers Driven' AS 'name',kmeter AS details,'assets/images/icon-fleets-benefits-1.svg' image FROM cars WHERE id=$data[id] UNION ";
                 }
-                return DB::select("SELECT cs.car_id,s.name,cs.details,s.image FROM car_specification cs
+                return DB::select("$union SELECT cs.car_id,s.name,cs.details,s.image FROM car_specification cs
                                     LEFT JOIN specification s ON cs.spec_id = s.id
                                     WHERE s.deleted=0 $condition;");
                 break;
