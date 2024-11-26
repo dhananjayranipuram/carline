@@ -92,13 +92,51 @@
 
                 <div class="card">
                     <div class="card-body">
-                    <h5 class="card-title">Map</h5>
+                    <h5 class="card-title">Documents</h5>
 
                     <!-- Vertical Form -->
                     <div class="row g-3">
-                        <div class="col-12">
-                            <div id="map"></div>
-                        </div>
+                        @if(!empty($user[0]->pass_front))
+                            <div class="col-6">
+                                <strong>Passport Front</strong><br>
+                                <img src="{{asset($user[0]->pass_front)}}" alt="" style="width:100%;">
+                            </div>
+                        @endif
+
+                        @if(!empty($user[0]->pass_back))
+                            <div class="col-6">
+                                <strong>Passport Back</strong><br>
+                                <img src="{{asset($user[0]->pass_back)}}" alt="" style="width:100%;">
+                            </div>
+                        @endif
+
+                        @if(!empty($user[0]->dl_front))
+                            <div class="col-6">
+                                <strong>Driving Licence Front</strong><br>
+                                <img src="{{asset($user[0]->dl_front)}}" alt="" style="width:100%;">
+                            </div>
+                        @endif
+
+                        @if(!empty($user[0]->dl_back))
+                            <div class="col-6">
+                                <strong>Driving Licence Back</strong><br>
+                                <img src="{{asset($user[0]->dl_back)}}" alt="Image not found" style="width:100%;">
+                            </div>
+                        @endif
+
+                        @if(!empty($user[0]->eid_front))
+                            <div class="col-6">
+                                <strong>EID Front</strong><br>
+                                <img src="{{asset($user[0]->eid_front)}}" alt="" style="width:100%;">
+                            </div>
+                        @endif
+
+                        @if(!empty($user[0]->eid_back))
+                            <div class="col-6">
+                                <strong>EID Back</strong><br>
+                                <img src="{{asset($user[0]->eid_back)}}" alt="" style="width:100%;">
+                            </div>
+                        @endif
                     </div><!-- Vertical Form -->
 
                     </div>
