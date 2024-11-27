@@ -364,7 +364,7 @@ $(document).ready(function () {
                     'Latitude': lat,
                     'Longitude': lng,
                     'Emirates': emiratesName,
-                    'Address': tempAddress,
+                    'Address': place.name + tempAddress,
                 });
             } else {
                 $("#booking-errors").html('<span style="color:red;">Cannot pickup from airports.</span>');
@@ -413,7 +413,7 @@ $(document).ready(function () {
                     'Latitude': lat,
                     'Longitude': lng,
                     'Emirates': emiratesName,
-                    'Address': tempAddress,
+                    'Address': place.name + tempAddress,
                 });
 
             } else {

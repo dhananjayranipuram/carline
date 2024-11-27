@@ -611,6 +611,140 @@ class Admin extends Model
                                 HOUR(created_on) AS label,
                                 COUNT(*) AS booking_count
                             FROM booking
+                            WHERE car_id = 4 AND (
+                                (pickup_date BETWEEN '$data[from]' AND '$data[to]')
+                                OR (return_date BETWEEN '$data[from]' AND '$data[to]')
+                                OR (pickup_date <= '$data[from]' AND return_date >= '$data[to]')
+                            )
+                            
+                            GROUP BY label
+                        ) b ON d.label = b.label
+                        ORDER BY d.label;";
+                break;
+        }
+
+        return DB::select($query);
+    }
+
+    public function getChartData2($data=[]){
+        $query = '';
+        switch ($data['period']) {
+
+            case 'thismonth':
+                $query = "SELECT 
+                            d.label AS label,
+                            COALESCE(b.booking_count, 0) AS booking_count
+                        FROM 
+                            (
+                                SELECT 1 AS label UNION ALL
+                                SELECT 2 UNION ALL
+                                SELECT 3 UNION ALL
+                                SELECT 4 UNION ALL
+                                SELECT 5 UNION ALL
+                                SELECT 6 UNION ALL
+                                SELECT 7 UNION ALL
+                                SELECT 8 UNION ALL
+                                SELECT 9 UNION ALL
+                                SELECT 10 UNION ALL
+                                SELECT 11 UNION ALL
+                                SELECT 12 UNION ALL
+                                SELECT 13 UNION ALL
+                                SELECT 14 UNION ALL
+                                SELECT 15 UNION ALL
+                                SELECT 16 UNION ALL
+                                SELECT 17 UNION ALL
+                                SELECT 18 UNION ALL
+                                SELECT 19 UNION ALL
+                                SELECT 20 UNION ALL
+                                SELECT 21 UNION ALL
+                                SELECT 22 UNION ALL
+                                SELECT 23 UNION ALL
+                                SELECT 24 UNION ALL
+                                SELECT 25 UNION ALL
+                                SELECT 26 UNION ALL
+                                SELECT 27 UNION ALL
+                                SELECT 28 UNION ALL
+                                SELECT 29 UNION ALL
+                                SELECT 30 UNION ALL
+                                SELECT 31
+                            ) d
+                        LEFT JOIN (
+                            SELECT 
+                                DAY(created_on) AS label,
+                                COUNT(*) AS booking_count
+                            FROM booking
+                            WHERE created_on BETWEEN '$data[from]' AND '$data[to]'
+                            GROUP BY DAY(created_on)
+                        ) b ON d.label = b.label
+                        WHERE d.label <= DAY(LAST_DAY('$data[from]'))
+                        ORDER BY d.label;";
+                break;
+            case 'thisyear':
+                $query = "SELECT 
+                        DATE_FORMAT(STR_TO_DATE(CONCAT(m.label, ' 1, 2024'), '%m %d, %Y'), '%b') AS label,
+                        COALESCE(b.booking_count, 0) AS booking_count
+                    FROM 
+                        (
+                            SELECT 1 AS label UNION ALL
+                            SELECT 2 UNION ALL
+                            SELECT 3 UNION ALL
+                            SELECT 4 UNION ALL
+                            SELECT 5 UNION ALL
+                            SELECT 6 UNION ALL
+                            SELECT 7 UNION ALL
+                            SELECT 8 UNION ALL
+                            SELECT 9 UNION ALL
+                            SELECT 10 UNION ALL
+                            SELECT 11 UNION ALL
+                            SELECT 12
+                        ) m
+                    LEFT JOIN (
+                        SELECT 
+                            MONTH(created_on) AS label,
+                            COUNT(*) AS booking_count
+                        FROM booking
+                        WHERE created_on BETWEEN '$data[from]' AND '$data[to]'
+                        GROUP BY MONTH(created_on)
+                    ) b ON m.label = b.label
+                    ORDER BY m.label;";
+                break;
+            default:
+            /**Today and yesterday*/
+            $query = "SELECT 
+                            d.label AS label,
+                            COALESCE(b.booking_count, 0) AS booking_count
+                        FROM 
+                            (
+                                SELECT 1 AS label UNION ALL
+                                SELECT 2 UNION ALL
+                                SELECT 3 UNION ALL
+                                SELECT 4 UNION ALL
+                                SELECT 5 UNION ALL
+                                SELECT 6 UNION ALL
+                                SELECT 7 UNION ALL
+                                SELECT 8 UNION ALL
+                                SELECT 9 UNION ALL
+                                SELECT 10 UNION ALL
+                                SELECT 11 UNION ALL
+                                SELECT 12 UNION ALL
+                                SELECT 13 UNION ALL
+                                SELECT 14 UNION ALL
+                                SELECT 15 UNION ALL
+                                SELECT 16 UNION ALL
+                                SELECT 17 UNION ALL
+                                SELECT 18 UNION ALL
+                                SELECT 19 UNION ALL
+                                SELECT 20 UNION ALL
+                                SELECT 21 UNION ALL
+                                SELECT 22 UNION ALL
+                                SELECT 23 UNION ALL
+                                SELECT 24
+                            ) d
+                        LEFT JOIN (
+                            SELECT 
+                                HOUR(created_on) AS label,
+                                COUNT(*) AS booking_count
+                            FROM booking
                             WHERE car_id = 4 AND created_on BETWEEN '$data[from]' AND '$data[from]'
                             
                             GROUP BY label
@@ -660,6 +794,28 @@ class Admin extends Model
                 OR (b.pickup_date <= '$data[from]' AND return_date >= '$data[to]')
             )
             GROUP BY b.car_id;";
+
+        return DB::select($query);
+    }
+
+    public function getSales($data=[]){
+        $query = "SELECT
+                SUM(b.rate) AS booking_total
+            FROM booking b
+            WHERE (
+                (b.pickup_date BETWEEN '$data[from]' AND '$data[to]')
+                OR (b.return_date BETWEEN '$data[from]' AND '$data[to]')
+                OR (b.pickup_date <= '$data[from]' AND return_date >= '$data[to]')
+            );";
+
+        return DB::select($query);
+    }
+
+    public function getCustomers($data=[]){
+        $query = "SELECT
+                COUNT(id) AS cnt
+            FROM enduser
+            WHERE created_on BETWEEN '$data[from]' AND '$data[to]';";
 
         return DB::select($query);
     }

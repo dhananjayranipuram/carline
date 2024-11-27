@@ -51,40 +51,20 @@ class AdminController extends Controller
         $input = ['from' => date('Y-m-d'),'to' => date('Y-m-d'),'period'=>'today']; //Today's data
 
         $data = $admin->getChartData($input);
-        $temp = [];
-        foreach ($data as $key => $value) {
-            if (!isset($temp['label'])) {
-                $temp['label'] = [];
-            }
-            
-            if (!isset($temp['data'])) {
-                $temp['data'] = [];
-            }
-            array_push($temp['label'],$value->label);
-            array_push($temp['data'],$value->booking_count);
-        }
-        $response['booking_stat'] = $temp;
+        $response['booking_stat'] = $this->generateChartData($data);
+
+        $data = $admin->getChartData2($input);
+        $response['booking_stat2'] = $this->generateChartData($data);
 
         $response['latest_bookings'] = $admin->getLatestBooking($input);
 
         $data = $admin->carWiseBooking($input);
+        $response['carwise_bookings'] = $this->generateCarWiseBookingData($data);
 
-        $temp = [];
-        foreach ($data as $key => $value) {
-            if (!isset($temp['label'])) {
-                $temp['label'] = [];
-            }
-            if (!isset($temp['data'])) {
-                $temp['data'] = [];
-            }
-            if (!isset($temp['color'])) {
-                $temp['color'] = [];
-            }
-            array_push($temp['label'],$value->label);
-            array_push($temp['data'],$value->booking_total);
-            array_push($temp['color'], $this->random_color());
-        }
-        $response['carwise_bookings'] = $temp;
+        $response['sales'] = $admin->getSales($input);
+
+        $response['customers'] = $admin->getCustomers($input);
+// echo '<pre>';print_r($response);exit;
         return view('admin/dashboard',$response);
     }
 
@@ -95,6 +75,7 @@ class AdminController extends Controller
             'period' => ['required'],
             'card' => ['required']
         ]);
+
         switch ($filterData['period']) {
             case 'today':
                 $filterData['from'] = date('Y-m-d');
@@ -117,50 +98,26 @@ class AdminController extends Controller
                 $filterData['to'] = date('Y-m-d');
                 break;
         }
-        // print_r($filterData);exit;
+        
         switch ($filterData['card']) {
             case 'booking-stat':
                 $data = $admin->getChartData($filterData);
-                // print_r($data);exit;
-                foreach ($data as $key => $value) {
-                    if (!isset($response['label'])) {
-                        $response['label'] = [];
-                    }
-                    
-                    if (!isset($response['data'])) {
-                        $response['data'] = [];
-                    }
-                    array_push($response['label'],$value->label);
-                    array_push($response['data'],$value->booking_count);
-                }
+                $response['data'] = $this->generateChartData($data);
+
+                $data = $admin->getChartData2($filterData);
+                $response['data2'] = $this->generateChartData($data);
                 break;
             case 'carwise-booking':
                 $data = $admin->carWiseBooking($filterData);
-                foreach ($data as $key => $value) {
-                    if (!isset($response['label'])) {
-                        $response['label'] = [];
-                    }
-                    if (!isset($response['data'])) {
-                        $response['data'] = [];
-                    }
-                    if (!isset($response['color'])) {
-                        $response['color'] = [];
-                    }
-                    array_push($response['label'],$value->label);
-                    array_push($response['data'],$value->booking_total);
-                    array_push($response['color'], $this->random_color());
-                }
+                $response = $this->generateCarWiseBookingData($data);
                 break;
-            /*case 'customer-count':
-                $customerRes = $admin->getCustomerData($input);
-                $data['customer'] = (object)['today_cnt'=>$customerRes[0]->cnt,'increase'=>$this->increasePercentage($customerRes[1]->cnt,$customerRes[0]->cnt)];
+            case 'customer-count':
+                $response = $admin->getCustomers($filterData);
                 break;
-            case 'pie-chart':
-                $data['doc_appt'] = $admin->getDocWiseAppointmentData($input);
+            case 'sales-count':
+                $response = $admin->getSales($filterData);
                 break;
-            case 'recent-appt':
-                $data['list'] = $admin->getLatestAppointmentData($input);
-                break;*/
+            
             default:
                 # code...
                 break;
@@ -1124,5 +1081,40 @@ class AdminController extends Controller
     
     function random_color() {
         return '#' . $this->random_color_part() . $this->random_color_part() . $this->random_color_part();
+    }
+
+    public function generateChartData($data){
+        $temp = [];
+        foreach ($data as $key => $value) {
+            if (!isset($temp['label'])) {
+                $temp['label'] = [];
+            }
+            
+            if (!isset($temp['data'])) {
+                $temp['data'] = [];
+            }
+            array_push($temp['label'],$value->label);
+            array_push($temp['data'],$value->booking_count);
+        }
+        return $temp;
+    }
+
+    public function generateCarWiseBookingData($data){
+        $temp = [];
+        foreach ($data as $key => $value) {
+            if (!isset($temp['label'])) {
+                $temp['label'] = [];
+            }
+            if (!isset($temp['data'])) {
+                $temp['data'] = [];
+            }
+            if (!isset($temp['color'])) {
+                $temp['color'] = [];
+            }
+            array_push($temp['label'],$value->label);
+            array_push($temp['data'],$value->booking_total);
+            array_push($temp['color'], $this->random_color());
+        }
+        return $temp;
     }
 }
