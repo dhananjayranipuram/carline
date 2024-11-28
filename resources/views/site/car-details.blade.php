@@ -364,7 +364,7 @@ $(document).ready(function () {
                     'Latitude': lat,
                     'Longitude': lng,
                     'Emirates': emiratesName,
-                    'Address': place.name + tempAddress,
+                    'Address': place.name + ',' + tempAddress,
                 });
             } else {
                 $("#booking-errors").html('<span style="color:red;">Cannot pickup from airports.</span>');
@@ -413,7 +413,7 @@ $(document).ready(function () {
                     'Latitude': lat,
                     'Longitude': lng,
                     'Emirates': emiratesName,
-                    'Address': place.name + tempAddress,
+                    'Address': place.name + ',' + tempAddress,
                 });
 
             } else {
@@ -578,9 +578,9 @@ $("#pickupdate, #returndate, #destination, #source, #returntime, #pickuptime, #b
                 type: 'post',
                 data: { 
                     'destinationEmirate': destinationData[0].Emirates, 
-                    'destinationData': destinationData, 
+                    'destinationData': destinationData[0], 
                     'sourceEmirates': sourceData[0].Emirates, 
-                    'sourceData': sourceData, 
+                    'sourceData': sourceData[0], 
                     'pickupdate': $("#pickupdate").val(),
                     'returndate': $("#returndate").val(),
                     'pickuptime': $("#pickuptime").val(),
@@ -720,7 +720,7 @@ function bookCarActionFinal(){
                 $("#booking-details").append('<span style="color:green;"><br> Baby Seat : '+ babySeat +'</span>');
                 setTimeout(function () {
                     location.reload();
-                }, 2500);
+                }, 10000);
             }else{
                 var str = '<span style="color:red;">'+res.message+'</span>'
                 $("#booking-errors").html(str);

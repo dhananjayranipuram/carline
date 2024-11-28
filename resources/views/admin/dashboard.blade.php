@@ -95,7 +95,7 @@
                     <tbody>
                         @foreach($latest_bookings as $key => $value)
                             <tr>
-                            <th scope="row">{{$value->car_name}}</th>
+                            <th scope="row"><a href="{{url('/admin/edit-car')}}?id={{base64_encode($value->carId)}}">{{$value->car_name}}</a></th>
                             <td>{{$value->source}}</td>
                             <td>{{$value->destination}}</td>
                             <td>AED {{$value->rate}}</td>

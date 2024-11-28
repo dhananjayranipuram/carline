@@ -59,6 +59,15 @@
                     <div class="help-block with-errors"></div>
                 </div>
 
+                <div class="booking-form-group col-md-6 mb-4">
+                    <select class="booking-form-control form-select" id="countryEdit" required>
+                        <option value="" disabled selected>Country</option>
+                        @foreach($country as $key => $value)
+                            <option value="{{$key}}">{{$value}}</option>
+                        @endforeach
+                    </select>
+                    <div class="help-block with-errors"></div>
+                </div>
                 <div class="row">
                     <div class="col-md-12 mb-12 pb-2" id="errorMessages">
 
@@ -96,7 +105,7 @@
                         <!-- Team member Body Start -->
                         <div class="team-member-body wow fadeInUp" data-wow-delay="0.5s">
                             <ul>
-                                <li><span>Phone: </span>(+01) {{$userAccount[0]->phone}}</li>
+                                <li><span>Phone: </span>(+971) {{$userAccount[0]->phone}}</li>
                                 <li><span>Email: </span>{{$userAccount[0]->email}}</li>
                                 <li><span>Address: </span>{{$userAccount[0]->flat}}, {{$userAccount[0]->building}}, {{$userAccount[0]->landmark}}, {{$userAccount[0]->city}}, {{$userAccount[0]->emirates}}</li>
                             </ul>
@@ -208,7 +217,12 @@ function getUserData(){
                 $("#landmarkEdit").val(res[0].landmark);
                 $("#cityEdit").val(res[0].city);
                 $('#emiratesEdit option').each(function() {
-                    if($(this).val()==res[0].emirates){
+                    if($(this).val()==res[0].emirateid){
+                        $(this).attr('selected','selected');
+                    }
+                });
+                $('#countryEdit option').each(function() {
+                    if($(this).val()==res[0].country){
                         $(this).attr('selected','selected');
                     }
                 });
@@ -232,6 +246,7 @@ function updateUser(){
         'landmark': $("#landmarkEdit").val(),
         'city': $("#cityEdit").val(),
         'emirates': $("#emiratesEdit").val(),
+        'country': $("#countryEdit").val(),
     };
     
     if(!validateForm(datas)){

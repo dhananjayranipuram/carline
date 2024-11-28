@@ -27,6 +27,7 @@ class SiteController extends Controller
         $layoutCarTypes = $site->getCarType();
         // Share 'emirates' with all views
         $country = [
+            "AE" => "United Arab Emirates",
             "AF" => "Afghanistan",
             "AL" => "Albania",
             "DZ" => "Algeria",
@@ -207,7 +208,6 @@ class SiteController extends Controller
             "TV" => "Tuvalu",
             "UG" => "Uganda",
             "UA" => "Ukraine",
-            "AE" => "United Arab Emirates",
             "GB" => "United Kingdom",
             "US" => "United States",
             "UY" => "Uruguay",
@@ -507,14 +507,16 @@ class SiteController extends Controller
                         $timeSlots = $this->generateTimeslot('','');
                         return response()->json($timeSlots);
                     }
-                }else if($credentials['pickupdate']){
-                    $time = strtotime(date('h:i a', time()));
-                    $round = 30*60;
-                    $rounded = round($time / $round) * $round;
-                    $date = date("H:i", $rounded);
-                    
-                    $timeSlots = $this->generateStartTimeslot($date,'');
-                    return response()->json($timeSlots);
+                }else if($credentials['pickupdate'] ){
+                    if($credentials['pickupdate'] == date('Y-m-d')){
+                        $time = strtotime(date('h:i a', time()));
+                        $round = 30*60;
+                        $rounded = round($time / $round) * $round;
+                        $date = date("H:i", $rounded);
+                        
+                        $timeSlots = $this->generateStartTimeslot($date,'');
+                        return response()->json($timeSlots);
+                    }
                 }
                 $res = $site->getTimeAvailable($credentials);
                 $pickupTime = null;
@@ -559,11 +561,13 @@ class SiteController extends Controller
     }
 
     public function generateStartTimeslot($pickupTime,$dropoffTime){
-        echo $pickupTime;
+        // echo $pickupTime;
         $timeSlots = [];
         $startTime = $pickupTime ? strtotime($pickupTime) : strtotime("12:00 AM");
+        
         $endTime = $dropoffTime ? strtotime($dropoffTime) : strtotime("11:59 PM");
         $startTime += 120*60;
+
         if ($startTime > $endTime) {
             return response()->json(['error' => 'Invalid time range'], 400);
         }
@@ -705,7 +709,7 @@ class SiteController extends Controller
         
         // Additional charge if pickup and destination emirates differ
         // if($credentials['destinationData'][0]['placeName'] == '')
-        if($credentials['sourceData'][0]['placeName'] == 'CAR LINE RENT A CAR' || $credentials['destinationData'][0]['placeName'] == 'CAR LINE RENT A CAR'){
+        if($credentials['sourceData']['placeName'] == 'CAR LINE RENT A CAR' || $credentials['destinationData']['placeName'] == 'CAR LINE RENT A CAR'){
             $emirateCharges = 0;
         }else if ($credentials['destinationEmirate'] != $credentials['sourceEmirates']) {
             $resEmirate = $site->getEmiratesForRate($credentials);
@@ -823,7 +827,10 @@ class SiteController extends Controller
         $input['id'] = Session::get('userId');
         $data['userAccount'] = $site->getMyDetails($input);
         $data['bookingHistory'] = $site->getBookingHistory($input);
-        // echo '<pre>';print_r($data);exit;
+        if(empty($data['userAccount'])){
+            Session::flush();
+            return Redirect::to('/home');
+        }
         return view('site/my-account',$data);
     }
     
@@ -848,6 +855,7 @@ class SiteController extends Controller
             'landmark' => ['required'],
             'city' => ['required'],
             'emirates' => ['required'],
+            'country' => ['required'],
         ]);
 
         $credentials['id'] = Session::get('userId');

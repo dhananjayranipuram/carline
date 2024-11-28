@@ -698,11 +698,11 @@ $(document).ready(function () {
                     if(res.status == 200){
                         $("#otp-section").hide();
                         $(".send-otp-button").hide();
-                        $('#errorMessages').append('<br><span style="color:red;">Please fill valid data.</span>');
+                        // $('#errorMessages').append('<br><span style="color:green;">OTP Verified succesfully.</span>');
                         setTimeout(function () {
-                            $('#errorMessages').html('');
+                            // $('#errorMessages').html('');
                             createUser();
-                        }, 6000);
+                        }, 5000);
                         
                     }else{
                         inputs.forEach((input) => {
@@ -823,9 +823,9 @@ $(document).ready(function () {
                 dataType: "json",
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 success: function(res) {
-
+                    $.magnificPopup.close();
                     $('#loginErrors').append('<br><span style="color:green;">'+res.message+'</span>');
-                    setTimeout(function () {
+                    // setTimeout(function () {
                         $('#loginErrors').html('');
                         if(res.status == 200){
                             $("#userId").val(res.userId);
@@ -836,7 +836,7 @@ $(document).ready(function () {
                             }
                             
                         }
-                    }, 5000);
+                    // }, 5000);
 
                     
                     $(".overlay").hide();
@@ -879,7 +879,7 @@ $(".upload_docs").click(function(e) {
                 $('#uploadDocs')[0].reset();
                 if($('#pickupdate').length){
                     if(!bookCarAction()){
-                        location.reload();
+                        // location.reload();
                     }
                 }
                 

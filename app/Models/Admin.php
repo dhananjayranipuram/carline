@@ -611,7 +611,7 @@ class Admin extends Model
                                 HOUR(created_on) AS label,
                                 COUNT(*) AS booking_count
                             FROM booking
-                            WHERE car_id = 4 AND (
+                            WHERE (
                                 (pickup_date BETWEEN '$data[from]' AND '$data[to]')
                                 OR (return_date BETWEEN '$data[from]' AND '$data[to]')
                                 OR (pickup_date <= '$data[from]' AND return_date >= '$data[to]')
@@ -673,7 +673,7 @@ class Admin extends Model
                                 DAY(created_on) AS label,
                                 COUNT(*) AS booking_count
                             FROM booking
-                            WHERE created_on BETWEEN '$data[from]' AND '$data[to]'
+                            WHERE CAST(created_on AS DATE) BETWEEN '$data[from]' AND '$data[to]'
                             GROUP BY DAY(created_on)
                         ) b ON d.label = b.label
                         WHERE d.label <= DAY(LAST_DAY('$data[from]'))
@@ -703,7 +703,7 @@ class Admin extends Model
                             MONTH(created_on) AS label,
                             COUNT(*) AS booking_count
                         FROM booking
-                        WHERE created_on BETWEEN '$data[from]' AND '$data[to]'
+                        WHERE CAST(created_on AS DATE) BETWEEN '$data[from]' AND '$data[to]'
                         GROUP BY MONTH(created_on)
                     ) b ON m.label = b.label
                     ORDER BY m.label;";
@@ -745,7 +745,7 @@ class Admin extends Model
                                 HOUR(created_on) AS label,
                                 COUNT(*) AS booking_count
                             FROM booking
-                            WHERE car_id = 4 AND created_on BETWEEN '$data[from]' AND '$data[from]'
+                            WHERE CAST(created_on AS DATE) BETWEEN '$data[from]' AND '$data[from]'
                             
                             GROUP BY label
                         ) b ON d.label = b.label
@@ -765,6 +765,7 @@ class Admin extends Model
             ->groupBy('b.id')
             ->select([
                 'b.id',
+                'c.id as carId',
                 \DB::raw("DATE_FORMAT(b.pickup_date, '%Y-%m-%d') as pickup_date"),
                 \DB::raw("DATE_FORMAT(b.return_date, '%Y-%m-%d') as return_date"),
                 \DB::raw("DATE_FORMAT(b.pickup_time, '%h:%i %p') as pickup_time"),
@@ -815,7 +816,7 @@ class Admin extends Model
         $query = "SELECT
                 COUNT(id) AS cnt
             FROM enduser
-            WHERE created_on BETWEEN '$data[from]' AND '$data[to]';";
+            WHERE CAST(created_on AS DATE) BETWEEN '$data[from]' AND '$data[to]';";
 
         return DB::select($query);
     }
