@@ -2,91 +2,166 @@
 
 @section('content')
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCq0y9JbWvjemcHSpRNzUwstBeCQs0VS9k&libraries=places"></script>
+<style>
+        @media only screen and (max-width: 600px) {
+  .bannneru {
+    width: 200%;
+  }
+}
+        .search-form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #ffffff;
+    padding: 10px;
+    width: 350px;
+    margin: 20px auto;
+    border-radius: 30px;
+}
+    
+        .search-form {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px; /* Adds spacing between elements */
+        }
+    
+        .form-icon-wrapper {
+            display: flex;
+            align-items: center;
+        }
+    
+        .form-icon {
+            width: 40px;
+            height: 40px;
+        }
+    
+        .form-field {
+            display: flex;
+            align-items: center;
+        }
+    
+        .form-select {
+            width: 100%;
+            max-width: 300px;
+            padding: 10px 30px 10px 30px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            background-color: #fff;
+        }
+    
+        .search-button {
+            color: #ffffff;
+            background-color: var(--accent-color);
+            border-radius: 50%;
+            width: 50px !important;
+            height: 50px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease-in-out;
+        }
+    
+        .search-button:hover {
+            background-color: #000000;
+        }
+    
+        @media screen and (max-width: 768px) {
+            .search-form {
+                flex-wrap: wrap; /* Stack items on smaller screens */
+                gap: 10px;
+            }
+    
+            .form-select, .search-button {
+                width: 100%;
+            }
+        }
+        @media (min-width: 1024px) {
+    .hero-video {
+        width: 100%;
+    }
+    .hero-slider-layout .hero-slide {
+    position: relative;
+    padding: 80px 0 120px;
+}
+}
+    </style>
 <!-- Hero Slider Section Start -->
 <div class="hero hero-slider">
-        <div class="hero-section bg-section hero-slider-layout">
-			<div class="swiper">
-				<div class="swiper-wrapper">
-					<!-- Hero Slide Start -->
-					<div class="swiper-slide">
-						<div class="hero-slide">
-							<!-- Slider Image Start -->
-							<div class="hero-slider-image">
-                            <video autoplay="" muted="" loop="" id="myVideo" class="bannneru" style="width: 100%;"><source src="{{asset('assets/images/videos.mp4')}}" type="video/mp4"></video>
-							</div>
-							<!-- Slider Image End -->
+    <div class="hero-section bg-section hero-slider-layout">
+        <div class="swiper">
+            <div class="swiper-wrapper">
+                <!-- Hero Slide Start -->
+                <div class="swiper-slide">
+                    <div class="hero-slide">
+                        <!-- Slider Image Start -->
+                        <div class="hero-slider-image">
+                            <video autoplay muted loop id="heroVideo" class="hero-video">
+                                <source src="{{asset('assets/images/videos.mp4')}}" type="video/mp4">
+                            </video>
+                        </div>
+                        <!-- Slider Image End -->
 
-							<!-- Slider Content Start -->
-							<div class="container">
-                                <div class="row align-items-center">
-                                    <div class="col-lg-12">
-                                        <!-- Hero Content Start -->
-                                        <div class="hero-content">
-                                            <div class="section-title">
-                                                <h3 class="wow fadeInUp">Welcome to Carline Car Rental</h3>
-                                                <h1 class="text-anime-style-3">Dubai's Trusted Car Rental Experts</h1>
-                                                
-                                                <p class="wow fadeInUp" data-wow-delay="0.25s">Whether you're planning a weekend getaway, a business trip, or just need a reliable ride for the day, we offers a wide range of vehicles to suit your needs.</p>
+                        <!-- Slider Content Start -->
+                        <div class="container">
+                            <div class="row align-items-center">
+                                <div class="col-lg-12">
+                                    <!-- Hero Content Start -->
+                                    <div class="hero-content text-center">
+                                        <div class="section-title">
+                                            <h3 class="fadeInUp">Welcome to Carline Car Rental</h3>
+                                            <h1 class="text-highlight">Dubai’s Trusted Car Rental Experts</h1>
+                                            <p class="fadeInUp" data-wow-delay="0.25s">
+                                                Whether you're planning a weekend getaway, a business trip, or just need a reliable ride for the day, we offer a wide range of vehicles to suit your needs.
+                                            </p>
+                                            <!-- Search Form Start -->
+                                            <div class="search-form-container">
+                                                <form action="#" method="get" class="search-form">
+                                                    <!-- Car Icon -->
+                                                    <div class="form-icon-wrapper">
+                                                        <img src="{{asset('assets/images/icon-rent-details-1.svg')}}" alt="Car Icon" class="form-icon">
+                                                    </div>
+                                                    <!-- Car Types Dropdown -->
+                                                    <div class="form-field">
+                                                        <select class="rent-details-form form-select select-type" aria-label="Choose Car Type">
+                                                            <option value="" disabled selected>Choose Car Type</option>
+                                                                                                                <option value="1">Hatchback</option>
+                                                                                                                <option value="2">Sedan</option>
+                                                                                                                <option value="3">SUV</option>
+                                                                                                                <option value="4">Crossover</option>
+                                                                                                                <option value="5">Luxury cars</option>
+                                                                                                        </select>
+                                                    </div>
+                                                    <!-- Search Button -->
+                                                    <div class="form-field">
+                                                        <button type="submit" class="search-button">
+                                                            <i class="fa-solid fa-magnifying-glass"></i>
+                                                        </button>
+                                                    </div>
+                                                    
+                                                </form>
                                             </div>
-                    
+                                            <!-- Search Form End -->
                                         </div>
-                                        <!-- Hero Content End -->                    
                                     </div>
+                                    <!-- Hero Content End -->
                                 </div>
                             </div>
-							<!-- Slider Content End -->
-						</div>
-					</div>
-					<!-- Hero Slide End -->
-
-                   
-				</div>
-                <div class="hero-pagination"></div>
-			</div>  
-		</div>
-
-        <!-- Rent Details Section Start -->
-        <div class="rent-details wow fadeInUp" data-wow-delay="0.75s">
-            <div class="container" style="text-align: -webkit-center;">
-                <!-- Filter Form Start -->
-				<form action="#" method="get" style="width:40%;">
-                    <div class="row no-gutters align-items-center">
-                        <div class="col-md-12">
-                            <div class="rent-details-box">
-                                <div class="rent-details-form">
-                                    <!-- Rent Details Item Start -->
-                                    <div class="rent-details-item" style="width: 70%;">
-                                        <div class="icon-box">
-                                            <img src="{{asset('assets/images/icon-rent-details-1.svg')}}" alt="Car Type Icon">
-                                        </div>
-                                        <div class="rent-details-content">
-                                            <h3>car Type</h3>
-                                            <select class="rent-details-form form-select select-type" aria-label="Choose Car Type">
-                                                <option value="" disabled selected>Choose Car Type</option>
-                                                @foreach($carType as $key => $value)
-                                                    <option value="{{$value->id}}">{{$value->name}}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <!-- Rent Details Item End -->
-
-                                    
-                                     
-                                    <div class="rent-details-item rent-details-search">
-                                        <a href="{{url('/cars')}}" class="search-button"><i class="fa-solid fa-magnifying-glass"></i></a>
-                                    </div>
-                                </div>                                
-                            </div>                               
                         </div>
+                        <!-- Slider Content End -->
                     </div>
-                </form>
-                <!-- Filter Form End -->              
+                </div>
+                <!-- Hero Slide End -->
             </div>
+            <div class="hero-pagination"></div>
         </div>
-        <!-- Rent Details Section End -->
     </div>
-    <!-- Hero Slider Section End -->
+</div>
+<!-- Hero Slider Section End -->
+
+
 
 <div class="perfect-fleet bg-section">
     <div class="container-fluid">
