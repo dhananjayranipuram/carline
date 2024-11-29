@@ -12,7 +12,7 @@
 						<div class="hero-slide">
 							<!-- Slider Image Start -->
 							<div class="hero-slider-image">
-								<video autoplay="" muted="" loop="" id="myVideo" class="bannneru"><source src="{{asset('assets/images/videos.mp4')}}" type="video/mp4"></video>
+                            <video autoplay="" muted="" loop="" id="myVideo" class="bannneru" style="width: 100%;"><source src="{{asset('assets/images/videos.mp4')}}" type="video/mp4"></video>
 							</div>
 							<!-- Slider Image End -->
 
