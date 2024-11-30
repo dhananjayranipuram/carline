@@ -3,12 +3,12 @@
 @section('content')
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCq0y9JbWvjemcHSpRNzUwstBeCQs0VS9k&libraries=places"></script>
 <style>
-        @media only screen and (max-width: 600px) {
-  .bannneru {
-    width: 200%;
-  }
+@media only screen and (max-width: 600px) {
+    .bannneru {
+        width: 200%;
+    }
 }
-        .search-form-container {
+.search-form-container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -19,75 +19,75 @@
     border-radius: 30px;
 }
     
-        .search-form {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 15px; /* Adds spacing between elements */
-        }
-    
-        .form-icon-wrapper {
-            display: flex;
-            align-items: center;
-        }
-    
-        .form-icon {
-            width: 40px;
-            height: 40px;
-        }
-    
-        .form-field {
-            display: flex;
-            align-items: center;
-        }
-    
-        .form-select {
-            width: 100%;
-            max-width: 300px;
-            padding: 10px 30px 10px 30px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-            background-color: #fff;
-        }
-    
-        .search-button {
-            color: #ffffff;
-            background-color: var(--accent-color);
-            border-radius: 50%;
-            width: 50px !important;
-            height: 50px;
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease-in-out;
-        }
-    
-        .search-button:hover {
-            background-color: #000000;
-        }
-    
-        @media screen and (max-width: 768px) {
-            .search-form {
-                flex-wrap: wrap; /* Stack items on smaller screens */
-                gap: 10px;
-            }
-    
-            .form-select, .search-button {
-                width: 100%;
-            }
-        }
-        @media (min-width: 1024px) {
+.search-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px; /* Adds spacing between elements */
+}
+
+.form-icon-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.form-icon {
+    width: 40px;
+    height: 40px;
+}
+
+.form-field {
+    display: flex;
+    align-items: center;
+}
+
+.form-select {
+    width: 100%;
+    max-width: 300px;
+    padding: 10px 30px 10px 30px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: #fff;
+}
+
+.search-button {
+    color: #ffffff;
+    background-color: var(--accent-color);
+    border-radius: 50%;
+    width: 50px !important;
+    height: 50px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease-in-out;
+}
+
+.search-button:hover {
+    background-color: #000000;
+}
+
+@media screen and (max-width: 768px) {
+    .search-form {
+        flex-wrap: wrap; /* Stack items on smaller screens */
+        gap: 10px;
+    }
+
+    .form-select, .search-button {
+        width: 100%;
+    }
+}
+@media (min-width: 1024px) {
     .hero-video {
         width: 100%;
     }
     .hero-slider-layout .hero-slide {
-    position: relative;
-    padding: 80px 0 120px;
+        position: relative;
+        padding: 80px 0 120px;
+    }
 }
-}
-    </style>
+</style>
 <!-- Hero Slider Section Start -->
 <div class="hero hero-slider">
     <div class="hero-section bg-section hero-slider-layout">
@@ -127,12 +127,10 @@
                                                     <div class="form-field">
                                                         <select class="rent-details-form form-select select-type" aria-label="Choose Car Type">
                                                             <option value="" disabled selected>Choose Car Type</option>
-                                                                                                                <option value="1">Hatchback</option>
-                                                                                                                <option value="2">Sedan</option>
-                                                                                                                <option value="3">SUV</option>
-                                                                                                                <option value="4">Crossover</option>
-                                                                                                                <option value="5">Luxury cars</option>
-                                                                                                        </select>
+                                                                @foreach($carType as $key => $value)
+                                                                    <option value="{{$value->id}}">{{$value->name}}</option>
+                                                                @endforeach
+                                                        </select>
                                                     </div>
                                                     <!-- Search Button -->
                                                     <div class="form-field">

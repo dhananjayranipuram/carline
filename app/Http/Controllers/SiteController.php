@@ -842,6 +842,75 @@ class SiteController extends Controller
         // echo '<pre>';print_r($data);exit;
         return response()->json($data);
     }
+    
+    public function myDocumentDetails(){
+        $site = new Site();
+        $data = [];
+        $input['id'] = Session::get('userId');
+        $data['userAccount'] = $site->getMyDetails($input);
+        $data['userDocument'] = $site->getMyDocumentDetails($input);
+        // echo '<pre>';print_r($data);exit;
+        if(empty($data['userAccount'])){
+            Session::flush();
+            return Redirect::to('/home');
+        }
+        return view('site/my-document',$data);
+    }
+
+    public function editUploadDocuments(Request $request)
+    {
+        $site = new Site();
+        $response = [];
+
+        // Validation
+        $credentials = $request->validate([
+            'edit_pass_front' => ['nullable', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
+            'edit_pass_back' => ['nullable', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
+            'edit_dl_front' => ['nullable', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
+            'edit_dl_back' => ['nullable', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
+            'edit_eid_front' => ['nullable', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
+            'edit_eid_back' => ['nullable', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
+        ]);
+
+        // Handle file uploads using the helper function
+        $uploadedFiles = $this->handleFileUploads($request, [
+            'edit_pass_front', 
+            'edit_pass_back', 
+            'edit_dl_front', 
+            'edit_dl_back', 
+            'edit_eid_front', 
+            'edit_eid_back'
+        ]);
+        // print_r($uploadedFiles);exit;
+
+        $credentials['id'] = Session::get('userId');
+        $currentFiles = $site->getMyDocumentDetails($credentials);
+        // print_r($currentFiles);exit;
+        
+        // Check for errors in uploaded files
+        if ($uploadedFiles['errors']) {
+            return response()->json(['status' => '400', 'message' => $uploadedFiles['errors']], 400);
+        }
+        
+        // Add user ID to the uploaded files data
+        $uploadedFiles['id'] = $request->session()->get('userId');
+
+        // Save uploaded documents
+        $res = $site->updateUploadedDocuments($uploadedFiles);
+
+        // Prepare response
+        if ($res) {
+            foreach ($uploadedFiles['uploadedFiles'] as $key => $field) {
+                $currentFilePath = $currentFiles[0]->{str_replace('edit_', '', $key)} ?? null;
+                if ($currentFilePath && File::exists($currentFilePath)) {
+                    File::delete($currentFilePath);
+                }
+            }
+            return response()->json(['status' => '200', 'message' => 'Document uploaded successfully.']);
+        } else {
+            return response()->json(['status' => '500', 'message' => 'Something went wrong.'], 500);
+        }
+    }
 
     public function updateUser(Request $request){
         $site = new Site();

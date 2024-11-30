@@ -229,6 +229,13 @@ class Site extends Model
             LEFT JOIN emirates e ON eu.emirates=e.id
             WHERE eu.id='$data[id]' AND eu.active=1;");
     }
+    
+    public function getMyDocumentDetails($data=[]){
+        return DB::select("SELECT eu.id,ud.pass_front,ud.pass_back,ud.dl_front,ud.dl_back,ud.eid_front,ud.eid_back
+            FROM enduser eu
+            LEFT JOIN user_documents ud ON eu.id=ud.user_id
+            WHERE eu.id='$data[id]' AND eu.active=1;");
+    }
 
     public function getDocumentUpload($data=[]){
         return DB::table('enduser')
@@ -266,6 +273,43 @@ class Site extends Model
             DB::rollback();
             return false; // Return false on failure
         }
+    }
+    
+    
+    public function updateUploadedDocuments($data = [])
+    {
+        // Ensure uploadedFiles key exists and is an array
+        if (!isset($data['uploadedFiles']) || !is_array($data['uploadedFiles'])) {
+            return false; // Or handle the error as needed
+        }
+
+        // Define the mapping of input keys to database column names
+        $fieldMapping = [
+            'edit_pass_front' => 'pass_front', 
+            'edit_pass_back' => 'pass_back', 
+            'edit_dl_front' => 'dl_front', 
+            'edit_dl_back' => 'dl_back', 
+            'edit_eid_front' => 'eid_front', 
+            'edit_eid_back' => 'eid_back',
+        ];
+
+        // Map input data to database columns and filter out null/empty values
+        $updateData = [];
+        foreach ($data['uploadedFiles'] as $key => $value) {
+            if (!is_null($value) && $value !== '' && isset($fieldMapping[$key])) {
+                $updateData[$fieldMapping[$key]] = $value;
+            }
+        }
+
+        // Proceed only if there's data to update
+        if (empty($updateData)) {
+            return false; // Or handle the case when there's nothing to update
+        }
+
+        // Perform the update query
+        return DB::table('user_documents')
+            ->where('user_id', $data['id']) // Ensure ID is provided
+            ->update($updateData);
     }
 
     public function getBookingHistory($data = [])

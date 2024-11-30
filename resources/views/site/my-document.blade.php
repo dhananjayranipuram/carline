@@ -94,14 +94,7 @@
         <fieldset>
             <form id="edit_uploadDocs" enctype="multipart/form-data" method="POST">
                 <div class="row">
-                    <div class="booking-form-group col-md-12 mb-4">
-                        <label for="returnLocationToggle">Driver Type</label>
-                        <input type="radio" class="form-check-input rider_type" name="rider_type" value="resident" checked>  <label for="rider_type">Resident</label>
-                        <input type="radio" class="form-check-input rider_type" name="rider_type" value="tourist">  <label for="rider_type">Tourist</label>
-                    </div>
-
-
-                    <div class="booking-form-group col-md-12 mb-4">
+                    <div class="booking-form-group col-md-12 mb-4" id="edit_passport-section">
                         <div class="row" id="passport-section">
                             <label for="returnLocationToggle">Passport</label>
                             <div class="booking-form-group col-md-6 mb-4">
@@ -117,7 +110,7 @@
                         </div>
                     </div>
 
-                    <div class="booking-form-group col-md-12 mb-4">
+                    <div class="booking-form-group col-md-12 mb-4" id="edit_dl-section">
                         <div class="row" id="dl-section">
                             <label for="returnLocationToggle">Driving Licence</label>
                             <div class="booking-form-group col-md-6 mb-4">
@@ -155,7 +148,7 @@
                         </div>
                     </div>
                     <div class="col-md-12 booking-form-group">
-                        <button type="button" class="btn-default upload_docs">Upload</button>
+                        <button type="button" class="btn-default edit_upload_docs">Upload</button>
                         <div id="edit_msgSubmit" class="h3 hidden"></div>
                     </div>
                 </div>   
@@ -187,7 +180,7 @@
                         <!-- Team member Body Start -->
                         <div class="team-member-body wow fadeInUp" data-wow-delay="0.5s">
                             <ul>
-                                <li><span>Phone: </span>(+971) {{$userAccount[0]->phone}}</li>
+                                <li><span>Phone: </span>{{$userAccount[0]->phone}}</li>
                                 <li><span>Email: </span>{{$userAccount[0]->email}}</li>
                                 <li><span>Address: </span>{{$userAccount[0]->flat}}, {{$userAccount[0]->building}}, {{$userAccount[0]->landmark}}, {{$userAccount[0]->city}}, {{$userAccount[0]->emirates}}</li>
                             </ul>
@@ -216,56 +209,125 @@
 
             <div class="col-lg-7">
             
-                @foreach($bookingHistory as $key => $value)
-                <!-- Booking History Section Start -->
-                <div class="booking-history">
-                    <!-- Booking Item Start -->
-                    <div class="booking-item">
-                        <div class="row">
-                            <!-- Car Image Column Start -->
-                            <div class="col-md-4">
-                                <p><strong>{{$value->car_name}}</strong></p>
+                @if(!empty($userDocument[0]->pass_front) || !empty($userDocument[0]->pass_back))
+                    <!-- Booking History Section Start -->
+                    <div class="booking-history">
+                        <!-- Booking Item Start -->
+                        <div class="booking-item">
+                            <div class="row">
+                                <h3>PASSPORT</h3>
+                                <!-- Car Image Column Start -->
+                                <div class="col-md-5">
+                                    <p><strong>Front Page</strong></p>
+                                    <div class="car-image">
+                                        <img src="{{asset($userDocument[0]->pass_front)}}" alt="Passport Front">
+                                    </div>
+                                </div>
+                                <!-- Car Image Column End -->
+                
+                               <!-- Car Image Column Start -->
+                                <div class="col-md-5">
+                                <p><strong>Back Page</strong></p>
                                 <div class="car-image">
-                                    <img src="{{asset($value->image)}}" alt="Car Image">
+                                    <img src="{{asset($userDocument[0]->pass_back)}}" alt="Passport Back">
                                 </div>
                             </div>
                             <!-- Car Image Column End -->
-            
-                            <!-- Pickup Details Column Start -->
-                            <div class="col-md-4">
-                                <div class="booking-details">
-                                    <p><strong>Pickup Location:</strong> <span>{{$value->s_address}}</span></p>
-                                    <p><strong>Pickup Date:</strong> <span>{{$value->pickup_date}}</span></p>
-                                    <p><strong>Pickup Time:</strong> <span>{{$value->pickup_time}}</span></p>
+                
+                                <!-- Buttons Column Start -->
+                                <div class="col-md-2 text-right">
+                                    <div class="booking-actions">
+                                        <button class="btn btn-edit upload-doc" data-section="passport">Edit</button>
+                                        <!-- <button class="btn btn-view">Delete</button> -->
+                                    </div>
                                 </div>
+                                <!-- Buttons Column End -->
                             </div>
-                            <!-- Pickup Details Column End -->
-            
-                            <!-- Dropoff Details Column Start -->
-                            <div class="col-md-4">
-                                <div class="booking-details">
-                                    <p><strong>Dropoff Location:</strong> <span>{{$value->d_address}}</span></p>
-                                    <p><strong>Dropoff Date:</strong> <span>{{$value->return_date}}</span></p>
-                                    <p><strong>Dropoff Time:</strong> <span>{{$value->return_time}}</span></p>
-                                </div>
-                            </div>
-                            <!-- Dropoff Details Column End -->
-            
-                            <!-- Buttons Column Start -->
-                            <!-- <div class="col-md-2 text-right"> -->
-                                <!-- <div class="booking-actions"> -->
-                                    <!-- <button class="btn btn-edit">Edit</button> -->
-                                    <!-- <button class="btn btn-view">View</button> -->
-                                <!-- </div> -->
-                            <!-- </div> -->
-                            <!-- Buttons Column End -->
                         </div>
+                        <!-- Booking Item End -->
                     </div>
-                    <!-- Booking Item End -->
-                </div>
-                <!-- Booking History Section End -->
-                @endforeach
+                    <!-- Booking History Section End -->
+                @endif
 
+                @if(!empty($userDocument[0]->dl_front) || !empty($userDocument[0]->dl_back))
+                     <!-- Booking History Section Start -->
+                    <div class="booking-history">
+                        <!-- Booking Item Start -->
+                        <div class="booking-item">
+                            <div class="row">
+                                <h3>DRIVING LICENCE</h3>
+                                <!-- Car Image Column Start -->
+                                <div class="col-md-5">
+                                    <p><strong>Front Page</strong></p>
+                                    <div class="car-image">
+                                        <img src="{{asset($userDocument[0]->dl_front)}}" alt="Driving Licence Front">
+                                    </div>
+                                </div>
+                                <!-- Car Image Column End -->
+                
+                               <!-- Car Image Column Start -->
+                               <div class="col-md-5">
+                                <p><strong>Back Page</strong></p>
+                                <div class="car-image">
+                                    <img src="{{asset($userDocument[0]->dl_back)}}" alt="Driving Licence Back">
+                                </div>
+                            </div>
+                            <!-- Car Image Column End -->
+                
+                                <!-- Buttons Column Start -->
+                                <div class="col-md-2 text-right">
+                                    <div class="booking-actions">
+                                        <button class="btn btn-edit upload-doc" data-section="dl">Edit</button>
+                                        <!-- <button class="btn btn-view">Delete</button> -->
+                                    </div>
+                                </div>
+                                <!-- Buttons Column End -->
+                            </div>
+                        </div>
+                        <!-- Booking Item End -->
+                    </div>
+                    <!-- Booking History Section End -->
+                @endif
+
+                @if(!empty($userDocument[0]->eid_front) || !empty($userDocument[0]->eid_back))
+                    <!-- Booking History Section Start -->
+                    <div class="booking-history">
+                        <!-- Booking Item Start -->
+                        <div class="booking-item">
+                            <div class="row">
+                                <h3>EID</h3>
+                                <!-- Car Image Column Start -->
+                                <div class="col-md-5">
+                                    <p><strong>Front Page</strong></p>
+                                    <div class="car-image">
+                                        <img src="{{asset($userDocument[0]->eid_front)}}" alt="EID Front">
+                                    </div>
+                                </div>
+                                <!-- Car Image Column End -->
+                
+                               <!-- Car Image Column Start -->
+                               <div class="col-md-5">
+                                <p><strong>Back Page</strong></p>
+                                <div class="car-image">
+                                    <img src="{{asset($userDocument[0]->eid_back)}}" alt="EID Back">
+                                </div>
+                            </div>
+                            <!-- Car Image Column End -->
+                
+                                <!-- Buttons Column Start -->
+                                <div class="col-md-2 text-right">
+                                    <div class="booking-actions">
+                                        <button class="btn btn-edit upload-doc" data-section="eid">Edit</button>
+                                        <!-- <button class="btn btn-view">Delete</button> -->
+                                    </div>
+                                </div>
+                                <!-- Buttons Column End -->
+                            </div>
+                        </div>
+                        <!-- Booking Item End -->
+                    </div>
+                    <!-- Booking History Section End -->
+                @endif
             </div>
             
             
@@ -277,6 +339,70 @@
 <!-- Page Team Single End -->
 <script src="{{asset('admin_assets/js/core/jquery-3.7.1.min.js')}}"></script> 
 <script>
+$(".upload-doc").click(function() {
+    if($(this).attr('data-section')=='passport'){
+        $("#edit_passport-section").show();
+        $("#edit_dl-section").hide();
+        $("#edit_eid-section").hide();
+    }else if($(this).attr('data-section')=='dl'){
+        $("#edit_passport-section").hide();
+        $("#edit_dl-section").show();
+        $("#edit_eid-section").hide();
+    }else if($(this).attr('data-section')=='eid'){
+        $("#edit_passport-section").hide();
+        $("#edit_dl-section").hide();
+        $("#edit_eid-section").show();
+    }
+    $.magnificPopup.open({
+        items: {
+            src: '#documentUpdateForm', 
+            type: 'inline'
+        }
+    });
+});
+
+$(".edit_upload_docs").click(function(e) {
+    e.preventDefault();
+    let formData = new FormData($('#edit_uploadDocs')[0]);
+    console.log(formData)
+    $(".overlay").show();
+    $.ajax({
+        url: baseUrl + '/edit-upload-docs',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+        success: function(response) {
+            $("#edit_docErrorMessages").html('<span style="color:green;">Documents uploaded successfully.<span>');
+            setTimeout(function () {
+                $("#edit_docErrorMessages").html('');
+                $.magnificPopup.close();
+                $('#edit_uploadDocs')[0].reset();
+                location.reload();
+            }, 5000);
+            $(".overlay").hide();
+        },
+        error: function(xhr) {
+            if (xhr.status === 422) {
+                let errors = xhr.responseJSON.errors;
+                Object.keys(errors).forEach(function(key) {
+                    $("."+key+"").html('<span style="color:red;">'+errors[key][0]+'<span>');
+                    setTimeout(function () {
+                        $("."+key+"").html('');
+                    }, 5000);
+                });
+            } else {
+                $("#edit_docErrorMessages").html('<span style="color:red;">An error occurred during the upload.<span>');
+                setTimeout(function () {
+                    $("#edit_docErrorMessages").html('');
+                }, 5000);
+            }
+            $(".overlay").hide();
+        }
+    });
+});
+
 function getUserData(){
     $(".overlay").show();
     $.ajax({
@@ -369,7 +495,42 @@ function updateUser(){
     }
 }
 
+function getUserDocData(){
+    $(".overlay").show();
+    $.ajax({
+        url: baseUrl + '/my-document-details',
+        type: 'post',
+        data: {},
+        dataType: "json",
+        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+        success: function(res) {
 
+            
+            if(res){
+                
+                $.magnificPopup.open({
+                    items: {
+                        src: '#documentUpdateForm', 
+                        type: 'inline'
+                    }
+                });
+                // $("#firstNameEdit").val(res[0].first_name);
+                // $("#lastNameEdit").val(res[0].last_name);
+                // $("#emailEdit").val(res[0].email);
+                // $("#phoneEdit").val(res[0].phone);
+                // $("#flatEdit").val(res[0].flat);
+                // $("#buildingEdit").val(res[0].building);
+                // $("#landmarkEdit").val(res[0].landmark);
+                // $("#cityEdit").val(res[0].city);
+                
+            }
+            $(".overlay").hide();
+        },
+        error: function(xhr, status, error) {
+            console.error("AJAX Error: ", status, error);
+        }
+    });
+}
 
 $(".rider_type").click(function() {
     if($(this).val()=='tourist'){

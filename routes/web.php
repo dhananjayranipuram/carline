@@ -26,6 +26,8 @@ Route::get('/news', [SiteController::class, 'news']);
 Route::get('/contact', [SiteController::class, 'contactUs']);
 Route::get('/my-account', [SiteController::class, 'myAccount']);
 Route::any('/my-account-details', [SiteController::class, 'myAccountDetails']);
+Route::any('/my-documents', [SiteController::class, 'myDocumentDetails']);
+Route::any('/edit-upload-docs', [SiteController::class, 'editUploadDocuments']);
 Route::get('/logout', [SiteController::class, 'logout']);
 
 Route::any('/check-document-uploaded', [SiteController::class, 'checkDocumentUploaded']);
