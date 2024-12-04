@@ -447,6 +447,7 @@ class Admin extends Model
             ->leftJoin('cars as c', 'c.id', '=', 'b.car_id')
             ->leftJoin('car_brand as cb', 'cb.id', '=', 'c.brand_id')
             ->leftJoin('car_images as ci', 'ci.car_id', '=', 'c.id')
+            ->leftJoin('enduser as eu', 'b.user_id', '=', 'eu.id')
             ->where('c.active', 1);
 
         if (!empty($data['brand'])) {
@@ -465,6 +466,7 @@ class Admin extends Model
             ->select([
                 'b.id',
                 \DB::raw("CONCAT(cb.name, ' ', c.name, ' ', c.model) AS car_name"),
+                \DB::raw("CONCAT(eu.first_name, ' ', eu.last_name) AS user_name"),
                 \DB::raw("DATE_FORMAT(b.pickup_date, '%Y-%m-%d') AS pickup_date"),
                 \DB::raw("DATE_FORMAT(b.return_date, '%Y-%m-%d') AS return_date"),
                 \DB::raw("DATE_FORMAT(b.pickup_time, '%h:%i %p') AS pickup_time"),

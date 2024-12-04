@@ -202,7 +202,7 @@ class AdminController extends Controller
         $input['id'] = base64_decode($queries['id']);
         $data['details'] = $admin->getBookingDetails($input);
         return view('admin/booking-details',$data);
-        echo '<pre>';print_r($data);exit;
+        // echo '<pre>';print_r($data);exit;
     }
 
     public function cars(){

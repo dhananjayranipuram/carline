@@ -48,6 +48,13 @@
                                         <span>{{$details[0]->car_name}}</span>
                                     </p>
                                 </div>
+                                
+                                <div class="col-md-12">
+                                    <p>
+                                        <strong>Customer Name</strong><br>
+                                        <span>{{$details[0]->user_name}}</span>
+                                    </p>
+                                </div>
 
                                 <div class="col-md-6">
                                     <p>

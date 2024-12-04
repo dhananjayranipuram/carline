@@ -56,6 +56,7 @@
                         <thead>
                             <tr>
                                 <th>ID</th>
+                                <th>Customer Name</th>
                                 <th>Car Name</th>
                                 <th>Pickup Date</th>
                                 <th>Pickup Time</th>
@@ -71,6 +72,7 @@
                             @foreach($bookings as $key => $value)
                             <tr>
                                 <td>{{$value->id}}</td>
+                                <td>{{$value->user_name}}</td>
                                 <td>{{$value->car_name}}</td>
                                 <td>{{$value->pickup_date}}</td>
                                 <td>{{$value->pickup_time}}</td>
