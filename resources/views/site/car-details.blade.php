@@ -385,7 +385,7 @@ while ($startTime <= $endTime) {
                                     <div id="rentalcollapse{{$key}}" class="accordion-collapse collapse" aria-labelledby="rentalheading{{$key}}"
                                         data-bs-parent="#rentalaccordion">
                                         <div class="accordion-body">
-                                            <p>{{$value->content}}</p>
+                                            <p>{!!nl2br(e($value->content))!!}</p>
                                         </div>
                                     </div>
                                 </div>

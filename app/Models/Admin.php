@@ -407,7 +407,8 @@ class Admin extends Model
     }
 
     public function updatePolicyAgreementData($data){
-        return DB::UPDATE("UPDATE policy_agreement SET name='$data[name]',content='$data[content]',active='$data[active]' WHERE id='$data[id]';");
+        $content = str_replace("'", "''", $data['content']);
+        return DB::UPDATE("UPDATE policy_agreement SET name='$data[name]',content='$content',active='$data[active]' WHERE id='$data[id]';");
     }
 
     public function deletePolicyAgreementData($data){
