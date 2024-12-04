@@ -1,7 +1,52 @@
 @extends('layouts.admin')
 
 @section('content')
+<style>
+/* Container styling */
+.input-container {
+  position: relative;
+  /* margin: 20px 0; */
+}
 
+/* Input styling */
+input[type="text"] {
+  width: 100%;
+  padding: 10px 5px;
+  font-size: 16px;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+  background: none;
+}
+
+/* Change border color on focus */
+input[type="text"]:focus {
+  border-color: #007bff;
+}
+
+/* Label (placeholder text) styling */
+.input-placeholder {
+  position: absolute;
+  top: 50%;
+  left: 15px;
+  transform: translateY(-50%);
+  font-size: 16px;
+  color: #999;
+  background: white;
+  padding: 0 5px;
+  transition: all 0.3s ease;
+  pointer-events: none; /* Prevent label from blocking input clicks */
+}
+
+/* Move the placeholder to the border when input is focused or contains text */
+input[type="text"]:focus + .input-placeholder,
+input[type="text"]:not(:placeholder-shown) + .input-placeholder {
+  top: 10px;
+  left: 15px;
+  font-size: 12px;
+  color: #007bff; /* Change color when active */
+}
+</style>
 <div class="row">
     <div class="col-md-12">
         <div class="card">
@@ -19,8 +64,9 @@
                             </div>
                         @endif
                         <div class="col-md-6 col-lg-3">
-                            <div class="form-group">
-                                <input type="text" class="form-control" name="name" placeholder="Enter Car Name" value="{{old('name')}}"/>
+                            <div class="form-group input-container">
+                                <input type="text" class="form-control" name="name" placeholder="" value="{{old('name')}}"/>
+                                <label for="input-box" class="input-placeholder">Car Name</label>
                                 @error('name') <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
                         </div>
@@ -93,9 +139,18 @@
                                     <h4 class="card-title">Rent per day in AED</h4>
                                 </div>
                                 <div class="card-body">
-                                    <input type="text" name="rent" class="form-control" value="{{old('rent')}}">
-                                    @error('rent') <span class="text-danger">{{ $message }}</span> @enderror
-
+                                    <div class="form-group input-container">
+                                        <input type="text" name="rent" class="form-control" placeholder="" value="{{old('rent')}}">
+                                        <label for="input-box" class="input-placeholder">Daily Rent (AED)</label>
+                                        @error('rent') <span class="text-danger">{{ $message }}</span> @enderror
+                                    </div>
+                                    <div class="form-group input-container">
+                                        <input type="text" name="daily_mileage" placeholder="" class="form-control" value="{{old('daily_mileage')}}">
+                                        <label for="input-box" class="input-placeholder">Daily Mileage (KM)</label>
+                                        @error('daily_mileage')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
                                     <div class="form-group mt-2">
                                         <input class="form-check-input" type="checkbox" name="offerFlag" id="offerFlag"
                                                @if(old('offerFlag')) checked @endif>
@@ -103,21 +158,112 @@
                                     </div>
 
                                     <div class="form-group special-offer" style="display: none;">
-                                        <input type="text" name="specialOffer" placeholder="Enter Offer Price" class="form-control" value="{{old('specialOffer')}}">
-                                        @error('specialOffer') <span class="text-danger">{{ $message }}</span> @enderror
+                                        <div class="form-group input-container">
+                                            <input type="text" name="specialOffer" placeholder="" class="form-control" value="{{old('specialOffer')}}">
+                                            <label for="input-box" class="input-placeholder">Offer price (AED)</label>
+                                            @error('specialOffer') <span class="text-danger">{{ $message }}</span> @enderror
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="card">
                                 <div class="card-header">
-                                    <h4 class="card-title">Deposit in AED</h4>
+                                    <h4 class="card-title">Weekly rent in AED</h4>
                                 </div>
                                 <div class="card-body">
-                                    <input type="text" name="deposit" placeholder="Enter Deposit Amount" class="form-control" value="{{old('deposit')}}">
-                                    @error('deposit') <span class="text-danger">{{ $message }}</span> @enderror
+                                    <div class="form-group input-container">
+                                        <input type="text" name="weekly_rent" placeholder="" class="form-control" value="{{old('weekly_rent')}}">
+                                        <label for="input-box" class="input-placeholder">Weekly Rent (AED)</label>
+                                        @error('weekly_rent')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group input-container">
+                                        <input type="text" name="weekly_mileage" placeholder="" class="form-control" value="{{old('weekly_mileage')}}">
+                                        <label for="input-box" class="input-placeholder">Weekly Mileage (KM)</label>
+                                        @error('weekly_mileage')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group">
+                                        <input class="form-check-input offer-flag" type="checkbox" name="offerFlagWeekly" id="offerFlagWeekly" 
+                                            @if(old('offerFlagWeekly')) checked @endif>
+                                        <label class="form-check-label">Avail special offers</label>
+                                    </div>
+                                    <div class="col-12 col-md-12 special-offer-weekly">
+                                        <div class="form-group input-container">
+                                            <input type="text" name="specialOfferWeekly" placeholder="" class="form-control" value="{{old('specialOfferWeekly')}}">
+                                            <label for="input-box" class="input-placeholder">Offer Price (AED)</label>
+                                            @error('specialOfferWeekly')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">Monthly rent in AED</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group input-container">
+                                        <input type="text" name="monthly_rent" placeholder="" class="form-control" value="{{old('monthly_rent')}}">
+                                        <label for="input-box" class="input-placeholder">Monthly Rent (AED)</label>
+                                        @error('monthly_rent')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group input-container">
+                                        <input type="text" name="monthly_mileage" placeholder="" class="form-control" value="{{old('monthly_mileage')}}">
+                                        <label for="input-box" class="input-placeholder">Monthly Mileage (KM)</label>
+                                        @error('monthly_mileage')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group">
+                                        <input class="form-check-input offer-flag" type="checkbox" name="offerFlagMonthly" id="offerFlagMonthly" 
+                                            @if(old('offerFlagMonthly')) checked @endif>
+                                        <label class="form-check-label">Avail special offers</label>
+                                    </div>
+                                    <div class="col-12 col-md-12 special-offer-monthly">
+                                        <div class="form-group input-container">
+                                            <input type="text" name="specialOfferMonthly" placeholder="" class="form-control" value="{{old('specialOfferMonthly')}}">
+                                            <label for="input-box" class="input-placeholder">Offer Price (AED)</label>
+                                            @error('specialOfferMonthly')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">Other Charges AED</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group input-container">
+                                        <input type="text" name="deposit" placeholder="" class="form-control" value="{{old('deposit')}}">
+                                        <label for="input-box" class="input-placeholder">Deposit Amount (AED)</label>
+                                        @error('deposit') <span class="text-danger">{{ $message }}</span> @enderror
+                                    </div>
+                                    <div class="form-group input-container">
+                                        <input type="text" name="toll" placeholder="" class="form-control" value="{{old('toll')}}">
+                                        <label for="input-box" class="input-placeholder">Toll Amount (AED)</label>
+                                        @error('toll')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group input-container">
+                                        <input type="text" name="additionalCharge" placeholder="" class="form-control" value="{{old('additionalCharge')}}">
+                                        <label for="input-box" class="input-placeholder">Additional rent per KM (AED)</label>
+                                        @error('additionalCharge')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div class="card">
                                 <div class="card-header">
                                     <h4 class="card-title">Quantity</h4>
                                 </div>
@@ -125,14 +271,17 @@
                                     <input type="text" name="qty" placeholder="Enter Quantity" class="form-control" value="{{old('qty')}}">
                                     @error('qty') <span class="text-danger">{{ $message }}</span> @enderror
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="card">
                                 <div class="card-header">
                                     <h4 class="card-title">Kilometers Driven</h4>
                                 </div>
                                 <div class="card-body">
-                                    <input type="text" name="kmeter" placeholder="Enter Kilometer" class="form-control" value="{{old('kmeter')}}">
-                                    @error('kmeter') <span class="text-danger">{{ $message }}</span> @enderror
+                                    <div class="form-group input-container">
+                                        <input type="text" name="kmeter" placeholder="" class="form-control" value="{{old('kmeter')}}">
+                                        @error('kmeter') <span class="text-danger">{{ $message }}</span> @enderror
+                                        <label for="input-box" class="input-placeholder">Kilometers Driven (KM)</label>
+                                    </div>
                                 </div>
                             </div>
                             <div class="card">
@@ -199,13 +348,27 @@
     document.addEventListener('DOMContentLoaded', function () {
         const offerFlag = document.getElementById('offerFlag');
         const specialOffer = document.querySelector('.special-offer');
-
         function toggleSpecialOffer() {
             specialOffer.style.display = offerFlag.checked ? 'block' : 'none';
         }
-
         offerFlag.addEventListener('change', toggleSpecialOffer);
         toggleSpecialOffer();
+
+        const offerFlagWeekly = document.getElementById('offerFlagWeekly');
+        const specialOfferWeekly = document.querySelector('.special-offer-weekly');
+        function toggleSpecialOfferWeekly() {
+            specialOfferWeekly.style.display = offerFlagWeekly.checked ? 'block' : 'none';
+        }
+        offerFlagWeekly.addEventListener('change', toggleSpecialOfferWeekly);
+        toggleSpecialOfferWeekly();
+        
+        const offerFlagMonthly = document.getElementById('offerFlagMonthly');
+        const specialOfferMonthly = document.querySelector('.special-offer-monthly');
+        function toggleSpecialOfferMonthly() {
+            specialOfferMonthly.style.display = offerFlagMonthly.checked ? 'block' : 'none';
+        }
+        offerFlagMonthly.addEventListener('change', toggleSpecialOfferMonthly);
+        toggleSpecialOfferMonthly();
     });
 </script>
 

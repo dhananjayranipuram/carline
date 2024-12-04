@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Config;
 use Illuminate\Http\Request;
 use App\Models\Site;
 use App\Mail\OtpVerification;
@@ -680,8 +681,12 @@ class SiteController extends Controller
 
         $site = new Site();
         $res = [];
-        $deposit = $rate = $emirateCharges = $babySeatCharges = $total = 0;
-    
+        $rentDays = $monthlyRate = $weeklyRate = $deposit = $rate = $emirateCharges = $babySeatCharges = $total = 0;
+        $daysInWeek = config('constants.DAYS_IN_WEEK');
+        $daysInMonth = config('constants.DAYS_IN_MONTH');
+        $vatRate = config('constants.VAT_RATE');
+        $bsCharges = config('constants.BABY_SEAT_CHARGE');
+        $carlineName = config('constants.CAR_LINE_NAME');
         // Calculate the time difference in days and hours
         $pickupdate = strtotime($credentials['pickupdate'] . ' ' . $credentials['pickuptime']);
         $returndate = strtotime($credentials['returndate'] . ' ' . $credentials['returntime']);
@@ -704,12 +709,32 @@ class SiteController extends Controller
         if (!empty($carRes)) {
             // Apply offer price if available, otherwise use regular rent
             $rate = (float) str_replace(',', '', $carRes[0]->offer_flag == 1 ? $carRes[0]->offer_price : $carRes[0]->rent);
+            $weeklyRate = (float) str_replace(',', '', $carRes[0]->offer_flag_weekly == 1 ? $carRes[0]->offer_price_weekly : $carRes[0]->per_week);
+            $monthlyRate = (float) str_replace(',', '', $carRes[0]->offer_flag_monthly == 1 ? $carRes[0]->offer_price_monthly : $carRes[0]->per_month);
             $deposit = !empty($carRes[0]->deposit) ? (float) str_replace(',', '', $carRes[0]->deposit) : 0;
+        }
+
+        $months = floor($days / $daysInMonth);
+        $weeks = floor($days / $daysInWeek);
+        if($months>0){
+            $remainingDays = $days % $daysInMonth;
+            $remainingWeeks = floor($remainingDays / $daysInWeek);
+            if($remainingWeeks>0){
+                $remainingDays = $remainingDays % $daysInWeek;
+                $rentDays = $months*$monthlyRate + $remainingWeeks*$weeklyRate + $remainingDays*$rate;
+            }else{
+                $rentDays = $months*$monthlyRate + $remainingDays*$rate;
+            }
+        }else if($weeks>0){
+            $remainingDays = $days % $daysInWeek;
+            $rentDays = $weeks*$weeklyRate + $remainingDays*$rate;
+        }else{
+            $rentDays = $days*$rate;
         }
         
         // Additional charge if pickup and destination emirates differ
         // if($credentials['destinationData'][0]['placeName'] == '')
-        if($credentials['sourceData']['placeName'] == 'CAR LINE RENT A CAR' || $credentials['destinationData']['placeName'] == 'CAR LINE RENT A CAR'){
+        if($credentials['sourceData']['placeName'] == $carlineName || $credentials['destinationData']['placeName'] == $carlineName){
             $emirateCharges = 0;
         }else if ($credentials['destinationEmirate'] != $credentials['sourceEmirates']) {
             $resEmirate = $site->getEmiratesForRate($credentials);
@@ -718,18 +743,18 @@ class SiteController extends Controller
         }
         
         if($credentials['babySeat']=='on'){
-            $babySeatCharges = 30;
+            $babySeatCharges = $bsCharges;
         }
 
         // Calculate the total amount and VAT
-        $total = $days * $rate + $deposit + $emirateCharges + $babySeatCharges;
-        $vat = 0.05 * $total;
+        $total = $rentDays + $deposit + $emirateCharges + $babySeatCharges;
+        $vat = $vatRate * $total;
     
         // Prepare result data
         $res['days'] = $days;
         $res['vat'] = number_format($vat, 2, '.', '');
         $res['emirate'] = number_format($emirateCharges, 2, '.', '');
-        $res['rate'] = number_format($days * $rate, 2, '.', '');
+        $res['rate'] = number_format($rentDays, 2, '.', '');
         $res['deposit'] = number_format($deposit, 2, '.', '');
         $res['babySeat'] = number_format($babySeatCharges, 2, '.', '');
         $res['total'] = number_format($total + $vat, 2, '.', '');

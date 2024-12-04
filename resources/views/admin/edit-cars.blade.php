@@ -23,6 +23,51 @@
 .imagecheck-figure:hover .delete-icon {
     opacity: 1;
 }
+
+/* Container styling */
+.input-container {
+  position: relative;
+  /* margin: 20px 0; */
+}
+
+/* Input styling */
+input[type="text"] {
+  width: 100%;
+  padding: 10px 5px;
+  font-size: 16px;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+  background: none;
+}
+
+/* Change border color on focus */
+input[type="text"]:focus {
+  border-color: #007bff;
+}
+
+/* Label (placeholder text) styling */
+.input-placeholder {
+  position: absolute;
+  top: 50%;
+  left: 15px;
+  transform: translateY(-50%);
+  font-size: 16px;
+  color: #999;
+  background: white;
+  padding: 0 5px;
+  transition: all 0.3s ease;
+  pointer-events: none; /* Prevent label from blocking input clicks */
+}
+
+/* Move the placeholder to the border when input is focused or contains text */
+input[type="text"]:focus + .input-placeholder,
+input[type="text"]:not(:placeholder-shown) + .input-placeholder {
+  top: 10px;
+  left: 15px;
+  font-size: 12px;
+  color: #007bff; /* Change color when active */
+}
 </style>
 <div class="row">
     <div class="col-md-12">
@@ -47,9 +92,10 @@
                             </div>
                         @endif
                         <div class="col-md-6 col-lg-3">
-                            <div class="form-group">
+                            <div class="form-group input-container">
                                 <input type="hidden" name="carId" value="{{ $cars[0]->id }}">
-                                <input type="text" class="form-control" name="name" placeholder="Enter Car Name" value="{{ $cars[0]->name }}"/>
+                                <input type="text" class="form-control" name="name" placeholder="" value="{{ $cars[0]->name }}"/>
+                                <label for="input-box" class="input-placeholder">Car Name</label>
                                 @error('name')
                                     <div class="text-danger">{{ $message }}</div>
                                 @enderror
@@ -148,9 +194,17 @@
                                     <h4 class="card-title">Rent per day in AED</h4>
                                 </div>
                                 <div class="card-body">
-                                    <div class="form-group">
-                                        <input type="text" name="rent" placeholder="Enter Rent Amount" class="form-control" value="{{ $cars[0]->rent }}">
+                                    <div class="form-group input-container">
+                                        <input type="text" name="rent" placeholder="" class="form-control" value="{{ $cars[0]->rent }}">
+                                        <label for="input-box" class="input-placeholder">Daily Rent (AED)</label>
                                         @error('rent')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group input-container">
+                                        <input type="text" name="daily_mileage" placeholder="" class="form-control" value="{{ $cars[0]->daily_mileage }}">
+                                        <label for="input-box" class="input-placeholder">Daily Mileage (KM)</label>
+                                        @error('daily_mileage')
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
@@ -159,8 +213,9 @@
                                         <label class="form-check-label">Avail special offers</label>
                                     </div>
                                     <div class="col-12 col-md-12 special-offer" style="display: @if($cars[0]->offer_flag == 1) block; @else none; @endif;">
-                                        <div class="form-group">
-                                            <input type="text" name="specialOffer" placeholder="Enter Offer Price" class="form-control" value="{{ $cars[0]->offer_price }}">
+                                        <div class="form-group input-container">
+                                            <input type="text" name="specialOffer" placeholder="" class="form-control" value="{{ $cars[0]->offer_price }}">
+                                            <label for="input-box" class="input-placeholder">Offer Price (AED)</label>
                                             @error('specialOffer')
                                                 <div class="text-danger">{{ $message }}</div>
                                             @enderror
@@ -171,18 +226,103 @@
 
                             <div class="card">
                                 <div class="card-header">
-                                    <h4 class="card-title">Deposit in AED</h4>
+                                    <h4 class="card-title">Weekly rent in AED</h4>
                                 </div>
                                 <div class="card-body">
+                                    <div class="form-group input-container">
+                                        <input type="text" name="weekly_rent" placeholder="" class="form-control" value="{{ $cars[0]->per_week }}">
+                                        <label for="input-box" class="input-placeholder">Weekly Rent (AED)</label>
+                                        @error('weekly_rent')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group input-container">
+                                        <input type="text" name="weekly_mileage" placeholder="" class="form-control" value="{{ $cars[0]->weekly_mileage }}">
+                                        <label for="input-box" class="input-placeholder">Weekly Mileage (KM)</label>
+                                        @error('weekly_mileage')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
                                     <div class="form-group">
-                                        <input type="text" name="deposit" placeholder="Enter Deposit Amount" class="form-control" value="{{ $cars[0]->deposit }}">
+                                        <input class="form-check-input offer-flag" type="checkbox" name="offerFlagWeekly" id="offerFlagWeekly" @if($cars[0]->offer_flag_weekly == 1) checked @endif>
+                                        <label class="form-check-label">Avail special offers</label>
+                                    </div>
+                                    <div class="col-12 col-md-12 special-offer-weekly" style="display: @if($cars[0]->offer_flag_weekly == 1) block; @else none; @endif;">
+                                        <div class="form-group input-container">
+                                            <input type="text" name="specialOfferWeekly" placeholder="" class="form-control" value="{{ $cars[0]->offer_price_weekly }}">
+                                            <label for="input-box" class="input-placeholder">Offer Price (AED)</label>
+                                            @error('specialOfferWeekly')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">Monthly rent in AED</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group input-container">
+                                        <input type="text" name="monthly_rent" placeholder="" class="form-control" value="{{ $cars[0]->per_month }}">
+                                        <label for="input-box" class="input-placeholder">Monthly Rent (AED)</label>
+                                        @error('monthly_rent')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group input-container">
+                                        <input type="text" name="monthly_mileage" placeholder="" class="form-control" value="{{ $cars[0]->monthly_mileage }}">
+                                        <label for="input-box" class="input-placeholder">Monthly Mileage (KM)</label>
+                                        @error('monthly_mileage')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group">
+                                        <input class="form-check-input offer-flag" type="checkbox" name="offerFlagMonthly" id="offerFlagMonthly" @if($cars[0]->offer_flag_monthly == 1) checked @endif>
+                                        <label class="form-check-label">Avail special offers</label>
+                                    </div>
+                                    <div class="col-12 col-md-12 special-offer-monthly" style="display: @if($cars[0]->offer_flag_monthly == 1) block; @else none; @endif;">
+                                        <div class="form-group input-container">
+                                            <input type="text" name="specialOfferMonthly" placeholder="" class="form-control" value="{{ $cars[0]->offer_price_monthly }}">
+                                            <label for="input-box" class="input-placeholder">Offer Price (AED)</label>
+                                            @error('specialOfferMonthly')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">Other Charges AED</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group input-container">
+                                        <input type="text" name="deposit" placeholder="" class="form-control" value="{{ $cars[0]->deposit }}">
+                                        <label for="input-box" class="input-placeholder">Deposit Amount (AED)</label>
                                         @error('deposit')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group input-container">
+                                        <input type="text" name="toll" placeholder="" class="form-control" value="{{ $cars[0]->toll_charges }}">
+                                        <label for="input-box" class="input-placeholder">Toll Amount (AED)</label>
+                                        @error('toll')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group input-container">
+                                        <input type="text" name="additionalCharge" placeholder="" class="form-control" value="{{ $cars[0]->add_mileage_charge }}">
+                                        <label for="input-box" class="input-placeholder">Additional rent per KM (AED)</label>
+                                        @error('additionalCharge')
                                             <div class="text-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
                                 </div>
                             </div>
-                            <div class="card">
+                            <!-- <div class="card">
                                 <div class="card-header">
                                     <h4 class="card-title">Quantity</h4>
                                 </div>
@@ -190,14 +330,15 @@
                                     <input type="text" name="qty" placeholder="Enter Quantity" class="form-control" value="{{ $cars[0]->qty }}">
                                     @error('qty') <span class="text-danger">{{ $message }}</span> @enderror
                                 </div>
-                            </div>
+                            </div> -->
 
                             <div class="card">
                                 <div class="card-header">
                                     <h4 class="card-title">Kilometers Driven</h4>
                                 </div>
-                                <div class="card-body">
-                                    <input type="text" name="kmeter" placeholder="Enter Kilometer" class="form-control" value="{{ $cars[0]->kmeter }}">
+                                <div class="card-body input-container">
+                                    <input type="text" name="kmeter" placeholder="" class="form-control" value="{{ $cars[0]->kmeter }}">
+                                    <label for="input-box" class="input-placeholder">Kilometers Driven (KM)</label>
                                     @error('kmeter') <span class="text-danger">{{ $message }}</span> @enderror
                                 </div>
                             </div>
@@ -242,10 +383,10 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="form-group">
-                                        <input type="checkbox" name="general_info" @if($cars[0]->general_info_flag == 1) checked @endif> Include general information
+                                        <input type="checkbox" name="general_info" @if($cars[0]->general_info_flag == 1) checked @endif> Include General Information
                                     </div>
                                     <div class="form-group">
-                                        <input type="checkbox" name="rental_condition" @if($cars[0]->rental_condition_flag == 1) checked @endif> Include rental conditions
+                                        <input type="checkbox" name="rental_condition" @if($cars[0]->rental_condition_flag == 1) checked @endif> Include Policies and Agreement
                                     </div>
                                 </div>
                             </div>
@@ -265,13 +406,27 @@
     document.addEventListener('DOMContentLoaded', function () {
         const offerFlag = document.getElementById('offerFlag');
         const specialOffer = document.querySelector('.special-offer');
-
         function toggleSpecialOffer() {
             specialOffer.style.display = offerFlag.checked ? 'block' : 'none';
         }
-
         offerFlag.addEventListener('change', toggleSpecialOffer);
         toggleSpecialOffer();
+
+        const offerFlagWeekly = document.getElementById('offerFlagWeekly');
+        const specialOfferWeekly = document.querySelector('.special-offer-weekly');
+        function toggleSpecialOfferWeekly() {
+            specialOfferWeekly.style.display = offerFlagWeekly.checked ? 'block' : 'none';
+        }
+        offerFlagWeekly.addEventListener('change', toggleSpecialOfferWeekly);
+        toggleSpecialOfferWeekly();
+        
+        const offerFlagMonthly = document.getElementById('offerFlagMonthly');
+        const specialOfferMonthly = document.querySelector('.special-offer-monthly');
+        function toggleSpecialOfferMonthly() {
+            specialOfferMonthly.style.display = offerFlagMonthly.checked ? 'block' : 'none';
+        }
+        offerFlagMonthly.addEventListener('change', toggleSpecialOfferMonthly);
+        toggleSpecialOfferMonthly();
     });
 
     $(".delete-car-image").click(function () {

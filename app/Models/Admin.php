@@ -19,7 +19,7 @@ class Admin extends Model
         if(!empty($data['id'])){
             $condition .= " AND c.id = $data[id]";
         }
-        return DB::select("SELECT c.id,c.name,c.model,cb.id brand_id,cb.name brand_name,ct.id type_id,ct.name car_type,GROUP_CONCAT(ci.image) AS 'image',c.rent,c.general_info_flag,c.rental_condition_flag,c.offer_flag,c.offer_price,c.deposit,c.qty,c.kmeter FROM cars c
+        return DB::select("SELECT c.id,c.name,c.model,cb.id brand_id,cb.name brand_name,ct.id type_id,ct.name car_type,GROUP_CONCAT(ci.image) AS 'image',c.rent,c.general_info_flag,c.rental_condition_flag,c.offer_flag,c.offer_price,c.deposit,c.qty,c.kmeter,c.daily_mileage,c.weekly_mileage,c.monthly_mileage,c.toll_charges,c.add_mileage_charge,c.per_week,c.offer_flag_weekly,c.offer_price_weekly,c.per_month,c.offer_flag_monthly,c.offer_price_monthly FROM cars c
                             LEFT JOIN car_brand cb ON cb.id=c.brand_id
                             LEFT JOIN car_type ct ON ct.id=c.type_id
                             LEFT JOIN car_images ci ON ci.car_id=c.id
@@ -72,7 +72,7 @@ class Admin extends Model
         try {
             // Insert into cars table
             DB::insert(
-                "INSERT INTO cars (name, model, brand_id, type_id, general_info_flag, rental_condition_flag, rent, deposit, offer_flag, offer_price,qty,kmeter) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                "INSERT INTO cars (name, model, brand_id, type_id, general_info_flag, rental_condition_flag, rent, deposit, offer_flag, offer_price,qty,kmeter,daily_mileage,per_week,weekly_mileage,offer_flag_weekly,offer_price_weekly,per_month,monthly_mileage,offer_flag_monthly,offer_price_monthly,toll_charges,add_mileage_charge) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 [
                     $data['name'],
                     $data['model'],
@@ -86,6 +86,18 @@ class Admin extends Model
                     $data['specialOffer'] ?? null,
                     $data['qty'],
                     $data['kmeter'],
+
+                    $data['daily_mileage'],
+                    $data['weekly_rent'],
+                    $data['weekly_mileage'],
+                    $data['offerFlagWeekly'],
+                    $data['specialOfferWeekly'] ?? null,
+                    $data['monthly_rent'],
+                    $data['monthly_mileage'],
+                    $data['offerFlagMonthly'],
+                    $data['specialOfferMonthly'] ?? null,
+                    $data['toll'],
+                    $data['additionalCharge']
                 ]
             );
 
@@ -132,7 +144,7 @@ class Admin extends Model
         DB::beginTransaction();
         try {
             $carId = $data['carId'];
-            DB::UPDATE("UPDATE cars SET name='$data[name]',model='$data[model]',brand_id='$data[brand]',type_id='$data[cartype]',general_info_flag='$data[general_info]',rental_condition_flag='$data[rental_condition]',rent='$data[rent]',offer_price='$data[specialOffer]',offer_flag='$data[offerFlag]',deposit='$data[deposit]',qty='$data[qty]',kmeter='$data[kmeter]' WHERE id=$carId;");
+            DB::UPDATE("UPDATE cars SET name='$data[name]',model='$data[model]',brand_id='$data[brand]',type_id='$data[cartype]',general_info_flag='$data[general_info]',rental_condition_flag='$data[rental_condition]',rent='$data[rent]',offer_price='$data[specialOffer]',offer_flag='$data[offerFlag]',deposit='$data[deposit]',qty='$data[qty]',kmeter='$data[kmeter]',daily_mileage='$data[daily_mileage]',weekly_mileage='$data[weekly_mileage]',monthly_mileage='$data[monthly_mileage]',add_mileage_charge='$data[additionalCharge]',toll_charges='$data[toll]',per_week='$data[weekly_rent]',offer_flag_weekly='$data[offerFlagWeekly]',offer_price_weekly='$data[specialOfferWeekly]',per_month='$data[monthly_rent]',offer_flag_monthly='$data[offerFlagMonthly]',offer_price_monthly='$data[specialOfferMonthly]' WHERE id=$carId;");
 
             //Update Car Specifications
             DB::DELETE("DELETE FROM car_specification WHERE car_id='$carId';");

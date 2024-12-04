@@ -228,16 +228,31 @@ class AdminController extends Controller
                 'cartype' => ['required'],
                 'features' => ['required'],
                 'specifications' => ['required'],
-                'rent' => ['required'],
                 'general_info' => ['nullable'],
                 'rental_condition' => ['nullable', ],
                 'carImages' => ['required', 'array'],
                 'carImages.*' => ['required', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
+
+                'rent' => ['required'],
+                'daily_mileage' => ['required'],
                 'specialOffer' => ['nullable'],
                 'offerFlag' => ['nullable'],
+
+                'weekly_rent' => ['required'],
+                'weekly_mileage' => ['required'],
+                'offerFlagWeekly' => ['nullable'],
+                'specialOfferWeekly' => ['nullable'],
+
+                'monthly_rent' => ['required'],
+                'monthly_mileage' => ['required'],
+                'offerFlagMonthly' => ['nullable'],
+                'specialOfferMonthly' => ['nullable'],
+
                 'deposit' => ['required'],
-                'qty' => ['required','numeric'],
+                'qty' => ['nullable','numeric'],
                 'kmeter' => ['required','numeric'],
+                'toll' => ['required','numeric'],
+                'additionalCharge' => ['required','numeric'],
             ],[
                 'carImages.*.max' => 'Each image must not exceed 2 MB in size.',
             ]);
@@ -246,7 +261,11 @@ class AdminController extends Controller
             $filterData['general_info'] = !empty($filterData['general_info']) ? 1 : 0;
             $filterData['rental_condition'] = !empty($filterData['rental_condition']) ? 1 : 0;
             $filterData['offerFlag'] = !empty($filterData['offerFlag']) ? 1 : 0;
+            $filterData['offerFlagWeekly'] = isset($filterData['offerFlagWeekly']) ? 1 : 0;
+            $filterData['offerFlagMonthly'] = isset($filterData['offerFlagMonthly']) ? 1 : 0;
 
+            $filterData['qty'] = 1;
+            
             // Handle file uploads
             $uploadedImages = [];
             if ($request->hasFile('carImages')) {
@@ -305,23 +324,43 @@ class AdminController extends Controller
                 'cartype' => ['required'],
                 'features' => ['required'],
                 'specifications' => ['required'],
-                'rent' => ['required'],
+                
                 'deposit' => ['required'],
                 'general_info' => ['nullable'],
                 'rental_condition' => ['nullable'],
                 'carImages' => ['nullable'],
                 'carImages.*' => ['image', 'mimes:jpg,jpeg,png,gif', 'max:2048'],
+
+                'rent' => ['required'],
+                'daily_mileage' => ['required'],
                 'specialOffer' => ['nullable'],
                 'offerFlag' => ['nullable'],
-                'qty' => ['required','numeric'],
+
+                'weekly_rent' => ['required'],
+                'weekly_mileage' => ['required'],
+                'offerFlagWeekly' => ['nullable'],
+                'specialOfferWeekly' => ['nullable'],
+
+                'monthly_rent' => ['required'],
+                'monthly_mileage' => ['required'],
+                'offerFlagMonthly' => ['nullable'],
+                'specialOfferMonthly' => ['nullable'],
+
+                'qty' => ['nullable','numeric'],
                 'kmeter' => ['required','numeric'],
+                'toll' => ['required','numeric'],
+                'additionalCharge' => ['required','numeric'],
             ]);
 
             // Set flags for general info and rental conditions
             $filterData['general_info'] = isset($filterData['general_info']) ? 1 : 0;
             $filterData['rental_condition'] = isset($filterData['rental_condition']) ? 1 : 0;
             $filterData['offerFlag'] = isset($filterData['offerFlag']) ? 1 : 0;
+            $filterData['offerFlagWeekly'] = isset($filterData['offerFlagWeekly']) ? 1 : 0;
+            $filterData['offerFlagMonthly'] = isset($filterData['offerFlagMonthly']) ? 1 : 0;
 
+            $filterData['qty'] = 1;
+            // echo '<pre>';print_r($filterData);exit;
             if(Session::get('deleteCarImageData')){
                 $CarImageData = Session::get('deleteCarImageData');
                 // echo '<pre>';print_r($CarImageData);exit;

@@ -9,6 +9,66 @@
 
     
 </style>
+<style>
+    .pricing-table {
+        margin-top: 30px;
+        overflow-x: auto; /* Allows horizontal scroll on small screens */
+    }
+
+    .pricing-table table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 0 auto;
+        background: #fff;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .pricing-table th, .pricing-table td {
+        text-align: center;
+        padding: 15px 20px;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .pricing-table th {
+        background-color: #000080;
+        color: #fff;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .pricing-table tr:last-child td {
+        border-bottom: none;
+    }
+
+    .pricing-table tbody tr {
+        transition: background-color 0.3s ease;
+    }
+
+    .pricing-table tbody tr:hover {
+        background-color: #f9f9f9;
+    }
+
+    .pricing-table td {
+        font-size: 16px;
+        color: #333;
+    }
+
+    @media screen and (max-width: 768px) {
+        .pricing-table th, .pricing-table td {
+            font-size: 14px;
+            padding: 12px;
+        }
+    }
+
+    @media screen and (max-width: 480px) {
+        .pricing-table th, .pricing-table td {
+            font-size: 12px;
+            padding: 10px;
+        }
+    }
+</style>
 @php
 $timeSlots = [];
 $startTime = strtotime("12:00 AM");
@@ -168,6 +228,58 @@ while ($startTime <= $endTime) {
                             <h2>{{$carDet[0]->brand_name}} {{$carDet[0]->name}} - {{$carDet[0]->model}} Model</h2>
                         </div>
                         
+                        <!-- Responsive Table Start -->
+                        <div class="pricing-table wow fadeInUp fleets-information" data-wow-delay="0.5s">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Rental Period</th>
+                                        <th>Rental Cost</th>
+                                        <th>Mileage Limit</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Daily</td>
+                                        <td> 
+                                        @if($carDet[0]->offer_flag==1)
+                                            <del>AED {{$carDet[0]->rent}}</del>
+                                            Offer Price AED {{$carDet[0]->offer_price}}
+                                        @else
+                                            AED {{$carDet[0]->rent}}
+                                        @endif
+                                        </td>
+                                        <td>{{$carDet[0]->daily_mileage}} KM</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Weekly</td>
+                                        <td>
+                                        @if($carDet[0]->offer_flag_weekly==1)
+                                            <del>AED {{$carDet[0]->per_week}}</del>
+                                            Offer Price AED {{$carDet[0]->offer_price_weekly}}
+                                        @else
+                                            AED {{$carDet[0]->per_week}}
+                                        @endif
+                                        </td>
+                                        <td>{{$carDet[0]->weekly_mileage}} KM</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Monthly</td>
+                                        <td>
+                                        @if($carDet[0]->offer_flag_monthly==1)
+                                            <del>AED {{$carDet[0]->per_month}}</del>
+                                            Offer Price AED {{$carDet[0]->offer_price_monthly}}
+                                        @else
+                                            AED {{$carDet[0]->per_month}}
+                                        @endif
+                                        </td>
+                                        <td>{{$carDet[0]->monthly_mileage}} KM</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- Responsive Table End -->
+
                         <div class="fleets-single-sidebar-list">
                             <div class="row">
 

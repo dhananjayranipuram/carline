@@ -2,6 +2,26 @@
 
 @section('content')
 <style> .btn-default.btn-highlighted { background-color: #000000; color: #ffffff; } .btn-default.btn-highlighted:before { background-color: #b9b9b9; } /* Booking History Background */ .booking-history { background-color: #f5f5f5; /* Light grey background */ padding: 20px; border-radius: 8px; margin-bottom: 20px; } /* Car Image Styling */ .car-image img { width: 100%; height: auto; border-radius: 5px; margin-bottom: 15px; } /* Booking Details Styling */ /* Booking Details Styling */ .booking-details p { font-size: 14px; color: #333; margin: 4px 0; } .booking-details p span { display: block; margin-top: 2px; /* Optional: Adds a small gap between the label and the value */ } /* Buttons Styling */ .booking-actions { display: flex; flex-direction: column; gap: 10px; /* Spacing between buttons */ align-items: flex-end; margin-top: 20px; } /* Button Styling */ .btn { padding: 10px 20px; font-size: 14px; font-weight: 600; border: none; border-radius: 4px; cursor: pointer; transition: background-color 0.3s ease; width: 100px; /* Set a fixed width for consistency */ text-align: center; } /* Edit Button Styling */ .btn-edit { background-color: #4caf50; /* Green background */ color: #fff; } .btn-edit:hover { background-color: #45a049; /* Darker green on hover */ color: #FFEB3B; } /* View Button Styling */ .btn-view { background-color: #007bff; /* Blue background */ color: #fff; } .btn-view:hover { background-color: #0069d9; /* Darker blue on hover */ color: #FFEB3B; } /* Default single-column layout for larger screens */ .booking-details { display: block; } /* Two-column layout for smaller screens (mobile) */ @media (max-width: 576px) { .booking-details { display: grid; grid-template-columns: 1fr 1fr; /* Two equal columns */ gap: 10px; /* Space between columns */ } .booking-details p { margin: 4px 0; } } </style>
+<style>
+    .responsive-button {
+        display: block; /* Ensures full-width behavior */
+        width: 100%; /* Full width of the container */
+        max-width: 400px; /* Optional: Limit maximum width */
+        margin: 10px auto; /* Center the button and add spacing */
+        text-align: center; /* Center the text */
+        padding: 15px; /* Add padding for better appearance */
+        background-color: #007BFF; /* Example color */
+        color: #fff; /* Text color */
+        text-decoration: none; /* Remove underline */
+        border-radius: 5px; /* Rounded corners */
+        cursor: pointer;
+        transition: background-color 0.3s ease; /* Hover effect */
+    }
+    
+    .responsive-button:hover {
+        background-color: #0056b3; /* Darker blue on hover */
+    }
+</style>
 
 <!-- Booking Form Box Start -->
 <div class="booking-form-box">
@@ -191,6 +211,8 @@
                                 <li><span>Email: </span>{{$userAccount[0]->email}}</li>
                                 <li><span>Address: </span>{{$userAccount[0]->flat}}, {{$userAccount[0]->building}}, {{$userAccount[0]->landmark}}, {{$userAccount[0]->city}}, {{$userAccount[0]->emirates}}</li>
                             </ul>
+                            <a href="{{ url('/my-account') }}" class="responsive-button">Booking History</a>
+                            <a href="{{ url('/my-documents') }}" class="responsive-button">My Documents</a>
                         </div>
                         <!-- Team member Body End -->
 
