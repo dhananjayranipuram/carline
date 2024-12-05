@@ -90,7 +90,7 @@ while ($startTime <= $endTime) {
                                 <input type="hidden" value="{{$carDet[0]->id}}" id="carId">
                                 @if($carDet[0]->offer_flag==1)
                                     <h5>AED <del>{{$carDet[0]->rent}}</del><span>/ DAY</span></h5>
-                                    <h2>Offer Price AED {{$carDet[0]->offer_price}}<span>/ DAY</span></h2>
+                                    <h2>Offer Price <br>AED {{$carDet[0]->offer_price}}<span>/ DAY</span></h2>
                                 @else
                                     <h2>AED {{$carDet[0]->rent}}<span>/ DAY</span></h2>
                                 @endif
@@ -244,7 +244,7 @@ while ($startTime <= $endTime) {
                                         <td> 
                                         @if($carDet[0]->offer_flag==1)
                                             <del>AED {{$carDet[0]->rent}}</del>
-                                            Offer Price AED {{$carDet[0]->offer_price}}
+                                            AED {{$carDet[0]->offer_price}}
                                         @else
                                             AED {{$carDet[0]->rent}}
                                         @endif
@@ -256,7 +256,7 @@ while ($startTime <= $endTime) {
                                         <td>
                                         @if($carDet[0]->offer_flag_weekly==1)
                                             <del>AED {{$carDet[0]->per_week}}</del>
-                                            Offer Price AED {{$carDet[0]->offer_price_weekly}}
+                                            AED {{$carDet[0]->offer_price_weekly}}
                                         @else
                                             AED {{$carDet[0]->per_week}}
                                         @endif
@@ -268,7 +268,7 @@ while ($startTime <= $endTime) {
                                         <td>
                                         @if($carDet[0]->offer_flag_monthly==1)
                                             <del>AED {{$carDet[0]->per_month}}</del>
-                                            Offer Price AED {{$carDet[0]->offer_price_monthly}}
+                                            AED {{$carDet[0]->offer_price_monthly}}
                                         @else
                                             AED {{$carDet[0]->per_month}}
                                         @endif

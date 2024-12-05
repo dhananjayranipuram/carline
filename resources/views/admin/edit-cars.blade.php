@@ -120,7 +120,13 @@ input[type="text"]:not(:placeholder-shown) + .input-placeholder {
                             <div class="form-group">
                                 <select class="form-control" name="model">
                                     <option value="">Select Model</option>
-                                    @for ($i = date('Y'); $i >= 1990; $i--)
+                                    @php 
+                                    $year = date('Y');
+                                    if(date('M')>10){
+                                        $year = date('Y')+1;
+                                    }
+                                    @endphp
+                                    @for ($i = $year; $i >= 1990; $i--)
                                         <option value="{{ $i }}" @selected($cars[0]->model == $i)>{{ $i }}</option>
                                     @endfor
                                 </select>
