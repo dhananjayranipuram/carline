@@ -70,6 +70,8 @@
     }
     ul{
         color: var(--white-color);
+        margin: 0;
+        font-weight: normal;
     }
 </style>
 @php
