@@ -396,7 +396,7 @@ class Admin extends Model
     }
 
     public function savePolicyAgreementData($data){
-        $res = DB::select("SELECT id FROM policy_agreement WHERE name LIKE '%$data[name]%';");
+        $res = DB::select("SELECT id FROM policy_agreement WHERE name = '$data[name]';");
         if(empty($res)){
             DB::INSERT("INSERT INTO policy_agreement (name,content,active) VALUES ('$data[name]','$data[content]','$data[active]');");
             return DB::getPdo()->lastInsertId();
