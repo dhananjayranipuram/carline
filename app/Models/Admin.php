@@ -392,7 +392,7 @@ class Admin extends Model
         }
         return DB::select("SELECT pa.id,pa.name,pa.content,CASE WHEN pa.active = 1 THEN 'Active' ELSE 'Inactive' END as 'status' FROM policy_agreement pa 
                             WHERE pa.deleted=0 $condition 
-                            ORDER BY pa.name ASC;");
+                            ORDER BY pa.id ASC;");
     }
 
     public function savePolicyAgreementData($data){

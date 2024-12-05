@@ -68,6 +68,9 @@
             padding: 10px;
         }
     }
+    ul{
+        color: var(--white-color);
+    }
 </style>
 @php
 $timeSlots = [];
@@ -385,7 +388,7 @@ while ($startTime <= $endTime) {
                                     <div id="rentalcollapse{{$key}}" class="accordion-collapse collapse" aria-labelledby="rentalheading{{$key}}"
                                         data-bs-parent="#rentalaccordion">
                                         <div class="accordion-body">
-                                            <p>{!!nl2br(e($value->content))!!}</p>
+                                            <p>{!!html_entity_decode(nl2br(e($value->content)))!!}</p>
                                         </div>
                                     </div>
                                 </div>

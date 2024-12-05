@@ -256,6 +256,7 @@ $("#addRowButton").click(function () {
                 $('#save-errors').css('color', color);
                 $('#save-errors').html('<div>'+res.message+'</div>');
                 setTimeout(function(){
+                    location.reload();
                     if(res > 0){
                         var action = '<div class="form-button-action"><button type="button" data-bs-toggle="tooltip" class="btn btn-link btn-primary btn-lg edit-feature" data-name="'+$("#addName").val()+'" data-id="'+res+'" aria-label="Edit Feature" data-bs-original-title="Edit Feature" aria-describedby="tooltip939116"><i class="fa fa-edit"></i></button><button type="button" data-bs-toggle="tooltip" class="btn btn-link btn-danger delete-feature" data-id="'+res+'" aria-label="Delete Feature" data-bs-original-title="Delete Feature"><i class="fa fa-times"></i></button></div>';
                         
