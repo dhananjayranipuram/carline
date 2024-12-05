@@ -253,7 +253,7 @@ $("#addRowButton").click(function () {
                 if(res.status!=200){
                     color = 'red';
                 }
-                $('#save-errors').css('color', +color+);
+                $('#save-errors').css('color', color);
                 $('#save-errors').html('<div>'+res.message+'</div>');
                 setTimeout(function(){
                     if(res > 0){
