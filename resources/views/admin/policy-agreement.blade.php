@@ -249,8 +249,11 @@ $("#addRowButton").click(function () {
             dataType: "json",
             headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
             success: function(res) {
-                
-                $('#save-errors').css('color', 'green');
+                color = 'green';
+                if(res.status!=200){
+                    color = 'red';
+                }
+                $('#save-errors').css('color', +color+);
                 $('#save-errors').html('<div>'+res.message+'</div>');
                 setTimeout(function(){
                     if(res > 0){

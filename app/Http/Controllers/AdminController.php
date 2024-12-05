@@ -1034,7 +1034,14 @@ class AdminController extends Controller
             ]);
             $filterData['active'] = ($filterData['active']=='true') ? 1 : 0;
             $data = $admin->savePolicyAgreementData($filterData);
-            return json_encode($data);
+            if ($data == -1) {
+                $response['status'] = 500;
+                $response['message'] = "Something went wrong.";
+            }else {
+                $response['status'] = 200;
+                $response['message'] = "Policies and Agreements added successfully.";
+            }
+            return json_encode($response);
         }
     }
 
