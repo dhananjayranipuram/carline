@@ -73,6 +73,9 @@
         margin: 0;
         font-weight: normal;
     }
+    p{
+        font-weight: normal;
+    }
 </style>
 @php
 $timeSlots = [];
