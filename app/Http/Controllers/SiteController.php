@@ -317,6 +317,12 @@ class SiteController extends Controller
     public function aboutUs(){
         return view('site/about-us');
     }
+    
+    public function policiesAgreements(){
+        $site = new Site();
+        $data['policy'] = $site->getPolicyAgreement();
+        return view('site/policies-agreements',$data);
+    }
 
     public function offers(){
         $site = new Site();

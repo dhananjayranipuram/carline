@@ -43,6 +43,7 @@ Route::any('/save-car-booking', [SiteController::class, 'saveCarBooking']);
 Route::any('/check-car-booking', [SiteController::class, 'checkCarBooking']);
 
 Route::any('/send-contact-us', [SiteController::class, 'sendContactUs']);
+Route::any('/policies-agreements', [SiteController::class, 'policiesAgreements']);
 
 Route::any('/check-rate', [SiteController::class, 'checkRate']);
 Route::any('/check-time', [SiteController::class, 'checkTime']);

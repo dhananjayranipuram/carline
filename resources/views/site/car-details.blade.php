@@ -73,6 +73,10 @@
         margin: 0;
         font-weight: normal;
     }
+    a.disabled {
+        pointer-events: none;
+        cursor: default;
+    }
 </style>
 @php
 $timeSlots = [];
@@ -188,9 +192,14 @@ while ($startTime <= $endTime) {
                                             <p style="margin-bottom: 0px;"><i class="fas fa-info-circle"></i> Salik / Toll Charges - AED {{$carDet[0]->toll_charges}}</p>
                                             <p style="margin-bottom: 0px;"><i class="fas fa-info-circle"></i> Additional mileage charge - AED {{$carDet[0]->add_mileage_charge}}/km</p>
                                         </div>
+
+                                        <div class="fleets-single-sidebar-list">
+                                            <input type="checkbox" id="agreePolicy"> I have read and agree to Carline's <a href="{{url('/policies-agreements')}}" target="_blank">Policies and Agreement</a>
+                                        </div>
+
                                         <!-- Feets Single Sidebar Btn Start -->
                                         <div class="fleets-single-sidebar-btn">
-                                            <a href="#" class="btn-default popup-with-form book-now-form">book now</a>
+                                            <a href="#" class="btn-default popup-with-form book-now-form disabled" id="bookNowButton">book now</a>
                                             <span>or</span>
                                             <a href="#" class="wp-btn"><i class="fa-brands fa-whatsapp"></i></a>                                
                                         </div>
@@ -753,6 +762,14 @@ $("#pickupdate, #returndate, #destination, #source, #returntime, #pickuptime, #b
         }else{
             localStorage.setItem("action",'booking');
             checkDocumentUploaded();
+        }
+    });
+
+    $("#agreePolicy").click(function() {
+        if ($(this).prop('checked')==true){ 
+            $('#bookNowButton').removeClass('disabled')
+        }else{
+            $('#bookNowButton').addClass('disabled');
         }
     });
 
