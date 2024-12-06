@@ -136,9 +136,7 @@ class Site extends Model
                 $union = '';
                 if(!empty($data['id'])){
                     $condition .= " AND cs.car_id = $data[id]";
-                    $union = "SELECT id,'Kilometers Driven' AS 'name',kmeter AS details,'assets/images/icon-fleets-benefits-1.svg' image FROM cars WHERE id=$data[id] UNION
-                    SELECT id,'Salik / Toll Charges' AS 'name',COALESCE(toll_charges,0) AS details,'assets/images/icon-service-1.svg' image FROM cars WHERE id=$data[id] UNION 
-                    SELECT id,'Additional Mileage Charges' AS 'name',COALESCE(add_mileage_charge,0) AS details,'assets/images/icon-service-2.svg' image FROM cars WHERE id=$data[id] UNION ";
+                    $union = "SELECT id,'Kilometers Driven' AS 'name',kmeter AS details,'assets/images/icon-fleets-benefits-1.svg' image FROM cars WHERE id=$data[id] UNION ";
                 }
                 return DB::select("$union SELECT cs.car_id,s.name,cs.details,s.image FROM car_specification cs
                                     LEFT JOIN specification s ON cs.spec_id = s.id

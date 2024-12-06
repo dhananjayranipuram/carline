@@ -184,6 +184,10 @@ while ($startTime <= $endTime) {
                                                 <li><img src="{{asset('assets/images/icon-service-2.svg')}}" alt="">Total <span id="total-message">AED 100</span></li>
                                             </ul>
                                         </div>
+                                        <div class="fleets-single-sidebar-list" id="additionalNotes" style="display:none;">
+                                            <p style="margin-bottom: 0px;"><i class="fas fa-info-circle"></i> Salik / Toll Charges - AED {{$carDet[0]->toll_charges}}</p>
+                                            <p style="margin-bottom: 0px;"><i class="fas fa-info-circle"></i> Additional mileage charge - AED {{$carDet[0]->add_mileage_charge}}/km</p>
+                                        </div>
                                         <!-- Feets Single Sidebar Btn Start -->
                                         <div class="fleets-single-sidebar-btn">
                                             <a href="#" class="btn-default popup-with-form book-now-form">book now</a>
@@ -725,6 +729,7 @@ $("#pickupdate, #returndate, #destination, #source, #returntime, #pickuptime, #b
                                 '</ul>';
                     $("#rate-details").show();
                     $("#rate-details").html(str);
+                    $("#additionalNotes").show();
                     // $(".overlay").hide();
                 }
             });

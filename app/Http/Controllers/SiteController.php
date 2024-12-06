@@ -748,7 +748,7 @@ class SiteController extends Controller
 
         // Calculate the total amount and VAT
         $total = $rentDays + $deposit + $emirateCharges + $babySeatCharges;
-        $vat = $vatRate * $total;
+        $vat = $vatRate * $rentDays;
     
         // Prepare result data
         $res['days'] = $days;
