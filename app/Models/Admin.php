@@ -865,4 +865,171 @@ class Admin extends Model
             ])
             ->get();
     }
+
+    public function updateDocStatus($data)
+    {
+        // Define mapping of docType to database columns
+        $docTypeToColumn = [
+            'pass_front' => 'passf_flag',
+            'pass_back'  => 'passb_flag',
+            'dl_front'   => 'dlf_flag',
+            'dl_back'    => 'dlb_flag',
+            'eid_front'  => 'eidf_flag',
+            'eid_back'   => 'eidb_flag',
+        ];
+
+        // Check if the docType is valid
+        if (!isset($docTypeToColumn[$data['docType']])) {
+            return false; // Invalid docType
+        }
+
+        // Update the appropriate column in the database
+        return DB::table('enduser')
+            ->where('id', $data['userId'])
+            ->update([$docTypeToColumn[$data['docType']] => '0']);
+    }
+
+    public function updateDocImage($data,$image=[])
+    {
+        // Define the mapping of docType to database column
+        $docTypeToColumn = [
+            'pass_front' => 'pass_front',
+            'pass_back'  => 'pass_back',
+            'dl_front'   => 'dl_front',
+            'dl_back'    => 'dl_back',
+            'eid_front'  => 'eid_front',
+            'eid_back'   => 'eid_back',
+        ];
+
+        // Validate if the provided docType exists in the mapping
+        if (!isset($docTypeToColumn[$data['docType']])) {
+            return response()->json(['error' => 'Invalid document type.'], 400); // Return error response
+        }
+
+        // Use the column mapped to the docType
+        $column = $docTypeToColumn[$data['docType']];
+
+        // Update the appropriate column in the database
+        return DB::table('user_documents')
+            ->where('user_id', $data['userId'])
+            ->update([$column => '']);
+    }
+
+    public function getImage($data)
+    {
+        // Define the mapping of docType to database column
+        $docTypeToColumn = [
+            'pass_front' => 'pass_front',
+            'pass_back'  => 'pass_back',
+            'dl_front'   => 'dl_front',
+            'dl_back'    => 'dl_back',
+            'eid_front'  => 'eid_front',
+            'eid_back'   => 'eid_back',
+        ];
+
+        // Validate if the provided docType exists in the mapping
+        if (!isset($docTypeToColumn[$data['docType']])) {
+            return response()->json(['error' => 'Invalid document type.'], 400); // Return error response
+        }
+
+        // Use the column mapped to the docType
+        $column = $docTypeToColumn[$data['docType']];
+
+        // Fetch the image from the database
+        return \DB::table('enduser as eu')
+            ->leftJoin('user_documents as ud', 'ud.user_id', '=', 'eu.id')
+            ->where('eu.id', $data['userId'])
+            ->select([$column . ' as image'])
+            ->first();
+    }
+
+    public function updateUserData($data = [])
+    {
+        return DB::table('enduser')
+                ->where('id', $data['userId'])
+                ->update([
+                    'first_name' => $data['first_name'],
+                    'last_name' => $data['last_name'],
+                    'phone' => $data['phone'],
+                    'flat' => $data['flat'],
+                    'building' => $data['building'],
+                    'landmark' => $data['landmark'],
+                    'city' => $data['city']
+                ]);
+    }
+
+    public function updateUploadedDocuments($data = [])
+    {
+        // Validate if 'uploadedFiles' is provided and is an array
+        if (!isset($data['uploadedFiles']) || !is_array($data['uploadedFiles'])) {
+            return false;
+        }
+
+        // Validate if 'id' is provided
+        if (!isset($data['id']) || empty($data['id'])) {
+            return false;
+        }
+
+        // Define mappings for uploaded files to database columns
+        $fieldMapping = [
+            'pass_front' => 'pass_front',
+            'pass_back'  => 'pass_back',
+            'dl_front'   => 'dl_front',
+            'dl_back'    => 'dl_back',
+            'eid_front'  => 'eid_front',
+            'eid_back'   => 'eid_back',
+        ];
+
+        $flagMapping = [
+            'pass_front' => 'passf_flag',
+            'pass_back'  => 'passb_flag',
+            'dl_front'   => 'dlf_flag',
+            'dl_back'    => 'dlb_flag',
+            'eid_front'  => 'eidf_flag',
+            'eid_back'   => 'eidb_flag',
+        ];
+
+        // Map input data for updates
+        $documentUpdates = [];
+        $flagUpdates = [];
+
+        foreach ($data['uploadedFiles'] as $key => $value) {
+            if (!is_null($value) && $value !== '' && isset($fieldMapping[$key])) {
+                $documentUpdates[$fieldMapping[$key]] = $value; // Update document columns
+                $flagUpdates[$flagMapping[$key]] = 1;          // Set corresponding flag to 1
+            }
+        }
+
+        // Check if there's anything to update
+        if (empty($documentUpdates)) {
+            return false;
+        }
+
+        try {
+            DB::beginTransaction();
+
+            // Update the user_documents table
+            DB::table('user_documents')
+                ->where('user_id', $data['id'])
+                ->update($documentUpdates);
+
+            // Update the flags in the enduser table
+            DB::table('enduser')
+                ->where('id', $data['id'])
+                ->update($flagUpdates);
+
+            DB::commit();
+            return true;
+        } catch (\Exception $e) {
+            DB::rollback();
+            return false; // Handle error
+        }
+    }
+
+    public function getMyDocumentDetails($data=[]){
+        return DB::select("SELECT eu.id,ud.pass_front,ud.pass_back,ud.dl_front,ud.dl_back,ud.eid_front,ud.eid_back
+            FROM enduser eu
+            LEFT JOIN user_documents ud ON eu.id=ud.user_id
+            WHERE eu.id='$data[userId]' AND eu.active=1;");
+    }
 }

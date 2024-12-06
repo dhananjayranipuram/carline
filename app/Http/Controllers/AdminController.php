@@ -161,6 +161,97 @@ class AdminController extends Controller
 
         return view('admin/view-user', $data);
     }
+    
+    public function editUsers(Request $request)
+    {
+        $admin = new Admin();
+        if ($request->isMethod('post')) {
+            $credentials = $request->validate([
+                'userId' => ['required'],
+                'first_name' => ['required'],
+                'last_name' => ['required'],
+                'email' => ['required'],
+                'phone' => ['required'],
+                'flat' => ['required'],
+                'building' => ['required'],
+                'landmark' => ['required'],
+                'city' => ['required'],
+                'country' => ['nullable'],
+
+                'pass_front' => ['nullable', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
+                'pass_back' => ['nullable', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
+                'dl_front' => ['nullable', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
+                'dl_back' => ['nullable', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
+                'eid_front' => ['nullable', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
+                'eid_back' => ['nullable', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
+            ]);
+
+            // Handle file uploads using the helper function
+            $uploadedFiles = $this->handleFileUploads($request, [
+                'pass_front', 
+                'pass_back', 
+                'dl_front', 
+                'dl_back', 
+                'eid_front', 
+                'eid_back'
+            ]);
+            
+            $currentFiles = $admin->getMyDocumentDetails($credentials);
+            
+            // Check for errors in uploaded files
+            if ($uploadedFiles['errors']) {
+                return response()->json(['status' => '400', 'message' => $uploadedFiles['errors']], 400);
+            }
+
+            // Add user ID to the uploaded files data
+            $uploadedFiles['id'] = $request->session()->get('userId');
+
+            // Save uploaded documents
+            $res = $admin->updateUploadedDocuments($uploadedFiles);
+
+            $res = $admin->updateUserData($credentials);
+
+            if($res){
+                foreach ($uploadedFiles['uploadedFiles'] as $key => $field) {
+                    $currentFilePath = $currentFiles[0]->{str_replace('edit_', '', $key)} ?? null;
+                    if ($currentFilePath && File::exists($currentFilePath)) {
+                        File::delete($currentFilePath);
+                    }
+                }
+            }
+            return redirect()->to('/admin/edit-users?id=' . base64_encode($credentials['userId']))
+                         ->with('success', 'User details updated successfully!');
+        }else{
+            $queries = [];
+            parse_str($_SERVER['QUERY_STRING'], $queries);
+            $input['id'] = base64_decode($queries['id']);
+    
+            $data['user'] = $admin->getUsersDetails($input);
+    
+            return view('admin/edit-user', $data);
+        }
+        
+    }
+
+    private function handleFileUploads(Request $request, array $fields)
+    {
+        $uploadedFiles = [];
+        $errors = [];
+
+        foreach ($fields as $field) {
+            if ($request->hasFile($field)) {
+                $file = $request->file($field);
+                $uploadedFiles[$field] = 'storage/' . $file->store('uploads/documents', 'public');
+            } else {
+                // Collect errors for missing required files if needed
+                if (in_array($field, ['eid_front', 'eid_back']) && $request->rider_type === 'resident') {
+                    $errors[] = "Please select " . ucfirst(str_replace('_', ' ', $field)) . " image.";
+                }
+            }
+        }
+
+        return ['uploadedFiles' => $uploadedFiles, 'errors' => $errors];
+    }
 
     public function bookingList(Request $request){
         $request->flash();
@@ -203,6 +294,35 @@ class AdminController extends Controller
         $data['details'] = $admin->getBookingDetails($input);
         return view('admin/booking-details',$data);
         // echo '<pre>';print_r($data);exit;
+    }
+
+    public function updateDocumentStatus(Request $request){
+        $admin = new Admin();
+        $res = $data = [];
+        if($request->method() == 'POST'){
+            $filterData = $request->validate([
+                'userId' => ['required'],
+                'docType' => ['required'],
+                'status' => ['required'],
+            ]);
+            if($filterData['status']=='delete'){
+                $data = $admin->updateDocStatus($filterData);                
+            }
+            
+            if($data){
+                $img = $admin->getImage($filterData);
+                if (File::exists($img->image)) {
+                    File::delete($img->image);
+                    $admin->updateDocImage($filterData,$img); 
+                }
+                $res['status'] = 200;
+                $res['data'] = "Document deleted.";
+            }else{
+                $res['status'] = 500;
+                $res['data'] = "Car not deleted."; 
+            }
+            return json_encode($res);
+        }
     }
 
     public function cars(){

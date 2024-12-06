@@ -296,38 +296,70 @@ class Site extends Model
     
     public function updateUploadedDocuments($data = [])
     {
-        // Ensure uploadedFiles key exists and is an array
+        // Validate if 'uploadedFiles' is provided and is an array
         if (!isset($data['uploadedFiles']) || !is_array($data['uploadedFiles'])) {
-            return false; // Or handle the error as needed
+            return false;
         }
 
-        // Define the mapping of input keys to database column names
+        // Validate if 'id' is provided
+        if (!isset($data['id']) || empty($data['id'])) {
+            return false;
+        }
+
+        // Define mappings for uploaded files to database columns
         $fieldMapping = [
-            'edit_pass_front' => 'pass_front', 
-            'edit_pass_back' => 'pass_back', 
-            'edit_dl_front' => 'dl_front', 
-            'edit_dl_back' => 'dl_back', 
-            'edit_eid_front' => 'eid_front', 
-            'edit_eid_back' => 'eid_back',
+            'edit_pass_front' => 'pass_front',
+            'edit_pass_back'  => 'pass_back',
+            'edit_dl_front'   => 'dl_front',
+            'edit_dl_back'    => 'dl_back',
+            'edit_eid_front'  => 'eid_front',
+            'edit_eid_back'   => 'eid_back',
         ];
 
-        // Map input data to database columns and filter out null/empty values
-        $updateData = [];
+        $flagMapping = [
+            'edit_pass_front' => 'passf_flag',
+            'edit_pass_back'  => 'passb_flag',
+            'edit_dl_front'   => 'dlf_flag',
+            'edit_dl_back'    => 'dlb_flag',
+            'edit_eid_front'  => 'eidf_flag',
+            'edit_eid_back'   => 'eidb_flag',
+        ];
+
+        // Map input data for updates
+        $documentUpdates = [];
+        $flagUpdates = [];
+
         foreach ($data['uploadedFiles'] as $key => $value) {
             if (!is_null($value) && $value !== '' && isset($fieldMapping[$key])) {
-                $updateData[$fieldMapping[$key]] = $value;
+                $documentUpdates[$fieldMapping[$key]] = $value; // Update document columns
+                $flagUpdates[$flagMapping[$key]] = 1;          // Set corresponding flag to 1
             }
         }
 
-        // Proceed only if there's data to update
-        if (empty($updateData)) {
-            return false; // Or handle the case when there's nothing to update
+        // Check if there's anything to update
+        if (empty($documentUpdates)) {
+            return false;
         }
 
-        // Perform the update query
-        return DB::table('user_documents')
-            ->where('user_id', $data['id']) // Ensure ID is provided
-            ->update($updateData);
+        try {
+            DB::beginTransaction();
+
+            // Update the user_documents table
+            DB::table('user_documents')
+                ->where('user_id', $data['id'])
+                ->update($documentUpdates);
+
+            // Update the flags in the enduser table
+            DB::table('enduser')
+                ->where('id', $data['id'])
+                ->update($flagUpdates);
+
+            DB::commit();
+            return true;
+        } catch (\Exception $e) {
+            DB::rollback();
+            return false; // Handle error
+        }
     }
 
     public function updateMissingUploadedDocuments($data = [])
