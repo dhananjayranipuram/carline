@@ -218,12 +218,6 @@
 
                         <div class="hero-content-body wow fadeInUp" data-wow-delay="0.5s" style="visibility: visible; animation-delay: 0.5s; animation-name: fadeInUp;">
                             <a onclick="getUserData()" class="btn-default edit-user">Edit Details</a>   <a href="{{ url('/logout') }}" class="btn-default btn-highlighted">Log Out</a>
-                        </div></br>
-                        <div class="hero-content-body wow fadeInUp" data-wow-delay="0.5s" style="visibility: visible; animation-delay: 0.5s; animation-name: fadeInUp;">
-                            <a href="{{ url('/my-account') }}" class="btn-default edit-user">Bookings History</a>
-                        </div><br>
-                        <div class="hero-content-body wow fadeInUp" data-wow-delay="0.5s" style="visibility: visible; animation-delay: 0.5s; animation-name: fadeInUp;">
-                            <a href="{{ url('/my-documents') }}" class="btn-default edit-user">My Documents</a>
                         </div>
                         <!-- member Social List Start -->
                         <div class="">

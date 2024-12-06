@@ -359,6 +359,7 @@
                     </div>                                
                     <fieldset>
                         <form id="uploadDocs" enctype="multipart/form-data" method="POST">
+                            <input type="hidden" id="docUploadType">
                             <div class="row">
                                 <div class="booking-form-group col-md-12 mb-4">
                                     <label for="returnLocationToggle">Driver Type</label>
@@ -370,12 +371,12 @@
                                 <div class="booking-form-group col-md-12 mb-4">
                                     <div class="row" id="passport-section">
                                         <label for="returnLocationToggle">Passport</label>
-                                        <div class="booking-form-group col-md-6 mb-4">
+                                        <div class="booking-form-group col-md-6 mb-4" id="passf" style="display:none;">
                                             <label>Front</label>
                                             <input type="file" name="pass_front" class="booking-form-control" placeholder="Front" accept="image/*" required>
                                             <div class="help-block with-errors pass_front"></div>
                                         </div>
-                                        <div class="booking-form-group col-md-6 mb-4">
+                                        <div class="booking-form-group col-md-6 mb-4" id="passb" style="display:none;">
                                             <label>Back</label>
                                             <input type="file" name ="pass_back" class="booking-form-control" placeholder="Back" accept="image/*" required>
                                             <div class="help-block with-errors pass_back"></div>
@@ -386,12 +387,12 @@
                                 <div class="booking-form-group col-md-12 mb-4">
                                     <div class="row" id="dl-section">
                                         <label for="returnLocationToggle">Driving Licence</label>
-                                        <div class="booking-form-group col-md-6 mb-4">
+                                        <div class="booking-form-group col-md-6 mb-4" id="dlf" style="display:none;">
                                             <label>Front</label>
                                             <input type="file" name="dl_front" class="booking-form-control" placeholder="Front" accept="image/*" required>
                                             <div class="help-block with-errors dl_front"></div>
                                         </div>
-                                        <div class="booking-form-group col-md-6 mb-4">
+                                        <div class="booking-form-group col-md-6 mb-4" id="dlb" style="display:none;">
                                             <label>Back</label>
                                             <input type="file" name="dl_back" class="booking-form-control" placeholder="Back" accept="image/*" required>
                                             <div class="help-block with-errors dl_back"></div>
@@ -402,12 +403,12 @@
                                 <div class="booking-form-group col-md-12 mb-4" id="eid-section">
                                     <div class="row" >
                                         <label for="returnLocationToggle">EID</label>
-                                        <div class="booking-form-group col-md-6 mb-4">
+                                        <div class="booking-form-group col-md-6 mb-4" id="eidf" style="display:none;">
                                             <label>Front</label>
                                             <input type="file" name="eid_front" class="booking-form-control" placeholder="Front" accept="image/*" required>
                                             <div class="help-block with-errors eid_front"></div>
                                         </div>
-                                        <div class="booking-form-group col-md-6 mb-4">
+                                        <div class="booking-form-group col-md-6 mb-4" id="eidb" style="display:none;">
                                             <label>Back</label>
                                             <input type="file" name="eid_back" class="booking-form-control" placeholder="Back" accept="image/*" required>
                                             <div class="help-block with-errors eid_back"></div>
@@ -861,49 +862,91 @@ $(".rider_type").click(function() {
 });
 
 $(".upload_docs").click(function(e) {
-    e.preventDefault();
-    let formData = new FormData($('#uploadDocs')[0]);
-    $(".overlay").show();
-    $.ajax({
-        url: baseUrl + '/upload-docs',
-        type: 'POST',
-        data: formData,
-        processData: false,
-        contentType: false,
-        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-        success: function(response) {
-            $("#docErrorMessages").html('<span style="color:green;">Documents uploaded successfully.<span>');
-            setTimeout(function () {
-                $("#docErrorMessages").html('');
-                $.magnificPopup.close();
-                $('#uploadDocs')[0].reset();
-                if($('#pickupdate').length){
-                    if(!bookCarAction()){
-                        // location.reload();
-                    }
-                }
-                
-            }, 5000);
-            $(".overlay").hide();
-        },
-        error: function(xhr) {
-            if (xhr.status === 422) {
-                let errors = xhr.responseJSON.errors;
-                Object.keys(errors).forEach(function(key) {
-                    $("."+key+"").html('<span style="color:red;">'+errors[key][0]+'<span>');
-                    setTimeout(function () {
-                        $("."+key+"").html('');
-                    }, 5000);
-                });
-            } else {
-                $("#docErrorMessages").html('<span style="color:red;">An error occurred during the upload.<span>');
+    if($("#docUploadType").val()=='new'){
+        e.preventDefault();
+        let formData = new FormData($('#uploadDocs')[0]);
+        $(".overlay").show();
+        $.ajax({
+            url: baseUrl + '/upload-docs',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+            success: function(response) {
+                $("#docErrorMessages").html('<span style="color:green;">Documents uploaded successfully.<span>');
                 setTimeout(function () {
                     $("#docErrorMessages").html('');
+                    $.magnificPopup.close();
+                    $('#uploadDocs')[0].reset();
+                    if($('#pickupdate').length){
+                        if(!bookCarAction()){
+                            // location.reload();
+                        }
+                    }
+                    
                 }, 5000);
+                $(".overlay").hide();
+            },
+            error: function(xhr) {
+                if (xhr.status === 422) {
+                    let errors = xhr.responseJSON.errors;
+                    Object.keys(errors).forEach(function(key) {
+                        $("."+key+"").html('<span style="color:red;">'+errors[key][0]+'<span>');
+                        setTimeout(function () {
+                            $("."+key+"").html('');
+                        }, 5000);
+                    });
+                } else {
+                    $("#docErrorMessages").html('<span style="color:red;">An error occurred during the upload.<span>');
+                    setTimeout(function () {
+                        $("#docErrorMessages").html('');
+                    }, 5000);
+                }
+                $(".overlay").hide();
             }
-            $(".overlay").hide();
-        }
-    });
+        });
+    }else{
+        e.preventDefault();
+        let formData = new FormData($('#uploadDocs')[0]);
+        console.log(formData)
+        $(".overlay").show();
+        $.ajax({
+            url: baseUrl + '/missing-upload-docs',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+            success: function(response) {
+                $("#edit_docErrorMessages").html('<span style="color:green;">Documents uploaded successfully.<span>');
+                setTimeout(function () {
+                    $("#edit_docErrorMessages").html('');
+                    $.magnificPopup.close();
+                    $('#edit_uploadDocs')[0].reset();
+                    location.reload();
+                }, 5000);
+                $(".overlay").hide();
+            },
+            error: function(xhr) {
+                if (xhr.status === 422) {
+                    let errors = xhr.responseJSON.errors;
+                    Object.keys(errors).forEach(function(key) {
+                        $("."+key+"").html('<span style="color:red;">'+errors[key][0]+'<span>');
+                        setTimeout(function () {
+                            $("."+key+"").html('');
+                        }, 5000);
+                    });
+                } else {
+                    $("#edit_docErrorMessages").html('<span style="color:red;">An error occurred during the upload.<span>');
+                    setTimeout(function () {
+                        $("#edit_docErrorMessages").html('');
+                    }, 5000);
+                }
+                $(".overlay").hide();
+            }
+        });
+    }
 });
 
 function checkDocumentUploaded(){
@@ -916,12 +959,59 @@ function checkDocumentUploaded(){
         headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
         success: function(res) {
             if(res.cnt == 0){
-                $.magnificPopup.open({
-                    items: {
-                        src: '#documentUploadForm',
-                        type: 'inline'
+                if(res.data.eidf_flag == 0 && res.data.eidb_flag == 0 && res.data.dlf_flag == 0 && res.data.dlb_flag == 0 && res.data.passf_flag == 0 && res.data.passb_flag == 0){
+                    $("#docUploadType").val('new');
+                    $("#passf").show();
+                    $("#passb").show();
+                    $("#dlf").show();
+                    $("#dlb").show();
+                    $("#eidf").show();
+                    $("#eidb").show();
+                    $.magnificPopup.open({
+                        items: {
+                            src: '#documentUploadForm',
+                            type: 'inline'
+                        }
+                    });
+                }else{
+                    $("#docUploadType").val('old');
+                    if(res.data.passf_flag == 0){
+                        $("#passf").show();
                     }
-                });
+                    if(res.data.passb_flag == 0){
+                        $("#passb").show();
+                    }
+                    if(res.data.dlf_flag == 0){
+                        $("#dlf").show();
+                    }
+                    if(res.data.dlb_flag == 0){
+                        $("#dlb").show();
+                    }
+                    if(res.data.eidf_flag == 0 && res.data.user_type == 'R'){
+                        $("#eidf").show();
+                    }
+                    if(res.data.eidb_flag == 0 && res.data.user_type == 'R'){
+                        $("#eidb").show();
+                    }
+                    if(res.data.passf_flag != 0 && res.data.passb_flag != 0){
+                        $("#passport-section").hide();
+                    }
+                    if(res.data.dlf_flag != 0 && res.data.dlb_flag != 0){
+                        $("#dl-section").hide();
+                    }
+                    if(res.data.eidf_flag != 0 && res.data.eidb_flag != 0){
+                        $("#eid-section").hide();
+                    }
+                    if(res.data.user_type == 'T'){
+                        $("#eid-section").hide();
+                    }
+                    $.magnificPopup.open({
+                        items: {
+                            src: '#documentUploadForm',
+                            type: 'inline'
+                        }
+                    });
+                }
             }else{
                 if($('#pickupdate').length){
                     if(!bookCarAction()){

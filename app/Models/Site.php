@@ -239,33 +239,51 @@ class Site extends Model
 
     public function getDocumentUpload($data=[]){
         return DB::table('enduser')
-                        ->select('document_uploaded')
+                        ->select('passf_flag','passb_flag','dlf_flag','dlb_flag','eidf_flag','eidb_flag','user_type')
                         ->where('id', $data['id'])
                         ->where('active', 1)
                         ->first();
     }
 
-    public function saveUploadedDocuments($data = [])
+    public function saveUploadedDocuments($data = [],$rider_type)
     {
         DB::beginTransaction();
         try {
             // Insert document records
             DB::table('user_documents')->insert([
                 'user_id' => $data['id'],
-                'pass_front' => $data['uploadedFiles']['pass_front'],
-                'pass_back' => $data['uploadedFiles']['pass_back'],
-                'dl_front' => $data['uploadedFiles']['dl_front'],
-                'dl_back' => $data['uploadedFiles']['dl_back'],
+                'pass_front' => $data['uploadedFiles']['pass_front'] ?? '',
+                'pass_back' => $data['uploadedFiles']['pass_back'] ?? '',
+                'dl_front' => $data['uploadedFiles']['dl_front'] ?? '',
+                'dl_back' => $data['uploadedFiles']['dl_back'] ?? '',
                 'eid_front' => $data['uploadedFiles']['eid_front'] ?? '', // Use null coalescing operator
                 'eid_back' => $data['uploadedFiles']['eid_back'] ?? '',   // Use null coalescing operator
             ]);
 
             // Update user record to mark documents as uploaded
-            DB::table('enduser')
-                ->where('id', $data['id'])
-                ->update([
-                    'document_uploaded' => '1',
-                ]);
+            $flags = [];
+            if (isset($data['uploadedFiles']['pass_front'])) {
+                $flags['passf_flag'] = '1';
+            }
+            if (isset($data['uploadedFiles']['pass_back'])) {
+                $flags['passb_flag'] = '1';
+            }
+            if (isset($data['uploadedFiles']['dl_front'])) {
+                $flags['dlf_flag'] = '1';
+            }
+            if (isset($data['uploadedFiles']['dl_back'])) {
+                $flags['dlb_flag'] = '1';
+            }
+            if (isset($data['uploadedFiles']['eid_front'])) {
+                $flags['eidf_flag'] = '1';
+            }
+            if (isset($data['uploadedFiles']['eid_back'])) {
+                $flags['eidb_flag'] = '1';
+            }
+
+            $flags['user_type'] = ($rider_type == 'resident') ? 'R' : 'T';
+
+            DB::table('enduser')->where('id', $data['id'])->update($flags);
 
             DB::commit();
             return true;
@@ -291,6 +309,42 @@ class Site extends Model
             'edit_dl_back' => 'dl_back', 
             'edit_eid_front' => 'eid_front', 
             'edit_eid_back' => 'eid_back',
+        ];
+
+        // Map input data to database columns and filter out null/empty values
+        $updateData = [];
+        foreach ($data['uploadedFiles'] as $key => $value) {
+            if (!is_null($value) && $value !== '' && isset($fieldMapping[$key])) {
+                $updateData[$fieldMapping[$key]] = $value;
+            }
+        }
+
+        // Proceed only if there's data to update
+        if (empty($updateData)) {
+            return false; // Or handle the case when there's nothing to update
+        }
+
+        // Perform the update query
+        return DB::table('user_documents')
+            ->where('user_id', $data['id']) // Ensure ID is provided
+            ->update($updateData);
+    }
+
+    public function updateMissingUploadedDocuments($data = [])
+    {
+        // Ensure uploadedFiles key exists and is an array
+        if (!isset($data['uploadedFiles']) || !is_array($data['uploadedFiles'])) {
+            return false; // Or handle the error as needed
+        }
+
+        // Define the mapping of input keys to database column names
+        $fieldMapping = [
+            'pass_front' => 'pass_front', 
+            'pass_back' => 'pass_back', 
+            'dl_front' => 'dl_front', 
+            'dl_back' => 'dl_back', 
+            'eid_front' => 'eid_front', 
+            'eid_back' => 'eid_back',
         ];
 
         // Map input data to database columns and filter out null/empty values

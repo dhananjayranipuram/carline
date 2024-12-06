@@ -5,7 +5,7 @@
 <div class="page-inner">
     <section class="section">
         <div class="row">
-            <div class="col-lg-6">
+            <div class="col-lg-12">
 
                 
 
@@ -23,59 +23,59 @@
                         </div>
                         <div class="card-body">
                             <div class="row g-3">
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <p>
                                         <strong>First Name</strong><br>
                                         <span>{{$user[0]->first_name}}</span>
                                     </p>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <p>
                                         <strong>Last Name</strong><br>
                                         <span>{{$user[0]->last_name}}</span>
                                     </p>
                                 </div>
 
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <p>
                                         <strong>Email</strong><br>
                                         <span>{{$user[0]->email}}</span>
                                     </p>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <p>
                                         <strong>Phone</strong><br>
                                         <span>{{$user[0]->phone}}</span>
                                     </p>
                                 </div>
 
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <p>
                                         <strong>Flat</strong><br>
                                         <span>{{$user[0]->flat}}</span>
                                     </p>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <p>
                                         <strong>Building</strong><br>
                                         <span>{{$user[0]->building}}</span>
                                     </p>
                                 </div>
 
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <p>
                                         <strong>Landmark</strong><br>
                                         <span>{{$user[0]->landmark}}</span>
                                     </p>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <p>
                                         <strong>City/Emirates</strong><br>
                                         <span>{{$user[0]->city}}</span>
                                     </p>
                                 </div>
                                 
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <p>
                                         <strong>Country</strong><br>
                                         <span>{{$user[0]->country}}</span>
@@ -86,9 +86,9 @@
                     </div>
                 </div>
 
-        
+            </div>
 
-            <div class="col-lg-6">
+            <div class="col-lg-12">
 
                 <div class="card">
                     <div class="card-body">
@@ -97,42 +97,42 @@
                     <!-- Vertical Form -->
                     <div class="row g-3">
                         @if(!empty($user[0]->pass_front))
-                            <div class="col-6">
+                            <div class="col-2">
                                 <strong>Passport Front</strong><br>
                                 <img src="{{asset($user[0]->pass_front)}}" alt="" style="width:100%;">
                             </div>
                         @endif
 
                         @if(!empty($user[0]->pass_back))
-                            <div class="col-6">
+                            <div class="col-2">
                                 <strong>Passport Back</strong><br>
                                 <img src="{{asset($user[0]->pass_back)}}" alt="" style="width:100%;">
                             </div>
                         @endif
 
                         @if(!empty($user[0]->dl_front))
-                            <div class="col-6">
+                            <div class="col-2">
                                 <strong>Driving Licence Front</strong><br>
                                 <img src="{{asset($user[0]->dl_front)}}" alt="" style="width:100%;">
                             </div>
                         @endif
 
                         @if(!empty($user[0]->dl_back))
-                            <div class="col-6">
+                            <div class="col-2">
                                 <strong>Driving Licence Back</strong><br>
                                 <img src="{{asset($user[0]->dl_back)}}" alt="Image not found" style="width:100%;">
                             </div>
                         @endif
 
                         @if(!empty($user[0]->eid_front))
-                            <div class="col-6">
+                            <div class="col-2">
                                 <strong>EID Front</strong><br>
                                 <img src="{{asset($user[0]->eid_front)}}" alt="" style="width:100%;">
                             </div>
                         @endif
 
                         @if(!empty($user[0]->eid_back))
-                            <div class="col-6">
+                            <div class="col-2">
                                 <strong>EID Back</strong><br>
                                 <img src="{{asset($user[0]->eid_back)}}" alt="" style="width:100%;">
                             </div>

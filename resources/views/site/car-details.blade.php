@@ -791,6 +791,7 @@ function bookCarAction(){
             }
         });
     }else{
+        $(".overlay").hide();
         return false;
     }
 

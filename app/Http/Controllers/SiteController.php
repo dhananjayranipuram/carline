@@ -588,15 +588,22 @@ class SiteController extends Controller
         $input['id'] = Session::get('userId');
         $response = [];
         $res = $site->getDocumentUpload($input);
-
-        if($res->document_uploaded == 1){
+        $uploadCnt = 0;
+        if($res->user_type == 'R'){
+            $uploadCnt = $res->passf_flag * $res->passb_flag * $res->dlf_flag * $res->dlb_flag * $res->eidf_flag * $res->eidb_flag;
+        }else{
+            $uploadCnt = $res->passf_flag * $res->passb_flag * $res->dlf_flag * $res->dlb_flag;
+        }
+        if($uploadCnt == 1){
             $response['status'] = '200';
             $response['message'] = 'User uploaded document';
-            $response['cnt'] = $res->document_uploaded;
+            $response['cnt'] = $uploadCnt;
+            $response['data'] = $res;
         }else{
             $response['status'] = '200';
             $response['message'] = 'User not uploaded document';
-            $response['cnt'] = $res->document_uploaded;
+            $response['cnt'] = $uploadCnt;
+            $response['data'] = $res;
         }
         return json_encode($response);
     }
@@ -609,24 +616,26 @@ class SiteController extends Controller
         // Validation
         $credentials = $request->validate([
             'rider_type' => ['required'],
-            'pass_front' => ['required', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
-            'pass_back' => ['required', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
-            'dl_front' => ['required', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
-            'dl_back' => ['required', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
-            'eid_front' => [
-                'nullable',
-                'max:2048',
-                Rule::requiredIf(function () use ($request) {
-                    return $request->rider_type === 'resident'; // Only required if rider_type is 'resident'
-                }),
-            ],
-            'eid_back' => [
-                'nullable',
-                'max:2048',
-                Rule::requiredIf(function () use ($request) {
-                    return $request->rider_type === 'resident'; // Only required if rider_type is 'resident'
-                }),
-            ],
+            'pass_front' => ['nullable', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
+            'pass_back' => ['nullable', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
+            'dl_front' => ['nullable', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
+            'dl_back' => ['nullable', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
+            'eid_front' => ['nullable', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
+            'eid_back' => ['nullable', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
+            // 'eid_front' => [
+            //     'nullable',
+            //     'max:2048',
+            //     Rule::requiredIf(function () use ($request) {
+            //         return $request->rider_type === 'resident'; // Only required if rider_type is 'resident'
+            //     }),
+            // ],
+            // 'eid_back' => [
+            //     'nullable',
+            //     'max:2048',
+            //     Rule::requiredIf(function () use ($request) {
+            //         return $request->rider_type === 'resident'; // Only required if rider_type is 'resident'
+            //     }),
+            // ],
         ]);
 
         // Handle file uploads using the helper function
@@ -648,7 +657,7 @@ class SiteController extends Controller
         $uploadedFiles['id'] = $request->session()->get('userId');
 
         // Save uploaded documents
-        $res = $site->saveUploadedDocuments($uploadedFiles);
+        $res = $site->saveUploadedDocuments($uploadedFiles,$credentials['rider_type']);
 
         // Prepare response
         if ($res) {
@@ -923,6 +932,62 @@ class SiteController extends Controller
 
         // Save uploaded documents
         $res = $site->updateUploadedDocuments($uploadedFiles);
+
+        // Prepare response
+        if ($res) {
+            foreach ($uploadedFiles['uploadedFiles'] as $key => $field) {
+                $currentFilePath = $currentFiles[0]->{str_replace('edit_', '', $key)} ?? null;
+                if ($currentFilePath && File::exists($currentFilePath)) {
+                    File::delete($currentFilePath);
+                }
+            }
+            return response()->json(['status' => '200', 'message' => 'Document uploaded successfully.']);
+        } else {
+            return response()->json(['status' => '500', 'message' => 'Something went wrong.'], 500);
+        }
+    }
+
+    public function missingUploadDocuments(Request $request)
+    {
+        $site = new Site();
+        $response = [];
+
+        // Validation
+        $credentials = $request->validate([
+            'pass_front' => ['nullable', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
+            'pass_back' => ['nullable', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
+            'dl_front' => ['nullable', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
+            'dl_back' => ['nullable', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
+            'eid_front' => ['nullable', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
+            'eid_back' => ['nullable', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
+        ]);
+
+        // Handle file uploads using the helper function
+        $uploadedFiles = $this->handleFileUploads($request, [
+            'pass_front', 
+            'pass_back', 
+            'dl_front', 
+            'dl_back', 
+            'eid_front', 
+            'eid_back'
+        ]);
+        // print_r($uploadedFiles);exit;
+
+        $credentials['id'] = Session::get('userId');
+        $currentFiles = $site->getMyDocumentDetails($credentials);
+        // print_r($currentFiles);exit;
+        
+        // Check for errors in uploaded files
+        if ($uploadedFiles['errors']) {
+            return response()->json(['status' => '400', 'message' => $uploadedFiles['errors']], 400);
+        }
+        
+        // Add user ID to the uploaded files data
+        $uploadedFiles['id'] = $request->session()->get('userId');
+
+        // print_r($uploadedFiles);exit;
+        // Save uploaded documents
+        $res = $site->updateMissingUploadedDocuments($uploadedFiles);
 
         // Prepare response
         if ($res) {

@@ -28,6 +28,7 @@ Route::get('/my-account', [SiteController::class, 'myAccount']);
 Route::any('/my-account-details', [SiteController::class, 'myAccountDetails']);
 Route::any('/my-documents', [SiteController::class, 'myDocumentDetails']);
 Route::any('/edit-upload-docs', [SiteController::class, 'editUploadDocuments']);
+Route::any('/missing-upload-docs', [SiteController::class, 'missingUploadDocuments']);
 Route::get('/logout', [SiteController::class, 'logout']);
 
 Route::any('/check-document-uploaded', [SiteController::class, 'checkDocumentUploaded']);
