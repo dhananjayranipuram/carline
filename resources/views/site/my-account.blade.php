@@ -232,6 +232,18 @@
 
             <div class="col-lg-7">
             
+                @if(empty($bookingHistory[0]) )
+                    <div class="booking-history">
+                        <!-- Booking Item Start -->
+                        <div class="booking-item">
+                            <div class="row">
+                                <h3>No Bookings Found!</h3>
+                            </div>            
+                        </div>
+                        <!-- Booking Item End -->
+                    </div>
+                    <!-- Booking History Section End -->
+                @endif
                 @foreach($bookingHistory as $key => $value)
                 <!-- Booking History Section Start -->
                 <div class="booking-history">

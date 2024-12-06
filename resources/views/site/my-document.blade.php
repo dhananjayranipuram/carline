@@ -224,7 +224,19 @@
             </div>
 
             <div class="col-lg-7">
-            
+                @if(empty($userDocument[0]->pass_front) && empty($userDocument[0]->pass_back) && empty($userDocument[0]->dl_front) && empty($userDocument[0]->dl_back) && empty($userDocument[0]->eid_front) && empty($userDocument[0]->eid_back))
+                    <div class="booking-history">
+                        <!-- Booking Item Start -->
+                        <div class="booking-item">
+                            <div class="row">
+                                <h3>No Documents Found!</h3>
+                                
+                            </div>            
+                        </div>
+                        <!-- Booking Item End -->
+                    </div>
+                    <!-- Booking History Section End -->
+                @endif
                 @if(!empty($userDocument[0]->pass_front) || !empty($userDocument[0]->pass_back))
                     <!-- Booking History Section Start -->
                     <div class="booking-history">
