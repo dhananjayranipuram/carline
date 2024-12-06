@@ -77,6 +77,10 @@
         pointer-events: none;
         cursor: default;
     }
+
+    .fleets-amenities-list ul li:before{
+        color:white;
+    }
 </style>
 @php
 $timeSlots = [];
@@ -189,8 +193,8 @@ while ($startTime <= $endTime) {
                                             </ul>
                                         </div>
                                         <div class="fleets-single-sidebar-list" id="additionalNotes" style="display:none;">
-                                            <p style="margin-bottom: 0px;"><i class="fas fa-info-circle"></i> Salik / Toll Charges - AED {{$carDet[0]->toll_charges}}</p>
                                             <p style="margin-bottom: 0px;"><i class="fas fa-info-circle"></i> Additional mileage charge - AED {{$carDet[0]->add_mileage_charge}}/km</p>
+                                            <p style="margin-bottom: 0px;"><i class="fas fa-info-circle"></i> Salik / Toll Charges - AED {{$carDet[0]->toll_charges}}/Salik or toll </p>
                                         </div>
 
                                         <div class="fleets-single-sidebar-list">
@@ -323,15 +327,13 @@ while ($startTime <= $endTime) {
                         </div>
 
                         <!-- Feets Amenities Start -->
-                        <div class="fleets-amenities">
-                            <!-- Section Title Start -->
+                        <!-- <div class="fleets-amenities">
+
                             <div class="section-title">
                                 <h3 class="wow fadeInUp">amenities</h3>
                                 <h2 class="text-anime-style-3" data-cursor="-opaque">Amenities and features</h2>
                             </div>
-                            <!-- Section Title End -->
 
-                            <!-- Feets Amenities List Start -->
                             <div class="fleets-amenities-list wow fadeInUp" data-wow-delay="0.25s">
                                 <ul>
                                     @foreach($features as $key => $value)
@@ -339,9 +341,36 @@ while ($startTime <= $endTime) {
                                     @endforeach
                                 </ul>
                             </div>
-                            <!-- Feets Amenities List End -->
+                        </div> -->
+                        <!-- Feets Amenities Start -->
+
+                        <div class="fleets-amenities">
+                            <div class="rental-condition-accordion">
+                                <!-- FAQ Item Start -->
+                                <div class="accordion-item wow fadeInUp">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#rentalcollapse" aria-expanded="false" aria-controls="rentalcollapse">
+                                            Amenities and features
+                                        </button>
+                                    </h2>
+                                    <div id="rentalcollapse" class="accordion-collapse collapse" aria-labelledby="rentalheading"
+                                        data-bs-parent="#rentalaccordion">
+                                        <div class="accordion-body">
+                                            <div class="fleets-amenities-list wow fadeInUp" data-wow-delay="0.25s" >
+                                                <ul>
+                                                    @foreach($features as $key => $value)
+                                                        <li style="color:white;">{{$value->feature}}</li>
+                                                    @endforeach
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- FAQ Item End -->
+
+                            </div>
                         </div>
-                        <!-- Feets Amenities End -->
 
                         <!-- Feets Information Start -->
                         <div class="fleets-information">
