@@ -109,6 +109,9 @@
                             <li class="nav-item @if(Request::path() == 'admin/bookings') active @endif">
                                 <a href="{{url('/admin/bookings')}}" ><i class="fas fa-list"></i><p>Bookings</p></a>
                             </li>
+                            <li class="nav-item @if(Request::path() == 'admin/reports') active @endif">
+                                <a href="{{url('/admin/reports')}}" ><i class="fas fa-list"></i><p>Reports</p></a>
+                            </li>
               
               <!-- <li class="nav-item">
                 <a href="widgets.html">

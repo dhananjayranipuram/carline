@@ -8,6 +8,7 @@ use App\Exports\UserExport;
 use App\Exports\BookingsExport;
 use Illuminate\Support\Facades\Route;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Collection;
 use Session;
 use Redirect;
 use Storage;
@@ -1282,5 +1283,74 @@ class AdminController extends Controller
             array_push($temp['color'], $this->random_color());
         }
         return $temp;
+    }
+
+    public function reports(Request $request){
+        $admin = new Admin();
+        $response = [];
+
+        if($request->method() == 'POST'){
+            $filterData = $request->validate([
+                'from' => [''],
+                'to' => [''],
+            ]);
+            
+            
+            $data = $admin->getBookingHistoryReports($filterData);
+            // echo '<pre>';print_r($data);exit;
+            $response = $this->generateReportData($data);
+        }else{
+            $filterData['from'] = date('Y-m-d');
+            $filterData['to'] = date('Y-m-d');
+            $data = $admin->getBookingHistoryReports($filterData);
+            // echo '<pre>';print_r($data);exit;
+            $response = $this->generateReportData($data);
+            // echo '<pre>';print_r($response);exit;
+        }
+        
+        return view('admin/reports',$response);
+    }
+
+    private function generateReportData($data){
+        $collection = collect($data);
+
+        // Calculate metrics
+        $carWiseSales = $collection->groupBy('carname')->map(function ($group,$carname) {
+            return [
+                'car_name' => $carname,
+                'total_sales' => $group->sum('rate'),
+                'sales_count' => $group->count(),
+            ];
+        });
+
+        $brandWiseSales = $collection->groupBy('carbrand')->map(function ($group,$carbrand) {
+            return [
+                'brand_name' => $carbrand,
+                'total_sales' => $group->sum('rate'),
+                'sales_count' => $group->count(),
+            ];
+        });
+
+        $carTypeWiseSales = $collection->groupBy('cartypename')->map(function ($group,$cartypename) {
+            return [
+                'type_name' => $cartypename,
+                'total_sales' => $group->sum('rate'),
+                'sales_count' => $group->count(),
+            ];
+        });
+
+        // Calculate total sales and sales count
+        $totalSales = $collection->sum('rate');
+        $totalSalesCount = $collection->count();
+
+        // Output the results
+        $response = [
+            'car_wise_sales' => $carWiseSales,
+            'brand_wise_sales' => $brandWiseSales,
+            'car_type_wise_sales' => $carTypeWiseSales,
+            'total_sales' => $totalSales,
+            'total_sales_count' => $totalSalesCount,
+        ];
+        return $response;
     }
 }

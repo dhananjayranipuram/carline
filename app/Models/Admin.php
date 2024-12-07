@@ -1032,4 +1032,33 @@ class Admin extends Model
             LEFT JOIN user_documents ud ON eu.id=ud.user_id
             WHERE eu.id='$data[userId]' AND eu.active=1;");
     }
+
+    public function getBookingHistoryReports($data = [])
+    {
+
+        $query = \DB::table('booking as b')
+            ->join('booking_details as bd', 'b.id', '=', 'bd.booking_id')
+            ->leftJoin('cars as c', 'c.id', '=', 'b.car_id')
+            ->leftJoin('car_brand as cb', 'cb.id', '=', 'c.brand_id')
+            ->leftJoin('car_type as ct', 'ct.id', '=', 'c.type_id')
+            ->where('c.active', 1);
+
+        if (!empty($data['from']) && !empty($data['to'])) {
+            $query->whereBetween('b.pickup_date', [$data['from'], $data['to']]);
+        }
+
+        return $query->groupBy('b.id')
+            ->select([
+                'b.id',
+                \DB::raw("CONCAT(cb.name, ' ', c.name, ' ', c.model) AS car_name"),
+                'b.rate',
+                'c.name AS carname',
+                'c.id AS carid',
+                'cb.name AS carbrand',
+                'cb.id AS carbrandid',
+                'ct.id AS cartypeid',
+                'ct.name AS cartypename',
+            ])
+            ->get();
+    }
 }
