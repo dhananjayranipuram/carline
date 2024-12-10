@@ -103,7 +103,7 @@
                                 <div class="col-md-4">
                                     <p>
                                         <strong>Country</strong><br>
-                                        <span>{{$user[0]->country}}</span>
+                                        <span>{{$user[0]->country_name}}</span>
                                     </p>
                                 </div>
                             </div>
