@@ -81,6 +81,11 @@
     .fleets-amenities-list ul li:before{
         color:white;
     }
+
+    .policy-link{
+        color:#000080;
+        cursor: pointer;
+    }
 </style>
 @php
 $timeSlots = [];
@@ -91,6 +96,37 @@ while ($startTime <= $endTime) {
     $startTime = strtotime('+30 minutes', $startTime);
 }
 @endphp
+<!-- Booking Form Box Start -->
+<div class="booking-form-box">
+    <!-- Booking PopUp Form Start -->
+    <div id="termsCondition" class="white-popup-block mfp-hide booking-form">                              
+        <fieldset>
+            <div class="row">
+                <div class="booking-form-group col-md-12 mb-4">
+                    <!-- Feets Single Content Start -->
+                    <div class="fleets-single-content">
+
+                        <!-- Rental Conditions Faqs Start -->
+                        <div class="rental-conditions-faqs">
+                            <!-- Section Title Start -->
+                            <div class="section-title">
+                                <h3 class="wow fadeInUp">rental conditions</h3>
+                                <h2 class="text-anime-style-3" data-cursor="-opaque">Policies and agreement</h2>
+                            </div>
+                            <!-- Section Title End -->
+                            <div class="rental-condition-accordion" id="rentalaccordion">
+                            
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>                                    
+        </fieldset>
+    </div>
+    <!-- Registration PopUp Form End -->
+</div>
+<!-- Registration Form Box End -->
 <div class="page-fleets-single">
         <div class="container">
             <div class="row">
@@ -198,7 +234,7 @@ while ($startTime <= $endTime) {
                                         </div>
 
                                         <div class="fleets-single-sidebar-list">
-                                            <input type="checkbox" id="agreePolicy"> I have read and agree to Carline's <a href="{{url('/policies-agreements')}}" target="_blank">Policies and Agreement</a>
+                                            <input type="checkbox" id="agreePolicy"> I have read and agree to Carline's <span class="policy-link">Policies and Agreement</span>
                                         </div>
 
                                         <!-- Feets Single Sidebar Btn Start -->
@@ -372,6 +408,7 @@ while ($startTime <= $endTime) {
                             </div>
                         </div>
 
+                        @if($carDet[0]->general_info_flag == 1)
                         <!-- Feets Information Start -->
                         <div class="fleets-information">
                             <div class="section-title">
@@ -407,6 +444,7 @@ while ($startTime <= $endTime) {
 
                         </div>
                         <!-- Feets Information End -->
+                        @endif
 
                         @if($carDet[0]->rental_condition_flag == 1)
                         <!-- Rental Conditions Faqs Start -->
@@ -697,7 +735,7 @@ $("#returndate").on("change", function() {
                     
                     if($("#returntime").val()==-1 || $("#returntime").val()==null){
                         $("#returntime").html('');
-                        $("#returntime").append('<option selected disabled value="-1">Select Pickup Time</option>');
+                        $("#returntime").append('<option selected disabled value="-1">Select DropOff Time</option>');
                         $.each(res, function(key, value) {
                             $("#returntime").append(`<option value="${value}">${value}</option>`);
                         });
@@ -901,7 +939,42 @@ function bookCarActionFinal(){
 
 }
 
+$(".policy-link").click(function () {
 
+    $.ajax({
+        url: baseUrl + '/policies-agreements',
+        type: 'post',
+        dataType: "json",
+        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+        success: function(res) {
+            var str = '';
+            $.each(res.policy, function (index,value) {
+                str += '<div class="accordion-item wow fadeInUp">'+
+                    '<h2 class="accordion-header" id="rentalheading1">'+
+                        '<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#rentalcollapse'+index+'" aria-expanded="false" aria-controls="rentalcollapse'+index+'">'+value.name+'</button>'+
+                    '</h2>'+
+                    '<div id="rentalcollapse'+index+'" class="accordion-collapse collapse" aria-labelledby="rentalheading'+index+'" data-bs-parent="#rentalaccordion">'+
+                        '<div class="accordion-body">'+
+                            '<p>'+nl2br(value.content)+'</p>'+
+                        '</div>'+
+                    '</div>'+
+                '</div>';
+            });
+            
+            $("#rentalaccordion").html(str);
+            $.magnificPopup.open({
+                items: {
+                    src: '#termsCondition',
+                    type: 'inline'
+                }
+            });
+        }
+    });
+});
 
+function nl2br (str, is_xhtml) {   
+    var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>';    
+    return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1'+ breakTag +'$2');
+}
 </script>
 @endsection

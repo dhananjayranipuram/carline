@@ -123,7 +123,7 @@
                             <thead>
                                 <tr>
                                     <th>Total Sales</th>
-                                    <th>Total Count</th>
+                                    <th>Total Bookings</th>
                                 </tr>
                             </thead>
                             <tbody>

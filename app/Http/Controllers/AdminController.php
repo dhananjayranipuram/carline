@@ -1286,6 +1286,7 @@ class AdminController extends Controller
     }
 
     public function reports(Request $request){
+        $request->flash();
         $admin = new Admin();
         $response = [];
 

@@ -321,7 +321,7 @@ class SiteController extends Controller
     public function policiesAgreements(){
         $site = new Site();
         $data['policy'] = $site->getPolicyAgreement();
-        return view('site/policies-agreements',$data);
+        return response()->json($data);
     }
 
     public function offers(){
