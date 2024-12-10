@@ -103,6 +103,21 @@
                                             @enderror
                                         </p>
                                     </div>
+
+                                    <div class="col-md-4">
+                                        <p>
+                                            <strong>Country</strong><br>
+                                            <select class="form-control" name="country">
+                                                <option value="">Select Country</option>
+                                                @foreach($country as $value)
+                                                    <option value="{{$value->id}}" @selected($user[0]->country == $value->id)>{{$value->name}}</option>
+                                                @endforeach
+                                            </select>
+                                            @error('country')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
+                                        </p>
+                                    </div>
                                     
                                     
                                 </div>

@@ -124,7 +124,7 @@ class Site extends Model
                 $union = '';
                 if(!empty($data['id'])){
                     $condition .= " AND cs.car_id = $data[id]";
-                    $union = "SELECT id,'Kilometers Driven' AS 'name',kmeter AS details,'assets/images/icon-fleets-benefits-1.svg' image FROM cars WHERE id=$data[id] UNION ";
+                    // $union = "SELECT id,'Kilometers Driven' AS 'name',kmeter AS details,'assets/images/icon-fleets-benefits-1.svg' image FROM cars WHERE id=$data[id] UNION ";
                 }
                 return DB::select("$union SELECT cs.car_id,s.name,cs.details,s.image FROM car_specification cs
                                     LEFT JOIN specification s ON cs.spec_id = s.id
@@ -136,7 +136,7 @@ class Site extends Model
                 $union = '';
                 if(!empty($data['id'])){
                     $condition .= " AND cs.car_id = $data[id]";
-                    $union = "SELECT id,'Kilometers Driven' AS 'name',kmeter AS details,'assets/images/icon-fleets-benefits-1.svg' image FROM cars WHERE id=$data[id] UNION ";
+                    // $union = "SELECT id,'Kilometers Driven' AS 'name',kmeter AS details,'assets/images/icon-fleets-benefits-1.svg' image FROM cars WHERE id=$data[id] UNION ";
                 }
                 return DB::select("$union SELECT cs.car_id,s.name,cs.details,s.image FROM car_specification cs
                                     LEFT JOIN specification s ON cs.spec_id = s.id
@@ -148,6 +148,19 @@ class Site extends Model
     public function getCarType(){
         return DB::select("SELECT ct.id,ct.name,ct.image FROM car_type ct
                             WHERE ct.active=1 AND ct.deleted=0;");
+    }
+    
+    public function getCountry(){
+        $countries = DB::select("SELECT id, name FROM country;");
+    
+        // Convert the result to an associative array
+        $countryArray = [];
+        foreach ($countries as $country) {
+            $countryArray[$country->id] = $country->name;
+        }
+
+        return $countryArray;
+        
     }
 
     public function getCarGeneralInfo(){

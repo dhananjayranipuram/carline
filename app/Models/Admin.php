@@ -954,7 +954,8 @@ class Admin extends Model
                     'flat' => $data['flat'],
                     'building' => $data['building'],
                     'landmark' => $data['landmark'],
-                    'city' => $data['city']
+                    'city' => $data['city'],
+                    'country' => $data['country']
                 ]);
     }
 
@@ -1060,5 +1061,9 @@ class Admin extends Model
                 'ct.name AS cartypename',
             ])
             ->get();
+    }
+
+    public function getContry() {
+        return DB::table('country')->select('id', 'name')->get()->toArray();
     }
 }

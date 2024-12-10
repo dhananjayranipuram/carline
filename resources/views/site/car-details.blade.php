@@ -231,6 +231,7 @@ while ($startTime <= $endTime) {
                                         <div class="fleets-single-sidebar-list" id="additionalNotes" style="display:none;">
                                             <p style="margin-bottom: 0px;"><i class="fas fa-info-circle"></i> Additional mileage charge - AED {{$carDet[0]->add_mileage_charge}}/km</p>
                                             <p style="margin-bottom: 0px;"><i class="fas fa-info-circle"></i> Salik / Toll Charges - AED {{$carDet[0]->toll_charges}}/Salik or toll </p>
+                                            <p style="margin-bottom: 0px;"><i class="fas fa-info-circle"></i> Fuel Policy - Same to Same </p>
                                         </div>
 
                                         <div class="fleets-single-sidebar-list">

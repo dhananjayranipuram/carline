@@ -177,7 +177,7 @@ class AdminController extends Controller
                 'building' => ['required'],
                 'landmark' => ['required'],
                 'city' => ['required'],
-                'country' => ['nullable'],
+                'country' => ['required'],
 
                 'pass_front' => ['nullable', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
                 'pass_back' => ['nullable', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
@@ -228,6 +228,7 @@ class AdminController extends Controller
             $input['id'] = base64_decode($queries['id']);
     
             $data['user'] = $admin->getUsersDetails($input);
+            $data['country'] = $admin->getContry();
     
             return view('admin/edit-user', $data);
         }
