@@ -255,15 +255,19 @@ class AdminController extends Controller
     }
 
     public function bookingList(Request $request){
-        $request->flash();
+        
         $admin = new Admin();
         if($request->method() == 'POST'){
+            $request->flash();
             $filterData = $request->validate([
                 'brand' => [''],
                 'type' => [''],
                 'from' => [''],
                 'to' => [''],
             ]);
+            $data['bookings'] = $admin->getBookingHistory($filterData);
+            Session::put('bookingFilter', $filterData);
+            return response()->json($data);
         }else{
             if(Session::get('bookingFilter')){
                 $filterData = Session::get('bookingFilter');
@@ -276,15 +280,13 @@ class AdminController extends Controller
                     'to' => date('Y-m-d', time()),
                 ];
             }
-            
+            $data['brands'] = $admin->getBrands();
+            $data['type'] = $admin->getCarType();
+            $data['bookings'] = $admin->getBookingHistory($filterData);
+            Session::put('bookingFilter', $filterData);
+            return view('admin/bookings',$data);
         }
-        Session::put('bookingFilter', $filterData);
-
-        $data['brands'] = $admin->getBrands();
-        $data['type'] = $admin->getCarType();
-        $data['bookings'] = $admin->getBookingHistory($filterData);
-        // echo '<pre>';print_r($data);exit;
-        return view('admin/bookings',$data);
+        
     }
 
     public function bookingDetails(){

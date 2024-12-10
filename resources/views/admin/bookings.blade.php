@@ -15,7 +15,7 @@
                         <a class="btn btn-primary" href="{{url('/admin/export-bookings')}}">Export</a>
                     </div>
                 </div>
-                <form class="card-body" id="booking-table" method="post" action="{{ url('/admin/bookings') }}">
+                <form class="card-body" id="booking-table" method="post">
                     @csrf <!-- {{ csrf_field() }} -->
                     <div class="row">
                         <div class="col-md-3">
@@ -68,7 +68,7 @@
                                 <th style="width: 10%">Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="booking-data">
                             @foreach($bookings as $key => $value)
                             <tr>
                                 <td>{{$value->id}}</td>
@@ -153,22 +153,81 @@ $(document).ready(function () {
     $('.ranges li').click(function(){
         if($(this).attr('data-range-key')!='Custom Range'){
             setTimeout(function () {
-                $("#booking-table").submit();
+                // $("#booking-table").submit();
+                buildTable();
             }, 200);
         }
     });
     $('.applyBtn').click(function(){
         setTimeout(function () {
-            $("#booking-table").submit();
+            // $("#booking-table").submit();
+            buildTable();
         }, 200);
     });
 
     $('.brand-select , .type-select').change(function(){
-        $("#booking-table").submit();
+        // $("#booking-table").submit();
+        buildTable();
     });
 
 });
 
+function buildTable(){
+    let formData = new FormData(document.getElementById("booking-table"));
+    $.ajax({
+        url: baseUrl + '/admin/bookings',
+        type: 'post',
+        data: formData,
+        processData: false,
+        contentType: false,
+        dataType: "json",
+        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+        success: function(res) {
+            let table = $('#multi-filter-select').DataTable();
+            table.destroy();
+
+            $("#booking-data").empty();
+            if(res.bookings.length>0){
+                res.bookings.forEach(function (data) {
+                    let encodedId = btoa(data.id);
+                    let row = `
+                        <tr>
+                            <td>${data.id}</td>
+                            <td>${data.user_name}</td>
+                            <td>${data.car_name}</td>
+                            <td>${data.pickup_date}</td>
+                            <td>${data.pickup_time}</td>
+                            <td>${data.source}</td>
+                            <td>${data.return_date}</td>
+                            <td>${data.return_time}</td>
+                            <td>${data.destination}</td>
+                            <td>${data.rate}</td>
+                            <td>
+                            <div class="form-button-action">
+                                <a href="${baseUrl}/admin/booking-details?id=${encodedId}" data-bs-toggle="tooltip" title="View Booking" class="btn btn-link btn-primary btn-lg edit-brand" data-original-title="View Booking">
+                                    <i class="far fa-eye"></i>
+                                </a>
+                            </div>
+                        </td>
+                        </tr>
+                    `;
+                    $("#booking-data").append(row);
+                });
+            }
+            $('#multi-filter-select').DataTable({
+                pageLength: 10,
+                responsive: true, // Enables responsive behavior
+                processing: true, // Displays a processing indicator
+                searching: true,  // Enables search functionality
+                paging: true,     // Enables pagination
+                autoWidth: false  // Prevents automatic column width calculation
+            });
+            
+        },error: function(xhr, status, error) {
+            
+        }
+    });
+}
 </script>  
  
 @endsection
