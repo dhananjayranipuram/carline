@@ -70,7 +70,7 @@
                         </thead>
                         <tbody id="booking-data">
                             @foreach($bookings as $key => $value)
-                            <tr>
+                            <tr data-url="{{url('/admin/booking-details')}}?id={{base64_encode($value->id)}}">
                                 <td>{{$value->id}}</td>
                                 <td>{{$value->user_name}}</td>
                                 <td>{{$value->car_name}}</td>
@@ -228,6 +228,14 @@ function buildTable(){
         }
     });
 }
+
+$('#multi-filter-select tbody').on('click', 'tr', function () {
+    const url = $(this).data('url');
+
+    if (url) {
+        window.location.href = url;
+    }
+});
 </script>  
  
 @endsection
