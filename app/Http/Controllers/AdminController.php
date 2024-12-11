@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Admin;
+use App\Models\Site;
 use App\Exports\UserExport;
 use App\Exports\BookingsExport;
 use Illuminate\Support\Facades\Route;
@@ -25,6 +26,16 @@ class AdminController extends Controller
         if($route != 'App\Http\Controllers\AdminController@editCar' || $route != 'App\Http\Controllers\AdminController@deleteCarImage'){
             Session::forget('deleteCarImageData');
         }
+
+        date_default_timezone_set('Asia/Calcutta');
+        $site = new Site();
+        $emirates = $site->getEmirates();
+        $layoutCarTypes = $site->getCarType();
+        $country = $site->getCountry();
+    
+        view()->share('emirates', $emirates);
+        view()->share('country', $country);
+        view()->share('layoutCarTypes', $layoutCarTypes);
     }
     public function login(Request $request){
         $admin = new Admin();
@@ -433,6 +444,20 @@ class AdminController extends Controller
         }
     }
 
+    public function previewCar(Request $request){
+        $queries = [];
+        parse_str($_SERVER['QUERY_STRING'], $queries);
+        $input['id'] = base64_decode($queries['id']);
+        $input['format'] = 'normal';
+        $site = new Site();
+        $data['carDet'] = $site->getCars($input);
+        $data['features'] = $site->getCarFeatures($input);
+        $data['specs'] = $site->getCarSpecifications($input);
+        $data['emirates'] = $site->getEmirates();
+        $data['generalInfo'] = $site->getCarGeneralInfo();
+        $data['policy'] = $site->getPolicyAgreement();
+        return view('admin/car-preview',$data);
+    }
 
     public function editCar(Request $request)
     {

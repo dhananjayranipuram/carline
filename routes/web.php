@@ -71,6 +71,7 @@ Route::middleware(['check.session', 'prevent.back.history'])->group(function () 
     Route::any('/admin/edit-car', [AdminController::class, 'editCar']);
     Route::any('/admin/delete-car', [AdminController::class, 'deleteCar']);
     Route::any('/admin/delete-car-image', [AdminController::class, 'deleteCarImage']);
+    Route::any('/admin/preview-car', [AdminController::class, 'previewCar']);
 
     Route::get('/admin/add-specifications', [AdminController::class, 'addSpecifications']);
     Route::any('/admin/add-spec', [AdminController::class, 'addSpec']);
