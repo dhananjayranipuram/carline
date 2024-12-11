@@ -170,8 +170,77 @@ class AdminController extends Controller
         $input['id'] = base64_decode($queries['id']);
 
         $data['user'] = $admin->getUsersDetails($input);
-
+        
         return view('admin/view-user', $data);
+    }
+    
+    public function downloadDocument(Request $request)
+    {
+        $admin = new Admin();
+        
+        $queries = $files = [];
+        parse_str($_SERVER['QUERY_STRING'], $queries);
+        $input['userId'] = base64_decode($queries['id']);
+        $input['doc'] = $queries['doc'];
+        
+        $documents = $admin->getMyDocumentDetails($input);
+        // echo '<pre>';print_r($documents);exit;
+        switch ($input['doc']) {
+            case 'pf':
+                $file = public_path($documents[0]->pass_front);
+                break;
+
+            case 'pb':
+                $file = public_path($documents[0]->pass_back);
+                break;
+
+            case 'df':
+                $file = public_path($documents[0]->dl_front);
+                break;
+                    
+            case 'db':
+                $file = public_path($documents[0]->dl_back);
+                break;
+
+            case 'ef':
+                $file = public_path($documents[0]->eid_front);
+                break;
+
+            case 'eb':
+                $file = public_path($documents[0]->eid_back);
+                break;
+            
+            default:
+                $files = $documents[0];
+                break;
+        }
+
+        if($input['doc'] == 'all'){
+            $zipFileName = 'files.zip';
+
+            $zip = new \ZipArchive;
+
+            $zipPath = public_path($zipFileName);
+
+            if ($zip->open($zipPath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) === true) {
+                foreach ($files as $file) {
+                    if (file_exists($file)) {
+                        $zip->addFile($file, basename($file));
+                    }
+                }
+                $zip->close();
+            } else {
+                return response()->json(['error' => 'Unable to create ZIP file'], 500);
+            }
+        
+            return response()->download($zipPath)->deleteFileAfterSend(true);
+        }else{
+            if (file_exists($file)) {
+                return response()->download($file);
+            } else {
+                return response()->json(['error' => 'File not found'], 404);
+            }
+        }
     }
     
     public function editUsers(Request $request)
@@ -189,6 +258,7 @@ class AdminController extends Controller
                 'landmark' => ['required'],
                 'city' => ['required'],
                 'country' => ['required'],
+                'user_type' => ['required'],
 
                 'pass_front' => ['nullable', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
                 'pass_back' => ['nullable', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
@@ -209,14 +279,14 @@ class AdminController extends Controller
             ]);
             
             $currentFiles = $admin->getMyDocumentDetails($credentials);
-            
+
             // Check for errors in uploaded files
             if ($uploadedFiles['errors']) {
                 return response()->json(['status' => '400', 'message' => $uploadedFiles['errors']], 400);
             }
 
             // Add user ID to the uploaded files data
-            $uploadedFiles['id'] = $request->session()->get('userId');
+            $uploadedFiles['id'] = $credentials['userId'];
 
             // Save uploaded documents
             $res = $admin->updateUploadedDocuments($uploadedFiles);
@@ -240,7 +310,7 @@ class AdminController extends Controller
     
             $data['user'] = $admin->getUsersDetails($input);
             $data['country'] = $admin->getContry();
-    
+            // echo '<pre>';print_r($data);exit;
             return view('admin/edit-user', $data);
         }
         

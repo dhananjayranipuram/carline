@@ -1,6 +1,73 @@
 @extends('layouts.admin')
 
 @section('content')
+<style>
+.delete-icon {
+    position: absolute;
+    top: 15px;
+    right: 58px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.imagecheck-figure:hover .delete-icon {
+    opacity: 1;
+}
+
+.view-icon {
+    position: absolute;
+    top: 15px;
+    right: 110px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.imagecheck-figure:hover .view-icon {
+    opacity: 1;
+}
+.download-icon {
+    position: absolute;
+    top: 15px;
+    right: 5px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.imagecheck-figure:hover .download-icon {
+    opacity: 1;
+}
+</style>
+<link href="https://cdn.jsdelivr.net/npm/lightbox2@2.11.4/dist/css/lightbox.min.css" rel="stylesheet">
 <div class="page-inner">
     <section class="section">
         <form method="post" action="{{ url('/admin/edit-users') }}" enctype="multipart/form-data">
@@ -22,6 +89,13 @@
                             </div>
                             <div class="card-body">
                                 <div class="row g-3">
+                                    @if($errors->any())
+                                        <div class="col-12 error-messages">
+                                            <div class="alert alert-danger">
+                                                {!! implode('', $errors->all('<div>:message</div>')) !!}
+                                            </div>
+                                        </div>
+                                    @endif
                                     @if(session('success'))
                                         <div class="alert alert-success">
                                             {{ session('success') }}
@@ -119,14 +193,30 @@
                                         </p>
                                     </div>
                                     
-                                    
+                                    <div class="col-md-4">
+                                        <p>
+                                            <strong>Driver Type</strong><br>
+                                            <select class="form-control user_type" name="user_type">
+                                                <option value="">Select Type</option>
+                                                    <option value="R" @selected($user[0]->user_type == 'R')>Resident</option>
+                                                    <option value="T" @selected($user[0]->user_type == 'T')>Tourist</option>
+                                            </select>
+                                            @error('country')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                 </div>
-
+                @if($user[0]->user_type == 'R')              
+                    @php $showEid = 'block'; @endphp
+                @else
+                    @php $showEid = 'none'; @endphp
+                @endif
                 <div class="col-lg-12">
 
                     <div class="card">
@@ -140,6 +230,11 @@
                                     <label class="imagecheck mb-2 image-outer">
                                         <figure class="imagecheck-figure">
                                             <img src="{{ asset($user[0]->pass_front) }}" alt="No document found" class="imagecheck-image">
+                                            @if(!empty($user[0]->pass_front))
+                                            <a class="view-icon view-doc" href="{{ asset($user[0]->pass_front) }}" data-lightbox="user-documents" data-title="Passport Front"><i class="far fa-eye"></i></a>
+                                            <a class="delete-icon delete-doc" data-type="pass_front" data-id="{{ $user[0]->id }}"><i class="far fa-trash-alt"></i></a>
+                                            <a class="download-icon" href="{{ url('/admin/download-document') }}?id={{base64_encode($user[0]->id)}}&doc=pf"><i class="fas fa-download"></i></a>
+                                            @endif
                                         </figure>
                                     </label>
                                     <input type="file" accept="image/*" name="pass_front">
@@ -151,6 +246,11 @@
                                     <label class="imagecheck mb-2 image-outer">
                                         <figure class="imagecheck-figure">
                                             <img src="{{ asset($user[0]->pass_back) }}" alt="No document found" class="imagecheck-image">
+                                            @if(!empty($user[0]->pass_back))
+                                            <a class="view-icon view-doc" href="{{ asset($user[0]->pass_back) }}" data-lightbox="user-documents" data-title="Passport Back"><i class="far fa-eye"></i></a>
+                                            <a class="delete-icon delete-doc" data-type="pass_back" data-id="{{ $user[0]->id }}"><i class="far fa-trash-alt"></i></a>
+                                            <a class="download-icon" href="{{ url('/admin/download-document') }}?id={{base64_encode($user[0]->id)}}&doc=pb"><i class="fas fa-download"></i></a>
+                                            @endif
                                         </figure>
                                     </label>
                                     <input type="file" accept="image/*" name="pass_back">
@@ -163,6 +263,11 @@
                                     <label class="imagecheck mb-2 image-outer">
                                         <figure class="imagecheck-figure">
                                             <img src="{{ asset($user[0]->dl_front) }}" alt="No document found" class="imagecheck-image">
+                                            @if(!empty($user[0]->dl_front))
+                                            <a class="view-icon view-doc" href="{{ asset($user[0]->dl_front) }}" data-lightbox="user-documents" data-title="Driving License Front"><i class="far fa-eye"></i></a>
+                                            <a class="delete-icon delete-doc" data-type="dl_front" data-id="{{ $user[0]->id }}"><i class="far fa-trash-alt"></i></a>
+                                            <a class="download-icon" href="{{ url('/admin/download-document') }}?id={{base64_encode($user[0]->id)}}&doc=df"><i class="fas fa-download"></i></a>
+                                            @endif
                                         </figure>
                                     </label>
                                     <input type="file" accept="image/*" name="dl_front">
@@ -175,6 +280,11 @@
                                     <label class="imagecheck mb-2 image-outer">
                                         <figure class="imagecheck-figure">
                                             <img src="{{ asset($user[0]->dl_back) }}" alt="No document found" class="imagecheck-image">
+                                            @if(!empty($user[0]->dl_back))
+                                            <a class="view-icon view-doc" href="{{ asset($user[0]->dl_back) }}" data-lightbox="user-documents" data-title="Driving License Back"><i class="far fa-eye"></i></a>
+                                            <a class="delete-icon delete-doc" data-type="dl_back" data-id="{{ $user[0]->id }}"><i class="far fa-trash-alt"></i></a>
+                                            <a class="download-icon" href="{{ url('/admin/download-document') }}?id={{base64_encode($user[0]->id)}}&doc=db"><i class="fas fa-download"></i></a>
+                                            @endif
                                         </figure>
                                     </label>
                                     <input type="file" accept="image/*" name="dl_back">
@@ -182,11 +292,16 @@
                             
 
                             
-                                <div class="col-2">
+                                <div class="col-2 eid_section" style="display:{{$showEid}}">
                                     <strong>EID Front</strong><br>
                                     <label class="imagecheck mb-2 image-outer">
                                         <figure class="imagecheck-figure">
                                             <img src="{{ asset($user[0]->eid_front) }}" alt="No document found" class="imagecheck-image">
+                                            @if(!empty($user[0]->eid_front))
+                                            <a class="view-icon view-doc" href="{{ asset($user[0]->eid_front) }}" data-lightbox="user-documents" data-title="EID Front"><i class="far fa-eye"></i></a>
+                                            <a class="delete-icon delete-doc" data-type="eid_front" data-id="{{ $user[0]->id }}"><i class="far fa-trash-alt"></i></a>
+                                            <a class="download-icon" href="{{ url('/admin/download-document') }}?id={{base64_encode($user[0]->id)}}&doc=ef"><i class="fas fa-download"></i></a>
+                                            @endif
                                         </figure>
                                     </label>
                                     <input type="file" accept="image/*" name="eid_front">
@@ -194,11 +309,16 @@
                             
 
                             
-                                <div class="col-2">
+                                <div class="col-2 eid_section" style="display:{{$showEid}}">
                                     <strong>EID Back</strong><br>
                                     <label class="imagecheck mb-2 image-outer">
                                         <figure class="imagecheck-figure">
                                             <img src="{{ asset($user[0]->eid_back) }}" alt="No document found" class="imagecheck-image">
+                                            @if(!empty($user[0]->eid_back))
+                                            <a class="view-icon view-doc" href="{{ asset($user[0]->eid_back) }}" data-lightbox="user-documents" data-title="EID Back"><i class="far fa-eye"></i></a>
+                                            <a class="delete-icon delete-doc" data-type="eid_back" data-id="{{ $user[0]->id }}"><i class="far fa-trash-alt"></i></a>
+                                            <a class="download-icon" href="{{ url('/admin/download-document') }}?id={{base64_encode($user[0]->id)}}&doc=eb"><i class="fas fa-download"></i></a>
+                                            @endif
                                         </figure>
                                     </label>
                                     <input type="file" accept="image/*" name="eid_back">
@@ -218,4 +338,35 @@
     </section>
 </div>
 <script src="{{asset('admin_assets/js/core/jquery-3.7.1.min.js')}}"></script>
+<script src="https://cdn.jsdelivr.net/npm/lightbox2@2.11.4/dist/js/lightbox.min.js"></script>
+<script>
+$(".delete-doc").click(function () {
+        
+    var userId = $(this).attr("data-id");
+    var docType = $(this).attr("data-type");
+    $.ajax({
+        url: baseUrl + '/admin/update-document-status',
+        type: 'post',
+        data: {
+            'userId' : userId,
+            'docType' : docType,
+            'status' : 'delete',
+        },
+        dataType: "json",
+        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+        success: function(res) {
+            location.reload();
+        }
+    });
+    
+});
+
+$(".user_type").change(function () {
+    if($(this).val()=='R'){
+        $(".eid_section").show();
+    }else{
+        $(".eid_section").hide();
+    }
+});
+</script>
 @endsection

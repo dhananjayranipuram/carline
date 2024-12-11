@@ -5,7 +5,7 @@
 .delete-icon {
     position: absolute;
     top: 15px;
-    right: 40px;
+    right: 58px;
     background-color: rgba(0, 0, 0, 0.7);
     color: white;
     border: none;
@@ -21,6 +21,49 @@
 }
 
 .imagecheck-figure:hover .delete-icon {
+    opacity: 1;
+}
+
+.view-icon {
+    position: absolute;
+    top: 15px;
+    right: 110px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.imagecheck-figure:hover .view-icon {
+    opacity: 1;
+}
+.download-icon {
+    position: absolute;
+    top: 15px;
+    right: 5px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.imagecheck-figure:hover .download-icon {
     opacity: 1;
 }
 </style>
@@ -106,6 +149,20 @@
                                         <span>{{$user[0]->country_name}}</span>
                                     </p>
                                 </div>
+
+                                <div class="col-md-4">
+                                    <p>
+                                        <strong>Driver Type</strong><br>
+                                        <span>
+                                        @if($user[0]->user_type == 'R')
+                                            
+                                            Resident
+                                        @else
+                                            Tourist
+                                        @endif    
+                                        </span>
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -126,12 +183,13 @@
                                 <strong>Passport Front</strong><br>
                                 <label class="imagecheck mb-2 image-outer">
                                     <figure class="imagecheck-figure">
-                                        <a href="{{ asset($user[0]->pass_front) }}" data-lightbox="user-documents" data-title="Passport Front">
-                                            <img src="{{ asset($user[0]->pass_front) }}" alt="No document found" class="imagecheck-image">
-                                        </a>
+                                        <img src="{{ asset($user[0]->pass_front) }}" alt="No document found" class="imagecheck-image">
+                                        <a class="view-icon view-doc" href="{{ asset($user[0]->pass_front) }}" data-lightbox="user-documents" data-title="Passport Front"><i class="far fa-eye"></i></a>
                                         <a class="delete-icon delete-doc" data-type="pass_front" data-id="{{ $user[0]->id }}"><i class="far fa-trash-alt"></i></a>
+                                        <a class="download-icon" href="{{ url('/admin/download-document') }}?id={{base64_encode($user[0]->id)}}&doc=pf"><i class="fas fa-download"></i></a>
                                     </figure>
                                 </label>
+                                
                             </div>
                         @endif
 
@@ -140,10 +198,10 @@
                                 <strong>Passport Back</strong><br>
                                 <label class="imagecheck mb-2 image-outer">
                                     <figure class="imagecheck-figure">
-                                        <a href="{{ asset($user[0]->pass_back) }}" data-lightbox="user-documents" data-title="Passport Back">
-                                            <img src="{{ asset($user[0]->pass_back) }}" alt="No document found" class="imagecheck-image">
-                                        </a>
+                                        <img src="{{ asset($user[0]->pass_back) }}" alt="No document found" class="imagecheck-image">
+                                        <a class="view-icon view-doc" href="{{ asset($user[0]->pass_back) }}" data-lightbox="user-documents" data-title="Passport Back"><i class="far fa-eye"></i></a>
                                         <a class="delete-icon delete-doc" data-type="pass_back" data-id="{{ $user[0]->id }}"><i class="far fa-trash-alt"></i></a>
+                                        <a class="download-icon" href="{{ url('/admin/download-document') }}?id={{base64_encode($user[0]->id)}}&doc=pb"><i class="fas fa-download"></i></a>
                                     </figure>
                                 </label>
                             </div>
@@ -154,10 +212,10 @@
                                 <strong>Driving License Front</strong><br>
                                 <label class="imagecheck mb-2 image-outer">
                                     <figure class="imagecheck-figure">
-                                        <a href="{{ asset($user[0]->dl_front) }}" data-lightbox="user-documents" data-title="Driving License Front">
-                                            <img src="{{ asset($user[0]->dl_front) }}" alt="No document found" class="imagecheck-image">
-                                        </a>
+                                        <img src="{{ asset($user[0]->dl_front) }}" alt="No document found" class="imagecheck-image">
+                                        <a class="view-icon view-doc" href="{{ asset($user[0]->dl_front) }}" data-lightbox="user-documents" data-title="Driving License Front"><i class="far fa-eye"></i></a>
                                         <a class="delete-icon delete-doc" data-type="dl_front" data-id="{{ $user[0]->id }}"><i class="far fa-trash-alt"></i></a>
+                                        <a class="download-icon" href="{{ url('/admin/download-document') }}?id={{base64_encode($user[0]->id)}}&doc=df"><i class="fas fa-download"></i></a>
                                     </figure>
                                 </label>
                             </div>
@@ -168,10 +226,10 @@
                                 <strong>Driving License Back</strong><br>
                                 <label class="imagecheck mb-2 image-outer">
                                     <figure class="imagecheck-figure">
-                                        <a href="{{ asset($user[0]->dl_back) }}" data-lightbox="user-documents" data-title="Driving License Back">
-                                            <img src="{{ asset($user[0]->dl_back) }}" alt="No document found" class="imagecheck-image">
-                                        </a>
+                                        <img src="{{ asset($user[0]->dl_back) }}" alt="No document found" class="imagecheck-image">
+                                        <a class="view-icon view-doc" href="{{ asset($user[0]->dl_back) }}" data-lightbox="user-documents" data-title="Driving License Back"><i class="far fa-eye"></i></a>
                                         <a class="delete-icon delete-doc" data-type="dl_back" data-id="{{ $user[0]->id }}"><i class="far fa-trash-alt"></i></a>
+                                        <a class="download-icon" href="{{ url('/admin/download-document') }}?id={{base64_encode($user[0]->id)}}&doc=db"><i class="fas fa-download"></i></a>
                                     </figure>
                                 </label>
                             </div>
@@ -182,10 +240,10 @@
                                 <strong>EID Front</strong><br>
                                 <label class="imagecheck mb-2 image-outer">
                                     <figure class="imagecheck-figure">
-                                        <a href="{{ asset($user[0]->eid_front) }}" data-lightbox="user-documents" data-title="EID Front">
-                                            <img src="{{ asset($user[0]->eid_front) }}" alt="No document found" class="imagecheck-image">
-                                        </a>
+                                        <img src="{{ asset($user[0]->eid_front) }}" alt="No document found" class="imagecheck-image">
+                                        <a class="view-icon view-doc" href="{{ asset($user[0]->eid_front) }}" data-lightbox="user-documents" data-title="EID Front"><i class="far fa-eye"></i></a>
                                         <a class="delete-icon delete-doc" data-type="eid_front" data-id="{{ $user[0]->id }}"><i class="far fa-trash-alt"></i></a>
+                                        <a class="download-icon" href="{{ url('/admin/download-document') }}?id={{base64_encode($user[0]->id)}}&doc=ef"><i class="fas fa-download"></i></a>
                                     </figure>
                                 </label>
                             </div>
@@ -196,16 +254,21 @@
                                 <strong>EID Back</strong><br>
                                 <label class="imagecheck mb-2 image-outer">
                                     <figure class="imagecheck-figure">
-                                        <a href="{{ asset($user[0]->eid_back) }}" data-lightbox="user-documents" data-title="EID Back">
-                                            <img src="{{ asset($user[0]->eid_back) }}" alt="No document found" class="imagecheck-image">
-                                        </a>
+                                        <img src="{{ asset($user[0]->eid_back) }}" alt="No document found" class="imagecheck-image">
+                                        <a class="view-icon view-doc" href="{{ asset($user[0]->eid_back) }}" data-lightbox="user-documents" data-title="EID Back"><i class="far fa-eye"></i></a>
                                         <a class="delete-icon delete-doc" data-type="eid_back" data-id="{{ $user[0]->id }}"><i class="far fa-trash-alt"></i></a>
+                                        <a class="download-icon" href="{{ url('/admin/download-document') }}?id={{base64_encode($user[0]->id)}}&doc=eb"><i class="fas fa-download"></i></a>
                                     </figure>
                                 </label>
                             </div>
                         @endif
                     </div><!-- Vertical Form -->
-
+                    <br>
+                    <div class="row g-3">
+                        <div class="col-2">
+                            <a class="btn btn-primary" href="{{ url('/admin/download-document') }}?id={{base64_encode($user[0]->id)}}&doc=all"><i class="fas fa-download"></i> Download All</a>
+                        </div>
+                    </div>
                     </div>
                 </div>
 

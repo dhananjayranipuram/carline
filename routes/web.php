@@ -61,6 +61,7 @@ Route::middleware(['check.session', 'prevent.back.history'])->group(function () 
     Route::get('/admin/view-user', [AdminController::class, 'viewUsers']);
     Route::any('/admin/delete-user', [AdminController::class, 'deleteUsers']);
     Route::any('/admin/edit-users', [AdminController::class, 'editUsers']);
+    Route::any('/admin/download-document', [AdminController::class, 'downloadDocument']);
 
     Route::any('/admin/bookings', [AdminController::class, 'bookingList']);
     Route::any('/admin/booking-details', [AdminController::class, 'bookingDetails']);

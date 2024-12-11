@@ -493,7 +493,7 @@ class Admin extends Model
     }
 
     public function getUsersDetails($data=[]){
-        return DB::select("SELECT u.id,u.first_name,u.last_name,u.email,u.phone,u.flat,u.building,u.landmark,u.city,u.emirates,u.country,d.pass_front,d.pass_back,d.dl_front,d.dl_back,d.eid_front,d.eid_back,c.name as country_name
+        return DB::select("SELECT u.id,u.first_name,u.last_name,u.email,u.phone,u.flat,u.building,u.landmark,u.city,u.emirates,u.country,d.pass_front,d.pass_back,d.dl_front,d.dl_back,d.eid_front,d.eid_back,c.name as country_name,u.user_type
             FROM enduser u
             LEFT JOIN user_documents d ON d.user_id=u.id
             LEFT JOIN country c ON c.id = u.country
@@ -956,7 +956,8 @@ class Admin extends Model
                     'building' => $data['building'],
                     'landmark' => $data['landmark'],
                     'city' => $data['city'],
-                    'country' => $data['country']
+                    'country' => $data['country'],
+                    'user_type' => $data['user_type']
                 ]);
     }
 
