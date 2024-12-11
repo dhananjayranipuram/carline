@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Http\Request;
 use App\Models\Site;
+use App\Models\Admin;
 use App\Mail\OtpVerification;
 use App\Mail\BookingConfirmation;
 use App\Mail\ContactUs;
@@ -503,12 +504,15 @@ class SiteController extends Controller
     public function calculateRate($credentials) {
 
         $site = new Site();
+        $admin = new Admin();
         $res = [];
         $rentDays = $monthlyRate = $weeklyRate = $deposit = $rate = $emirateCharges = $babySeatCharges = $total = 0;
+        $data = $admin->getAdditionalSettingsData();
+        
         $daysInWeek = config('constants.DAYS_IN_WEEK');
         $daysInMonth = config('constants.DAYS_IN_MONTH');
-        $vatRate = config('constants.VAT_RATE');
-        $bsCharges = config('constants.BABY_SEAT_CHARGE');
+        $vatRate = $data[0]->vat_rate/100;
+        $bsCharges = $data[0]->baby_seat_charge;
         $carlineName = config('constants.CAR_LINE_NAME');
         // Calculate the time difference in days and hours
         $pickupdate = strtotime($credentials['pickupdate'] . ' ' . $credentials['pickuptime']);

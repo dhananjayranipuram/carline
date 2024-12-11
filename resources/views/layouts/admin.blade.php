@@ -112,6 +112,9 @@
                             <li class="nav-item @if(Request::path() == 'admin/reports') active @endif">
                                 <a href="{{url('/admin/reports')}}" ><i class="fas fa-list"></i><p>Reports</p></a>
                             </li>
+                            <li class="nav-item">
+                                <a class="additional-settings" href="#" data-bs-toggle="modal" data-bs-target="#additionalSettings"><i class="fas fa-list"></i><p>Additional Settings</p></a>
+                            </li>
               
               <!-- <li class="nav-item">
                 <a href="widgets.html">
@@ -280,6 +283,48 @@
       </div>
 
     </div>
+    <!-- Modal -->
+    <div class="modal fade" id="additionalSettings" tabindex="-1" role="dialog" aria-hidden="true" >
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+
+                <form method="post" id="additional-settings-form">
+                @csrf <!-- {{ csrf_field() }} -->
+                    <div class="modal-header border-0">
+                        <h5 class="modal-title">
+                            <span class="fw-mediumbold"> Additional</span>
+                            <span class="fw-light"> Settings </span>
+                        </h5>
+                        <button type="button" class="close close-modal" aria-label="Close" > <span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="small"> Update basic settings using this form, make sure you fill them all </p>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group form-group-default">
+                                        <label>Baby seat charges (AED)</label>
+                                        <input name="babySeat" id="babySeat" type="text" class="form-control" placeholder="Enter amount" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="form-group form-group-default">
+                                        <label>VAT Rate (%)</label>
+                                        <input name="vatRate" id="vatRate" type="text" class="form-control" placeholder="Enter percentage" />
+                                    </div>
+                                </div>
+                            </div>
+                        
+                    </div>
+                    <div class="modal-footer border-0">
+                        <div id="as-edit-errors"></div>
+                        <button type="button" class="btn btn-primary update-settings" > Update </button>
+                        <button type="button" class="btn btn-danger close-modal" data-dismiss="modal" > Close </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
     <!--   Core JS Files   -->
     <script src="{{asset('admin_assets/js/core/jquery-3.7.1.min.js')}}"></script>
     <script src="{{asset('admin_assets/js/core/popper.min.js')}}"></script>
@@ -345,6 +390,61 @@
         lineColor: "#ffa534",
         fillColor: "rgba(255, 165, 52, .14)",
       });
+
+      $(".close-modal").click(function () {
+          $("#additionalSettings").modal("hide");
+      });
+
+      $(".update-settings").click(function () {
+        let formData = new FormData(document.getElementById("additional-settings-form"));
+        $.ajax({
+            url: baseUrl + '/admin/update-add-settings',
+            type: 'post',
+            data: formData,
+            processData: false,
+            contentType: false,
+            dataType: "json",
+            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+            success: function(res) {
+                $('#as-edit-errors').css('color', 'green');
+                $('#as-edit-errors').html('<div>'+res.message+'</div>');
+                setTimeout(function(){
+                    $('#as-edit-errors').html('');
+                    $("#additionalSettings").modal("hide");
+                }, 2500);
+            },error: function(xhr, status, error) {
+                $('#as-edit-errors').css('color', 'red');
+                $('#as-edit-errors').html('');
+                let errors = xhr.responseJSON?.errors;
+                if (errors) {
+                    $.each(errors, function (key, messages) {
+                        messages.forEach(message => {
+                            $('#as-edit-errors').append('<div>' + message + '</div>');
+                        });
+                    });
+                } else {
+                    $('#as-edit-errors').html('<div>An unexpected error occurred.</div>');
+                }
+                setTimeout(function(){
+                    $('#as-edit-errors').html('');
+                }, 2500);
+            }
+        });
+    });
+    $(".additional-settings").click(function () {
+      $.ajax({
+          url: baseUrl + '/admin/get-additional-settings',
+          type: 'post',
+          dataType: "json",
+          headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+          success: function(res) {
+              if(res.status == 200 ){
+                  $("#babySeat").val(res.data[0].baby_seat_charge);
+                  $("#vatRate").val(res.data[0].vat_rate);
+              }
+          }
+      });
+    });
     </script>
     <script src="{{asset('admin_assets/js/main.js')}}"></script> 
   </body>

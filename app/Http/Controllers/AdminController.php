@@ -1452,4 +1452,46 @@ class AdminController extends Controller
         ];
         return $response;
     }
+
+    public function updateAdditionalSettings(Request $request){
+        $admin = new Admin();
+        $response = [];
+        if($request->method() == 'POST'){
+            $filterData = $request->validate([
+                'babySeat' => ['required'],
+                'vatRate' => ['required']
+            ]);
+
+            $data = $admin->updateAdditionalSettingsData($filterData);
+            // print_r($data);exit;
+            if ($data) {
+                $response['status'] = 200;
+                $response['message'] = "Settings Updated successfully.";
+            } else {
+                $response['status'] = 200;
+                $response['message'] = "Settings Updated successfully.";
+            }
+            
+            return response()->json($response);
+        }
+    }
+
+    public function getAdditionalSettings(Request $request){
+        $admin = new Admin();
+        $response = [];
+        if($request->method() == 'POST'){
+
+            $data = $admin->getAdditionalSettingsData();
+            // print_r($data);exit;
+            if ($data) {
+                $response['status'] = 200;
+                $response['data'] = $data;
+            } else {
+                $response['status'] = 200;
+                $response['data'] = [];
+            }
+            
+            return response()->json($response);
+        }
+    }
 }

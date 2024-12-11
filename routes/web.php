@@ -109,6 +109,9 @@ Route::middleware(['check.session', 'prevent.back.history'])->group(function () 
     Route::any('/admin/edit-policy-agreement', [AdminController::class, 'editPolicyAgreement']);
     Route::any('/admin/update-policy-agreement', [AdminController::class, 'updatePolicyAgreement']);
     Route::any('/admin/delete-policy-agreement', [AdminController::class, 'deletePolicyAgreement']);
+    
+    Route::any('/admin/update-add-settings', [AdminController::class, 'updateAdditionalSettings']);
+    Route::any('/admin/get-additional-settings', [AdminController::class, 'getAdditionalSettings']);
 
     Route::any('/admin/export-users', [AdminController::class, 'exportUsers']);
     Route::any('/admin/export-bookings', [AdminController::class, 'exportBookings']);

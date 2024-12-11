@@ -1068,4 +1068,16 @@ class Admin extends Model
     public function getContry() {
         return DB::table('country')->select('id', 'name')->get()->toArray();
     }
+
+    public function updateAdditionalSettingsData($data) {
+        return DB::update("UPDATE additional_settings SET baby_seat_charge = :babySeat,vat_rate = :vatRate WHERE id = :id", [
+            'babySeat' => $data['babySeat'],
+            'vatRate' => $data['vatRate'],
+            'id' => 1
+        ]);
+    }
+
+    public function getAdditionalSettingsData() {
+        return DB::table('additional_settings')->select('baby_seat_charge', 'vat_rate')->get()->toArray();
+    }
 }
