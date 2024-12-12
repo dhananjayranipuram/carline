@@ -13,6 +13,54 @@
   display: none;
 }
 </style>
+<style>
+     /* Style for the select dropdown */
+.fleets-sort select {
+    padding: 8px 12px;
+    font-size: 16px;
+    color: #6c757d; /* Default placeholder color */
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 20px !important;
+}
+
+/* Style for the filter button */
+.filter-toggle-btn i {
+    font-size: 18px;
+}
+
+/* Style for icons inside the dropdown */
+.fleets-sort i {
+    margin-right: 8px;
+    font-size: 18px;
+}
+
+/* Mobile-specific styles */
+@media only screen and (max-width: 600px) {
+    .fleets-sort {
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: space-between;
+        align-items: center !important;
+    }
+
+    /* Style for the select dropdown on mobile */
+    .fleets-sort select {
+        color: #ffffff;
+        background: #000000;
+        text-align: center;
+        flex-grow: 1; /* Allow the select to take the remaining space */
+        margin-bottom: 8px !important;
+    }
+
+    /* Style for the filter button */
+    .filter-toggle-btn {
+        margin-left: 10px; /* Add space between the dropdown and button */
+    }
+}
+
+</style>
 <!-- Page Header Start -->
 <!-- <div class="page-header bg-section parallaxie">
     <div class="container">
@@ -53,81 +101,96 @@
                     </div>
                     <!-- Fleets Search Box End -->
 
-                    <div class="fleets-sidebar-list-box">
-                        <!-- Fleets Sidebar List Start -->
-                        <div class="fleets-sidebar-list">
-                            <div class="fleets-list-title">
-                                <h3>Car Type</h3>
-                            </div>
+                    <div class="fleets-sort d-flex flex-column flex-sm-row align-items-center">
+                        <!-- Sort Dropdown -->
+                        <select class="form-control mb-2 mb-sm-0" id="sortOptions">
+                            <option value="default" selected disabled>⬇️ Sort By </option>
+                            <option value="asc"> Price: Low to High</option>
+                            <option value="desc"> Price: High to Low</option>
+                        </select>
+                        
+                        <!-- Filter Button -->
+                        <button class="form-control mb-2 mb-sm-0 d-lg-none filter-toggle-btn" type="button" style="background: #000080;color: #ffffff;padding: 8px 12px;">
+                            <i class="fa-solid fa-filter me-2"></i>Filters
+                        </button>
+                    </div>
 
-                            <ul>
-                                @foreach($carType as $key => $value)
-                                <li class="form-check filterLi" search-value="{{$value->name}}">
-                                    <input class="form-check-input car-type" type="checkbox" value="{{$value->id}}">
-                                    <label class="form-check-label" for="checkbox1">{{$value->name}}</label>
-                                </li>
-                                @endforeach                                
-                            </ul>
-                        </div>
-                        <!-- Fleets Sidebar List End -->
+                    <div class="filter-section">
+                        <div class="collapse d-lg-block" id="filterOptions">
+                            <!-- Fleets Sidebar List Start -->
+                            <div class="fleets-sidebar-list">
+                                <div class="fleets-list-title">
+                                    <h3>Car Type</h3>
+                                </div>
 
-                        <!-- Fleets Sidebar List Start -->
-                        <div class="fleets-sidebar-list">
-                            <div class="fleets-list-title">
-                                <h3>Car Brands</h3>
-                            </div>
-
-                            <ul>
-                                @foreach($brands as $key => $value)
-                                <li class="form-check filterLi" search-value="{{$value->name}}">
-                                    <input class="form-check-input car-brand" type="checkbox" value="{{$value->id}}">
-                                    <label class="form-check-label" for="checkbox7">{{$value->name}}</label>
-                                </li>
-                                @endforeach
-                            </ul>
-                        </div>
-                        <!-- Fleets Sidebar List End -->
-                        <!-- Fleets Sidebar List Start -->
-                        <div class="fleets-sidebar-list">
-                            <div class="fleets-list-title">
-                                <h3>Transmission</h3>
-                            </div>
-                            @foreach($all_specs as $keyspec => $valuespec)
-                                @if($valuespec->name=='Transmission')
-                                    @php $transArr = explode('~',$valuespec->options); @endphp
-                                    @php $transId = $valuespec->id; @endphp
-                                @endif
-                                @if($valuespec->name=='Passenger')
-                                    @php $passArr = explode('~',$valuespec->options); @endphp
-                                    @php $seatId = $valuespec->id; @endphp
-                                @endif
-                            @endforeach
-                            <ul class="transmission-id" data-value="{{$transId}}">
-                                @foreach($transArr as $key1 => $value1)
-                                    <li class="form-check filterLi" search-value="{{$value1}}">
-                                        <input class="form-check-input car-transmision" type="checkbox" value="{{$value1}}">
-                                        <label class="form-check-label" for="checkbox7">{{$value1}}</label>
+                                <ul>
+                                    @foreach($carType as $key => $value)
+                                    <li class="form-check filterLi" search-value="{{$value->name}}">
+                                        <input class="form-check-input car-type" type="checkbox" value="{{$value->id}}">
+                                        <label class="form-check-label" for="checkbox1">{{$value->name}}</label>
                                     </li>
-                                @endforeach
-                            </ul>
-                        </div>
-                        <!-- Fleets Sidebar List End -->
-                         <!-- Fleets Sidebar List Start -->
-                        <div class="fleets-sidebar-list">
-                            <div class="fleets-list-title">
-                                <h3>Seat</h3>
+                                    @endforeach                                
+                                </ul>
                             </div>
-                            <ul class="seat-id" data-value="{{$seatId}}">
-                                @foreach($passArr as $key2 => $value2)
-                                    <li class="form-check filterLi" search-value="{{$value2}}">
-                                        <input class="form-check-input car-seats" type="checkbox" value="{{$value2}}">
-                                        <label class="form-check-label" for="checkbox7">{{$value2}}</label>
-                                    </li>
-                                @endforeach
-                            </ul>
-                        </div>
-                        <!-- Fleets Sidebar List End -->
+                            <!-- Fleets Sidebar List End -->
 
+                            <!-- Fleets Sidebar List Start -->
+                            <div class="fleets-sidebar-list">
+                                <div class="fleets-list-title">
+                                    <h3>Car Brands</h3>
+                                </div>
+
+                                <ul>
+                                    @foreach($brands as $key => $value)
+                                    <li class="form-check filterLi" search-value="{{$value->name}}">
+                                        <input class="form-check-input car-brand" type="checkbox" value="{{$value->id}}">
+                                        <label class="form-check-label" for="checkbox7">{{$value->name}}</label>
+                                    </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                            <!-- Fleets Sidebar List End -->
+                            <!-- Fleets Sidebar List Start -->
+                            <div class="fleets-sidebar-list">
+                                <div class="fleets-list-title">
+                                    <h3>Transmission</h3>
+                                </div>
+                                @foreach($all_specs as $keyspec => $valuespec)
+                                    @if($valuespec->name=='Transmission')
+                                        @php $transArr = explode('~',$valuespec->options); @endphp
+                                        @php $transId = $valuespec->id; @endphp
+                                    @endif
+                                    @if($valuespec->name=='Passenger')
+                                        @php $passArr = explode('~',$valuespec->options); @endphp
+                                        @php $seatId = $valuespec->id; @endphp
+                                    @endif
+                                @endforeach
+                                <ul class="transmission-id" data-value="{{$transId}}">
+                                    @foreach($transArr as $key1 => $value1)
+                                        <li class="form-check filterLi" search-value="{{$value1}}">
+                                            <input class="form-check-input car-transmision" type="checkbox" value="{{$value1}}">
+                                            <label class="form-check-label" for="checkbox7">{{$value1}}</label>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                            <!-- Fleets Sidebar List End -->
+                            <!-- Fleets Sidebar List Start -->
+                            <div class="fleets-sidebar-list">
+                                <div class="fleets-list-title">
+                                    <h3>Seat</h3>
+                                </div>
+                                <ul class="seat-id" data-value="{{$seatId}}">
+                                    @foreach($passArr as $key2 => $value2)
+                                        <li class="form-check filterLi" search-value="{{$value2}}">
+                                            <input class="form-check-input car-seats" type="checkbox" value="{{$value2}}">
+                                            <label class="form-check-label" for="checkbox7">{{$value2}}</label>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                            <!-- Fleets Sidebar List End -->
+                        </div> 
                     </div>                        
                 </div>
                 <!-- Fleets Sidebar End -->
@@ -251,6 +314,10 @@ $(document).ready(function () {
         getCars();
     });
 
+    $("#sortOptions").change(function () {
+        getCars();
+    });
+
     function getCars(){
         var carType = [];
         var carBrand = [];
@@ -292,6 +359,7 @@ $(document).ready(function () {
                 'transId':$(".transmission-id").attr('data-value'),
                 'seatId':$(".seat-id").attr('data-value'),
                 'searchText':$("#search").val(),
+                'sortBy':$("#sortOptions").val(),
             },
             headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
             success: function(res) {
@@ -373,5 +441,14 @@ $(document).ready(function () {
     });
 
 });
+</script>
+<script>
+    // Custom toggle behavior for filter button
+    const filterToggleBtn = document.querySelector('.filter-toggle-btn');
+    const filterOptions = document.getElementById('filterOptions');
+
+    filterToggleBtn.addEventListener('click', () => {
+        filterOptions.classList.toggle('collapse');
+    });
 </script>
 @endsection

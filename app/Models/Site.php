@@ -26,6 +26,10 @@ class Site extends Model
     }
 
     public function getCars($data=[]){
+
+        if(!isset($data['sortBy'])){
+            $data['sortBy'] = 'asc';
+        } 
         switch ($data['format']) {
             case 'filter':
                 $condition = '';
@@ -60,14 +64,14 @@ class Site extends Model
                     LEFT JOIN car_images ci ON ci.car_id=c.id
                     LEFT JOIN car_specification cst ON cst.car_id = c.id $transJoin
                     LEFT JOIN car_specification css ON css.car_id = c.id $seatJoin
-                    WHERE c.active=1 AND c.deleted=0 $condition GROUP BY c.id;");
+                    WHERE c.active=1 AND c.deleted=0 $condition GROUP BY c.id ORDER BY c.rent $data[sortBy];");
                 break;
             case 'offer':
                 return DB::select("SELECT c.id,c.name,c.model,cb.name brand_name,ct.name car_type,GROUP_CONCAT(ci.image) AS 'image',FORMAT(c.rent,0) rent,c.general_info_flag,c.rental_condition_flag,c.offer_flag,FORMAT(c.offer_price,0) offer_price,FORMAT(c.deposit,0) deposit,c.kmeter,COALESCE(c.daily_mileage, 0) AS daily_mileage,FORMAT(COALESCE(c.per_week, 0), 0) AS per_week,COALESCE(c.weekly_mileage, 0) AS weekly_mileage,FORMAT(COALESCE(c.per_month, 0), 0) AS per_month,COALESCE(c.monthly_mileage, 0) AS monthly_mileage,FORMAT(COALESCE(c.toll_charges, 0), 0) AS toll_charges,FORMAT(COALESCE(c.add_mileage_charge, 0), 0) AS add_mileage_charge,c.offer_flag_weekly,FORMAT(COALESCE(c.offer_price_weekly, 0), 0) AS offer_price_weekly,c.offer_flag_monthly,FORMAT(COALESCE(c.offer_price_monthly, 0), 0) AS offer_price_monthly FROM cars c
                     LEFT JOIN car_brand cb ON cb.id=c.brand_id
                     LEFT JOIN car_type ct ON ct.id=c.type_id
                     LEFT JOIN car_images ci ON ci.car_id=c.id
-                    WHERE c.active=1 AND c.deleted=0 AND c.offer_flag=1 GROUP BY c.id;");
+                    WHERE c.active=1 AND c.deleted=0 AND c.offer_flag=1 GROUP BY c.id ORDER BY c.rent $data[sortBy];");
                 break;
             default:
                 $condition = '';
@@ -78,7 +82,7 @@ class Site extends Model
                                 LEFT JOIN car_brand cb ON cb.id=c.brand_id
                                 LEFT JOIN car_type ct ON ct.id=c.type_id
                                 LEFT JOIN car_images ci ON ci.car_id=c.id
-                                WHERE c.active=1 AND c.deleted=0 $condition GROUP BY c.id;");
+                                WHERE c.active=1 AND c.deleted=0 $condition GROUP BY c.id ORDER BY c.rent $data[sortBy];");
                 break;
         }
     }

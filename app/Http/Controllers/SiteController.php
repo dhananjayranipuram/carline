@@ -103,6 +103,7 @@ class SiteController extends Controller
                 'transId' => [''],
                 'seatId' => [''],
                 'searchText' => [''],
+                'sortBy' => [''],
             ]);
             
             // $filterData['type'] = implode(',', $filterData['type']);
