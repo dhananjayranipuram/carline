@@ -17,17 +17,17 @@
                     </div>
                     <div class="card-body">
                         <div class="row align-items-center">
-                            <div class="col col-stats ms-3 ms-sm-0">
-                                <div class="numbers">
-                                    <label for="validationDefault02" class="form-label">Select date range</label>
-                                    <div id="reportrange" class="word-wrap-custom" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 25%">
-                                        <i class="fa fa-calendar"></i>&nbsp;
-                                        <span></span> <i class="fa fa-caret-down"></i>
-                                        <input type="hidden" id="from" name="from">
-                                        <input type="hidden" id="to" name="to">
-                                    </div>
+                            <div class="col-md-3">
+                                <label for="validationDefault02" class="form-label">Select Date Range</label>
+                                <div id="reportrange" class="word-wrap-custom" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+                                    <i class="fa fa-calendar"></i>&nbsp;
+                                    <span></span> <i class="fa fa-caret-down"></i>
+                                    <input type="hidden" id="from" name="from">
+                                    <input type="hidden" id="to" name="to">
                                 </div>
                             </div>
+
+                            
                         </div>
                     </div>
                     
@@ -201,7 +201,11 @@ $(function() {
     }
     
     function cb(start, end) {
-        $('#reportrange span').html(start.format('DD-MM-Y') + ' - ' + end.format('DD-MM-Y'));
+        if(start.format('DD-MM-Y') == '01-01-1970'){
+            $('#reportrange span').html('Starting point - ' + end.format('DD-MM-Y'));
+        }else{
+            $('#reportrange span').html(start.format('DD-MM-Y') + ' - ' + end.format('DD-MM-Y'));
+        }
         $("#from").val(start.format('Y-MM-DD'));
         $("#to").val(end.format('Y-MM-DD'));
     }
@@ -217,6 +221,7 @@ $(function() {
             'This Month': [moment().startOf('month'), moment().endOf('month')],
             'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
             'This Year': [moment().startOf('year'), moment().endOf('year')],
+            'Maximum': [moment("1970-01-01"), moment()],
         }
     }, cb);
 

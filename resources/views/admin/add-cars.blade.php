@@ -298,9 +298,7 @@ input[type="text"]:not(:placeholder-shown) + .input-placeholder {
                                     <div class="form-check">
                                         <input type="checkbox" class="form-check-input" name="general_info" @if(old('general_info')) checked @endif> Include general information
                                     </div>
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" name="rental_condition" @if(old('rental_condition')) checked @endif> Include rental conditions
-                                    </div>
+                                    
                                 </div>
                             </div>
                         </div>

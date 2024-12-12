@@ -430,26 +430,26 @@ class SiteController extends Controller
         // Validation
         $credentials = $request->validate([
             'rider_type' => ['required'],
-            'pass_front' => ['nullable', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
-            'pass_back' => ['nullable', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
-            'dl_front' => ['nullable', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
-            'dl_back' => ['nullable', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
-            'eid_front' => ['nullable', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
-            'eid_back' => ['nullable', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
-            // 'eid_front' => [
-            //     'nullable',
-            //     'max:2048',
-            //     Rule::requiredIf(function () use ($request) {
-            //         return $request->rider_type === 'resident'; // Only required if rider_type is 'resident'
-            //     }),
-            // ],
-            // 'eid_back' => [
-            //     'nullable',
-            //     'max:2048',
-            //     Rule::requiredIf(function () use ($request) {
-            //         return $request->rider_type === 'resident'; // Only required if rider_type is 'resident'
-            //     }),
-            // ],
+            'pass_front' => ['required', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
+            'pass_back' => ['required', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
+            'dl_front' => ['required', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
+            'dl_back' => ['required', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
+            // 'eid_front' => ['nullable', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
+            // 'eid_back' => ['nullable', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
+            'eid_front' => [
+                'nullable',
+                'max:2048',
+                Rule::requiredIf(function () use ($request) {
+                    return $request->rider_type === 'resident'; // Only required if rider_type is 'resident'
+                }),
+            ],
+            'eid_back' => [
+                'nullable',
+                'max:2048',
+                Rule::requiredIf(function () use ($request) {
+                    return $request->rider_type === 'resident'; // Only required if rider_type is 'resident'
+                }),
+            ],
         ]);
 
         // Handle file uploads using the helper function

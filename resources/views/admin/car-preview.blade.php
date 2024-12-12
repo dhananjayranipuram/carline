@@ -447,42 +447,7 @@ while ($startTime <= $endTime) {
                         <!-- Feets Information End -->
                         @endif
 
-                        @if($carDet[0]->rental_condition_flag == 1)
-                        <!-- Rental Conditions Faqs Start -->
-                        <div class="rental-conditions-faqs">
-                            <!-- Section Title Start -->
-                            <div class="section-title">
-                                <h3 class="wow fadeInUp">rental conditions</h3>
-                                <h2 class="text-anime-style-3" data-cursor="-opaque">Policies and agreement</h2>
-                            </div>
-                            <!-- Section Title End -->
-
-                            <!-- Rental Conditions FAQ Accordion Start -->
-                            <div class="rental-condition-accordion" id="rentalaccordion">
-                                @foreach($policy as $key => $value)
-                                <!-- FAQ Item Start -->
-                                <div class="accordion-item wow fadeInUp">
-                                    <h2 class="accordion-header" id="rentalheading1">
-                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                            data-bs-target="#rentalcollapse{{$key}}" aria-expanded="false" aria-controls="rentalcollapse{{$key}}">
-                                            {{$value->name}}
-                                        </button>
-                                    </h2>
-                                    <div id="rentalcollapse{{$key}}" class="accordion-collapse collapse" aria-labelledby="rentalheading{{$key}}"
-                                        data-bs-parent="#rentalaccordion">
-                                        <div class="accordion-body">
-                                            <p>{!!html_entity_decode(nl2br(e($value->content)))!!}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- FAQ Item End -->
-                                @endforeach
-
-                            </div>
-                            <!-- Rental Conditions FAQ Accordion End -->
-                        </div>
-                        <!-- Rental Conditions Faqs End -->
-                        @endif
+                        
 
                     </div>
                     <!-- Feets Single Content End -->

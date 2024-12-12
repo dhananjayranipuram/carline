@@ -122,7 +122,11 @@ $(function() {
     }
     
     function cb(start, end) {
-        $('#reportrange span').html(start.format('DD-MM-Y') + ' - ' + end.format('DD-MM-Y'));
+        if(start.format('DD-MM-Y') == '01-01-1970'){
+            $('#reportrange span').html('Starting point - ' + end.format('DD-MM-Y'));
+        }else{
+            $('#reportrange span').html(start.format('DD-MM-Y') + ' - ' + end.format('DD-MM-Y'));
+        }
         $("#from").val(start.format('Y-MM-DD'));
         $("#to").val(end.format('Y-MM-DD'));
     }
@@ -138,6 +142,7 @@ $(function() {
            'This Month': [moment().startOf('month'), moment().endOf('month')],
            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
           'This Year': [moment().startOf('year'), moment().endOf('year')],
+          'Maximum': [moment("1970-01-01"), moment()],
         }
     }, cb);
 
@@ -191,7 +196,7 @@ function buildTable(){
                 res.bookings.forEach(function (data) {
                     let encodedId = btoa(data.id);
                     let row = `
-                        <tr>
+                        <tr data-url="${baseUrl}/admin/booking-details?id=${encodedId}">
                             <td>${data.id}</td>
                             <td>${data.user_name}</td>
                             <td>${data.car_name}</td>
