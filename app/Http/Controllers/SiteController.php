@@ -561,7 +561,7 @@ class SiteController extends Controller
         
         // Additional charge if pickup and destination emirates differ
         // if($credentials['destinationData'][0]['placeName'] == '')
-        if($credentials['sourceData']['placeName'] == $carlineName || $credentials['destinationData']['placeName'] == $carlineName){
+        if($credentials['sourceData']['placeName'] == $carlineName && $credentials['destinationData']['placeName'] == $carlineName){
             $emirateCharges = 0;
         }else {
             $resEmirate = $site->getEmiratesForRate($credentials);

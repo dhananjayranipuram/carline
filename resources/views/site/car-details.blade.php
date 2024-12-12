@@ -87,6 +87,54 @@
         cursor: pointer;
     }
 </style>
+<style>
+    .booking-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        font-size: 16px;
+        color: #333;
+        background-color: #f9f9f9; /* Subtle background color */
+        border: 1px solid #ddd; /* Border for the table */
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .booking-table th, .booking-table td {
+        text-align: left;
+        padding: 12px 15px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .booking-table th {
+        background-color: #f1f1f1; /* Faded header color */
+        color: #000080;
+        font-weight: bold;
+    }
+
+    .booking-table tr:nth-child(even) {
+        background-color: #f7f7f7; /* Alternating row color */
+    }
+
+    .booking-table tr:nth-child(odd) {
+        background-color: #ffffff; /* Alternating row color */
+    }
+
+    .booking-table tr:last-child td {
+        border-bottom: none;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .booking-table {
+            font-size: 14px;
+        }
+
+        .booking-table th, .booking-table td {
+            padding: 10px;
+        }
+    }
+</style>
 @php
 $timeSlots = [];
 $startTime = strtotime("12:00 AM");
@@ -884,13 +932,35 @@ function bookCarActionFinal(){
                 // var str = '<span style="color:green;">Car Booked.<br> Booking ID:'+res.bookingId+'</span>';
 
                 var babySeat = (res.bookingData["babySeat"]=='on')?'Included':'Not Included';
-                $("#booking-details").append('<span style="color:green;">Car Booked.<br> Booking ID:'+res.bookingId+'</span>');
-                $("#booking-details").append('<span style="color:green;"><br> Booking ID:'+res.bookingId+'</span>');
-                $("#booking-details").append('<span style="color:green;"><br> Pickup Date : '+res.bookingData["pickupdate"]+'</span>');
-                $("#booking-details").append('<span style="color:green;"><br> Dropoff Date : '+res.bookingData["returndate"]+'</span>');
-                $("#booking-details").append('<span style="color:green;"><br> Pickup Time : '+res.bookingData["pickuptime"]+'</span>');
-                $("#booking-details").append('<span style="color:green;"><br> Dropoff Time : '+res.bookingData["returntime"]+'</span>');
-                $("#booking-details").append('<span style="color:green;"><br> Baby Seat : '+ babySeat +'</span>');
+                var str = '<table class="table booking-table">'+
+                                        '<tbody>'+
+                                            '<tr>'+
+                                                '<th>Booking ID:</th>'+
+                                                '<td>'+res.bookingId+'</td>'+
+                                            '</tr>'+
+                                            '<tr>'+
+                                                '<th>Pickup Date:</th>'+
+                                                '<td>'+res.bookingData["pickupdate"]+'</td>'+
+                                            '</tr>'+
+                                            '<tr>'+
+                                                '<th>Dropoff Date:</th>'+
+                                                '<td>'+res.bookingData["returndate"]+'</td>'+
+                                            '</tr>'+
+                                            '<tr>'+
+                                                '<th>Pickup Time:</th>'+
+                                                '<td>'+res.bookingData["pickuptime"]+'</td>'+
+                                            '</tr>'+
+                                            '<tr>'+
+                                                '<th>Dropoff Time:</th>'+
+                                                '<td>'+res.bookingData["returntime"]+'</td>'+
+                                            '</tr>'+
+                                            '<tr>'+
+                                                '<th>Baby Seat:</th>'+
+                                                '<td>'+ babySeat +'</td>'+
+                                            '</tr>'+
+                                        '</tbody>'+
+                                    '</table>';
+                $("#booking-details").html(str);
                 setTimeout(function () {
                     location.reload();
                 }, 10000);

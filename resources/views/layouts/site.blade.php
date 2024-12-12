@@ -336,13 +336,13 @@
                 <!-- Booking PopUp Form Start -->
                 <div id="bookingConfirm" class="white-popup-block mfp-hide booking-form">
                     <div class="section-title" style="text-align: center;">
-                        <h2>Booking Confirmation</h2>
+                        <h2 style="color: #000080; font-weight: bold;">Booking Confirmation</h2>
                     </div>                                
                     <fieldset>
                         <div class="row">
-                            <div class="booking-form-group col-md-12 mb-4" align="center">
-                                <i class="fas fa-check-circle" style="font-size: 200px; color: green;"></i>
-                                <br><span id="booking-details"></span>
+                            <div class="booking-form-group col-md-12 text-center">
+                                <i class="fas fa-check-circle" style="font-size: 100px; color: #006d09; margin-bottom: 20px;"></i>
+                                <div id="booking-details"></div>
                             </div>
                         </div>                                    
                     </fieldset>
