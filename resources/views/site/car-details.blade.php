@@ -135,6 +135,48 @@
         }
     }
 </style>
+<style>
+        @media only screen and (max-width: 991px) {
+    .fleets-single-slider {
+        margin-bottom: 2px;
+    }
+}
+@media only screen and (max-width: 991px) {
+    .page-fleets-single {
+        padding: 0px 0;
+    }
+}
+@media only screen and (max-width: 991px) {
+    .fleets-information {
+        margin-bottom: 5px;
+        padding-bottom: 5px;
+    }
+    .pricing-table {
+    margin-top: 1px;
+    overflow-x: auto;
+}
+.fleets-slider-image {
+    position: relative;
+    border-radius: 30px;
+    overflow: hidden;
+    padding-top: 20px;
+}
+}
+
+/* Hide the page header on desktop and laptop (above 1024px) */
+@media only screen and (min-width: 1025px) {
+    .page-header {
+        display: none;
+    }
+}
+
+/* Ensure the page header is visible on mobile and tablets (up to 1024px) */
+@media only screen and (max-width: 1024px) {
+    .page-header {
+        display: block;
+    }
+}
+    </style>
 @php
 $timeSlots = [];
 $startTime = strtotime("12:00 AM");
@@ -144,6 +186,21 @@ while ($startTime <= $endTime) {
     $startTime = strtotime('+30 minutes', $startTime);
 }
 @endphp
+<!-- Page Header Start -->
+<div class="page-header bg-section parallaxie">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<!-- Page Header Box Start -->
+					<div class="page-header-box">
+						<h1 class="text-anime-style-3" data-cursor="-opaque">{{$carDet[0]->brand_name}} {{$carDet[0]->name}} - {{$carDet[0]->model}} Model</h1>
+					</div>
+					<!-- Page Header Box End -->
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Page Header End -->
 <!-- Booking Form Box Start -->
 <div class="booking-form-box">
     <!-- Booking PopUp Form Start -->
@@ -1012,5 +1069,24 @@ function nl2br (str, is_xhtml) {
     var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>';    
     return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1'+ breakTag +'$2');
 }
+</script>
+
+<script>
+  // JavaScript to move the sections dynamically on mobile
+window.addEventListener('load', function() {
+    if (window.innerWidth <= 768) {
+        const fleetsSection = document.querySelector('.fleets-single-slider');
+        const pricingTable = document.querySelector('.pricing-table');
+        const pageHeader = document.querySelector('.page-header'); // Reference to the page header
+
+        if (fleetsSection && pricingTable && pageHeader) {
+            // Insert fleets section just after the page header
+            pageHeader.parentNode.insertBefore(fleetsSection, pageHeader.nextSibling);
+            
+            // Insert pricing table just after the fleets section
+            fleetsSection.parentNode.insertBefore(pricingTable, fleetsSection.nextSibling);
+        }
+    }
+});
 </script>
 @endsection
