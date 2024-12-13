@@ -14,6 +14,9 @@
         margin-top: 30px;
         overflow-x: auto; /* Allows horizontal scroll on small screens */
     }
+    .with-errors{
+        color:red;
+    }
 
     .pricing-table table {
         width: 100%;
@@ -68,11 +71,11 @@
             padding: 10px;
         }
     }
-    ul{
+    /* ul{
         color: var(--white-color);
         margin: 0;
         font-weight: normal;
-    }
+    } */
     a.disabled {
         pointer-events: none;
         cursor: default;
@@ -173,9 +176,73 @@
 /* Ensure the page header is visible on mobile and tablets (up to 1024px) */
 @media only screen and (max-width: 1024px) {
     .page-header {
-        display: block;
-    }
+        display: block;
+    }
 }
+    </style>
+<style>
+        /* General Popup Styles */
+.carline-popup {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Overlay effect */
+    z-index: 1050; /* Above other content */
+    overflow: auto; /* Enable scrolling */
+}
+
+.carline-popup-content {
+    background: #fff;
+    margin: 5% auto;
+    padding: 20px;
+    width: 90%;
+    max-width: 800px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    font-family: 'Poppins Semibold', sans-serif;
+}
+
+/* Close Button */
+.carline-close-btn {
+    float: right;
+    font-size: 1.5em;
+    cursor: pointer;
+    color: #333;
+}
+
+/* Two-Column Container */
+.carline-terms-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 10px;
+}
+
+.carline-terms-column {
+    flex: 1;
+    min-width: 300px;
+    max-height: 400px; /* Set scrollable height */
+    overflow-y: auto; /* Scrollbar for overflow */
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background: #f9f9f9;
+}
+
+/* Column Content Styling */
+.carline-terms-column h3 {
+    font-family: 'Copperplate Gothic', sans-serif;
+    margin-top: 0;
+}
+
+.carline-terms-column p {
+    line-height: 1.5;
+    margin: 10px 0;
+}
+
     </style>
 @php
 $timeSlots = [];
@@ -200,7 +267,8 @@ while ($startTime <= $endTime) {
 			</div>
 		</div>
 	</div>
-	<!-- Page Header End -->
+	<!-- Page Header End -->
+
 <!-- Booking Form Box Start -->
 <div class="booking-form-box">
     <!-- Booking PopUp Form Start -->
@@ -215,12 +283,18 @@ while ($startTime <= $endTime) {
                         <div class="rental-conditions-faqs">
                             <!-- Section Title Start -->
                             <div class="section-title">
-                                <h3 class="wow fadeInUp">rental conditions</h3>
                                 <h2 class="text-anime-style-3" data-cursor="-opaque">Policies and agreement</h2>
                             </div>
                             <!-- Section Title End -->
                             <div class="rental-condition-accordion" id="rentalaccordion">
-                            
+                                <div class="row">
+                                    <div class="col-md-6 mb-4 first-section">
+                                        
+                                    </div>
+                                    <div class="col-md-6 mb-4 second-section">
+                                        
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -891,12 +965,14 @@ $("#pickupdate, #returndate, #destination, #source, #returntime, #pickuptime, #b
 
     $(".book-now-form").click(function () {
         if($("#userId").val()==''){
-            $.magnificPopup.open({
-                items: {
-                    src: '#registrationForm', 
-                    type: 'inline'
-                }
-            });
+            if(!validateBookingForm()){
+                $.magnificPopup.open({
+                    items: {
+                        src: '#registrationForm', 
+                        type: 'inline'
+                    }
+                });
+            }
         }else{
             localStorage.setItem("action",'booking');
             checkDocumentUploaded();
@@ -1040,21 +1116,23 @@ $(".policy-link").click(function () {
         dataType: "json",
         headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
         success: function(res) {
-            var str = '';
-            $.each(res.policy, function (index,value) {
-                str += '<div class="accordion-item wow fadeInUp">'+
-                    '<h2 class="accordion-header" id="rentalheading1">'+
-                        '<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#rentalcollapse'+index+'" aria-expanded="false" aria-controls="rentalcollapse'+index+'">'+value.name+'</button>'+
-                    '</h2>'+
-                    '<div id="rentalcollapse'+index+'" class="accordion-collapse collapse" aria-labelledby="rentalheading'+index+'" data-bs-parent="#rentalaccordion">'+
-                        '<div class="accordion-body">'+
-                            '<p>'+nl2br(value.content)+'</p>'+
-                        '</div>'+
-                    '</div>'+
-                '</div>';
+            var str1 = str2 = '';
+            var indexToSplit = res.policy.length/2;
+            var first = res.policy.slice(0, indexToSplit);
+            var second = res.policy.slice(indexToSplit);
+
+            $.each(first, function (index,value) {
+                str1 += '<h3>'+value.name+'</h3>'+
+                        '<p>'+nl2br(value.content)+'</p>';
+            });
+
+            $.each(second, function (index,value) {
+                str2 += '<h3>'+value.name+'</h3>'+
+                        '<p style="color:black;">'+nl2br(value.content)+'</p>';
             });
             
-            $("#rentalaccordion").html(str);
+            $(".first-section").html(str1);
+            $(".second-section").html(str2);
             $.magnificPopup.open({
                 items: {
                     src: '#termsCondition',
@@ -1088,5 +1166,61 @@ window.addEventListener('load', function() {
         }
     }
 });
+
+function validateBookingForm(){
+
+    chk = 0;
+    if($("#source").val() == ''){
+        chk = 1;
+        $("#source").css('border-color', 'red');
+        $("#source").closest('div').find('.with-errors').html('Pickup location should not be blank.');
+    }else{
+        $("#source").css('border-color', '');
+        $("#source").closest('div').find('.with-errors').html('');
+    }
+    if($("#pickupdate").val() == ''){
+        chk = 1;
+        $("#pickupdate").css('border-color', 'red');
+        $("#pickupdate").closest('div').find('.with-errors').html('Pickup date should not be blank.');
+    }else{
+        $("#pickupdate").css('border-color', '');
+        $("#pickupdate").closest('div').find('.with-errors').html('');
+    }
+    if($("#pickuptime").val() == null){
+        chk = 1;
+        $("#pickuptime").css('border-color', 'red');
+        $("#pickuptime").closest('div').find('.with-errors').html('Pickup time should not be blank.');
+    }else{
+        $("#pickuptime").css('border-color', '');
+        $("#pickuptime").closest('div').find('.with-errors').html('');
+    }
+    if($("#destination").val() == ''){
+        chk = 1;
+        $("#destination").css('border-color', 'red');
+        $("#destination").closest('div').find('.with-errors').html('Dropoff location should not be blank.');
+    }else{
+        $("#destination").css('border-color', '');
+        $("#destination").closest('div').find('.with-errors').html('');
+    }
+    if($("#returndate").val() == ''){
+        chk = 1;
+        $("#returndate").css('border-color', 'red');
+        $("#returndate").closest('div').find('.with-errors').html('Dropoff date should not be blank.');
+    }else{
+        $("#returndate").css('border-color', '');
+        $("#returndate").closest('div').find('.with-errors').html('');
+    }
+    if($("#returntime").val() == null){
+        chk = 1;
+        $("#returntime").css('border-color', 'red');
+        $("#returntime").closest('div').find('.with-errors').html('Dropoff time should not be blank.');
+    }else{
+        $("#returntime").css('border-color', '');
+        $("#returntime").closest('div').find('.with-errors').html('');
+    }
+    
+    return chk;
+}
 </script>
+
 @endsection

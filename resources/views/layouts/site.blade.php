@@ -163,7 +163,7 @@
 					</a>
 					<!-- Logo End -->
 
-					<!-- Main Menu Start -->
+                    <!-- Main Menu Start -->
 					<div class="collapse navbar-collapse main-menu">
                         <div class="nav-menu-wrapper">
                             <ul class="navbar-nav mr-auto" id="menu">
@@ -173,20 +173,16 @@
                                 <li class="nav-item"><a class="nav-link" href="{{ url('/offers') }}">Special Offers</a></li>
                                 <li class="nav-item"><a class="nav-link" href="{{ url('/news') }}">News</a></li>
                                 <li class="nav-item"><a class="nav-link" href="{{ url('/contact') }}">Contact Us</a></li>
+                                @if(session()->has('userdata') || session()->has('userId'))
+                                    <li class="nav-item"><a href="{{ url('/my-account') }}" class="btn-default" style=" color: #ffffff; ">My Account</a></li>
+                                @else  
+                                    <li class="nav-item"><a href="javascript:void(0);" class="btn-default register-user" style=" color: #ffffff; ">My Account</a></li>
+                                @endif
                             </ul>
                         </div>
-                        <!-- Let’s Start Button Start -->
-                        <div class="header-btn d-inline-flex">
-                            @if(session()->has('userdata') || session()->has('userId'))
-                                <a href="{{ url('/my-account') }}" class="btn-default">My Account</a>
-                            @else
-                                <a href="#" class="btn-default register-user">My Account</a>
-                            @endif
-                        </div>
-                        <!-- Let’s Start Button End -->
-
 					</div>
-					<!-- Main Menu End -->
+					<!-- Main Menu End -->
+					
 					<div class="navbar-toggle"></div>
 				</div>
 			</nav>
