@@ -361,8 +361,8 @@ class SiteController extends Controller
     public function generateTimeslot($pickupTime,$dropoffTime){
         
         $timeSlots = [];
-        $startTime = $dropoffTime ? strtotime($dropoffTime) : strtotime("12:00 AM");
-        $endTime = $pickupTime ? strtotime($pickupTime) : strtotime("11:59 PM");
+        $startTime = $dropoffTime ? strtotime($dropoffTime) : strtotime("08:00 AM");
+        $endTime = $pickupTime ? strtotime($pickupTime) : strtotime("08:00 PM");
 
         if ($startTime > $endTime) {
             return response()->json(['error' => 'Invalid time range'], 400);
@@ -380,9 +380,9 @@ class SiteController extends Controller
     public function generateStartTimeslot($pickupTime,$dropoffTime){
         // echo $pickupTime;
         $timeSlots = [];
-        $startTime = $pickupTime ? strtotime($pickupTime) : strtotime("12:00 AM");
+        $startTime = $pickupTime ? strtotime($pickupTime) : strtotime("08:00 AM");
         
-        $endTime = $dropoffTime ? strtotime($dropoffTime) : strtotime("11:59 PM");
+        $endTime = $dropoffTime ? strtotime($dropoffTime) : strtotime("08:00 PM");
         $startTime += 120*60;
 
         if ($startTime > $endTime) {

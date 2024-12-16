@@ -1182,6 +1182,10 @@ function validateBookingForm(){
         chk = 1;
         $("#pickupdate").css('border-color', 'red');
         $("#pickupdate").closest('div').find('.with-errors').html('Pickup date should not be blank.');
+    }else if(isPreviousDate($("#pickupdate").val())){
+        chk = 1;
+        $("#pickupdate").css('border-color', 'red');
+        $("#pickupdate").closest('div').find('.with-errors').html('Pickup date should not be older than todays.');
     }else{
         $("#pickupdate").css('border-color', '');
         $("#pickupdate").closest('div').find('.with-errors').html('');
@@ -1206,6 +1210,10 @@ function validateBookingForm(){
         chk = 1;
         $("#returndate").css('border-color', 'red');
         $("#returndate").closest('div').find('.with-errors').html('Dropoff date should not be blank.');
+    }else if(isPreviousDate($("#returndate").val())){
+        chk = 1;
+        $("#returndate").css('border-color', 'red');
+        $("#returndate").closest('div').find('.with-errors').html('Dropoff date should not be older than todays.');
     }else{
         $("#returndate").css('border-color', '');
         $("#returndate").closest('div').find('.with-errors').html('');
@@ -1220,6 +1228,15 @@ function validateBookingForm(){
     }
     
     return chk;
+}
+
+function isPreviousDate(inputDate) {
+    
+    var date = new Date(inputDate);
+    var today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    return date < today;
 }
 </script>
 
