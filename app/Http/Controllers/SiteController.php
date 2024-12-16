@@ -386,7 +386,7 @@ class SiteController extends Controller
         $startTime += 120*60;
 
         if ($startTime > $endTime) {
-            return response()->json(['error' => 'Invalid time range'], 400);
+            return 'Invalid time range';
         }
 
         $slotDuration = 30; // Slot duration in minutes

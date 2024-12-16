@@ -824,23 +824,29 @@ $("#pickupdate").on("change", function() {
                     if($("#pickuptime").val()==-1 || $("#pickuptime").val()==null){
                         $("#pickuptime").html('');
                         $("#pickuptime").append('<option selected disabled value="-1">Select Pickup Time</option>');
-                        $.each(res, function(key, value) {
-                            $("#pickuptime").append(`<option value="${value}">${value}</option>`);
-                        });
+                        if(res!="Invalid time range"){
+                            $.each(res, function(key, value) {
+                                $("#pickuptime").append(`<option value="${value}">${value}</option>`);
+                            });
+                        }
                     }
                     if($("#returntime").val()==-1 || $("#returntime").val()==null){
                         $("#returntime").html('');
                         $("#returntime").append('<option selected disabled value="-1">Select Pickup Time</option>');
-                        $.each(res, function(key, value) {
-                            $("#returntime").append(`<option value="${value}">${value}</option>`);
-                        });
+                        if(res!="Invalid time range"){
+                            $.each(res, function(key, value) {
+                                $("#returntime").append(`<option value="${value}">${value}</option>`);
+                            });
+                        }
                     }
                 }else{
                     $("#pickuptime").html('');
                     $("#pickuptime").append('<option selected disabled value="-1">Select Pickup Time</option>');
-                    $.each(res, function(key, value) {
-                        $("#pickuptime").append(`<option value="${value}">${value}</option>`);
-                    });
+                    if(res!="Invalid time range"){
+                        $.each(res, function(key, value) {
+                            $("#pickuptime").append(`<option value="${value}">${value}</option>`);
+                        });
+                    }
                 }
             }else{
                 $("#pickuptime").html('');
