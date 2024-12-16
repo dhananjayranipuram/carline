@@ -207,7 +207,7 @@
                         <!-- Team member Body Start -->
                         <div class="team-member-body wow fadeInUp" data-wow-delay="0.5s">
                             <ul>
-                                <li><span>Phone: </span>(+971) {{$userAccount[0]->phone}}</li>
+                                <li><span>Phone: </span>{{$userAccount[0]->phone}}</li>
                                 <li><span>Email: </span>{{$userAccount[0]->email}}</li>
                                 <li><span>Address: </span>{{$userAccount[0]->flat}}, {{$userAccount[0]->building}}, {{$userAccount[0]->landmark}}, {{$userAccount[0]->city}}, {{$userAccount[0]->emirates}}</li>
                             </ul>

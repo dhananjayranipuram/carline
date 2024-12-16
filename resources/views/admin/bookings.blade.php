@@ -2,6 +2,11 @@
 
 @section('content')
 <link href="{{asset('admin_assets/css/daterangepicker.css')}}" rel="stylesheet">
+<style>
+tbody > tr{
+    cursor: pointer;
+}
+</style>
 <div class="page-inner">
    
     <div class="row">
@@ -65,7 +70,6 @@
                                 <th>Return Time</th>
                                 <th>Return Location</th>
                                 <th>Rate</th>
-                                <th style="width: 10%">Actions</th>
                             </tr>
                         </thead>
                         <tbody id="booking-data">
@@ -81,13 +85,7 @@
                                 <td>{{$value->return_time}}</td>
                                 <td>{{$value->destination}}</td>
                                 <td>{{$value->rate}} AED</td>
-                                <td>
-                                    <div class="form-button-action">
-                                        <a href="{{url('/admin/booking-details')}}?id={{base64_encode($value->id)}}" data-bs-toggle="tooltip" title="View Booking" class="btn btn-link btn-primary btn-lg edit-brand" data-original-title="View Booking">
-                                            <i class="far fa-eye"></i>
-                                        </a>
-                                    </div>
-                                </td>
+                                
                             </tr>
                             @endforeach
                         </tbody>
@@ -207,13 +205,7 @@ function buildTable(){
                             <td>${data.return_time}</td>
                             <td>${data.destination}</td>
                             <td>${data.rate}</td>
-                            <td>
-                            <div class="form-button-action">
-                                <a href="${baseUrl}/admin/booking-details?id=${encodedId}" data-bs-toggle="tooltip" title="View Booking" class="btn btn-link btn-primary btn-lg edit-brand" data-original-title="View Booking">
-                                    <i class="far fa-eye"></i>
-                                </a>
-                            </div>
-                        </td>
+                            
                         </tr>
                     `;
                     $("#booking-data").append(row);

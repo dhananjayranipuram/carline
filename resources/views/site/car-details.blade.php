@@ -243,6 +243,9 @@
     margin: 10px 0;
 }
 
+.rental-condition-accordion h3{
+    font-size: 1.25rem;
+}
     </style>
 @php
 $timeSlots = [];
@@ -283,7 +286,7 @@ while ($startTime <= $endTime) {
                         <div class="rental-conditions-faqs">
                             <!-- Section Title Start -->
                             <div class="section-title">
-                                <h2 class="text-anime-style-3" data-cursor="-opaque">Policies and agreement</h2>
+                                <h2 class="text-anime-style-3" data-cursor="-opaque">Terms & Conditions</h2>
                             </div>
                             <!-- Section Title End -->
                             <div class="rental-condition-accordion" id="rentalaccordion">
@@ -414,7 +417,7 @@ while ($startTime <= $endTime) {
                                         </div>
 
                                         <div class="fleets-single-sidebar-list">
-                                            <input type="checkbox" id="agreePolicy"> I have read and agree to Carline's <span class="policy-link">Policies and Agreement</span>
+                                            <input type="checkbox" id="agreePolicy"> I have read and agree to Carline's <span class="policy-link">Terms & Conditions</span>
                                         </div>
 
                                         <!-- Feets Single Sidebar Btn Start -->
@@ -1123,7 +1126,7 @@ $(".policy-link").click(function () {
 
             $.each(first, function (index,value) {
                 str1 += '<h3>'+value.name+'</h3>'+
-                        '<p>'+nl2br(value.content)+'</p>';
+                        '<p style="color:black;">'+nl2br(value.content)+'</p>';
             });
 
             $.each(second, function (index,value) {

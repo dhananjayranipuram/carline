@@ -51,7 +51,7 @@
 
                                 <!-- Contact Info Content Start -->
                                 <div class="contact-info-content">
-                                    <p>+971 56 537 8866</p>
+                                    <p>+971 50 86 89 526</p>
                                     <p>+971 4 52 92 722</p>
                                 </div>
                                 <!-- Contact Info Content End -->
@@ -68,7 +68,7 @@
 
                                 <!-- Contact Info Content Start -->
                                 <div class="contact-info-content">
-                                    <p>carlinellc32@gmail.com</p>
+                                    <p>Info@carline.com</p>
                                 </div>
                                 <!-- Contact Info Content End -->
                             </div>
