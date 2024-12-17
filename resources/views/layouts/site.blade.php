@@ -136,6 +136,16 @@
     border-radius: 100%;
     border-style: solid;
 }
+
+.luxury-collection-image a::before {
+        background: #00000000;
+}
+
+.perfect-fleet-item .image-box img {
+    border-radius: 20px;
+    height: 210px;
+    width: 100%;
+}
 </style>
 <body>
     <div class="overlay">
