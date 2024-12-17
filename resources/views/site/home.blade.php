@@ -301,67 +301,55 @@
 </div>
 <!-- Exclusive Partners Section End -->
 
-<!-- Luxury Collection Section Start -->
-<div class="luxury-collection">
-    <div class="container-fluid">
-        <div class="row no-gutters">
-            <div class="col-lg-12">
-                <div class="row section-row ">
-                    <div class="col-lg-12">
-                        <!-- Section Title Start -->
-                        <div class="section-title">
-                            <h3 class="wow fadeInUp">Choose Your Car Type</h3>
-                            <h2 class="text-anime-style-3">Find the Perfect Fit</h2>
-                        </div>
-                        <!-- Section Title End -->
-                    </div>
-                </div>
-                <div class="luxury-collection-box">
-
-                    @foreach($carType as $key => $value)
-                    <!-- Luxury Collection Item Start -->
-                    <div class="luxury-collection-item wow fadeInUp type-click" data-id="{{$value->id}}">
-                        <!-- Luxury Collection Image Start -->
-                        <div class="luxury-collection-image" data-cursor-text="View">
-                            <a href="#">
-                                <figure>
-                                    <img src="{{asset($value->image)}}" alt="">
-                                </figure>
-                            </a>
-                        </div>
-                        <!-- Luxury Collection Image End -->
-
-                        <!-- Luxury Collection Title Start -->
-                        <div class="luxury-collection-title">
-                            <h2>{{$value->name}}</h2>
-                        </div>
-                        <!-- Luxury Collection Title End -->
-                        
-                        <!-- Luxury Collection Btn Start -->
-                        <div class="luxury-collection-btn">
-                            <a href="#" class="section-icon-btn"><img src="{{asset('assets/images/arrow-white.svg')}}" alt=""></a>
-                        </div>
-                        <!-- Luxury Collection Btn End -->
-                    </div>
-                    <!-- Luxury Collection Item End -->
-                    @if($key==3) @break @endif
-                    @endforeach
-
-                    
-                </div>    
+<!-- Hero Slider Section End -->
+<div class="perfect-fleet bg-section">
+        <div class="container-fluid">
+            <div class="row section-row">
                 <div class="col-lg-12">
-                    <!-- Service Box Footer Start -->
-                    <div class="services-box-footer wow fadeInUp" data-wow-delay="1s">
-                        <a href="{{url('/cars')}}" class="btn-default">view all Cars</a>
+                    <!-- Section Title Start -->
+                    <div class="section-title">
+                        <h3 class="wow fadeInUp">Choose Your Car Type</h3>
+                        <h2 class="text-anime-style-3">Find the Perfect Fit</h2>
                     </div>
-                    <!-- Service Box Footer End -->
-                </div>                
+                    <!-- Section Title End -->
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <!-- Testimonial Slider Start -->
+                    <div class="car-details-slider">
+                        <div class="swiper">
+                            <div class="swiper-wrapper" data-cursor-text="Drag">
+
+                                @foreach($carType as $key => $value)
+                                    <!-- Testimonial Slide Start -->
+                                    <div class="swiper-slide type-click" data-id="{{$value->id}}">
+                                        <div class="luxury-collection-image" data-cursor-text="View">
+                                            <a href="#"><figure><img src="{{asset($value->image)}}" alt=""></figure></a>
+                                        </div>
+                                        <div class="luxury-collection-title"><h2>{{$value->name}}</h2></div>
+                                        <div class="luxury-collection-btn"><a href="#" class="section-icon-btn"><img src="{{asset('assets/images/arrow-white.svg')}}" alt=""></a></div>                               
+                                    </div>
+                                    <!-- Testimonial Slide End -->
+                                @endforeach
+
+                               
+
+                                
+                                </div>
+                            </div>
+                            <div class="car-details-btn">
+                                <div class="car-button-prev"></div>
+				                <div class="car-button-next"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Testimonial Slider End -->
+                </div>
             </div>
         </div>
-    </div>
-</div>
-<!-- Luxury Collection Section End -->
-
+    </div>
 
 
 <!-- Our Services Section Start -->
