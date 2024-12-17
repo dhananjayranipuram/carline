@@ -2496,7 +2496,8 @@ header.main-header .header-sticky.active{
 }
 
 .footer-links ul li:hover a{
-	color: var(--accent-color);
+	/* color: var(--accent-color); */
+	color: #FFDF00;
 }
 
 .footer-newsletter-form .form-group{
