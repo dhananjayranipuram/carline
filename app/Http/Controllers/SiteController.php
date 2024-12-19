@@ -564,6 +564,11 @@ class SiteController extends Controller
         // if($credentials['destinationData'][0]['placeName'] == '')
         if($credentials['sourceData']['placeName'] == $carlineName && $credentials['destinationData']['placeName'] == $carlineName){
             $emirateCharges = 0;
+        }else if($credentials['sourceData']['placeName'] == $carlineName || $credentials['destinationData']['placeName'] == $carlineName){
+            $resEmirate = $site->getEmiratesForRate($credentials);
+            
+            $emirateCharges = !empty($resEmirate) ? (float) str_replace(',', '', $resEmirate[0]->rate) : 0;
+            $emirateCharges = $emirateCharges / 2;
         }else {
             $resEmirate = $site->getEmiratesForRate($credentials);
             

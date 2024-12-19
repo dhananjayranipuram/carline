@@ -640,6 +640,7 @@ while ($startTime <= $endTime) {
     <!-- Page Feets Single End -->
 <script src="{{asset('admin_assets/js/core/jquery-3.7.1.min.js')}}"></script>  
 <script src="{{asset('assets/js/jquery.magnific-popup.min.js')}}"></script>
+<script src="{{asset('admin_assets/js/moment.min.js')}}"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmX5w5ltGt09cjDod_YMamphRRgS8L-ZQ&components=country:ae&libraries=places"></script>
 
 <script>
@@ -704,6 +705,7 @@ $(document).ready(function () {
             });
 
             if (!isAirport) {
+                sourceData = [];
                 sourceData.push({
                     'placeName': place.name,
                     'Latitude': lat,
@@ -719,6 +721,8 @@ $(document).ready(function () {
                     $('#booking-errors').html('');
                 }, 2500);
             }
+            checkRate();
+            // console.log(sourceData);
         } else {
             console.log('No geometry data found for this place.');
         }
@@ -753,6 +757,7 @@ $(document).ready(function () {
             });
 
             if (!isAirport) {
+                destinationData = [];
                 destinationData.push({
                     'placeName': place.name,
                     'Latitude': lat,
@@ -769,7 +774,8 @@ $(document).ready(function () {
                     $('#booking-errors').html('');
                 }, 2500);
             }
-            
+            checkRate();
+            // console.log(destinationData);
         } else {
             console.log('No geometry data found for this place.');
         }
@@ -908,22 +914,16 @@ $("#returndate").on("change", function() {
     });
 });
 
-$("#pickupdate, #returndate, #destination, #source, #returntime, #pickuptime, #babySeat").on("change paste keyup click", function() {
+$("#pickupdate, #returndate, #returntime, #pickuptime, #babySeat").on("change paste keyup click", function() {
 
+    checkRate();
+});
+
+function checkRate(){
     if(destinationData.length != 0 && sourceData.length != 0 && $("#pickupdate").val() != '' && $("#returndate").val() != '' && $("#pickuptime").val() != '' && $("#returntime").val() != ''){
-        if ($("#pickupdate").val() < $("#returndate").val()) {
+        if (moment($("#pickupdate").val()).isBefore($("#returndate").val())) {
             // $(".overlay").show();
 
-            if($('#returnLocationToggle').is(":checked")){
-                var returnTo = 'on';
-            }else{
-                var returnTo = 'off';
-            }
-            if($('#babySeat').is(":checked")){
-                var babySeat = 'on';
-            }else{
-                var babySeat = 'off';
-            }
             $.ajax({
                 url: baseUrl + '/check-rate',
                 type: 'post',
@@ -936,41 +936,39 @@ $("#pickupdate, #returndate, #destination, #source, #returntime, #pickuptime, #b
                     'returndate': $("#returndate").val(),
                     'pickuptime': $("#pickuptime").val(),
                     'returntime': $("#returntime").val(),
-                    'returntosame': returnTo,
-                    'babySeat': babySeat,
+                    'returntosame': $('#returnLocationToggle').is(":checked") ? 'on' : 'off',
+                    'babySeat': $('#babySeat').is(":checked") ? 'on' : 'off',
                     'carId': $("#carId").val()},
                 dataType: "json",
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 success: function(res) {
 
-                    var str = '<ul>'+
-                                '<li><img src="'+baseUrl+'/assets/images/icon-how-it-work-2.svg'+'" alt="Image not available">Rent <span id="rate-message"> AED '+res.rate+'</span></li>';
-                            if(res.deposit!=0){
-                                str += '<li><img src="'+baseUrl+'/assets/images/icon-service-6.svg'+'" alt="Image not available">Deposit <span id="deposit-message">AED '+res.deposit+'</span></li>';
-                            }
-                            if(res.emirate!=0){
-                                str += '<li><img src="'+baseUrl+'/assets/images/icon-why-choose-3.svg'+'" alt="Image not available">Pick & Drop Charges <span id="emirate-message">AED '+res.emirate+'</span></li>';
-                            }
-                            if(res.babySeat!=0){
-                                str += '<li><img src="'+baseUrl+'/assets/images/icon-service-2.svg'+'" alt="Image not available">Baby Seat Charges <span id="emirate-message">AED '+res.babySeat+'</span></li>';
-                            }
-                                str += '<li><img src="'+baseUrl+'/assets/images/icon-service-2.svg'+'" alt="Image not available">VAT <span id="vat-message">AED '+res.vat+'</span></li>'+
-                                '<li><img src="'+baseUrl+'/assets/images/icon-service-2.svg'+'" alt="Image not available">Total <span id="total-message">AED '+res.total+'</span></li>'+
-                                '</ul>';
-                    $("#rate-details").show();
-                    $("#rate-details").html(str);
-                    $("#additionalNotes").show();
+                    updateRateDetails(res);
                     // $(".overlay").hide();
                 }
             });
         }else{
-            $("#booking-errors").html('<span style="color:red;">Error in dates</span>');
+            $("#booking-errors").html('<span style="color:red;">Pickup date must be before return date.</span>');
             setTimeout(function () {
                 $('#booking-errors').html('');
             }, 2500);
         }
     }
-});
+}
+
+function updateRateDetails(res) {
+    let str = `<ul>
+        <li><img src="${baseUrl}/assets/images/icon-how-it-work-2.svg" alt="Image not available">Rent <span id="rate-message">AED ${res.rate}</span></li>`;
+    if (res.deposit!=0) str += `<li><img src="${baseUrl}/assets/images/icon-service-6.svg" alt="Image not available">Deposit <span id="deposit-message">AED ${res.deposit}</span></li>`;
+    if (res.emirate!=0) str += `<li><img src="${baseUrl}/assets/images/icon-why-choose-3.svg" alt="Image not available">Pick & Drop Charges <span id="emirate-message">AED ${res.emirate}</span></li>`;
+    if (res.babySeat!=0) str += `<li><img src="${baseUrl}/assets/images/icon-service-2.svg" alt="Image not available">Baby Seat Charges <span id="emirate-message">AED ${res.babySeat}</span></li>`;
+    str += `<li><img src="${baseUrl}/assets/images/icon-service-2.svg" alt="Image not available">VAT <span id="vat-message">AED ${res.vat}</span></li>
+        <li><img src="${baseUrl}/assets/images/icon-service-2.svg" alt="Image not available">Total <span id="total-message">AED ${res.total}</span></li>
+        </ul>`;
+
+    $("#rate-details").show().html(str);
+    $("#additionalNotes").show();
+}
 
     $(".book-now-form").click(function () {
         if($("#userId").val()==''){
