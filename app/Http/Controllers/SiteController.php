@@ -854,4 +854,73 @@ class SiteController extends Controller
         }
         return json_encode($response);
     }
+
+    public function getWhatsappMsg(Request $request){
+        $site = new Site();
+        $response = [];
+        $credentials = $request->validate([
+            'destinationData' => ['required'],
+            'sourceData' => ['required'],
+            'sourceEmirates' => ['required'],
+            'destinationEmirate' => ['required'],
+            'pickupdate' => ['required'],
+            'returndate' => ['required'],
+            'pickuptime' => ['required'],
+            'returntime' => ['required'],
+            'babySeat' => ['required'],
+            'carId' => ['required'],
+        ]);
+        $rateData = $this->calculateRate($credentials);
+        $credentials['id'] = $credentials['carId'];
+        $credentials['format'] = 'default';
+        $carData = $site->getCars($credentials);
+        $message = $this->generateWhatsappMsg($credentials,$carData,$rateData);
+        
+        if($message){
+            $response['status'] = '200';
+            $response['message'] = $message;
+
+        }else{
+            $response['status'] = '401';
+            $response['message'] = 'Something went wrong.';
+        }
+        return json_encode($response);
+    }
+    
+    private function generateWhatsappMsg($credentials,$carData,$rateData){
+        $destinationData = $credentials['destinationData'];
+        $sourceData = $credentials['sourceData'];
+        $pickupdate = $credentials['pickupdate'];
+        $returndate = $credentials['returndate'];
+        $pickuptime = $credentials['pickuptime'];
+        $returntime = $credentials['returntime'];
+        $babySeat = $credentials['babySeat'] === 'on' ? 'Included' : 'Not included';
+        $carData = $carData[0];
+        
+        return "*Dropoff Details:*\n" .
+               "- Place Name: " . ($destinationData['placeName'] ?? '') . "\n" .
+               "- Emirate: " . ($destinationData['Emirates'] ?? '') . "\n" .
+               "- Map: https://maps.google.com/?q=".urlencode($destinationData['placeName'])."&ll=$destinationData[Latitude],$destinationData[Longitude]&region=ae\n\n" .
+               "*Pickup Details:*\n" .
+               "- Place Name: " . ($sourceData['placeName'] ?? '') . "\n" .
+               "- Emirate: " . ($sourceData['Emirates'] ?? '') . "\n" .
+               "- Map: http://maps.google.co.in/maps?q=".urlencode($sourceData['placeName'])."&ll=$sourceData[Latitude],$sourceData[Longitude]&region=ae\n\n" .
+               "*Booking Details:*\n" .
+               "- Pickup Date: ".date("d/m/Y", strtotime($pickupdate))."\n" .
+               "- Pickup Time: $pickuptime\n" .
+               "- Return Date: ".date("d/m/Y", strtotime($returndate))."\n" .
+               "- Return Time: $returntime\n" .
+               "- Baby Seat: $babySeat\n\n" .
+               "*Car Details:*\n" .
+               "- Car Name: $carData->name $carData->name $carData->model\n" .
+               "- Car Type: $carData->car_type\n\n".
+               "*Rent Details:*\n" .
+               "- Rent: $rateData[rate]\n" .
+               "- Deposit: $rateData[deposit]\n".
+               "- Pick & Drop Charges: $rateData[emirate]\n".
+               "- VAT: $rateData[vat]\n".
+               "- Baby seat charges: $rateData[babySeat]\n".
+               "- Total: $rateData[total]\n" ;
+
+    }
 }

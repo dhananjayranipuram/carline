@@ -48,6 +48,8 @@ Route::any('/policies-agreements', [SiteController::class, 'policiesAgreements']
 Route::any('/check-rate', [SiteController::class, 'checkRate']);
 Route::any('/check-time', [SiteController::class, 'checkTime']);
 
+Route::any('/get-whatsapp-msg', [SiteController::class, 'getWhatsappMsg']);
+
 Route::any('/site/filter-cars', [SiteController::class, 'filterCars']);
 
 Route::any('/admin/login', [AdminController::class, 'login'])->name('adminLogin');

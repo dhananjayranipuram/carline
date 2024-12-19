@@ -1245,6 +1245,37 @@ function isPreviousDate(inputDate) {
     
     return date < today;
 }
+
+$(".wp-btn").click(function () {
+    if(!validateBookingForm()){
+
+        $.ajax({
+            url: baseUrl + '/get-whatsapp-msg',
+            type: 'post',
+            data: { 
+                'destinationData': destinationData[0], 
+                'sourceData': sourceData[0], 
+                'destinationEmirate': destinationData[0].Emirates, 
+                'sourceEmirates': sourceData[0].Emirates,
+                'pickupdate': $("#pickupdate").val(),
+                'returndate': $("#returndate").val(),
+                'pickuptime': $("#pickuptime").val(),
+                'returntime': $("#returntime").val(),
+                'babySeat': $('#babySeat').is(":checked") ? 'on' : 'off',
+                'carId': $("#carId").val()
+            },
+            dataType: "json",
+            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+            success: function(res) {
+                const phone = 971508689526;
+                const message = res.message;
+                const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+                window.open(url, '_blank');
+            }
+        });
+        
+    }
+});
 </script>
 
 @endsection
