@@ -897,22 +897,22 @@ class SiteController extends Controller
         $babySeat = $credentials['babySeat'] === 'on' ? 'Included' : 'Not included';
         $carData = $carData[0];
         
-        return "*Dropoff Details:*\n" .
-               "- Place Name: " . ($destinationData['placeName'] ?? '') . "\n" .
-               "- Emirate: " . ($destinationData['Emirates'] ?? '') . "\n" .
-               "- Map: https://maps.google.com/?q=".urlencode($destinationData['placeName'])."&ll=$destinationData[Latitude],$destinationData[Longitude]&region=ae\n\n" .
-               "*Pickup Details:*\n" .
+        return "*Pickup Details:*\n" .
                "- Place Name: " . ($sourceData['placeName'] ?? '') . "\n" .
                "- Emirate: " . ($sourceData['Emirates'] ?? '') . "\n" .
                "- Map: http://maps.google.co.in/maps?q=".urlencode($sourceData['placeName'])."&ll=$sourceData[Latitude],$sourceData[Longitude]&region=ae\n\n" .
+               "*Dropoff Details:*\n" .
+               "- Place Name: " . ($destinationData['placeName'] ?? '') . "\n" .
+               "- Emirate: " . ($destinationData['Emirates'] ?? '') . "\n" .
+               "- Map: https://maps.google.com/?q=".urlencode($destinationData['placeName'])."&ll=$destinationData[Latitude],$destinationData[Longitude]&region=ae\n\n" .
                "*Booking Details:*\n" .
                "- Pickup Date: ".date("d/m/Y", strtotime($pickupdate))."\n" .
                "- Pickup Time: $pickuptime\n" .
-               "- Return Date: ".date("d/m/Y", strtotime($returndate))."\n" .
-               "- Return Time: $returntime\n" .
+               "- Dropoff Date: ".date("d/m/Y", strtotime($returndate))."\n" .
+               "- Dropoff Time: $returntime\n" .
                "- Baby Seat: $babySeat\n\n" .
                "*Car Details:*\n" .
-               "- Car Name: $carData->name $carData->name $carData->model\n" .
+               "- Car Name: $carData->brand_name $carData->name $carData->model\n" .
                "- Car Type: $carData->car_type\n\n".
                "*Rent Details:*\n" .
                "- Rent: $rateData[rate]\n" .
