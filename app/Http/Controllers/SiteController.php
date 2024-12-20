@@ -575,6 +575,10 @@ class SiteController extends Controller
             $emirateCharges = !empty($resEmirate) ? (float) str_replace(',', '', $resEmirate[0]->rate) : 0;
         }
         
+        if($months>0){
+            $emirateCharges = 0;
+        }
+
         if($credentials['babySeat']=='on'){
             $babySeatCharges = $bsCharges;
         }
@@ -635,7 +639,7 @@ class SiteController extends Controller
             ]);
             
             Mail::to('dhananjayranipuram@gmail.com')->send(new ContactUs((object)$filterData));
-
+            session()->flash('success', 'Your message has been sent! Thank you.');
             return Redirect::to('/contact');
         }
     }

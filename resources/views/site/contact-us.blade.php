@@ -105,8 +105,16 @@
                     </div>
                     <!-- Contact Information End -->
                 </div>
-
+                
                 <div class="col-lg-6">
+                    
+                    <div id="msgSubmit" class="h3 hidden">
+                        @if(session('success'))
+                        <div class="alert alert-success">
+                            {{ session('success') }}
+                        </div>
+                        @endif
+                    </div>
                     <!-- Contact Form Start -->
                     <div class="contact-us-form">
                         <form action="{{url('/send-contact-us')}}" method="POST" data-toggle="validator" class="wow fadeInUp" data-wow-delay="0.5s">
@@ -145,7 +153,7 @@
                                 <div class="col-lg-12">
                                     <div class="contact-form-btn">
                                         <button type="submit" class="btn-default">send message</button>
-                                        <div id="msgSubmit" class="h3 hidden"></div>
+                                        
                                     </div>
                                 </div>
                             </div>

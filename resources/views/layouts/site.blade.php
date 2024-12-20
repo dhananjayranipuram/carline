@@ -741,6 +741,8 @@ $(document).ready(function () {
                     type: 'inline'
                 }
             });
+        }else{
+            window.location.href = baseUrl + "/my-account";
         }
     });
 

@@ -48,7 +48,7 @@
     /* Style for the select dropdown on mobile */
     .fleets-sort select {
         color: #ffffff;
-        background: #000000;
+        background: #000080;
         text-align: center;
         flex-grow: 1; /* Allow the select to take the remaining space */
         margin-bottom: 8px !important;
@@ -373,12 +373,12 @@ $(document).ready(function () {
                     html += '<div class="col-lg-4 col-md-6">'
                         +'<div class="perfect-fleet-item fleets-collection-item wow fadeInUp">'
                                 +'<div class="image-box">'
-                                        +'<img src="'+baseUrl+'/'+image[0]+'" alt="Image not available">'
+                                        +'<a href="'+baseUrl+'/car-details?id='+window.btoa(item.id)+'"><img src="'+baseUrl+'/'+image[0]+'" alt="Image not available"></a>'
                                 +'</div>'
                                 +'<div class="perfect-fleet-content">'
                                     +'<div class="perfect-fleet-title">'
                                         +'<h3>'+item.car_type+'</h3>'
-                                        +'<h2>'+item.brand_name+' '+item.name+' '+item.model+'</h2>'
+                                        +'<a href="'+baseUrl+'/car-details?id='+window.btoa(item.id)+'"><h2>'+item.brand_name+' '+item.name+' '+item.model+'</h2></a>'
                                     +'</div>'
                                     +'<div class="perfect-fleet-body">'
                                         +'<ul>';
