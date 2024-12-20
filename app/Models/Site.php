@@ -187,7 +187,7 @@ class Site extends Model
     }
 
     public function registerUserData($data){
-        $res = DB::select("SELECT id FROM enduser WHERE email='$data[email]';");
+        $res = DB::select("SELECT id FROM enduser WHERE email='$data[email]' AND deleted=0;");
         if(!isset($res[0])){
             DB::INSERT("INSERT INTO enduser (first_name,last_name,email,password,phone,flat,building,landmark,city,country) VALUES ('$data[firstName]','$data[lastName]','$data[email]','$data[password]','$data[phone]','$data[flat]','$data[building]','$data[landmark]','$data[city]','$data[country]');");
             return DB::getPdo()->lastInsertId();
@@ -248,7 +248,7 @@ class Site extends Model
     }
     
     public function getMyDocumentDetails($data=[]){
-        return DB::select("SELECT eu.id,ud.pass_front,ud.pass_back,ud.dl_front,ud.dl_back,ud.eid_front,ud.eid_back
+        return DB::select("SELECT eu.id,ud.pass_front,ud.pass_back,ud.dl_front,ud.dl_back,ud.eid_front,ud.eid_back,eu.user_type
             FROM enduser eu
             LEFT JOIN user_documents ud ON eu.id=ud.user_id
             WHERE eu.id='$data[id]' AND eu.active=1;");

@@ -237,16 +237,16 @@
                     </div>
                     <!-- Booking History Section End -->
                 @endif
-                @if(!empty($userDocument[0]->pass_front) || !empty($userDocument[0]->pass_back))
+                @if((!empty($userDocument[0]->pass_front) || !empty($userDocument[0]->pass_back)) && $userDocument[0]->user_type =='T')
                     <!-- Booking History Section Start -->
                     <div class="booking-history">
                         <!-- Booking Item Start -->
                         <div class="booking-item">
                             <div class="row">
-                                <h3>PASSPORT</h3>
+                                
                                 <!-- Car Image Column Start -->
                                 <div class="col-md-5">
-                                    <p><strong>Front Page</strong></p>
+                                    <p><strong>Passport Front Page</strong></p>
                                     <div class="car-image">
                                         <img src="{{asset($userDocument[0]->pass_front)}}" alt="Passport Front">
                                     </div>
@@ -255,7 +255,7 @@
                 
                                <!-- Car Image Column Start -->
                                 <div class="col-md-5">
-                                <p><strong>Back Page</strong></p>
+                                <p><strong>Visit/Tourist Visa</strong></p>
                                 <div class="car-image">
                                     <img src="{{asset($userDocument[0]->pass_back)}}" alt="Passport Back">
                                 </div>
@@ -283,7 +283,11 @@
                         <!-- Booking Item Start -->
                         <div class="booking-item">
                             <div class="row">
+                                @if($userDocument[0]->user_type =='T')
+                                <h3>INTERNATIONAL DRIVING LICENCE</h3>
+                                @else
                                 <h3>DRIVING LICENCE</h3>
+                                @endif
                                 <!-- Car Image Column Start -->
                                 <div class="col-md-5">
                                     <p><strong>Front Page</strong></p>
@@ -317,7 +321,7 @@
                     <!-- Booking History Section End -->
                 @endif
 
-                @if(!empty($userDocument[0]->eid_front) || !empty($userDocument[0]->eid_back))
+                @if((!empty($userDocument[0]->eid_front) || !empty($userDocument[0]->eid_back)) && $userDocument[0]->user_type =='R')
                     <!-- Booking History Section Start -->
                     <div class="booking-history">
                         <!-- Booking Item Start -->

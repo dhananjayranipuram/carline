@@ -368,22 +368,26 @@
                             <input type="hidden" id="docUploadType">
                             <div class="row">
                                 <div class="booking-form-group col-md-12 mb-4">
-                                    <label for="returnLocationToggle">Driver Type</label>
-                                    <input type="radio" class="form-check-input rider_type" name="rider_type" value="resident" checked>  <label for="rider_type">Resident</label>
-                                    <input type="radio" class="form-check-input rider_type" name="rider_type" value="tourist">  <label for="rider_type">Tourist</label>
+                                    <div class="row">
+                                        <div class="booking-form-group col-md-6 mb-4">
+                                            <label for="returnLocationToggle">Driver Type :</label>
+                                            <input type="radio" class="form-check-input rider_type" name="rider_type" value="resident" checked>  <label for="rider_type">Resident</label>
+                                            &nbsp;<input type="radio" class="form-check-input rider_type" name="rider_type" value="tourist">  <label for="rider_type">Tourist</label>
+                                        </div>
+                                    </div>
                                 </div>
 
-
                                 <div class="booking-form-group col-md-12 mb-4">
-                                    <div class="row" id="passport-section">
-                                        <label for="returnLocationToggle">Passport</label>
+                                    <div class="row" id="passport-section" style="display:none;">
+                                        
                                         <div class="booking-form-group col-md-6 mb-4" id="passf" style="display:none;">
-                                            <label>Front</label>
+                                        <label for="returnLocationToggle">Passport Front</label>
                                             <input type="file" name="pass_front" class="booking-form-control" placeholder="Front" accept="image/*" required>
                                             <div class="help-block with-errors pass_front"></div>
                                         </div>
+                                        
                                         <div class="booking-form-group col-md-6 mb-4" id="passb" style="display:none;">
-                                            <label>Back</label>
+                                        <label for="returnLocationToggle">Visit/Tourist Visa</label>
                                             <input type="file" name ="pass_back" class="booking-form-control" placeholder="Back" accept="image/*" required>
                                             <div class="help-block with-errors pass_back"></div>
                                         </div>
@@ -392,7 +396,7 @@
 
                                 <div class="booking-form-group col-md-12 mb-4">
                                     <div class="row" id="dl-section">
-                                        <label for="returnLocationToggle">Driving Licence</label>
+                                        <label for="returnLocationToggle" id="dl_label">Driving Licence</label>
                                         <div class="booking-form-group col-md-6 mb-4" id="dlf" style="display:none;">
                                             <label>Front</label>
                                             <input type="file" name="dl_front" class="booking-form-control" placeholder="Front" accept="image/*" required>
@@ -866,9 +870,15 @@ $(document).ready(function () {
 
 $(".rider_type").click(function() {
     if($(this).val()=='tourist'){
+        $("#passport-section").show();
+        $("#dl-section").show();
         $("#eid-section").hide();
+        $("#dl_label").html("International Driving Licence");
     }else{
+        $("#passport-section").hide();
         $("#eid-section").show();
+        $("#dl-section").show();
+        $("#dl_label").html("Driving Licence");
     }
 });
 
@@ -970,69 +980,73 @@ function checkDocumentUploaded(){
         headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
         success: function(res) {
             if(res.cnt == 0){
-                if(res.data.eidf_flag == 0 && res.data.eidb_flag == 0 && res.data.dlf_flag == 0 && res.data.dlb_flag == 0 && res.data.passf_flag == 0 && res.data.passb_flag == 0){
-                    $("#docUploadType").val('new');
-                    $("#passf").show();
-                    $("#passb").show();
-                    $("#dlf").show();
-                    $("#dlb").show();
-                    $("#eidf").show();
-                    $("#eidb").show();
-                    $.magnificPopup.open({
-                        items: {
-                            src: '#documentUploadForm',
-                            type: 'inline'
-                        }
-                    });
-                }else{
-                    $("#docUploadType").val('old');
-                    if(res.data.passf_flag == 0){
+                if(!validateBookingForm()){
+                    if(res.data.eidf_flag == 0 && res.data.eidb_flag == 0 && res.data.dlf_flag == 0 && res.data.dlb_flag == 0 && res.data.passf_flag == 0 && res.data.passb_flag == 0){
+                        $("#docUploadType").val('new');
                         $("#passf").show();
-                    }
-                    if(res.data.passb_flag == 0){
                         $("#passb").show();
-                    }
-                    if(res.data.dlf_flag == 0){
                         $("#dlf").show();
-                    }
-                    if(res.data.dlb_flag == 0){
                         $("#dlb").show();
-                    }
-                    if(res.data.eidf_flag == 0 && res.data.user_type == 'R'){
                         $("#eidf").show();
-                    }
-                    if(res.data.eidb_flag == 0 && res.data.user_type == 'R'){
                         $("#eidb").show();
-                    }
-                    if(res.data.passf_flag != 0 && res.data.passb_flag != 0){
-                        $("#passport-section").hide();
-                    }
-                    if(res.data.dlf_flag != 0 && res.data.dlb_flag != 0){
-                        $("#dl-section").hide();
-                    }
-                    if(res.data.eidf_flag != 0 && res.data.eidb_flag != 0){
-                        $("#eid-section").hide();
-                    }
-                    if(res.data.user_type == 'T'){
-                        $("#eid-section").hide();
-                    }
-                    $.magnificPopup.open({
-                        items: {
-                            src: '#documentUploadForm',
-                            type: 'inline'
+                        $.magnificPopup.open({
+                            items: {
+                                src: '#documentUploadForm',
+                                type: 'inline'
+                            }
+                        });
+                    }else{
+                        $("#docUploadType").val('old');
+                        if(res.data.passf_flag == 0){
+                            $("#passf").show();
                         }
-                    });
+                        if(res.data.passb_flag == 0){
+                            $("#passb").show();
+                        }
+                        if(res.data.dlf_flag == 0){
+                            $("#dlf").show();
+                        }
+                        if(res.data.dlb_flag == 0){
+                            $("#dlb").show();
+                        }
+                        if(res.data.eidf_flag == 0 && res.data.user_type == 'R'){
+                            $("#eidf").show();
+                        }
+                        if(res.data.eidb_flag == 0 && res.data.user_type == 'R'){
+                            $("#eidb").show();
+                        }
+                        if(res.data.passf_flag != 0 && res.data.passb_flag != 0){
+                            $("#passport-section").hide();
+                        }
+                        if(res.data.dlf_flag != 0 && res.data.dlb_flag != 0){
+                            $("#dl-section").hide();
+                        }
+                        if(res.data.eidf_flag != 0 && res.data.eidb_flag != 0){
+                            $("#eid-section").hide();
+                        }
+                        if(res.data.user_type == 'T'){
+                            $("#eid-section").hide();
+                        }
+                        $.magnificPopup.open({
+                            items: {
+                                src: '#documentUploadForm',
+                                type: 'inline'
+                            }
+                        });
+                    }
                 }
             }else{
-                if($('#pickupdate').length){
-                    if(!bookCarAction()){
-                        // location.reload();
+                if(!validateBookingForm()){
+                    if($('#pickupdate').length){
+                        if(!bookCarAction()){
+                            // location.reload();
+                        }
+                    }else{
+                        $("#docErrorMessages").html('<span style="color:red;">Please fill up the booking details.<span>');
+                        setTimeout(function () {
+                            $("#docErrorMessages").html('');
+                        }, 5000);
                     }
-                }else{
-                    $("#docErrorMessages").html('<span style="color:red;">Please fill up the booking details.<span>');
-                    setTimeout(function () {
-                        $("#docErrorMessages").html('');
-                    }, 5000);
                 }
             }
             $(".overlay").hide();

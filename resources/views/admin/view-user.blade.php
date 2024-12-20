@@ -178,7 +178,7 @@
 
                     <!-- Vertical Form -->
                     <div class="row g-3">
-                        @if(!empty($user[0]->pass_front))
+                        @if(!empty($user[0]->pass_front) && $user[0]->user_type == 'T')
                             <div class="col-2">
                                 <strong>Passport Front</strong><br>
                                 <label class="imagecheck mb-2 image-outer">
@@ -193,9 +193,9 @@
                             </div>
                         @endif
 
-                        @if(!empty($user[0]->pass_back))
+                        @if(!empty($user[0]->pass_back) && $user[0]->user_type == 'T')
                             <div class="col-2">
-                                <strong>Passport Back</strong><br>
+                                <strong>Visit/Tourist Visa</strong><br>
                                 <label class="imagecheck mb-2 image-outer">
                                     <figure class="imagecheck-figure">
                                         <img src="{{ asset($user[0]->pass_back) }}" alt="No document found" class="imagecheck-image">
@@ -235,7 +235,7 @@
                             </div>
                         @endif
 
-                        @if(!empty($user[0]->eid_front))
+                        @if(!empty($user[0]->eid_front) && $user[0]->user_type == 'R')
                             <div class="col-2">
                                 <strong>EID Front</strong><br>
                                 <label class="imagecheck mb-2 image-outer">
@@ -249,7 +249,7 @@
                             </div>
                         @endif
 
-                        @if(!empty($user[0]->eid_back))
+                        @if(!empty($user[0]->eid_back) && $user[0]->user_type == 'R')
                             <div class="col-2">
                                 <strong>EID Back</strong><br>
                                 <label class="imagecheck mb-2 image-outer">

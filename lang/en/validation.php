@@ -187,8 +187,8 @@ return [
     */
 
     'attributes' => [
-        'pass_front' => 'Passport Front',
-        'pass_back' => 'Passport Back',
+        'pass_front' => 'Passport',
+        'pass_back' => 'Visa',
         'dl_front' => 'Driving License Front',
         'dl_back' => 'Driving License Front',
         'eid_front' => 'EID Front',

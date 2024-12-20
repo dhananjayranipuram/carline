@@ -431,8 +431,24 @@ class SiteController extends Controller
         // Validation
         $credentials = $request->validate([
             'rider_type' => ['required'],
-            'pass_front' => ['required', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
-            'pass_back' => ['required', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
+            'pass_front' => [
+                'nullable', 
+                'file', 
+                'mimes:jpg,png,pdf', 
+                'max:2048',
+                Rule::requiredIf(function () use ($request) {
+                    return $request->rider_type === 'tourist'; // Only required if rider_type is 'tourist'
+                }),
+            ],
+            'pass_back' => [
+                'nullable', 
+                'file', 
+                'mimes:jpg,png,pdf', 
+                'max:2048',
+                Rule::requiredIf(function () use ($request) {
+                    return $request->rider_type === 'tourist'; // Only required if rider_type is 'tourist'
+                }),
+            ], //Pass_back will be known as Visa
             'dl_front' => ['required', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
             'dl_back' => ['required', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
             // 'eid_front' => ['nullable', 'file', 'mimes:jpg,png,pdf', 'max:2048'],

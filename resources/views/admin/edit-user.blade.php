@@ -68,6 +68,7 @@
 }
 </style>
 <link href="https://cdn.jsdelivr.net/npm/lightbox2@2.11.4/dist/css/lightbox.min.css" rel="stylesheet">
+
 <div class="page-inner">
     <section class="section">
         <form method="post" action="{{ url('/admin/edit-users') }}" enctype="multipart/form-data">
@@ -225,7 +226,7 @@
 
                         <!-- Vertical Form -->
                         <div class="row g-3">
-                                <div class="col-2">
+                                <div class="col-2 pass_section" >
                                     <strong>Passport Front</strong><br>
                                     <label class="imagecheck mb-2 image-outer">
                                         <figure class="imagecheck-figure">
@@ -241,8 +242,8 @@
                                 </div>
 
                             
-                                <div class="col-2">
-                                    <strong>Passport Back</strong><br>
+                                <div class="col-2 pass_section">
+                                    <strong>Visit/Tourist Visa</strong><br>
                                     <label class="imagecheck mb-2 image-outer">
                                         <figure class="imagecheck-figure">
                                             <img src="{{ asset($user[0]->pass_back) }}" alt="No document found" class="imagecheck-image">
@@ -258,7 +259,7 @@
                             
 
                             
-                                <div class="col-2">
+                                <div class="col-2 dl_section">
                                     <strong>Driving License Front</strong><br>
                                     <label class="imagecheck mb-2 image-outer">
                                         <figure class="imagecheck-figure">
@@ -275,7 +276,7 @@
                             
 
                             
-                                <div class="col-2">
+                                <div class="col-2 dl_section">
                                     <strong>Driving License Back</strong><br>
                                     <label class="imagecheck mb-2 image-outer">
                                         <figure class="imagecheck-figure">
@@ -340,6 +341,18 @@
 <script src="{{asset('admin_assets/js/core/jquery-3.7.1.min.js')}}"></script>
 <script src="https://cdn.jsdelivr.net/npm/lightbox2@2.11.4/dist/js/lightbox.min.js"></script>
 <script>
+$(document).ready(function () {
+    var userType = '{{ $user[0]->user_type }}';
+    if(userType=='R'){
+        $(".eid_section").show();
+        $(".dl_section").show();
+        $(".pass_section").hide();
+    }else{
+        $(".eid_section").hide();
+        $(".dl_section").show();
+        $(".pass_section").show();
+    }
+});
 $(".delete-doc").click(function () {
         
     var userId = $(this).attr("data-id");
@@ -364,8 +377,12 @@ $(".delete-doc").click(function () {
 $(".user_type").change(function () {
     if($(this).val()=='R'){
         $(".eid_section").show();
+        $(".dl_section").show();
+        $(".pass_section").hide();
     }else{
         $(".eid_section").hide();
+        $(".dl_section").show();
+        $(".pass_section").show();
     }
 });
 </script>
