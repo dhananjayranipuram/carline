@@ -146,6 +146,13 @@
     height: 210px;
     width: 100%;
 }
+
+@media only screen and (max-width: 991px) {
+    .perfect-fleet-item .image-box img {
+        max-width: 100%;
+        height: 210px !important;
+    }
+}
 </style>
 <body>
     <div class="overlay">

@@ -134,7 +134,7 @@
                                                     </div>
                                                     <!-- Search Button -->
                                                     <div class="form-field">
-                                                        <button type="submit" class="search-button">
+                                                        <button type="button" class="search-button type-button">
                                                             <i class="fa-solid fa-magnifying-glass"></i>
                                                         </button>
                                                     </div>
@@ -1160,8 +1160,8 @@ function fillInAddress() {
   // Get the latitude and longitude of the location
   var lat = place.geometry.location.lat();
   var lng = place.geometry.location.lng();
-  console.log(lat)
-  console.log(lng)
+//   console.log(lat)
+//   console.log(lng)
 }
 
 // Listen for when the user selects a location from the autocomplete dropdown
@@ -1174,6 +1174,10 @@ $(document).ready(function () {
 
     $(".brand-click").click(function () {
         localStorage.setItem("brandClick",$(this).attr('data-id'));
+        window.location = baseUrl + '/cars';
+    });
+    
+    $(".type-button").click(function () {
         window.location = baseUrl + '/cars';
     });
 
