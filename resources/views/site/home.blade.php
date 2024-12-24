@@ -326,10 +326,10 @@
                                     <!-- Testimonial Slide Start -->
                                     <div class="swiper-slide type-click" data-id="{{$value->id}}">
                                         <div class="luxury-collection-image" data-cursor-text="View">
-                                            <a href="#"><figure><img src="{{asset($value->image)}}" alt=""></figure></a>
+                                            <a ><figure><img src="{{asset($value->image)}}" alt=""></figure></a>
                                         </div>
                                         <div class="luxury-collection-title"><h2>{{$value->name}}</h2></div>
-                                        <div class="luxury-collection-btn"><a href="#" class="section-icon-btn"><img src="{{asset('assets/images/arrow-white.svg')}}" alt=""></a></div>                               
+                                        <div class="luxury-collection-btn"><a  class="section-icon-btn"><img src="{{asset('assets/images/arrow-white.svg')}}" alt=""></a></div>                               
                                     </div>
                                     <!-- Testimonial Slide End -->
                                 @endforeach

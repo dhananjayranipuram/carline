@@ -35,7 +35,7 @@
                         <!-- Contact Information Title Start -->
                         <div class="section-title">
                             <h2 class="text-anime-style-3" data-cursor="-opaque">Contact information</h2>
-                            <p>Say something to start a live chat!</p>
+                            <!-- <p>Say something to start a live chat!</p> -->
                         </div>
                         <!-- Contact Information Title End -->
 
@@ -51,6 +51,7 @@
 
                                 <!-- Contact Info Content Start -->
                                 <div class="contact-info-content">
+                                    <p>+971 56 573 8866</p>
                                     <p>+971 50 86 89 526</p>
                                     <p>+971 4 52 92 722</p>
                                 </div>

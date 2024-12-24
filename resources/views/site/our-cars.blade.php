@@ -103,7 +103,7 @@
 
                     <div class="fleets-sort d-flex flex-column flex-sm-row align-items-center">
                         <!-- Sort Dropdown -->
-                        <select class="form-control mb-2 mb-sm-0" id="sortOptions">
+                        <select class="form-control mb-2 mb-sm-0" id="sortOptions" name="sortOptions">
                             <option value="default" selected disabled>⬇️ Sort By </option>
                             <option value="asc"> Price: Low to High</option>
                             <option value="desc"> Price: High to Low</option>
