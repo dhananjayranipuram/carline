@@ -213,9 +213,9 @@
                         </div></br>
                         
                         <!-- member Social List Start -->
-                        <div class="">
+                        <!-- <div class="">
                                 <img src="{{asset('assets/images/logo.png')}}" alt="">
-                        </div>
+                        </div> -->
                         <!-- member Social List End -->
                     </div>
                     <!-- Team member Content End -->

@@ -220,9 +220,9 @@
                             <a onclick="getUserData()" class="btn-default edit-user">Edit Details</a>   <a href="{{ url('/logout') }}" class="btn-default btn-highlighted">Log Out</a>
                         </div>
                         <!-- member Social List Start -->
-                        <div class="">
+                        <!-- <div class="">
                                 <img src="{{asset('assets/images/logo.png')}}" alt="">
-                        </div>
+                        </div> -->
                         <!-- member Social List End -->
                     </div>
                     <!-- Team member Content End -->
