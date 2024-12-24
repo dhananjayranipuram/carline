@@ -153,6 +153,39 @@
         height: 210px !important;
     }
 }
+
+
+@media (max-width: 768px) {
+    .header-btn-mobile {
+        display: inline-flex;
+    }
+
+    .btn-mobile-account {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 5px 5px;
+        border: 2px solid #a9a9a9;
+        border-radius: 15px;
+        background-color: #ffffff;
+        color: #000080;
+        font-size: 20px;
+        text-decoration: none;
+    }
+
+    .btn-mobile-account:hover {
+        background-color: #f0f0f0; 
+    }
+
+    .btn-mobile-account i {
+        margin-right: 0px;       
+    }
+}
+@media (min-width: 769px) {
+    .header-btn-mobile {
+        display: none !important;
+    }
+}
 </style>
 <body>
     <div class="overlay">
@@ -199,7 +232,15 @@
                         </div>
 					</div>
 					<!-- Main Menu End -->
-					
+                    @if(session()->has('userdata') || session()->has('userId'))
+					<div class="header-btn-mobile d-inline-flex">
+                        <a href="{{ url('/my-account') }}" class="btn-mobile-account"><i class="fa fa-user"></i></a>
+                    </div>
+                    @else
+                    <div class="header-btn-mobile d-inline-flex">
+                        <a href="javascript:void(0);" class="btn-mobile-account register-user"><i class="fa fa-user"></i></a>
+                    </div>
+                    @endif
 					<div class="navbar-toggle"></div>
 				</div>
 			</nav>
@@ -482,7 +523,7 @@
                         <h3>Our Cars</h3>
                         <ul>  
                             @foreach($layoutCarTypes as $key => $value)
-                                <li><a href="{{url('/cars')}}">{{$value->name}}</a></li>
+                                <li><a href="{{url('/cars')}}" class="type-click" data-id="{{$value->id}}">{{$value->name}}</a></li>
                             @endforeach
                         </ul>
                     </div>
@@ -1150,6 +1191,24 @@ function validateForm(datas){
     return chk;
 }
 
+$(document).ready(function () {
+    $(".select-type").change(function () {
+        localStorage.setItem("searchType",$(this).val());
+    });
 
+    $(".brand-click").click(function () {
+        localStorage.setItem("brandClick",$(this).attr('data-id'));
+        window.location = baseUrl + '/cars';
+    });
+    
+    $(".type-button").click(function () {
+        window.location = baseUrl + '/cars';
+    });
+
+    $(".type-click").click(function () {
+        localStorage.setItem("searchType",$(this).attr('data-id'));
+        window.location = baseUrl + '/cars';
+    });
+});
 </script>
 </html>

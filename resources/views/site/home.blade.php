@@ -288,7 +288,7 @@
 
         <div class="row">
             @foreach($brands as $key => $value)
-                <div class="col-lg-3 col-6">
+                <div class="col-lg-3 col-6" style="cursor:pointer;">
                     <!-- Partners Logo Start -->
                     <div class="partners-logo wow fadeInUp brand-click" data-wow-delay="0.2s" data-id="{{$value->id}}">
                         <img src="{{asset($value->image)}}" alt="{{asset($value->name)}}">
@@ -430,7 +430,7 @@
             <div class="col-lg-12">
                 <!-- Service Box Footer Start -->
                 <div class="services-box-footer wow fadeInUp" data-wow-delay="1s">
-                    <a href="destinations.html" class="btn-default">view all Destinations</a>
+                    <a href="#" class="btn-default">view all Destinations</a>
                 </div>
                 <!-- Service Box Footer End -->
             </div>
@@ -508,7 +508,7 @@
 
                     <!-- About Content Footer Start -->
                     <div class="about-content-footer wow fadeInUp" data-wow-delay="1s">
-                        <a href="contact.html" class="btn-default">contact us</a>
+                        <a href="{{ url('/contact') }}" class="btn-default">contact us</a>
                     </div>
                     <!-- About Content Footer End -->
                 </div>
@@ -549,101 +549,17 @@
                     <div class="client-slider">
                         <div class="swiper client_logo_slider">
                             <div class="swiper-wrapper">
-                                <!-- company Logo Start -->
-                                <div class="swiper-slide">
-                                    <div class="company-logo">
-                                        <img src="{{asset('assets/images/benz.png')}}" alt="">
-                                    </div>
-                                </div>
-                                <!-- company Logo End -->
 
-                                <!-- company Logo Start -->
-                                <div class="swiper-slide">
-                                    <div class="company-logo">
-                                        <img src="{{asset('assets/images/nissan.png')}}" alt="">
+                                @foreach($brands as $key => $value)
+                                    <!-- company Logo Start -->
+                                    <div class="swiper-slide brand-click" data-id="{{$value->id}}" style="cursor:pointer;">
+                                        <div class="company-logo">
+                                            <img src="{{asset($value->image)}}" alt="">
+                                        </div>
                                     </div>
-                                </div>
-                                <!-- company Logo End -->
+                                    <!-- company Logo End -->
+                                @endforeach
 
-                                <!-- company Logo Start -->
-                                <div class="swiper-slide">
-                                    <div class="company-logo">
-                                        <img src="{{asset('assets/images/toyota.png')}}" alt="">
-                                    </div>
-                                </div>
-                                <!-- company Logo End -->
-                                
-                                <!-- company Logo Start -->
-                                <div class="swiper-slide">
-                                    <div class="company-logo">
-                                        <img src="{{asset('assets/images/mg.png')}}" alt="">
-                                    </div>
-                                </div>
-                                <!-- company Logo End -->
-                                
-                                <!-- company Logo Start -->
-                                <div class="swiper-slide">
-                                    <div class="company-logo">
-                                        <img src="{{asset('assets/images/mazda.png')}}" alt="">
-                                    </div>
-                                </div>
-                                <!-- company Logo End -->
-                                
-                                <!-- company Logo Start -->
-                                <div class="swiper-slide">
-                                    <div class="company-logo">
-                                        <img src="{{asset('assets/images/hyndai.png')}}" alt="">
-                                    </div>
-                                </div>
-                                <!-- company Logo End -->
-                                    
-                                <!-- company Logo Start -->
-                                <div class="swiper-slide">
-                                    <div class="company-logo">
-                                        <img src="{{asset('assets/images/landrover.png')}}" alt="">
-                                    </div>
-                                </div>
-                                <!-- company Logo End -->
-                                
-                                <!-- company Logo Start -->
-                                <div class="swiper-slide">
-                                    <div class="company-logo">
-                                        <img src="{{asset('assets/images/lambo.png')}}" alt="">
-                                    </div>
-                                </div>
-                                <!-- company Logo End -->
-
-                                <!-- company Logo Start -->
-                                <div class="swiper-slide">
-                                    <div class="company-logo">
-                                        <img src="{{asset('assets/images/kia.png')}}" alt="">
-                                    </div>
-                                </div>
-                                <!-- company Logo End -->
-
-                                <!-- company Logo Start -->
-                                <div class="swiper-slide">
-                                    <div class="company-logo">
-                                        <img src="{{asset('assets/images/proche.png')}}" alt="">
-                                    </div>
-                                </div>
-                                <!-- company Logo End -->
-
-                                <!-- company Logo Start -->
-                                <div class="swiper-slide">
-                                    <div class="company-logo">
-                                        <img src="{{asset('assets/images/suzuki.png')}}" alt="">
-                                    </div>
-                                </div>
-                                <!-- company Logo End -->
-
-                                <!-- company Logo Start -->
-                                <div class="swiper-slide">
-                                    <div class="company-logo">
-                                        <img src="{{asset('assets/images/gmc.png')}}" alt="">
-                                    </div>
-                                </div>
-                                <!-- company Logo End -->
                             </div>
                         </div>
                     </div>
@@ -998,7 +914,7 @@
 
                     <!-- Cta Box Btn Start -->
                     <div class="cta-box-btn wow fadeInUp" data-wow-delay="0.5s">
-                        <a href="#" class="btn-default">contact us</a>
+                        <a href="{{ url('/contact') }}" class="btn-default">contact us</a>
                     </div>
                     <!-- Cta Box Btn End -->
                 </div></center>
@@ -1166,26 +1082,5 @@ function fillInAddress() {
 
 // Listen for when the user selects a location from the autocomplete dropdown
 source.addListener('place_changed', fillInAddress);
-
-$(document).ready(function () {
-    $(".select-type").change(function () {
-        localStorage.setItem("searchType",$(this).val());
-    });
-
-    $(".brand-click").click(function () {
-        localStorage.setItem("brandClick",$(this).attr('data-id'));
-        window.location = baseUrl + '/cars';
-    });
-    
-    $(".type-button").click(function () {
-        window.location = baseUrl + '/cars';
-    });
-
-    $(".type-click").click(function () {
-        localStorage.setItem("searchType",$(this).attr('data-id'));
-        window.location = baseUrl + '/cars';
-    });
-});
-
 </script>
 @endsection

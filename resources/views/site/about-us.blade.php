@@ -177,7 +177,7 @@
 
                     <!-- About Content Footer Start -->
                     <div class="about-content-footer wow fadeInUp" data-wow-delay="1s">
-                        <a href="#" class="btn-default">contact us</a>
+                        <a href="{{ url('/contact') }}" class="btn-default">contact us</a>
                     </div>
                     <!-- About Content Footer End -->
                 </div>
