@@ -628,6 +628,7 @@
 <script src="{{asset('admin_assets/js/core/jquery-3.7.1.min.js')}}"></script>  
 <script src="{{asset('assets/js/jquery.magnific-popup.min.js')}}"></script>
 <script src="{{asset('admin_assets/js/moment.min.js')}}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.43/moment-timezone-with-data.min.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmX5w5ltGt09cjDod_YMamphRRgS8L-ZQ&components=country:ae&libraries=places"></script>
 
 <script>
@@ -889,12 +890,15 @@ $("#pickuptime, #returntime").change(function () {
         $("#pickuptime").val() != '' && $("#pickuptime").val() != null &&
         $("#returntime").val() != '' && $("#returntime").val() != null) {
         
-        var pickupDateTime = moment($("#pickupdate").val() + " " + $("#pickuptime").val(), "YYYY-MM-DD HH:mm");
-        var returnDateTime = moment($("#returndate").val() + " " + $("#returntime").val(), "YYYY-MM-DD HH:mm");
+        var timezone = "Asia/Dubai";
+        var pickupDateTime = moment.tz($("#pickupdate").val() + " " + $("#pickuptime").val(), timezone);
+        var returnDateTime = moment.tz($("#returndate").val() + " " + $("#returntime").val(), timezone);
 
-        if (returnDateTime.isSameOrAfter(pickupDateTime.add(2, 'hours'))) {
-
+        if (returnDateTime.isSameOrAfter(pickupDateTime.clone().add(2, 'hours'))) {
+            checkRate();
         } else {
+            $("#rate-details").hide();
+            $("#additionalNotes").hide();
             $("#booking-errors").append('<span style="color:red;">Return time must be at least 2 hours after the pickup time.</span>');
             setTimeout(function () {
                 $('#booking-errors').html('');
@@ -902,8 +906,7 @@ $("#pickuptime, #returntime").change(function () {
             $("#returntime").val('');
         }
     }
-    
-    checkRate();
+
 });
 
 $("#pickupdate, #returndate, #babySeat").on("change paste keyup click", function() {
@@ -913,7 +916,7 @@ $("#pickupdate, #returndate, #babySeat").on("change paste keyup click", function
 
 function checkRate(){
     if(destinationData.length != 0 && sourceData.length != 0 && $("#pickupdate").val() != '' && $("#returndate").val() != '' && $("#pickuptime").val() != '' && $("#returntime").val() != ''){
-        if (moment($("#pickupdate").val()).isBefore($("#returndate").val())) {
+        if (moment($("#pickupdate").val()).isSameOrBefore($("#returndate").val())) {
             // $(".overlay").show();
 
             $.ajax({
@@ -934,13 +937,14 @@ function checkRate(){
                 dataType: "json",
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 success: function(res) {
-
                     updateRateDetails(res);
-                    // $(".overlay").hide();
+                },error: function(xhr, status, error) {
+                    $("#rate-details").hide();
+                    $("#additionalNotes").hide();
                 }
             });
         }else{
-            $("#booking-errors").append('<span style="color:red;">Pickup date must be before return date.</span>');
+            $("#booking-errors").append('<span style="color:red;">Pickup date must be before return date1.</span>');
             setTimeout(function () {
                 $('#booking-errors').html('');
             }, 2500);

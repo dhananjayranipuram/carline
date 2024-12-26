@@ -217,6 +217,11 @@ class Site extends Model
         return DB::select("SELECT e.id,e.name,e.rate FROM emirates e
                             WHERE e.deleted=0 AND e.active=1 $condition ORDER BY e.name;");
     }
+    
+    public function getCarlineEmiratesForRate($data){
+        
+        return DB::select("SELECT office_charge AS rate FROM additional_settings WHERE id=1;");
+    }
 
     public function login($data){
         return DB::select("SELECT id,first_name,last_name,email,phone,flat,building,landmark,city,emirates FROM enduser WHERE email='$data[username]' AND password='$data[password]' AND active=1 AND deleted=0;");
