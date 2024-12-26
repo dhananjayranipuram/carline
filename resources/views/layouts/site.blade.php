@@ -506,7 +506,7 @@
 
                         <!-- About Footer Content Start -->
                          <div class="about-footer-content">
-                            <p>At Carline, we’re fully flexible and client-focused, delivering cars when and where you need them. Our goal is to provide a seamless rental experience tailored to your schedule. </p>
+                            <p>At Carline, we're fully flexible and client-focused, delivering cars when and where you need them. Our goal is to provide a seamless rental experience tailored to your schedule. </p>
                          </div>
                         <!-- About Footer Content End -->
                      </div>
@@ -517,7 +517,7 @@
                     <!-- Footer Quick Links Start -->
                     <div class="footer-links footer-quick-links">
                         <h3>Our Cars</h3>
-                        <ul>  
+                        <ul>                            
                             @foreach($layoutCarTypes as $key => $value)
                                 <li><a href="{{url('/cars')}}" class="type-click" data-id="{{$value->id}}">{{$value->name}}</a></li>
                             @endforeach
@@ -530,12 +530,13 @@
                     <!-- Footer Menu Start -->
                     <div class="footer-links footer-menu">
                         <h3>quick links</h3>
-                        <ul>                          
+                        <ul>                            
                             <li><a href="{{ url('/home') }}">home</a></li>
                             <li><a href="{{ url('/about') }}">about us</a></li>
                             <li><a href="{{ url('/cars') }}">Our cars</a></li>
                             <li><a href="{{ url('/offers') }}">Special Offers</a></li>
                             <li><a href="{{ url('/contact') }}">Contact Us</a></li>
+                            <li><a href="">Terms & Conditions</a></li>
                         </ul>
                     </div>
                     <!-- Footer Menu End -->
@@ -549,12 +550,9 @@
                         <div class="about-footer-content">
                         <p><i class="fa fa-home"></i> Near Saffron Boutique Hotel, Omar Bin Al Khattab Road Deira Dubai U.A.E</p>
                         <p><i class="fa fa-phone"></i> <a href="tel:+971565738866">+971 56 573 8866</a></p>
-                        <p><i class="fa fa-phone"></i> <a href="tel:+971508689526">+971 50 868 9526</a></p>
-
                         <p><i class="fa fa-phone"></i> <a href="tel:+97145292722">+971 4 52 92 722</a></p>
-                        
-                        <p><i class="fa fa-envelope"></i> <a href="mailto:info@carline.com">Info@carline.com</a></p>
-                        <p><i class="fa-brands fa-whatsapp"></i> <a href="https://api.whatsapp.com/send?phone=971508689526">+971 50 868 9526</a></p>
+                        <p><i class="fa fa-envelope"></i> <a href="mailto:carlinellc32@gmail.com">carlinellc32@gmail.com</a></p>
+                        <p><i class="fa-brands fa-whatsapp"></i> <a href="https://api.whatsapp.com/send?phone=971565738866">+971 56 573 8866</a></p>
                     </div> </div>
                         
                     </div>
@@ -568,7 +566,7 @@
                     <div class="col-lg-4 col-md-7">
                         <!-- Footer Copyright Start -->
                         <div class="footer-copyright-text">
-                            <p>© 2024 Carline. All Rights Reserved</p>
+                            <p>© 2024 Carline. All Rights Reserved. <br>Designed By  <a href="http://growtharkmedia.com/" target="_blank">GrowthArk Media</a></p>
                         </div>
                         <!-- Footer Copyright End -->
                     </div>
@@ -576,7 +574,7 @@
                     <div class="col-lg-4 col-md-7">
                         <!-- Footer Copyright Start -->
                         <div class="footer-copyright-text">
-                            <center><p>Designed By  <a href="http://growtharkmedia.com/" target="_blank">GrowthArk Media</a></p></center>
+                            <center><p>Cards Accepted: </p><img src="{{asset('assets/images/cards.png')}}" alt=""></center>
                         </div>
                         <!-- Footer Copyright End -->
                     </div>
@@ -599,7 +597,7 @@
             <!-- Footer Copyright Section End -->
         </div>
     </footer>
-    <!-- Footer End -->
+    <!-- Footer End -->
 
     <!-- Jquery Library File -->
     <script src="{{asset('assets/js/jquery-3.7.1.min.js')}}"></script>
