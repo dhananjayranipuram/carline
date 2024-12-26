@@ -168,7 +168,7 @@
         color: #000080;
         font-size: 22px;
         text-decoration: none;
-        margin-right: -20px;
+        margin-right: -50px;
     }
 }
 @media (min-width: 769px) {
