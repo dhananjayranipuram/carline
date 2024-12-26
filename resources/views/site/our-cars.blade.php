@@ -15,50 +15,91 @@
 </style>
 <style>
      /* Style for the select dropdown */
-.fleets-sort select {
-    padding: 8px 12px;
-    font-size: 16px;
-    color: #6c757d; /* Default placeholder color */
-    font-weight: 500;
-    display: inline-flex;
-    align-items: center;
-    margin-bottom: 20px !important;
-}
-
-/* Style for the filter button */
-.filter-toggle-btn i {
-    font-size: 18px;
-}
-
-/* Style for icons inside the dropdown */
-.fleets-sort i {
-    margin-right: 8px;
-    font-size: 18px;
-}
-
-/* Mobile-specific styles */
-@media only screen and (max-width: 600px) {
+    .fleets-sort select {
+        padding: 8px 12px;
+        font-size: 16px;
+        color: #6c757d; /* Default placeholder color */
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        margin-bottom: 20px !important;
+    }
+    /* Style for the filter button */
+    .filter-toggle-btn i {
+        font-size: 18px;
+    }
+    /* Style for icons inside the dropdown */
+    .fleets-sort i {
+        margin-right: 8px;
+        font-size: 18px;
+    }
+    /* Mobile-specific styles */
+    @media only screen and (max-width: 600px) {
     .fleets-sort {
         display: flex !important;
         flex-direction: row !important;
         justify-content: space-between;
         align-items: center !important;
     }
-
     /* Style for the select dropdown on mobile */
     .fleets-sort select {
         color: #ffffff;
-        background: #000080;
+        background: #000000;
         text-align: center;
         flex-grow: 1; /* Allow the select to take the remaining space */
         margin-bottom: 8px !important;
     }
-
     /* Style for the filter button */
     .filter-toggle-btn {
         margin-left: 10px; /* Add space between the dropdown and button */
     }
+    .fleets-sidebar-list {
+        margin-top: 15px;
+    }
 }
+    .custom-dropdown {
+        position: relative;
+        display: inline-block;
+        margin-bottom: 15px !important;
+    }
+    .custom-dropdown-btn {
+        text-align: left;
+        background: #000080;
+        color: #ffffff;
+        padding: 8px 12px;
+        width: 250px;
+        border-radius: 6px;
+        font-size: 1rem;
+    }
+    .custom-dropdown-options {
+        display: none;
+        position: absolute;
+        background-color: white;
+        border: 1px solid #ccc;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        width: 100%;
+    }
+    .custom-option {
+        padding: 7px;
+        cursor: pointer;
+        background: #ffffff;
+        border: 1px solid #ededed;
+        color: #000080;
+    }
+    .custom-option:hover {
+        background-color: #f9f9f9;
+    }
+    @media only screen and (max-width: 600px) {
+        .custom-dropdown-btn {
+        width: 150px;
+        padding: 6px 12px;
+    }
+    .custom-dropdown {
+        margin-bottom: 0px !important;
+    }
+}
+
 
 </style>
 <!-- Page Header Start -->
@@ -102,17 +143,20 @@
                     <!-- Fleets Search Box End -->
 
                     <div class="fleets-sort d-flex flex-column flex-sm-row align-items-center">
-                        <!-- Sort Dropdown -->
-                        <select class="form-control mb-2 mb-sm-0" id="sortOptions" name="sortOptions">
-                            <option value="default" selected disabled>🔎 Sort By </option>
-                            <option value="asc"> Price: Low to High</option>
-                            <option value="desc"> Price: High to Low</option>
-                        </select>
-                        
-                        <!-- Filter Button -->
-                        <button class="form-control mb-2 mb-sm-0 d-lg-none filter-toggle-btn" type="button" style="background: #000080;color: #ffffff;padding: 8px 12px;">
-                            <i class="fa-solid fa-filter me-2"></i>Filters
-                        </button>
+                            <!-- Sort Dropdown -->
+                            <div class="custom-dropdown">
+                                <button class="custom-dropdown-btn" id="customSortBtn"><i class="fa fa-exchange" aria-hidden="true"></i> Sort By Price</button>
+                                <div class="custom-dropdown-options" id="customSortOptions">
+                                    <div class="custom-option" data-value="low_to_high"><i class="fa fa-arrow-up" aria-hidden="true"></i> Low to High</div>
+                                    <div class="custom-option" data-value="high_to_low"><i class="fa fa-arrow-down" aria-hidden="true"></i> High to Low</div>
+                                </div>
+                            </div>
+                            
+
+                            <!-- Filter Button -->
+                            <button class="form-control mb-sm-0 d-lg-none filter-toggle-btn" type="button" style="background: #000080;color: #ffffff;padding: 9px 12px;">
+                                <i class="fa-solid fa-filter me-2"></i>Filters
+                            </button>
                     </div>
 
                     <div class="filter-section">
@@ -314,11 +358,69 @@ $(document).ready(function () {
         getCars();
     });
 
-    $("#sortOptions").change(function () {
-        getCars();
+    // $("#customSortOptions").change(function () {
+    //     getCars();
+    // });
+
+    
+
+    $("#search").on("keyup change paste", function() {
+        getCars()
+        // var searchKeyword = $(this).val().toLowerCase(); // Convert to lowercase for case-insensitive search
+        // $(".filterLi").each(function() {
+        //     $(this).removeClass('show')
+        //     $(this).removeClass('hide')
+        //     // $(this).addClass('active');
+        // });
+        // if(searchKeyword==''){
+        //     return false;
+        // }
+        // $(".filterLi").each(function() {
+        //     var searchValue = $(this).attr('search-value').toLowerCase(); // Convert to lowercase for comparison
+        //     if (searchValue.includes(searchKeyword) && searchKeyword) {
+        //         $(this).addClass('show').removeClass('hide');
+        //     } else {
+        //         $(this).removeClass('show').addClass('hide');
+        //     }
+        // });
     });
 
-    function getCars(){
+
+    document.getElementById('customSortBtn').addEventListener('click', function () {
+        const options = document.getElementById('customSortOptions');
+        options.style.display = options.style.display === 'block' ? 'none' : 'block';
+    });
+
+    document.querySelectorAll('.custom-option').forEach(option => {
+        option.addEventListener('click', function () {
+            const selectedValue = this.getAttribute('data-value');
+            const btn = document.getElementById('customSortBtn');
+            btn.textContent = this.textContent;
+            document.getElementById('customSortOptions').style.display = 'none';
+            // console.log('Selected:', selectedValue);
+            getCars(selectedValue);
+        });
+    });
+
+    // Hide the dropdown when clicking outside
+    document.addEventListener('click', function (e) {
+        const dropdown = document.getElementById('customSortOptions');
+        const button = document.getElementById('customSortBtn');
+        if (!button.contains(e.target) && !dropdown.contains(e.target)) {
+            dropdown.style.display = 'none';
+        }
+    });
+
+    // Custom toggle behavior for filter button
+    const filterToggleBtn = document.querySelector('.filter-toggle-btn');
+    const filterOptions = document.getElementById('filterOptions');
+
+    filterToggleBtn.addEventListener('click', () => {
+        filterOptions.classList.toggle('collapse');
+    });
+
+    function getCars(sortData){
+        
         var carType = [];
         var carBrand = [];
         var carTransmission = [];
@@ -359,7 +461,7 @@ $(document).ready(function () {
                 'transId':$(".transmission-id").attr('data-value'),
                 'seatId':$(".seat-id").attr('data-value'),
                 'searchText':$("#search").val(),
-                'sortBy':$("#sortOptions").val(),
+                'sortBy':(sortData === 'low_to_high') ? 'asc' : (sortData === 'high_to_low') ? 'desc' : 'asc',
             },
             headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
             success: function(res) {
@@ -418,37 +520,6 @@ $(document).ready(function () {
             }
         });
     }
-
-    $("#search").on("keyup change paste", function() {
-        getCars()
-        // var searchKeyword = $(this).val().toLowerCase(); // Convert to lowercase for case-insensitive search
-        // $(".filterLi").each(function() {
-        //     $(this).removeClass('show')
-        //     $(this).removeClass('hide')
-        //     // $(this).addClass('active');
-        // });
-        // if(searchKeyword==''){
-        //     return false;
-        // }
-        // $(".filterLi").each(function() {
-        //     var searchValue = $(this).attr('search-value').toLowerCase(); // Convert to lowercase for comparison
-        //     if (searchValue.includes(searchKeyword) && searchKeyword) {
-        //         $(this).addClass('show').removeClass('hide');
-        //     } else {
-        //         $(this).removeClass('show').addClass('hide');
-        //     }
-        // });
-    });
-
 });
-</script>
-<script>
-    // Custom toggle behavior for filter button
-    const filterToggleBtn = document.querySelector('.filter-toggle-btn');
-    const filterOptions = document.getElementById('filterOptions');
-
-    filterToggleBtn.addEventListener('click', () => {
-        filterOptions.classList.toggle('collapse');
-    });
 </script>
 @endsection

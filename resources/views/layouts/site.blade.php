@@ -164,21 +164,12 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 5px 5px;
-        border: 2px solid #a9a9a9;
-        border-radius: 15px;
-        background-color: #ffffff;
-        color: #000080;
-        font-size: 20px;
+        padding: 8px 10px;
+        border-radius: 6px;
+        background-color: #000080;
+        color: #ffffff;
+        font-size: 22px;
         text-decoration: none;
-    }
-
-    .btn-mobile-account:hover {
-        background-color: #f0f0f0; 
-    }
-
-    .btn-mobile-account i {
-        margin-right: 0px;       
     }
 }
 @media (min-width: 769px) {
