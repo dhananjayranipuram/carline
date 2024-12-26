@@ -506,8 +506,13 @@ $(document).ready(function () {
                                     +'</div>'
                                     +'<div class="perfect-fleet-footer">'
                                         +'<div class="perfect-fleet-pricing">'
-                                            +'<h2>AED '+item.rent+'<span>/day</span></h2>'
-                                        +'</div>'
+                                            if(item.offer_flag == 1){
+                                                html+= '<del><h6>AED '+item.rent+'<span>/day</span></h6></del>'
+                                                    +'<h2>AED '+item.offer_price+' <span>/day</span></h2>';
+                                            }else{
+                                                html+= '<h2>AED '+item.rent+'<span>/day</span></h2>';
+                                            }
+                                        html+='</div>'
                                         +'<div class="perfect-fleet-btn">'
                                             +"<a href='"+baseUrl+"/car-details?id="+window.btoa(item.id)+"' class='section-icon-btn'><img src='"+baseUrl+'/'+"assets/images/arrow-white.svg' alt=''></a>"
                                         +'</div>'

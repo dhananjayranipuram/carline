@@ -123,6 +123,37 @@ class SiteController extends Controller
             return json_encode($data);
         }
     }
+    
+    public function filterOfferCars(Request $request){
+        $site = new Site();
+        if($request->method() == 'POST'){
+            $filterData = $request->validate([
+                'type' => [''],
+                'brand' => [''],
+                'carTransmission' => [''],
+                'carSeats' => [''],
+                'transId' => [''],
+                'seatId' => [''],
+                'searchText' => [''],
+                'sortBy' => [''],
+            ]);
+            
+            // $filterData['type'] = implode(',', $filterData['type']);
+            // $filterData['brand'] = implode(',', $filterData['brand']);
+            $filterData['format'] = 'filter';
+            $data['carDet'] = $site->getOfferCars($filterData);
+            $data['specs'] = $site->getCarSpecifications($filterData);
+            $temp = [];
+            foreach ($data['specs'] as $key => $value) {
+                if(!isset($temp[$value->car_id])){
+                    $temp[$value->car_id] = [];
+                }
+                array_push($temp[$value->car_id],$value);
+            }
+            $data['specs'] = $temp;
+            return json_encode($data);
+        }
+    }
 
     public function aboutUs(){
         return view('site/about-us');
@@ -139,6 +170,9 @@ class SiteController extends Controller
         $input['format'] = 'offer';
         $data['cars'] = $site->getCars($input);
         $data['specs'] = $site->getCarSpecifications($input);
+        $data['carType'] = $site->getCarType();
+        $data['all_specs'] = $site->getAllSpecifications();
+        $data['brands'] = $site->getBrands();
         $temp = [];
         foreach ($data['specs'] as $key => $value) {
             if(!isset($temp[$value->car_id])){
