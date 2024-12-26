@@ -869,7 +869,7 @@ $("#returndate").on("change", function() {
             if(res){
                 
                 $("#returntime").html('');
-                $("#returntime").append('<option selected disabled value="-1">Select Pickup Time</option>');
+                $("#returntime").append('<option selected disabled value="-1">Select Dropoff Time</option>');
                 if(res!="Invalid time range"){
                     $.each(res, function(key, value) {
                         $("#returntime").append(`<option value="${value}">${value}</option>`);

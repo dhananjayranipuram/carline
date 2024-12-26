@@ -158,7 +158,7 @@
 @media (max-width: 768px) {
     .header-btn-mobile {
         display: inline-flex;
-        margin-right: -20px;
+        margin-right: -10px;
     }
 
     .btn-mobile-account {
