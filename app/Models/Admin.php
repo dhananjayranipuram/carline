@@ -416,12 +416,19 @@ class Admin extends Model
     }
 
     public function getEmirates($data=[]){
-        $condition = '';
+        $condition = $uninStr = '';
         if(!empty($data['id'])){
             $condition .= " AND e.id = $data[id]";
+        }else{
+            $uninStr = "(SELECT 'cl' AS id,ad.office_name AS 'name',ad.office_charge AS rate,'Active' AS 'status' FROM additional_settings ad WHERE ad.id=1) UNION ";
         }
-        return DB::select("SELECT e.id,e.name,e.rate,CASE WHEN e.active = 1 THEN 'Active' ELSE 'Inactive' END as 'status' FROM emirates e
-                            WHERE e.deleted=0 $condition ORDER BY e.name;");
+        return DB::select("$uninStr (SELECT e.id,e.name,e.rate,CASE WHEN e.active = 1 THEN 'Active' ELSE 'Inactive' END as 'status' FROM emirates e
+                            WHERE e.deleted=0 $condition ORDER BY e.name);");
+    }
+    
+    public function getCarlineEmirates($data=[]){
+        
+        return DB::select("SELECT 'cl' AS id,ad.office_name AS 'name',ad.office_charge AS rate,'Active' AS 'status' FROM additional_settings ad WHERE ad.id=1;");
     }
 
     public function saveEmiratesData($data){
@@ -437,6 +444,10 @@ class Admin extends Model
 
     public function updateEmiratesData($data){
         return DB::UPDATE("UPDATE emirates SET name='$data[emName]',rate='$data[emRate]',active='$data[emActive]' WHERE id='$data[emId]';");
+    }
+    
+    public function updateCarlineEmiratesData($data){
+        return DB::UPDATE("UPDATE additional_settings SET office_name='$data[emName]',office_charge='$data[emRate]' WHERE id='1';");
     }
 
     public function getBookingHistory($data = [])

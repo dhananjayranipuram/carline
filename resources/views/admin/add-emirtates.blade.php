@@ -82,7 +82,7 @@
                                     <div class="modal-footer border-0">
                                         <div id="save-errors"></div>
                                         <button type="button" class="btn btn-primary addEmirate" > Add </button>
-                                        <button type="button" class="btn btn-danger" data-dismiss="modal" > Close </button>
+                                        <button type="button" class="btn btn-danger close-modal" data-dismiss="modal" > Close </button>
                                     </div>
                                 </form>
                             </div>
@@ -153,6 +153,11 @@ $(document).ready(function () {
     $("#add-row").DataTable({
         pageLength: 10,
     });
+});
+
+$(".close-modal").click(function () {
+    $("#addRowModal").modal("hide");
+    $("#editTypeModal").modal("hide");
 });
 
 $(".edit-spec").click(function () {

@@ -795,7 +795,11 @@ class AdminController extends Controller
             $filterData = $request->validate([
                 'id' => ['required'],
             ]);
-            $data = $admin->getEmirates($filterData);
+            if($filterData['id'] == 'cl'){
+                $data = $admin->getCarlineEmirates($filterData);
+            }else{
+                $data = $admin->getEmirates($filterData);
+            }
             if($data){
                 $res['status'] = 200;
                 $res['data'] = $data;
@@ -816,8 +820,12 @@ class AdminController extends Controller
             ]);
             
             $filterData['emActive'] = isset($filterData['emActive']) ? 1 : 0;
-            
-            $data = $admin->updateEmiratesData($filterData);
+            if($filterData['emId'] == 'cl'){
+                $data = $admin->updateCarlineEmiratesData($filterData);
+            }else{
+                $data = $admin->updateEmiratesData($filterData);
+            }
+
             if ($data == 0) {
                 $response['status'] = 200;
                 $response['message'] = "Nothing to update.";
