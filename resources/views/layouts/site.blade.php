@@ -158,6 +158,7 @@
 @media (max-width: 768px) {
     .header-btn-mobile {
         display: inline-flex;
+        margin-right: -20px;
     }
 
     .btn-mobile-account {
@@ -166,7 +167,7 @@
         justify-content: center;
         padding: 8px 10px;
         color: #000080;
-        font-size: 22px;
+        font-size: 30px;
         text-decoration: none;
         margin-right: -50px;
     }
