@@ -23,8 +23,8 @@ class SiteController extends Controller
 {
     public function __construct()
     {
-        // date_default_timezone_set('Asia/Dubai');
-        date_default_timezone_set('Asia/Kolkata');
+        date_default_timezone_set('Asia/Dubai');
+        // date_default_timezone_set('Asia/Kolkata');
         $site = new Site();
         $emirates = $site->getEmirates();
         $layoutCarTypes = $site->getCarType();
