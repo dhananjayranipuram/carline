@@ -177,6 +177,11 @@
         display: none !important;
     }
 }
+@media only screen and (max-width: 600px) {
+  .navbar-brand {
+    width: 220px;
+}
+}
 </style>
 <body>
     <div class="overlay">
