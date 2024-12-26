@@ -23,7 +23,8 @@ class SiteController extends Controller
 {
     public function __construct()
     {
-        date_default_timezone_set('Asia/Calcutta');
+        // date_default_timezone_set('Asia/Dubai');
+        date_default_timezone_set('Asia/Kolkata');
         $site = new Site();
         $emirates = $site->getEmirates();
         $layoutCarTypes = $site->getCarType();
@@ -304,57 +305,72 @@ class SiteController extends Controller
         $credentials = $request->validate([
             'pickupdate' => ['nullable'],
             'returndate' => ['nullable'],
+            'pickuptime' => ['nullable'],
+            'returntime' => ['nullable'],
             'type' => ['required'],
             'carId' => ['required'],
         ]);
+        $type = $credentials['type'];
         $credentials['type'] = 'date';
-        $res = $site->checkCarBooking($credentials);
-        $carCount = $site->getCarQty($credentials);
-        if(!empty($res)){
-            if($res[0]->cnt<$carCount){
-                return response()->json($this->generateTimeslot(null,null));
-            }else{
+        // $res = $site->checkCarBooking($credentials);
+        // $carCount = $site->getCarQty($credentials);
+        // if(!empty($res)){
+        //     echo $res[0]->cnt;exit;
+        //     if($res[0]->cnt<$carCount){
+                
+        //         $timeSlots = $this->generateTimeslot('','');
 
-                if($credentials['pickupdate']&&$credentials['returndate']){
-                    $credentials['type'] = 'both';
-                    $res = $site->getTimeAvailable($credentials);
-                    if($res){
-                        return response()->json($timeSlots);
-                    }else{
-                        $timeSlots = $this->generateTimeslot('','');
+        //         return response()->json($timeSlots);
+        //     }else{
+                if($type == 'pickup'){
+                    if($credentials['pickupdate'] ){
+                        if($credentials['pickupdate'] == date('Y-m-d')){
+                            $time = strtotime(date('h:i a', time()));
+                            $round = 30*60;
+                            $rounded = round($time / $round) * $round;
+                            $date = date("H:i", $rounded);
+                            
+                            $timeSlots = $this->generateStartTimeslot($date,'');
+                            
+                        }else{
+                            $timeSlots = $this->generateTimeslot('','');
+                        }
                         return response()->json($timeSlots);
                     }
-                }else if($credentials['pickupdate'] ){
-                    if($credentials['pickupdate'] == date('Y-m-d')){
-                        $time = strtotime(date('h:i a', time()));
-                        $round = 30*60;
-                        $rounded = round($time / $round) * $round;
-                        $date = date("H:i", $rounded);
-                        
-                        $timeSlots = $this->generateStartTimeslot($date,'');
+                }else if($type == 'dropoff'){
+                    if($credentials['returndate'] ){
+                        if($credentials['returndate'] == date('Y-m-d')){
+                            if($credentials['pickuptime']){
+                                $time = strtotime($credentials['pickuptime']);
+                                $time = strtotime('+2 hours', $time);
+                                $round = 30*60;
+                                $rounded = round($time / $round) * $round;
+                                $date = date("H:i", $rounded);
+                                
+                                $timeSlots = $this->generateTimeslot('',$date);
+                            }else{
+                                $time = strtotime(date('h:i a', time()));
+                                $time = strtotime('+2 hours', $time);
+                                $round = 30*60;
+                                $rounded = round($time / $round) * $round;
+                                $date = date("H:i", $rounded);
+                                
+                                $timeSlots = $this->generateTimeslot('',$date);
+                            }
+                            
+                        }else{
+                            $timeSlots = $this->generateTimeslot('','');
+                        }
                         return response()->json($timeSlots);
                     }
                 }
-                $res = $site->getTimeAvailable($credentials);
-                $pickupTime = null;
-                $dropoffTime = null;
-        
-                if ($res) {
-                    foreach ($res as $value) {
-                        if ($value->pickup_time) {
-                            $pickupTime = $value->pickup_time;
-                        }
-                        if ($value->return_time) {
-                            $dropoffTime = $value->return_time;
-                        }
-                    }
-                }
-        
-                return response()->json($this->generateTimeslot($pickupTime,$dropoffTime));
-            }
-        }else{
-            return response()->json($this->generateTimeslot(null,null));
-        }
+                
+            // }
+        // }else{
+
+        //     echo 456;exit;
+        //     return response()->json($this->generateTimeslot(null,null));
+        // }
         
     }
 
@@ -365,7 +381,7 @@ class SiteController extends Controller
         $endTime = $pickupTime ? strtotime($pickupTime) : strtotime("08:00 PM");
 
         if ($startTime > $endTime) {
-            return response()->json(['error' => 'Invalid time range'], 400);
+            return 'Invalid time range';
         }
 
         $slotDuration = 30; // Slot duration in minutes

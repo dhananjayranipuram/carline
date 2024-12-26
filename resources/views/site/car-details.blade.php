@@ -247,15 +247,6 @@
     font-size: 1.25rem;
 }
     </style>
-@php
-$timeSlots = [];
-$startTime = strtotime("12:00 AM");
-$endTime = strtotime("11:59 PM");
-while ($startTime <= $endTime) {
-    $timeSlots[] = date("g:i A", $startTime);
-    $startTime = strtotime('+30 minutes', $startTime);
-}
-@endphp
 <!-- Page Header Start -->
 <div class="page-header bg-section parallaxie">
 		<div class="container">
@@ -349,10 +340,8 @@ while ($startTime <= $endTime) {
                                         <div class="form-group col-12 mb-4">
                                             <label>Pickup Time</label>
                                             <select class="form-control" name="pickup_time" id="pickuptime">
-                                                <option selected disabled value="-1">Select Pickup Time</option>
-                                                @foreach($timeSlots as $key => $value)
-                                                    <option value="{{ date('G:i', strtotime($value))}}">{{$value}}</option>
-                                                @endforeach
+                                                <option selected disabled value="">Select Pickup Time</option>
+                                                
                                             </select>
                                             <div class="help-block with-errors"></div>
                                         </div>
@@ -385,10 +374,8 @@ while ($startTime <= $endTime) {
                                                 <label>Dropoff Time</label>
                                                 <!-- <input type="time" class="form-control" name="dropoff_time" id="returntime"> -->
                                                 <select class="form-control" name="dropoff_time" id="returntime">
-                                                    <option selected disabled value="-1">Select Dropoff Time</option>
-                                                    @foreach($timeSlots as $key => $value)
-                                                        <option value="{{ date('H:i', strtotime($value))}}">{{$value}}</option>
-                                                    @endforeach
+                                                    <option selected disabled value="">Select Dropoff Time</option>
+                                                    
                                                 </select>
                                                 <div class="help-block with-errors"></div>
                                             </div>
@@ -805,12 +792,22 @@ $("#returnLocationToggle").click(function() {
 });
 
 $("#pickupdate").on("change", function() {
-    // var d = new Date();
-    // if($("#pickupdate").val().length){
-    //     $('#returndate').attr( 'min',$("#pickupdate").val());
-    // }else{
-    //     $('#returndate').attr( 'min',formatDate(d));
-    // }
+    var pickupDate = moment($("#pickupdate").val());
+    var returnDate = moment($("#returndate").val());
+
+    if (pickupDate.isBefore(returnDate)) {
+        
+    } else if (pickupDate.isSame(returnDate)) {
+        
+    } else if (pickupDate.isAfter(returnDate)) {
+        $("#returndate").val('');
+        $("#pickuptime").html('');
+        $("#booking-errors").append('<span style="color:red;">Pickup date must be before return date.</span>');
+        setTimeout(function () {
+            $('#booking-errors').html('');
+        }, 2500);
+    }
+
     $.ajax({
         url: baseUrl + '/check-time',
         type: 'post',
@@ -825,49 +822,37 @@ $("#pickupdate").on("change", function() {
         headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
         success: function(res) {
             if(res){
-                if($("#returndate").val().length>0 && $("#pickupdate").val().length>0){
-                    
-                    if($("#pickuptime").val()==-1 || $("#pickuptime").val()==null){
-                        $("#pickuptime").html('');
-                        $("#pickuptime").append('<option selected disabled value="-1">Select Pickup Time</option>');
-                        if(res!="Invalid time range"){
-                            $.each(res, function(key, value) {
-                                $("#pickuptime").append(`<option value="${value}">${value}</option>`);
-                            });
-                        }
-                    }
-                    if($("#returntime").val()==-1 || $("#returntime").val()==null){
-                        $("#returntime").html('');
-                        $("#returntime").append('<option selected disabled value="-1">Select Pickup Time</option>');
-                        if(res!="Invalid time range"){
-                            $.each(res, function(key, value) {
-                                $("#returntime").append(`<option value="${value}">${value}</option>`);
-                            });
-                        }
-                    }
-                }else{
-                    $("#pickuptime").html('');
-                    $("#pickuptime").append('<option selected disabled value="-1">Select Pickup Time</option>');
-                    if(res!="Invalid time range"){
-                        $.each(res, function(key, value) {
-                            $("#pickuptime").append(`<option value="${value}">${value}</option>`);
-                        });
-                    }
+                $("#pickuptime").html('');
+                $("#pickuptime").append('<option selected disabled value="-1">Select Pickup Time</option>');
+                if(res!="Invalid time range"){
+                    $.each(res, function(key, value) {
+                        $("#pickuptime").append(`<option value="${value}">${value}</option>`);
+                    });
                 }
             }else{
                 $("#pickuptime").html('');
             }
         }
     });
+    
 });
 
 $("#returndate").on("change", function() {
-    // var d = new Date();
-    // if($("#returndate").val().length){
-    //     $('#pickupdate').attr( 'min',$("#returndate").val());
-    // }else{
-    //     $('#pickupdate').attr( 'min',formatDate(d));
-    // }
+    var pickupDate = moment($("#pickupdate").val());
+    var returnDate = moment($("#returndate").val());
+
+    if (pickupDate.isBefore(returnDate)) {
+        
+    } else if (pickupDate.isSame(returnDate)) {
+
+    } else if (pickupDate.isAfter(returnDate)) {
+        $("#returndate").val('');
+        $("#pickuptime").html('');
+        $("#booking-errors").append('<span style="color:red;">Pickup date must be before return date.</span>');
+        setTimeout(function () {
+            $('#booking-errors').html('');
+        }, 2500);
+    }
     $.ajax({
         url: baseUrl + '/check-time',
         type: 'post',
@@ -883,26 +868,9 @@ $("#returndate").on("change", function() {
         success: function(res) {
             if(res){
                 
-                if($("#returndate").val().length>0 && $("#pickupdate").val().length>0){
-                    
-                    if($("#pickuptime").val()==-1 || $("#pickuptime").val()==null){
-                        $("#pickuptime").html('');
-                        $("#pickuptime").append('<option selected disabled value="-1">Select Pickup Time</option>');
-                        $.each(res, function(key, value) {
-                            $("#pickuptime").append(`<option value="${value}">${value}</option>`);
-                        });
-                    }
-                    
-                    if($("#returntime").val()==-1 || $("#returntime").val()==null){
-                        $("#returntime").html('');
-                        $("#returntime").append('<option selected disabled value="-1">Select DropOff Time</option>');
-                        $.each(res, function(key, value) {
-                            $("#returntime").append(`<option value="${value}">${value}</option>`);
-                        });
-                    }
-                }else{
-                    $("#returntime").html('');
-                    $("#returntime").append('<option selected disabled value="-1">Select Drop Off Time</option>');
+                $("#returntime").html('');
+                $("#returntime").append('<option selected disabled value="-1">Select Pickup Time</option>');
+                if(res!="Invalid time range"){
                     $.each(res, function(key, value) {
                         $("#returntime").append(`<option value="${value}">${value}</option>`);
                     });
@@ -914,7 +882,31 @@ $("#returndate").on("change", function() {
     });
 });
 
-$("#pickupdate, #returndate, #returntime, #pickuptime, #babySeat").on("change paste keyup click", function() {
+$("#pickuptime, #returntime").change(function () {
+
+    if ($("#pickupdate").val() != '' && $("#pickupdate").val() != null &&
+        $("#returndate").val() != '' && $("#returndate").val() != null &&
+        $("#pickuptime").val() != '' && $("#pickuptime").val() != null &&
+        $("#returntime").val() != '' && $("#returntime").val() != null) {
+        
+        var pickupDateTime = moment($("#pickupdate").val() + " " + $("#pickuptime").val(), "YYYY-MM-DD HH:mm");
+        var returnDateTime = moment($("#returndate").val() + " " + $("#returntime").val(), "YYYY-MM-DD HH:mm");
+
+        if (returnDateTime.isSameOrAfter(pickupDateTime.add(2, 'hours'))) {
+
+        } else {
+            $("#booking-errors").append('<span style="color:red;">Return time must be at least 2 hours after the pickup time.</span>');
+            setTimeout(function () {
+                $('#booking-errors').html('');
+            }, 2500);
+            $("#returntime").val('');
+        }
+    }
+    
+    checkRate();
+});
+
+$("#pickupdate, #returndate, #babySeat").on("change paste keyup click", function() {
 
     checkRate();
 });
@@ -948,7 +940,7 @@ function checkRate(){
                 }
             });
         }else{
-            $("#booking-errors").html('<span style="color:red;">Pickup date must be before return date.</span>');
+            $("#booking-errors").append('<span style="color:red;">Pickup date must be before return date.</span>');
             setTimeout(function () {
                 $('#booking-errors').html('');
             }, 2500);
