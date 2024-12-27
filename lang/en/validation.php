@@ -190,9 +190,11 @@ return [
         'pass_front' => 'Passport',
         'pass_back' => 'Visa',
         'dl_front' => 'Driving License Front',
-        'dl_back' => 'Driving License Front',
+        'dl_back' => 'Driving License Back',
         'eid_front' => 'EID Front',
-        'eid_back' => 'EID Front',
+        'eid_back' => 'EID Back',
+        'cdl_front' => 'Country Driving License Front',
+        'cdl_back' => 'Country Driving License Back',
 
         'cartype' => 'Car Type',
         'features' => 'Feature',

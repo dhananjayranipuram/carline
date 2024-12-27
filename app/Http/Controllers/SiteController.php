@@ -481,15 +481,7 @@ class SiteController extends Controller
         // Validation
         $credentials = $request->validate([
             'rider_type' => ['required'],
-            'pass_front' => [
-                'nullable', 
-                'file', 
-                'mimes:jpg,png,pdf', 
-                'max:2048',
-                Rule::requiredIf(function () use ($request) {
-                    return $request->rider_type === 'tourist'; // Only required if rider_type is 'tourist'
-                }),
-            ],
+            'pass_front' => ['required', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
             'pass_back' => [
                 'nullable', 
                 'file', 
@@ -517,6 +509,20 @@ class SiteController extends Controller
                     return $request->rider_type === 'resident'; // Only required if rider_type is 'resident'
                 }),
             ],
+            'cdl_front' => [
+                'nullable',
+                'max:2048',
+                Rule::requiredIf(function () use ($request) {
+                    return $request->rider_type === 'tourist';
+                }),
+            ],
+            'cdl_back' => [
+                'nullable',
+                'max:2048',
+                Rule::requiredIf(function () use ($request) {
+                    return $request->rider_type === 'tourist';
+                }),
+            ],
         ]);
 
         // Handle file uploads using the helper function
@@ -526,7 +532,9 @@ class SiteController extends Controller
             'dl_front', 
             'dl_back', 
             'eid_front', 
-            'eid_back'
+            'eid_back',
+            'cdl_front',
+            'cdl_back'
         ]);
 
         // Check for errors in uploaded files
@@ -799,6 +807,8 @@ class SiteController extends Controller
             'edit_dl_back' => ['nullable', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
             'edit_eid_front' => ['nullable', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
             'edit_eid_back' => ['nullable', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
+            'edit_cdl_front' => ['nullable', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
+            'edit_cdl_back' => ['nullable', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
         ]);
 
         // Handle file uploads using the helper function
@@ -808,7 +818,9 @@ class SiteController extends Controller
             'edit_dl_front', 
             'edit_dl_back', 
             'edit_eid_front', 
-            'edit_eid_back'
+            'edit_eid_back',
+            'edit_cdl_front',
+            'edit_cdl_back'
         ]);
         // print_r($uploadedFiles);exit;
 
@@ -854,6 +866,8 @@ class SiteController extends Controller
             'dl_back' => ['nullable', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
             'eid_front' => ['nullable', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
             'eid_back' => ['nullable', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
+            'cdl_front' => ['nullable', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
+            'cdl_back' => ['nullable', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
         ]);
 
         // Handle file uploads using the helper function
@@ -863,7 +877,9 @@ class SiteController extends Controller
             'dl_front', 
             'dl_back', 
             'eid_front', 
-            'eid_back'
+            'eid_back',
+            'cdl_front',
+            'cdl_back'
         ]);
         // print_r($uploadedFiles);exit;
 

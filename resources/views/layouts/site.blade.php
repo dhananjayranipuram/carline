@@ -470,6 +470,22 @@
                                     </div>
                                 </div>
 
+                                <div class="booking-form-group col-md-12 mb-4">
+                                    <div class="row" id="country-dl-section" style="display:none;">
+                                        <label for="returnLocationToggle" id="dl_label">Country Licence</label>
+                                        <div class="booking-form-group col-md-6 mb-4" id="dlf">
+                                            <label>Front</label>
+                                            <input type="file" name="cdl_front" class="booking-form-control" placeholder="Front" accept="image/*,application/pdf" required>
+                                            <div class="help-block with-errors cdl_front"></div>
+                                        </div>
+                                        <div class="booking-form-group col-md-6 mb-4" id="dlb">
+                                            <label>Back</label>
+                                            <input type="file" name="cdl_back" class="booking-form-control" placeholder="Back" accept="image/*,application/pdf" required>
+                                            <div class="help-block with-errors cdl_back"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div class="row">
                                     <div class="col-md-12 mb-12 pb-2" id="docErrorMessages">
 
@@ -914,13 +930,19 @@ $(document).ready(function () {
 $(".rider_type").click(function() {
     if($(this).val()=='tourist'){
         $("#passport-section").show();
+        $("#passf").show();
+        $("#passb").show();
         $("#dl-section").show();
         $("#eid-section").hide();
+        $("#country-dl-section").show();
         $("#dl_label").html("International Driving Licence");
     }else{
-        $("#passport-section").hide();
+        $("#passport-section").show();
+        $("#passf").show();
+        $("#passb").hide();
         $("#eid-section").show();
         $("#dl-section").show();
+        $("#country-dl-section").hide();
         $("#dl_label").html("Driving Licence");
     }
 });
@@ -1026,8 +1048,9 @@ function checkDocumentUploaded(){
                 if(!validateBookingForm()){
                     if(res.data.eidf_flag == 0 && res.data.eidb_flag == 0 && res.data.dlf_flag == 0 && res.data.dlb_flag == 0 && res.data.passf_flag == 0 && res.data.passb_flag == 0){
                         $("#docUploadType").val('new');
+                        $("#passport-section").show();
                         $("#passf").show();
-                        $("#passb").show();
+                        $("#passb").hide();
                         $("#dlf").show();
                         $("#dlb").show();
                         $("#eidf").show();

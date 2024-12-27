@@ -315,7 +315,7 @@ class Site extends Model
     }
     
     public function getMyDocumentDetails($data=[]){
-        return DB::select("SELECT eu.id,ud.pass_front,ud.pass_back,ud.dl_front,ud.dl_back,ud.eid_front,ud.eid_back,eu.user_type
+        return DB::select("SELECT eu.id,ud.pass_front,ud.pass_back,ud.dl_front,ud.dl_back,ud.eid_front,ud.eid_back,ud.cdl_front,ud.cdl_back,eu.user_type
             FROM enduser eu
             LEFT JOIN user_documents ud ON eu.id=ud.user_id
             WHERE eu.id='$data[id]' AND eu.active=1;");
@@ -340,8 +340,10 @@ class Site extends Model
                 'pass_back' => $data['uploadedFiles']['pass_back'] ?? '',
                 'dl_front' => $data['uploadedFiles']['dl_front'] ?? '',
                 'dl_back' => $data['uploadedFiles']['dl_back'] ?? '',
-                'eid_front' => $data['uploadedFiles']['eid_front'] ?? '', // Use null coalescing operator
-                'eid_back' => $data['uploadedFiles']['eid_back'] ?? '',   // Use null coalescing operator
+                'eid_front' => $data['uploadedFiles']['eid_front'] ?? '',
+                'eid_back' => $data['uploadedFiles']['eid_back'] ?? '',
+                'cdl_front' => $data['uploadedFiles']['cdl_front'] ?? '',
+                'cdl_back' => $data['uploadedFiles']['cdl_back'] ?? '',
             ]);
 
             // Update user record to mark documents as uploaded
@@ -363,6 +365,12 @@ class Site extends Model
             }
             if (isset($data['uploadedFiles']['eid_back'])) {
                 $flags['eidb_flag'] = '1';
+            }
+            if (isset($data['uploadedFiles']['cdl_front'])) {
+                $flags['cdlf_flag'] = '1';
+            }
+            if (isset($data['uploadedFiles']['cdl_back'])) {
+                $flags['cdlb_flag'] = '1';
             }
 
             $flags['user_type'] = ($rider_type == 'resident') ? 'R' : 'T';
@@ -398,6 +406,8 @@ class Site extends Model
             'edit_dl_back'    => 'dl_back',
             'edit_eid_front'  => 'eid_front',
             'edit_eid_back'   => 'eid_back',
+            'edit_cdl_front'   => 'cdl_front',
+            'edit_cdl_back'   => 'cdl_back',
         ];
 
         $flagMapping = [
@@ -407,6 +417,8 @@ class Site extends Model
             'edit_dl_back'    => 'dlb_flag',
             'edit_eid_front'  => 'eidf_flag',
             'edit_eid_back'   => 'eidb_flag',
+            'edit_cdl_front'   => 'cdlf_flag',
+            'edit_cdl_back'   => 'cdlb_flag',
         ];
 
         // Map input data for updates
@@ -461,6 +473,8 @@ class Site extends Model
             'dl_back' => 'dl_back', 
             'eid_front' => 'eid_front', 
             'eid_back' => 'eid_back',
+            'cdl_front' => 'cdl_front',
+            'cdl_back' => 'cdl_back',
         ];
 
         // Map input data to database columns and filter out null/empty values
