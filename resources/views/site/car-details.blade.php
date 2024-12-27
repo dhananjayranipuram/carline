@@ -391,7 +391,7 @@
                                         <div class="fleets-single-sidebar-list" id="rate-details" style="display:none;">
                                             <ul>
                                                 <li><img src="{{asset('assets/images/icon-how-it-work-2.svg')}}" alt="">Rate <span id="rate-message"> AED 1500</span></li>
-                                                <li><img src="{{asset('assets/images/icon-service-2.svg')}}" alt="">Deposit <span id="deposit-message">AED 100</span></li>
+                                                <li><img src="{{asset('assets/images/icon-service-2.svg')}}" alt="">Refundable Deposit <span id="deposit-message">AED 100</span></li>
                                                 <li><img src="{{asset('assets/images/icon-service-2.svg')}}" alt="">Dropoff Charges <span id="emirate-message">AED 100</span></li>
                                                 <li><img src="{{asset('assets/images/icon-service-2.svg')}}" alt="">VAT <span id="vat-message">AED 100</span></li>
                                                 <li><img src="{{asset('assets/images/icon-service-2.svg')}}" alt="">Total <span id="total-message">AED 100</span></li>
@@ -955,7 +955,7 @@ function checkRate(){
 function updateRateDetails(res) {
     let str = `<ul>
         <li><img src="${baseUrl}/assets/images/icon-how-it-work-2.svg" alt="Image not available">Rent <span id="rate-message">AED ${res.rate}</span></li>`;
-    if (res.deposit!=0) str += `<li><img src="${baseUrl}/assets/images/icon-service-6.svg" alt="Image not available">Deposit <span id="deposit-message">AED ${res.deposit}</span></li>`;
+    if (res.deposit!=0) str += `<li><img src="${baseUrl}/assets/images/icon-service-6.svg" alt="Image not available">Refundable Deposit <span id="deposit-message">AED ${res.deposit}</span></li>`;
     if (res.emirate!=0) str += `<li><img src="${baseUrl}/assets/images/icon-why-choose-3.svg" alt="Image not available">Pick & Drop Charges <span id="emirate-message">AED ${res.emirate}</span></li>`;
     if (res.babySeat!=0) str += `<li><img src="${baseUrl}/assets/images/icon-service-2.svg" alt="Image not available">Baby Seat Charges <span id="emirate-message">AED ${res.babySeat}</span></li>`;
     str += `<li><img src="${baseUrl}/assets/images/icon-service-2.svg" alt="Image not available">VAT <span id="vat-message">AED ${res.vat}</span></li>

@@ -536,7 +536,8 @@
                             <li><a href="{{ url('/cars') }}">Our cars</a></li>
                             <li><a href="{{ url('/offers') }}">Special Offers</a></li>
                             <li><a href="{{ url('/contact') }}">Contact Us</a></li> -->
-                            <li><a href="#">Terms & Conditions</a></li>
+                            <li><a href="{{ url('/terms-conditions') }}">Terms & Conditions</a></li>
+                            <li><a href="{{ url('/privacy-policy') }}">Privacy Policy</a></li>
                             <li><a href="#">Refund policy</a></li>
                             <li><a href="#">Cancelation policy</a></li>
                         </ul>

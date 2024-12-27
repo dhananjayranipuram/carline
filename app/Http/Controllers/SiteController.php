@@ -994,4 +994,17 @@ class SiteController extends Controller
                "- Total: $rateData[total]\n" ;
 
     }
+
+    public function termsConditions(){
+        $site = new Site();
+        $data = [];
+        $data['policy'] = $site->getPolicyAgreement();
+        return view('site/terms-conditions',$data);
+    }
+    
+    public function privacyPolicy(){
+        $site = new Site();
+        $data = [];
+        return view('site/privacy-policy',$data);
+    }
 }

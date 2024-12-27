@@ -250,7 +250,7 @@ input[type="text"]:not(:placeholder-shown) + .input-placeholder {
                                 <div class="card-body">
                                     <div class="form-group input-container">
                                         <input type="text" name="deposit" placeholder="" class="form-control" value="{{old('deposit')}}">
-                                        <label for="input-box" class="input-placeholder">Deposit Amount (AED)</label>
+                                        <label for="input-box" class="input-placeholder">Refundable Deposit Amount (AED)</label>
                                         @error('deposit') <span class="text-danger">{{ $message }}</span> @enderror
                                     </div>
                                     <div class="form-group input-container">

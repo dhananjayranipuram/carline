@@ -45,6 +45,9 @@ Route::any('/check-car-booking', [SiteController::class, 'checkCarBooking']);
 Route::any('/send-contact-us', [SiteController::class, 'sendContactUs']);
 Route::any('/policies-agreements', [SiteController::class, 'policiesAgreements']);
 
+Route::any('/terms-conditions', [SiteController::class, 'termsConditions']);
+Route::any('/privacy-policy', [SiteController::class, 'privacyPolicy']);
+
 Route::any('/check-rate', [SiteController::class, 'checkRate']);
 Route::any('/check-time', [SiteController::class, 'checkTime']);
 
