@@ -323,7 +323,7 @@ class Site extends Model
 
     public function getDocumentUpload($data=[]){
         return DB::table('enduser')
-                        ->select('passf_flag','passb_flag','dlf_flag','dlb_flag','eidf_flag','eidb_flag','user_type')
+                        ->select('passf_flag','passb_flag','dlf_flag','dlb_flag','eidf_flag','eidb_flag','user_type','cdlf_flag','cdlb_flag')
                         ->where('id', $data['id'])
                         ->where('active', 1)
                         ->first();
@@ -477,23 +477,51 @@ class Site extends Model
             'cdl_back' => 'cdl_back',
         ];
 
+        $flagMapping = [
+            'pass_front' => 'passf_flag',
+            'pass_back'  => 'passb_flag',
+            'dl_front'   => 'dlf_flag',
+            'dl_back'    => 'dlb_flag',
+            'eid_front'  => 'eidf_flag',
+            'eid_back'   => 'eidb_flag',
+            'cdl_front'  => 'cdlf_flag',
+            'cdl_back'   => 'cdlb_flag',
+        ];
         // Map input data to database columns and filter out null/empty values
-        $updateData = [];
+        $documentUpdates = [];
+        $flagUpdates = [];
+
         foreach ($data['uploadedFiles'] as $key => $value) {
             if (!is_null($value) && $value !== '' && isset($fieldMapping[$key])) {
-                $updateData[$fieldMapping[$key]] = $value;
+                $documentUpdates[$fieldMapping[$key]] = $value; // Update document columns
+                $flagUpdates[$flagMapping[$key]] = 1;          // Set corresponding flag to 1
             }
         }
 
         // Proceed only if there's data to update
-        if (empty($updateData)) {
-            return false; // Or handle the case when there's nothing to update
+        if (empty($documentUpdates)) {
+            return false;
         }
 
-        // Perform the update query
-        return DB::table('user_documents')
-            ->where('user_id', $data['id']) // Ensure ID is provided
-            ->update($updateData);
+        try {
+            DB::beginTransaction();
+    
+            // Update the user_documents table
+            DB::table('user_documents')
+                ->where('user_id', $data['id'])
+                ->update($documentUpdates);
+    
+            // Update the flags in the enduser table
+            DB::table('enduser')
+                ->where('id', $data['id'])
+                ->update($flagUpdates);
+    
+            DB::commit();
+            return true;
+        } catch (\Exception $e) {
+            DB::rollback();
+            return false; // Handle error
+        }
     }
 
     public function getBookingHistory($data = [])

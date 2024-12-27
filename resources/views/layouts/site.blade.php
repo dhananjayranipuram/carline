@@ -470,15 +470,15 @@
                                     </div>
                                 </div>
 
-                                <div class="booking-form-group col-md-12 mb-4">
-                                    <div class="row" id="country-dl-section" style="display:none;">
+                                <div class="booking-form-group col-md-12 mb-4" id="country-dl-section" style="display:none;">
+                                    <div class="row">
                                         <label for="returnLocationToggle" id="dl_label">Country Licence</label>
-                                        <div class="booking-form-group col-md-6 mb-4" id="dlf">
+                                        <div class="booking-form-group col-md-6 mb-4" id="cdlf">
                                             <label>Front</label>
                                             <input type="file" name="cdl_front" class="booking-form-control" placeholder="Front" accept="image/*,application/pdf" required>
                                             <div class="help-block with-errors cdl_front"></div>
                                         </div>
-                                        <div class="booking-form-group col-md-6 mb-4" id="dlb">
+                                        <div class="booking-form-group col-md-6 mb-4" id="cdlb">
                                             <label>Back</label>
                                             <input type="file" name="cdl_back" class="booking-form-control" placeholder="Back" accept="image/*,application/pdf" required>
                                             <div class="help-block with-errors cdl_back"></div>
@@ -1006,11 +1006,17 @@ $(".upload_docs").click(function(e) {
             headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
             success: function(response) {
                 $("#edit_docErrorMessages").html('<span style="color:green;">Documents uploaded successfully.<span>');
+                $("#docErrorMessages").html('<span style="color:green;">Documents uploaded successfully.<span>');
                 setTimeout(function () {
                     $("#edit_docErrorMessages").html('');
+                    $("#docErrorMessages").html('');
+                    if(!bookCarAction()){
+                        // location.reload();
+                    }
                     $.magnificPopup.close();
                     $('#edit_uploadDocs')[0].reset();
-                    location.reload();
+                    // location.reload();
+                    
                 }, 5000);
                 $(".overlay").hide();
             },
@@ -1046,8 +1052,9 @@ function checkDocumentUploaded(){
         success: function(res) {
             if(res.cnt == 0){
                 if(!validateBookingForm()){
-                    if(res.data.eidf_flag == 0 && res.data.eidb_flag == 0 && res.data.dlf_flag == 0 && res.data.dlb_flag == 0 && res.data.passf_flag == 0 && res.data.passb_flag == 0){
+                    if(res.data.eidf_flag == 0 && res.data.eidb_flag == 0 && res.data.dlf_flag == 0 && res.data.dlb_flag == 0 && res.data.passf_flag == 0 && res.data.passb_flag == 0 && res.data.cdlf_flag == 0 && res.data.cdlb_flag == 0 ){
                         $("#docUploadType").val('new');
+                        $(".rider_type").prop("disabled", false); 
                         $("#passport-section").show();
                         $("#passf").show();
                         $("#passb").hide();
@@ -1055,6 +1062,7 @@ function checkDocumentUploaded(){
                         $("#dlb").show();
                         $("#eidf").show();
                         $("#eidb").show();
+                        $("#country-dl-section").hide();
                         $.magnificPopup.open({
                             items: {
                                 src: '#documentUploadForm',
@@ -1062,11 +1070,14 @@ function checkDocumentUploaded(){
                             }
                         });
                     }else{
+                        $(".rider_type").prop("disabled", true); 
                         $("#docUploadType").val('old');
                         if(res.data.passf_flag == 0){
+                            $("#passport-section").show();
                             $("#passf").show();
                         }
                         if(res.data.passb_flag == 0){
+                            $("#passport-section").show();
                             $("#passb").show();
                         }
                         if(res.data.dlf_flag == 0){
@@ -1092,6 +1103,15 @@ function checkDocumentUploaded(){
                         }
                         if(res.data.user_type == 'T'){
                             $("#eid-section").hide();
+                        }
+                        if((res.data.cdlf_flag == 0 || res.data.cdlb_flag == 0) && res.data.user_type == 'T'){
+                            $("#country-dl-section").show();
+                        }
+                        if(res.data.cdlf_flag == 0 && res.data.user_type == 'T'){
+                            $("#cdlf").show();
+                        }
+                        if(res.data.cdlb_flag == 0 && res.data.user_type == 'T'){
+                            $("#cdlb").show();
                         }
                         $.magnificPopup.open({
                             items: {

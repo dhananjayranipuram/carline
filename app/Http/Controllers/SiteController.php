@@ -455,9 +455,9 @@ class SiteController extends Controller
         $res = $site->getDocumentUpload($input);
         $uploadCnt = 0;
         if($res->user_type == 'R'){
-            $uploadCnt = $res->passf_flag * $res->passb_flag * $res->dlf_flag * $res->dlb_flag * $res->eidf_flag * $res->eidb_flag;
+            $uploadCnt = $res->passf_flag * $res->dlf_flag * $res->dlb_flag * $res->eidf_flag * $res->eidb_flag;
         }else{
-            $uploadCnt = $res->passf_flag * $res->passb_flag * $res->dlf_flag * $res->dlb_flag;
+            $uploadCnt = $res->passf_flag * $res->passb_flag * $res->dlf_flag * $res->dlb_flag * $res->cdlf_flag * $res->cdlb_flag;
         }
         if($uploadCnt == 1){
             $response['status'] = '200';
