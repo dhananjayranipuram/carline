@@ -169,7 +169,7 @@
         color: #000080;
         font-size: 30px;
         text-decoration: none;
-        margin-right: -50px;
+        margin-right: -30px;
     }
 }
 @media (min-width: 769px) {
