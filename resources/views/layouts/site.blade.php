@@ -309,7 +309,7 @@
                                 <div class="col-md-12 mb-12 pb-2">
                                     <div class="otpSection">
                                         <p class="otpSentTo">OTP has been sent to your email address.</p>
-                                        <!-- <p class="resend">Resend otp after <span class="countdown"></span></p> -->
+                                        <p class="resend">Resend otp after <span class="countdown"></span></p>
                                         <h3>Enter OTP</h3>
                                         <div class="otp-field">
                                             <input type="text" maxlength="1" />
@@ -681,7 +681,25 @@ $(document).ready(function () {
                     if(res.status == 200){
                         $("#otp-section").show();
                         $(".send-otp-button").hide();
-                        
+                        $('.resend').html('Resend otp after <span class="countdown"></span>');
+                        var timer2 = "15:00";
+                        var interval = setInterval(function() {
+                            var timer = timer2.split(':');
+                            //by parsing integer, I avoid all extra string processing
+                            var minutes = parseInt(timer[0], 10);
+                            var seconds = parseInt(timer[1], 10);
+                            --seconds;
+                            minutes = (seconds < 0) ? --minutes : minutes;
+                            if (minutes < 0) clearInterval(interval);
+                            seconds = (seconds < 0) ? 59 : seconds;
+                            seconds = (seconds < 10) ? '0' + seconds : seconds;
+                            $('.countdown').html(minutes + ':' + seconds);
+                            timer2 = minutes + ':' + seconds;
+                            if(timer2=='0:00'){
+                                $('.resend').html('<a class="resend-otp" onclick="resendOtp();">Resend OTP</a>');
+                                clearInterval(interval);
+                            }
+                        }, 1000);
                     }else{
                         $('#errorMessages').append('<br><span style="color:red;">OTP did not sent.</span>');
                         setTimeout(function () {
@@ -1227,6 +1245,69 @@ function validateForm(datas){
         $('#country').css('border-color', '');
     }
     return chk;
+}
+
+function resendOtp(){
+    var datas = {
+        'firstName': $("#firstName").val(),
+        'lastName': $("#lastName").val(),
+        'email': $("#email").val(),
+        'phone': $("#phone").val(),
+        'password': $("#password").val(),
+        'flat': $("#flat").val(),
+        'building': $("#building").val(),
+        'landmark': $("#landmark").val(),
+        'city': $("#city").val(),
+        'country': $("#country").val(),
+    };
+    
+    if(!validateForm(datas)){
+        $(".overlay").show();
+        $.ajax({
+            url: baseUrl + '/send-otp',
+            type: 'post',
+            data: datas,
+            dataType: "json",
+            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+            success: function(res) {
+                if(res.status == 200){
+                    $("#otp-section").show();
+                    $(".send-otp-button").hide();
+                    $('.resend').html('Resend otp after <span class="countdown"></span>');
+                    var timer2 = "15:00";
+                    var interval = setInterval(function() {
+                        var timer = timer2.split(':');
+                        //by parsing integer, I avoid all extra string processing
+                        var minutes = parseInt(timer[0], 10);
+                        var seconds = parseInt(timer[1], 10);
+                        --seconds;
+                        minutes = (seconds < 0) ? --minutes : minutes;
+                        if (minutes < 0) clearInterval(interval);
+                        seconds = (seconds < 0) ? 59 : seconds;
+                        seconds = (seconds < 10) ? '0' + seconds : seconds;
+                        $('.countdown').html(minutes + ':' + seconds);
+                        timer2 = minutes + ':' + seconds;
+                        if(timer2=='0:00'){
+                            $('.resend').html('<a class="resend-otp" onclick="resendOtp();">Resend OTP</a>');
+                            clearInterval(interval);
+                        }
+                    }, 1000);
+                }else{
+                    $('#errorMessages').append('<br><span style="color:red;">OTP did not sent.</span>');
+                    setTimeout(function () {
+                        $('#errorMessages').html('');
+                    }, 2500);
+                }
+                $(".overlay").hide();
+            }
+        });
+    }else{
+        $('#errorMessages').append('<br><span style="color:red;">Please fill valid data.</span>');
+        setTimeout(function () {
+            $('#errorMessages').html('');
+        }, 2500);
+        $(".overlay").hide();
+    }
 }
 
 $(document).ready(function () {

@@ -504,7 +504,7 @@ class Admin extends Model
     }
 
     public function getUsersDetails($data=[]){
-        return DB::select("SELECT u.id,u.first_name,u.last_name,u.email,u.phone,u.flat,u.building,u.landmark,u.city,u.emirates,u.country,d.pass_front,d.pass_back,d.dl_front,d.dl_back,d.eid_front,d.eid_back,c.name as country_name,u.user_type
+        return DB::select("SELECT u.id,u.first_name,u.last_name,u.email,u.phone,u.flat,u.building,u.landmark,u.city,u.emirates,u.country,d.pass_front,d.pass_back,d.dl_front,d.dl_back,d.eid_front,d.eid_back,d.cdl_front,d.cdl_back,c.name as country_name,u.user_type
             FROM enduser u
             LEFT JOIN user_documents d ON d.user_id=u.id
             LEFT JOIN country c ON c.id = u.country
@@ -888,6 +888,8 @@ class Admin extends Model
             'dl_back'    => 'dlb_flag',
             'eid_front'  => 'eidf_flag',
             'eid_back'   => 'eidb_flag',
+            'cdl_front'   => 'cdlf_flag',
+            'cdl_back'   => 'cdlb_flag',
         ];
 
         // Check if the docType is valid
@@ -911,6 +913,8 @@ class Admin extends Model
             'dl_back'    => 'dl_back',
             'eid_front'  => 'eid_front',
             'eid_back'   => 'eid_back',
+            'cdl_front'   => 'cdl_front',
+            'cdl_back'   => 'cdl_back',
         ];
 
         // Validate if the provided docType exists in the mapping
@@ -937,6 +941,8 @@ class Admin extends Model
             'dl_back'    => 'dl_back',
             'eid_front'  => 'eid_front',
             'eid_back'   => 'eid_back',
+            'cdl_front'   => 'cdl_front',
+            'cdl_back'   => 'cdl_back',
         ];
 
         // Validate if the provided docType exists in the mapping
@@ -992,6 +998,8 @@ class Admin extends Model
             'dl_back'    => 'dl_back',
             'eid_front'  => 'eid_front',
             'eid_back'   => 'eid_back',
+            'cdl_front'   => 'cdl_front',
+            'cdl_back'   => 'cdl_back',
         ];
 
         $flagMapping = [
@@ -1001,6 +1009,8 @@ class Admin extends Model
             'dl_back'    => 'dlb_flag',
             'eid_front'  => 'eidf_flag',
             'eid_back'   => 'eidb_flag',
+            'cdl_front'   => 'cdlf_flag',
+            'cdl_back'   => 'cdlb_flag',
         ];
 
         // Map input data for updates
@@ -1041,7 +1051,7 @@ class Admin extends Model
     }
 
     public function getMyDocumentDetails($data=[]){
-        return DB::select("SELECT eu.id,ud.pass_front,ud.pass_back,ud.dl_front,ud.dl_back,ud.eid_front,ud.eid_back
+        return DB::select("SELECT eu.id,ud.pass_front,ud.pass_back,ud.dl_front,ud.dl_back,ud.eid_front,ud.eid_back,ud.cdl_front,ud.cdl_back
             FROM enduser eu
             LEFT JOIN user_documents ud ON eu.id=ud.user_id
             WHERE eu.id='$data[userId]' AND eu.active=1;");

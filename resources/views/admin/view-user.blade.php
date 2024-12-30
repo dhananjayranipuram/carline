@@ -178,12 +178,20 @@
 
                     <!-- Vertical Form -->
                     <div class="row g-3">
-                        @if(!empty($user[0]->pass_front) && $user[0]->user_type == 'T')
+                        @if(!empty($user[0]->pass_front))
                             <div class="col-2">
                                 <strong>Passport Front</strong><br>
                                 <label class="imagecheck mb-2 image-outer">
                                     <figure class="imagecheck-figure">
+                                        @php
+                                            $file = $user[0]->pass_front;
+                                            $fileExtension = pathinfo($file, PATHINFO_EXTENSION);
+                                        @endphp
+                                        @if (in_array(strtolower($fileExtension), ['jpg', 'jpeg', 'png', 'gif']))
                                         <img src="{{ asset($user[0]->pass_front) }}" alt="No document found" class="imagecheck-image">
+                                        @elseif (strtolower($fileExtension) === 'pdf')
+                                            <embed src="{{ asset($file) }}" type="application/pdf" width="100%" height="200px" alt="No document found">
+                                        @endif
                                         <a class="view-icon view-doc" href="{{ asset($user[0]->pass_front) }}" data-lightbox="user-documents" data-title="Passport Front"><i class="far fa-eye"></i></a>
                                         <a class="delete-icon delete-doc" data-type="pass_front" data-id="{{ $user[0]->id }}"><i class="far fa-trash-alt"></i></a>
                                         <a class="download-icon" href="{{ url('/admin/download-document') }}?id={{base64_encode($user[0]->id)}}&doc=pf"><i class="fas fa-download"></i></a>
@@ -198,7 +206,15 @@
                                 <strong>Visit/Tourist Visa</strong><br>
                                 <label class="imagecheck mb-2 image-outer">
                                     <figure class="imagecheck-figure">
+                                        @php
+                                            $file = $user[0]->pass_back;
+                                            $fileExtension = pathinfo($file, PATHINFO_EXTENSION);
+                                        @endphp
+                                        @if (in_array(strtolower($fileExtension), ['jpg', 'jpeg', 'png', 'gif']))
                                         <img src="{{ asset($user[0]->pass_back) }}" alt="No document found" class="imagecheck-image">
+                                        @elseif (strtolower($fileExtension) === 'pdf')
+                                            <embed src="{{ asset($file) }}" type="application/pdf" width="100%" height="200px" alt="No document found">
+                                        @endif
                                         <a class="view-icon view-doc" href="{{ asset($user[0]->pass_back) }}" data-lightbox="user-documents" data-title="Passport Back"><i class="far fa-eye"></i></a>
                                         <a class="delete-icon delete-doc" data-type="pass_back" data-id="{{ $user[0]->id }}"><i class="far fa-trash-alt"></i></a>
                                         <a class="download-icon" href="{{ url('/admin/download-document') }}?id={{base64_encode($user[0]->id)}}&doc=pb"><i class="fas fa-download"></i></a>
@@ -212,7 +228,16 @@
                                 <strong>Driving License Front</strong><br>
                                 <label class="imagecheck mb-2 image-outer">
                                     <figure class="imagecheck-figure">
+                                        @php
+                                            $file = $user[0]->dl_front;
+                                            $fileExtension = pathinfo($file, PATHINFO_EXTENSION);
+                                        @endphp
+                                        @if (in_array(strtolower($fileExtension), ['jpg', 'jpeg', 'png', 'gif']))
                                         <img src="{{ asset($user[0]->dl_front) }}" alt="No document found" class="imagecheck-image">
+                                        @elseif (strtolower($fileExtension) === 'pdf')
+                                            <embed src="{{ asset($file) }}" type="application/pdf" width="100%" height="200px" alt="No document found">
+                                        @endif
+                                        
                                         <a class="view-icon view-doc" href="{{ asset($user[0]->dl_front) }}" data-lightbox="user-documents" data-title="Driving License Front"><i class="far fa-eye"></i></a>
                                         <a class="delete-icon delete-doc" data-type="dl_front" data-id="{{ $user[0]->id }}"><i class="far fa-trash-alt"></i></a>
                                         <a class="download-icon" href="{{ url('/admin/download-document') }}?id={{base64_encode($user[0]->id)}}&doc=df"><i class="fas fa-download"></i></a>
@@ -226,7 +251,16 @@
                                 <strong>Driving License Back</strong><br>
                                 <label class="imagecheck mb-2 image-outer">
                                     <figure class="imagecheck-figure">
+                                        @php
+                                            $file = $user[0]->dl_back;
+                                            $fileExtension = pathinfo($file, PATHINFO_EXTENSION);
+                                        @endphp
+                                        @if (in_array(strtolower($fileExtension), ['jpg', 'jpeg', 'png', 'gif']))
                                         <img src="{{ asset($user[0]->dl_back) }}" alt="No document found" class="imagecheck-image">
+                                        @elseif (strtolower($fileExtension) === 'pdf')
+                                            <embed src="{{ asset($file) }}" type="application/pdf" width="100%" height="200px" alt="No document found">
+                                        @endif
+                                        
                                         <a class="view-icon view-doc" href="{{ asset($user[0]->dl_back) }}" data-lightbox="user-documents" data-title="Driving License Back"><i class="far fa-eye"></i></a>
                                         <a class="delete-icon delete-doc" data-type="dl_back" data-id="{{ $user[0]->id }}"><i class="far fa-trash-alt"></i></a>
                                         <a class="download-icon" href="{{ url('/admin/download-document') }}?id={{base64_encode($user[0]->id)}}&doc=db"><i class="fas fa-download"></i></a>
@@ -240,7 +274,16 @@
                                 <strong>EID Front</strong><br>
                                 <label class="imagecheck mb-2 image-outer">
                                     <figure class="imagecheck-figure">
+                                        @php
+                                            $file = $user[0]->eid_front;
+                                            $fileExtension = pathinfo($file, PATHINFO_EXTENSION);
+                                        @endphp
+                                        @if (in_array(strtolower($fileExtension), ['jpg', 'jpeg', 'png', 'gif']))
                                         <img src="{{ asset($user[0]->eid_front) }}" alt="No document found" class="imagecheck-image">
+                                        @elseif (strtolower($fileExtension) === 'pdf')
+                                            <embed src="{{ asset($file) }}" type="application/pdf" width="100%" height="200px" alt="No document found">
+                                        @endif
+                                        
                                         <a class="view-icon view-doc" href="{{ asset($user[0]->eid_front) }}" data-lightbox="user-documents" data-title="EID Front"><i class="far fa-eye"></i></a>
                                         <a class="delete-icon delete-doc" data-type="eid_front" data-id="{{ $user[0]->id }}"><i class="far fa-trash-alt"></i></a>
                                         <a class="download-icon" href="{{ url('/admin/download-document') }}?id={{base64_encode($user[0]->id)}}&doc=ef"><i class="fas fa-download"></i></a>
@@ -254,10 +297,65 @@
                                 <strong>EID Back</strong><br>
                                 <label class="imagecheck mb-2 image-outer">
                                     <figure class="imagecheck-figure">
+                                        @php
+                                            $file = $user[0]->eid_back;
+                                            $fileExtension = pathinfo($file, PATHINFO_EXTENSION);
+                                        @endphp
+                                        @if (in_array(strtolower($fileExtension), ['jpg', 'jpeg', 'png', 'gif']))
                                         <img src="{{ asset($user[0]->eid_back) }}" alt="No document found" class="imagecheck-image">
+                                        @elseif (strtolower($fileExtension) === 'pdf')
+                                            <embed src="{{ asset($file) }}" type="application/pdf" width="100%" height="200px" alt="No document found">
+                                        @endif
+                                        
                                         <a class="view-icon view-doc" href="{{ asset($user[0]->eid_back) }}" data-lightbox="user-documents" data-title="EID Back"><i class="far fa-eye"></i></a>
                                         <a class="delete-icon delete-doc" data-type="eid_back" data-id="{{ $user[0]->id }}"><i class="far fa-trash-alt"></i></a>
                                         <a class="download-icon" href="{{ url('/admin/download-document') }}?id={{base64_encode($user[0]->id)}}&doc=eb"><i class="fas fa-download"></i></a>
+                                    </figure>
+                                </label>
+                            </div>
+                        @endif
+
+                        @if(!empty($user[0]->cdl_front) && $user[0]->user_type == 'T')
+                            <div class="col-2">
+                                <strong>Country License Front</strong><br>
+                                <label class="imagecheck mb-2 image-outer">
+                                    <figure class="imagecheck-figure">
+                                        @php
+                                            $file = $user[0]->cdl_front;
+                                            $fileExtension = pathinfo($file, PATHINFO_EXTENSION);
+                                        @endphp
+                                        @if (in_array(strtolower($fileExtension), ['jpg', 'jpeg', 'png', 'gif']))
+                                        <img src="{{ asset($user[0]->cdl_front) }}" alt="No document found" class="imagecheck-image">
+                                        @elseif (strtolower($fileExtension) === 'pdf')
+                                            <embed src="{{ asset($file) }}" type="application/pdf" width="100%" height="200px" alt="No document found">
+                                        @endif
+                                        
+                                        <a class="view-icon view-doc" href="{{ asset($user[0]->cdl_front) }}" data-lightbox="user-documents" data-title="EID Back"><i class="far fa-eye"></i></a>
+                                        <a class="delete-icon delete-doc" data-type="cdl_front" data-id="{{ $user[0]->id }}"><i class="far fa-trash-alt"></i></a>
+                                        <a class="download-icon" href="{{ url('/admin/download-document') }}?id={{base64_encode($user[0]->id)}}&doc=cf"><i class="fas fa-download"></i></a>
+                                    </figure>
+                                </label>
+                            </div>
+                        @endif
+
+                        @if(!empty($user[0]->cdl_back) && $user[0]->user_type == 'T')
+                            <div class="col-2">
+                                <strong>Country License Back</strong><br>
+                                <label class="imagecheck mb-2 image-outer">
+                                    <figure class="imagecheck-figure">
+                                        @php
+                                            $file = $user[0]->cdl_back;
+                                            $fileExtension = pathinfo($file, PATHINFO_EXTENSION);
+                                        @endphp
+                                        @if (in_array(strtolower($fileExtension), ['jpg', 'jpeg', 'png', 'gif']))
+                                        <img src="{{ asset($user[0]->cdl_back) }}" alt="No document found" class="imagecheck-image">
+                                        @elseif (strtolower($fileExtension) === 'pdf')
+                                            <embed src="{{ asset($file) }}" type="application/pdf" width="100%" height="200px" alt="No document found">
+                                        @endif
+                                        
+                                        <a class="view-icon view-doc" href="{{ asset($user[0]->cdl_back) }}" data-lightbox="user-documents" data-title="EID Back"><i class="far fa-eye"></i></a>
+                                        <a class="delete-icon delete-doc" data-type="cdl_back" data-id="{{ $user[0]->id }}"><i class="far fa-trash-alt"></i></a>
+                                        <a class="download-icon" href="{{ url('/admin/download-document') }}?id={{base64_encode($user[0]->id)}}&doc=cb"><i class="fas fa-download"></i></a>
                                     </figure>
                                 </label>
                             </div>

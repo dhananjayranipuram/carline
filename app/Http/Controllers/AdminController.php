@@ -181,9 +181,11 @@ class AdminController extends Controller
         $queries = $files = [];
         parse_str($_SERVER['QUERY_STRING'], $queries);
         $input['userId'] = base64_decode($queries['id']);
+        $input['id'] = base64_decode($queries['id']);
         $input['doc'] = $queries['doc'];
         
-        $documents = $admin->getMyDocumentDetails($input);
+        // $documents = $admin->getMyDocumentDetails($input);
+        $documents = $admin->getUsersDetails($input);
         // echo '<pre>';print_r($documents);exit;
         switch ($input['doc']) {
             case 'pf':
@@ -209,9 +211,29 @@ class AdminController extends Controller
             case 'eb':
                 $file = public_path($documents[0]->eid_back);
                 break;
+            case 'cf':
+                $file = public_path($documents[0]->cdl_front);
+                break;
+            case 'cb':
+                $file = public_path($documents[0]->cdl_back);
+                break;
             
             default:
-                $files = $documents[0];
+                if($documents[0]->user_type == 'R'){
+                    array_push($files,public_path($documents[0]->pass_front));
+                    array_push($files,public_path($documents[0]->dl_front));
+                    array_push($files,public_path($documents[0]->dl_back));
+                    array_push($files,public_path($documents[0]->eid_front));
+                    array_push($files,public_path($documents[0]->eid_back));
+                }else{
+                    array_push($files,public_path($documents[0]->pass_front));
+                    array_push($files,public_path($documents[0]->pass_back));
+                    array_push($files,public_path($documents[0]->dl_front));
+                    array_push($files,public_path($documents[0]->dl_back));
+                    array_push($files,public_path($documents[0]->cdl_front));
+                    array_push($files,public_path($documents[0]->cdl_back));
+                }
+                // $files = $documents[0];
                 break;
         }
 
@@ -266,6 +288,8 @@ class AdminController extends Controller
                 'dl_back' => ['nullable', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
                 'eid_front' => ['nullable', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
                 'eid_back' => ['nullable', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
+                'cdl_front' => ['nullable', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
+                'cdl_back' => ['nullable', 'file', 'mimes:jpg,png,pdf', 'max:2048'],
             ]);
 
             // Handle file uploads using the helper function
@@ -275,7 +299,9 @@ class AdminController extends Controller
                 'dl_front', 
                 'dl_back', 
                 'eid_front', 
-                'eid_back'
+                'eid_back',
+                'cdl_front',
+                'cdl_back'
             ]);
             
             $currentFiles = $admin->getMyDocumentDetails($credentials);
