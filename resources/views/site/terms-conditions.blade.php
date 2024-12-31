@@ -21,6 +21,7 @@
                                 @foreach($policy as $key => $value)
                                 <h3>{{$value->name}}</h3>
                                 {!!html_entity_decode(nl2br(e($value->content)))!!}
+                                <br>
                                 @endforeach
                                 <h3>Terms of Use and Payment Policy</h3>
 
@@ -34,6 +35,7 @@
                                     <li><strong>Minors:</strong> Customers using the website who are minors (under the age of 18) shall not register as a User of the website and shall not transact on or use the website.</li>
                                     <li><strong>Transaction Records:</strong> Cardholders must retain a copy of transaction records and <a target="_blank" style="color:#000080;" href="https://carlinerental.com">https://carlinerental.com</a> policies and rules.</li>
                                     <li><strong>User Responsibility:</strong> Users are responsible for maintaining the confidentiality of their account.</li>
+                                    <li><strong>Payment confirmation:</strong> Once the payment is made, the confirmation notice will be sent to the client via email within 24 hours of receipt.</li>
                                 </ul>
                         </div>
                         <!-- Rental Conditions Faqs End -->
