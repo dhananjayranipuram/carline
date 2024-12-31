@@ -31,12 +31,19 @@
                 <div class="card card-round">
                     <div class="card-header">
                         <div class="card-head-row card-tools-still-right">
-                            <div class="card-title">Booking Statistics</div>
+                            <div class="card-title">Booking Statistics (<span style="color: {{ $details[0]->status == 1 ? 'green' : 'red' }}">{{$details[0]->status_label}}</span>)</div>
                                 <div class="card-tools">
+                                    @if($details[0]->status != 0)
+                                    <a class="btn btn-danger cancel-booking" data-id="{{$details[0]->id}}">
+                                        <i class="icon-close"></i>
+                                        Cancel
+                                    </a>
+                                    @endif
                                     <a href="{{url('/admin/bookings')}}" class="btn btn-primary">
                                         <i class="icon-action-undo"></i>
                                         Back
                                     </a>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -123,8 +130,26 @@
         </div>
     </section>
 </div>
-
+<script src="{{asset('admin_assets/js/core/jquery-3.7.1.min.js')}}"></script>
 <script>
+
+$(".cancel-booking").click(function() {
+    $(".overlay").show();
+    if(confirm("Do you want to cancel this booking?")){
+        $.ajax({
+            url: baseUrl + '/cancel-booking',
+            type: 'post',
+            data: {id:$(this).data('id')},
+            dataType: "json",
+            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+            success: function(res) {
+                if(res.status == 200){
+                    location.reload();
+                }
+            }
+        });
+    }
+});
     function initMap() {
       // Define two geocodes
       const point1 = { lat: {{$details[0]->s_lat}}, lng: {{$details[0]->s_lon}} };

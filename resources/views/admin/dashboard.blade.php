@@ -100,7 +100,7 @@
                             <td>{{$value->destination}}</td>
                             <td>AED {{$value->rate}}</td>
                             <td>
-                                <span class="badge badge-success">Booked</span>
+                                <span class="badge {{ $value->status == 1 ? 'badge-success' : 'badge-danger' }}">{{$value->status_label}}</span>
                             </td>
                             </tr>
                         @endforeach

@@ -1,7 +1,7 @@
 @extends('layouts.site')
 
 @section('content')
-<style> .btn-default.btn-highlighted { background-color: #000000; color: #ffffff; } .btn-default.btn-highlighted:before { background-color: #b9b9b9; } /* Booking History Background */ .booking-history { background-color: #f5f5f5; /* Light grey background */ padding: 20px; border-radius: 8px; margin-bottom: 20px; } /* Car Image Styling */ .car-image img { width: 100%; height: auto; border-radius: 5px; margin-bottom: 15px; } /* Booking Details Styling */ /* Booking Details Styling */ .booking-details p { font-size: 14px; color: #333; margin: 4px 0; } .booking-details p span { display: block; margin-top: 2px; /* Optional: Adds a small gap between the label and the value */ } /* Buttons Styling */ .booking-actions { display: flex; flex-direction: column; gap: 10px; /* Spacing between buttons */ align-items: flex-end; margin-top: 20px; } /* Button Styling */ .btn { padding: 10px 20px; font-size: 14px; font-weight: 600; border: none; border-radius: 4px; cursor: pointer; transition: background-color 0.3s ease; width: 100px; /* Set a fixed width for consistency */ text-align: center; } /* Edit Button Styling */ .btn-edit { background-color: #4caf50; /* Green background */ color: #fff; } .btn-edit:hover { background-color: #45a049; /* Darker green on hover */ color: #FFEB3B; } /* View Button Styling */ .btn-view { background-color: #007bff; /* Blue background */ color: #fff; } .btn-view:hover { background-color: #0069d9; /* Darker blue on hover */ color: #FFEB3B; } /* Default single-column layout for larger screens */ .booking-details { display: block; } /* Two-column layout for smaller screens (mobile) */ @media (max-width: 576px) { .booking-details { display: grid; grid-template-columns: 1fr 1fr; /* Two equal columns */ gap: 10px; /* Space between columns */ } .booking-details p { margin: 4px 0; } } </style>
+<style> .btn-default.btn-highlighted { background-color: #000000; color: #ffffff; } .btn-default.btn-highlighted:before { background-color: #b9b9b9; } /* Booking History Background */ .booking-history { background-color: #f5f5f5; /* Light grey background */ padding: 20px; border-radius: 8px; margin-bottom: 20px; } /* Car Image Styling */ .car-image img { width: 100%; height: auto; border-radius: 5px; margin-bottom: 15px; } /* Booking Details Styling */ /* Booking Details Styling */ .booking-details p { font-size: 14px; color: #333; margin: 4px 0; } .booking-details p span { display: block; margin-top: 2px; /* Optional: Adds a small gap between the label and the value */ } /* Buttons Styling */ .booking-actions { display: flex; flex-direction: column; gap: 10px; /* Spacing between buttons */ align-items: flex-end; margin-top: 0px; } /* Button Styling */ .btn { padding: 10px 20px; font-size: 14px; font-weight: 600; border: none; border-radius: 4px; cursor: pointer; transition: background-color 0.3s ease; width: 100px; /* Set a fixed width for consistency */ text-align: center; } /* Edit Button Styling */ .btn-edit { background-color: #4caf50; /* Green background */ color: #fff; } .btn-edit:hover { background-color: #45a049; /* Darker green on hover */ color: #FFEB3B; } /* View Button Styling */ .btn-view { background-color: #007bff; /* Blue background */ color: #fff; } .btn-view:hover { background-color: #0069d9; /* Darker blue on hover */ color: #FFEB3B; } /* Default single-column layout for larger screens */ .booking-details { display: block; } /* Two-column layout for smaller screens (mobile) */ @media (max-width: 576px) { .booking-details { display: grid; grid-template-columns: 1fr 1fr; /* Two equal columns */ gap: 10px; /* Space between columns */ } .booking-details p { margin: 4px 0; } } </style>
 <style>
     .responsive-button {
         display: block; /* Ensures full-width behavior */
@@ -265,6 +265,7 @@
                                     <p><strong>Pickup Location:</strong> <span>{{$value->s_address}}</span></p>
                                     <p><strong>Pickup Date:</strong> <span>{{$value->pickup_date}}</span></p>
                                     <p><strong>Pickup Time:</strong> <span>{{$value->pickup_time}}</span></p>
+                                    <p><strong>Status:</strong> <span>{{$value->status_label}}</span></p>
                                 </div>
                             </div>
                             <!-- Pickup Details Column End -->
@@ -276,14 +277,22 @@
                                     <p><strong>Dropoff Date:</strong> <span>{{$value->return_date}}</span></p>
                                     <p><strong>Dropoff Time:</strong> <span>{{$value->return_time}}</span></p>
                                 </div>
+                                <div class="booking-actions">
+                                    <!-- <button class="btn btn-edit">Edit</button> -->
+                                    @if($value->status !=0)
+                                        <button class="btn btn-view cancel-button" data-id="{{$value->id}}">Cancel</button>
+                                    @endif
+                                </div>
                             </div>
                             <!-- Dropoff Details Column End -->
             
                             <!-- Buttons Column Start -->
-                            <!-- <div class="col-md-2 text-right"> -->
+                            <!-- <div class="col-md-1 text-right"> -->
                                 <!-- <div class="booking-actions"> -->
                                     <!-- <button class="btn btn-edit">Edit</button> -->
-                                    <!-- <button class="btn btn-view">View</button> -->
+                                    <!-- @if($value->status !=0) -->
+                                        <!-- <button class="btn btn-view cancel-button" data-id="{{$value->id}}">Cancel</button> -->
+                                    <!-- @endif -->
                                 <!-- </div> -->
                             <!-- </div> -->
                             <!-- Buttons Column End -->
@@ -397,7 +406,23 @@ function updateUser(){
     }
 }
 
-
+$(".cancel-button").click(function() {
+    if(confirm("Do you want to cancel this booking?")){
+        $(".overlay").show();
+        $.ajax({
+            url: baseUrl + '/cancel-booking',
+            type: 'post',
+            data: {id:$(this).data('id')},
+            dataType: "json",
+            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+            success: function(res) {
+                if(res.status == 200){
+                    location.reload();
+                }
+            }
+        });
+    }
+});
 
 $(".rider_type").click(function() {
     if($(this).val()=='tourist'){

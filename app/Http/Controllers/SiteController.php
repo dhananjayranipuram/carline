@@ -9,8 +9,10 @@ use App\Models\Admin;
 use App\Mail\OtpVerification;
 use App\Mail\BookingConfirmation;
 use App\Mail\ContactUs;
+use App\Mail\ResetPaswordLink;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
 use Session;
 use Redirect;
 use Storage;
@@ -758,6 +760,23 @@ class SiteController extends Controller
         return json_encode($response);
     }
 
+    public function cancelBooking(Request $request){
+        $site = new Site();
+        $response = [];
+        $credentials = $request->validate([
+            'id' => ['required']
+        ]);
+        $res = $site->upateBookingStatus($credentials);
+        if($res){
+            $response['status'] = '200';
+            $response['message'] = 'Booking Caanceled.';
+        }else{
+            $response['status'] = '401';
+            $response['message'] = 'Failed.';
+        }
+        return json_encode($response);
+    }
+
     public function myAccount(){
         $site = new Site();
         $data = [];
@@ -768,6 +787,7 @@ class SiteController extends Controller
             Session::flush();
             return Redirect::to('/home');
         }
+        // echo '<pre>';print_r($data);exit;
         return view('site/my-account',$data);
     }
     
@@ -1022,5 +1042,58 @@ class SiteController extends Controller
         $site = new Site();
         $data = [];
         return view('site/privacy-policy',$data);
+    }
+
+    public function resetPassword($token)
+    {
+        Session::put('reset-token', $token);
+        return view('site/reset-password');
+    }
+    
+    public function resetPasswordUpdate(Request $request)
+    {
+        $site = new Site();
+        if($request->method() == 'POST'){
+            $filterData = $request->validate([
+                'password' => ['required', 'min:8'],
+                'confirmPassword' => ['required', 'same:password']
+            ]);
+            $filterData['token'] = Session::get('reset-token');
+            $res = $site->updateUserPassword($filterData);
+            // echo $res;exit;
+            if ($res === true) {
+                return back()->with('success', 'Password reset successfully. You can now log in.<a style="color: blue;" class="login-popup">Click here</a>');
+            } elseif ($res == 'token_expired') {
+                return back()->with('error', 'The reset password link is expired or invalid. Please request a new password reset.<a style="color: blue;" class="reset-popup">Click here</a>');
+            } else {
+                return back()->with('error', 'Failed to reset password. Please try again.');
+            }
+            
+        }
+        return view('site/reset-password');
+    }
+
+
+
+    public function sendResetLink(Request $request){
+        $site = new Site();
+        $response = [];
+        $credentials = $request->validate([
+            'email' => ['required']
+        ]);
+        $credentials['phone'] = '';
+        $res = $site->getUserExist($credentials);
+        if($res[0]->cnt > 0){
+            $credentials['token'] = Str::random(64);
+            $res = $site->saveToken($credentials);
+            $credentials['url'] = url('/reset-password/' . $credentials['token']);
+            Mail::to($credentials['email'])->send(new ResetPaswordLink((object)$credentials));
+            $response['status'] = '200';
+            $response['message'] = 'A password reset link has been sent to your email.';
+        }else{
+            $response['status'] = '401';
+            $response['message'] = 'Email address not registered.';
+        }
+        return json_encode($response);
     }
 }

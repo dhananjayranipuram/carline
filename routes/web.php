@@ -33,6 +33,10 @@ Route::get('/logout', [SiteController::class, 'logout']);
 
 Route::any('/check-document-uploaded', [SiteController::class, 'checkDocumentUploaded']);
 Route::any('/upload-docs', [SiteController::class, 'uploadDocuments']);
+Route::any('/cancel-booking', [SiteController::class, 'cancelBooking']);
+Route::any('/send-reset-link', [SiteController::class, 'sendResetLink']);
+Route::any('/reset-password/{token}', [SiteController::class, 'resetPassword']);
+Route::any('/reset-user-password', [SiteController::class, 'resetPasswordUpdate']);
 
 Route::any('/send-otp', [SiteController::class, 'sendOtp']);
 Route::any('/verify-otp', [SiteController::class, 'verifyOtp']);

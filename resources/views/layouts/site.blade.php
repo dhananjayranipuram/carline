@@ -373,7 +373,37 @@
                                 <div id="login" class="h3 hidden"></div>
                             </div>
                             <div class="col-md-12 booking-form-group send-otp-button">
+                                <a id="forgotpopup" style="cursor:pointer; color:blue;">Forgot Password?</a><br>
                                 <label >Not registered? <a id="registrationPopup" style="cursor:pointer; color:blue;">Register here</a></label>
+                            </div>
+                        </div>                                    
+                    </fieldset>
+                </div>
+                <!-- Booking PopUp Form End -->
+            </div>
+            <!-- Login Form Box End -->
+
+            <!-- Login Form Box Start -->
+            <div class="booking-form-box">
+                <!-- Booking PopUp Form Start -->
+                <div id="forgotForm" class="white-popup-block mfp-hide booking-form">
+                    <div class="section-title">
+                        <h2>Forgot Password</h2>
+                    </div>                                
+                    <fieldset>
+                        <div class="row">
+                            <div class="booking-form-group col-md-12 mb-4" >
+                                <input class="booking-form-control" id="forgotEmailId" type="text" placeholder="Enter your email" autocomplete = "off"/>
+                                <div class="help-block with-errors"></div>
+                            </div>   
+
+                            <div class="booking-form-group col-md-12 mb-4" id="resetErrors">
+                                
+                            </div>
+
+                            <div class="booking-form-group col-md-12 mb-4">
+                                <button type="button" class="btn-default reset_button">Send Reset Link</button>
+                                <div id="login" class="h3 hidden"></div>
                             </div>
                         </div>                                    
                     </fieldset>
@@ -902,6 +932,51 @@ $(document).ready(function () {
         }, 150);
     });
 
+    $("#forgotpopup").click(function() {
+        $(".overlay").show();
+        $.magnificPopup.close();
+
+        setTimeout(function() {
+            $.magnificPopup.open({
+                items: {
+                    src: '#forgotForm',
+                    type: 'inline'
+                }
+            });
+            $(".overlay").hide();
+        }, 150);
+    });
+
+    $(".reset_button").click(function() {
+        var datas = {
+            'email': $("#forgotEmailId").val()
+        };
+        $(".overlay").show();
+        if(!validateForgotForm(datas)){
+            $.ajax({
+                url: baseUrl + '/send-reset-link',
+                type: 'post',
+                data: datas,
+                dataType: "json",
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                success: function(res) {
+                    // $.magnificPopup.close();
+                    $('#loginErrors').append('<br><span style="color:green;">'+res.message+'</span>');
+                    
+
+                    
+                    $(".overlay").hide();
+                }
+            });
+        }else{
+            $('#loginErrors').append('<br><span style="color:red;">Please fill valid data.</span>');
+            setTimeout(function () {
+                $('#loginErrors').html('');
+            }, 2500);
+            $(".overlay").hide();
+        }
+    });
+
     $(".login_button").click(function() {
         var datas = {
             'password': $("#userPassword").val(),
@@ -1171,6 +1246,18 @@ function validateLoginForm(datas){
         $('#userPassword').css('border-color', 'red');
     }else{
         $('#userPassword').css('border-color', '');
+    }
+
+    return chk;
+}
+
+function validateForgotForm(datas){
+    chk = 0;
+    if(datas.email == ''){
+        chk = 1;
+        $('#forgotEmailId').css('border-color', 'red');
+    }else{
+        $('#forgotEmailId').css('border-color', '');
     }
 
     return chk;

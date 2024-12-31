@@ -802,7 +802,13 @@ class Admin extends Model
                 'bd.s_address',
                 \DB::raw("LEFT(bd.d_address, LOCATE(',', bd.d_address) - 1) as destination"),
                 'bd.d_address',
-                \DB::raw("CONCAT(cb.name, ' ', c.name, ' ', c.model) as car_name")
+                \DB::raw("CONCAT(cb.name, ' ', c.name, ' ', c.model) as car_name"),
+                'b.status',
+                \DB::raw("CASE 
+                    WHEN b.status = 1 THEN 'Booked' 
+                    WHEN b.status = 0 THEN 'Canceled' 
+                    ELSE 'unknown' 
+                  END as status_label")
             ])
             ->orderBy('b.created_on', 'desc')
             ->limit(5)  // Limit the results to 5 records
@@ -873,7 +879,13 @@ class Admin extends Model
                 'bd.s_lat',
                 'bd.s_lon',
                 'bd.d_lat',
-                'bd.d_lon'
+                'bd.d_lon',
+                'b.status',
+                \DB::raw("CASE 
+                    WHEN b.status = 1 THEN 'Booked' 
+                    WHEN b.status = 0 THEN 'Canceled' 
+                    ELSE 'unknown' 
+                  END as status_label")
             ])
             ->get();
     }

@@ -547,7 +547,13 @@ class Site extends Model
                 \DB::raw("LEFT(bd.d_address, LOCATE(',', bd.d_address) - 1) as destination"),
                 'bd.d_address',
                 \DB::raw("CONCAT(cb.name, ' ', c.name, ' ', c.model) as car_name"),
-                'ci.image AS image'
+                'ci.image AS image',
+                'b.status',
+                \DB::raw("CASE 
+                    WHEN b.status = 1 THEN 'Booked' 
+                    WHEN b.status = 0 THEN 'Canceled' 
+                    ELSE 'unknown' 
+                  END as status_label")
                 // \DB::raw("LEFT(GROUP_CONCAT(ci.image), LOCATE(',', GROUP_CONCAT(ci.image)) - 1) as image")
             ])->get();
     }
@@ -575,21 +581,21 @@ class Site extends Model
     public function getTimeAvailable($data=[]){
         switch ($data['type']) {
             case 'pickup':
-                return DB::select("SELECT pickup_time,'' return_time FROM booking WHERE car_id=$data[carId] AND pickup_date='$data[pickupdate]'
+                return DB::select("SELECT pickup_time,'' return_time FROM booking WHERE status=1 AND car_id=$data[carId] AND pickup_date='$data[pickupdate]'
                                     UNION
-                                    SELECT '' pickup_time,return_time FROM booking WHERE car_id=$data[carId] AND return_date='$data[pickupdate]';");
+                                    SELECT '' pickup_time,return_time FROM booking WHERE status=1 AND car_id=$data[carId] AND return_date='$data[pickupdate]';");
                 break;
 
             case 'dropoff':
-                return DB::select("SELECT '' pickup_time,return_time FROM booking WHERE car_id=$data[carId] AND return_date='$data[returndate]'
+                return DB::select("SELECT '' pickup_time,return_time FROM booking WHERE status=1 AND car_id=$data[carId] AND return_date='$data[returndate]'
                                     UNION
-                                    SELECT pickup_time,'' return_time FROM booking WHERE car_id=$data[carId] AND return_date='$data[returndate]';");
+                                    SELECT pickup_time,'' return_time FROM booking WHERE status=1 AND car_id=$data[carId] AND return_date='$data[returndate]';");
                 break;
             
             default:
                 return DB::select("SELECT * 
                                     FROM booking
-                                    WHERE car_id=$data[carId] AND ((pickup_date BETWEEN '$data[pickupdate]' AND '$data[returndate]')
+                                    WHERE status=1 AND car_id=$data[carId] AND ((pickup_date BETWEEN '$data[pickupdate]' AND '$data[returndate]')
                                     OR (return_date BETWEEN '$data[pickupdate]' AND '$data[returndate]'));");
                 break;
         }
@@ -605,7 +611,7 @@ class Site extends Model
                     OR (STR_TO_DATE(return_date, '%Y-%m-%d %H:%i:%s') BETWEEN STR_TO_DATE('$data[pickupdate]', '%Y-%m-%d') AND STR_TO_DATE('$data[returndate]', '%Y-%m-%d'))) GROUP BY car_id;");*/
                 return DB::select("SELECT count(*) cnt 
                             FROM booking
-                            WHERE car_id = 1
+                            WHERE status=1 AND car_id = $data[carId]
                             AND (
                                 (pickup_date BETWEEN '$data[pickupdate]' AND '$data[returndate]')
                                 OR (return_date BETWEEN '$data[pickupdate]' AND '$data[returndate]')
@@ -618,7 +624,7 @@ class Site extends Model
             default:
                 return DB::select("SELECT count(*) cnt
                     FROM booking
-                    WHERE car_id=$data[carId] AND ((STR_TO_DATE(CONCAT(pickup_date, ' ', pickup_time), '%Y-%m-%d %H:%i:%s') BETWEEN STR_TO_DATE('$data[pickupdate] $data[pickuptime]', '%Y-%m-%d %h:%i %p') AND STR_TO_DATE('$data[returndate] $data[returntime]', '%Y-%m-%d %h:%i %p'))
+                    WHERE status=1 AND car_id=$data[carId] AND ((STR_TO_DATE(CONCAT(pickup_date, ' ', pickup_time), '%Y-%m-%d %H:%i:%s') BETWEEN STR_TO_DATE('$data[pickupdate] $data[pickuptime]', '%Y-%m-%d %h:%i %p') AND STR_TO_DATE('$data[returndate] $data[returntime]', '%Y-%m-%d %h:%i %p'))
                     OR (STR_TO_DATE(CONCAT(return_date, ' ', return_time), '%Y-%m-%d %H:%i:%s') BETWEEN STR_TO_DATE('$data[pickupdate] $data[pickuptime]', '%Y-%m-%d %h:%i %p') AND STR_TO_DATE('$data[returndate] $data[returntime]', '%Y-%m-%d %h:%i %p'))) GROUP BY car_id;");
                 break;
         }
@@ -629,5 +635,53 @@ class Site extends Model
         return DB::table('cars')
                 ->where('id', $data['carId'])->pluck('qty')->first();
         
+    }
+
+    public function upateBookingStatus($data = [])
+    {
+        return DB::table('booking')
+                ->where('id', $data['id'])
+                ->update([
+                    'status' => 0
+                ]);
+    }
+    
+    public function updateUserPassword($data = [])
+    {
+        DB::beginTransaction();
+        try {
+            $email = DB::table('password_reset')
+                    ->where('token', $data['token'])
+                    ->where('status', 0)
+                    ->where('created_on', '>=', now()->subMinutes(30))
+                    ->value('email');
+            if (!$email) {
+                return 'token_expired';
+            }
+            DB::table('enduser')
+                    ->where('email', $email)
+                    ->update([
+                        'password' => $data['password']
+                    ]);
+
+            DB::table('password_reset')
+                    ->where('token', $data['token'])
+                    ->update([
+                        'status' => 1
+                    ]);
+
+            DB::commit();
+            return true;
+        } catch (\Exception $e) {
+            DB::rollback();
+            return false; 
+        }
+    }
+
+    public function saveToken($data){
+        return DB::insert("INSERT INTO password_reset (email, token) VALUES (?, ?)", [
+            $data['email'], 
+            $data['token']
+        ]);
     }
 }
