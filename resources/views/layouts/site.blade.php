@@ -960,8 +960,11 @@ $(document).ready(function () {
                 dataType: "json",
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 success: function(res) {
-                    // $.magnificPopup.close();
-                    $('#loginErrors').append('<br><span style="color:green;">'+res.message+'</span>');
+                    var color = 'green';
+                    if(res.status != 200){
+                        color = 'red';
+                    }
+                    $('#resetErrors').html('<br><span style="color:'+color+';">'+res.message+'</span>');
                     
 
                     
@@ -1253,10 +1256,14 @@ function validateLoginForm(datas){
 
 function validateForgotForm(datas){
     chk = 0;
+    var emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if(datas.email == ''){
         chk = 1;
         $('#forgotEmailId').css('border-color', 'red');
-    }else{
+    } else if (!emailPattern.test(datas.email)) {
+        chk = 1;
+        $('#forgotEmailId').css('border-color', 'red');
+    } else {
         $('#forgotEmailId').css('border-color', '');
     }
 
