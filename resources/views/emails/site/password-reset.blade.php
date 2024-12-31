@@ -301,8 +301,10 @@
               <tr>
                 <td class="wrapper">
                   <p>Hi There,</p>
-                  <p>Here is the link to reset your account password</p>
-                  <p>First Name :<b>{{$email_data->url}}</b></p>
+                  <p>We received a request to reset your password for your account. If you did not make this request, please ignore this email.</p>
+                  <p>To reset your password, please click on the link below:</p>
+                  <p><b>{{$email_data->url}}</b></p>
+                  <p>This link will expire in 30 Minutes. If you do not reset your password within that time, you will need to request another reset link.</p>
                 </td>
               </tr>
 
