@@ -679,9 +679,10 @@ class Site extends Model
     }
 
     public function saveToken($data){
-        return DB::insert("INSERT INTO password_reset (email, token) VALUES (?, ?)", [
+        return DB::insert("INSERT INTO password_reset (email, token, created_on) VALUES (?, ?, ?)", [
             $data['email'], 
-            $data['token']
+            $data['token'],
+            now()
         ]);
     }
 }
