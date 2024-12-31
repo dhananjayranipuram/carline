@@ -1,7 +1,11 @@
 @extends('layouts.site')
 
 @section('content')
-
+<style>
+    .policy-section {
+        margin-bottom: 20px;
+    }
+</style>
 <div class="page-fleets-single">
         <div class="container">
             <div class="row">
@@ -20,8 +24,7 @@
                             <!-- Section Title End -->
                                 @foreach($policy as $key => $value)
                                 <h3>{{$value->name}}</h3>
-                                {!!html_entity_decode(nl2br(e($value->content)))!!}
-                                <br>
+                                <div class="policy-section">{!!html_entity_decode(nl2br(e($value->content)))!!}</div>
                                 @endforeach
                                 <h3>Terms of Use and Payment Policy</h3>
 
