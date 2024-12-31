@@ -31,7 +31,7 @@
                                 <p>Please allow up to <strong>45 days</strong> for the refund transfer to be completed, as it depends on the issuing bank or payment provider.</p>
                                 
                                 <h3>Cancellation Process</h3>
-                                <p>All cancellation requests must be submitted via email to <a href="mailto:support@example.com">support@example.com</a> or through our customer service portal.</p>
+                                <p>All cancellation requests must be submitted via email to <a target="_blank" style="color:#000080;" href="mailto:support@example.com">support@example.com</a> or through our customer service portal.</p>
                                 
                                 <h3>Non-Cancellable Orders</h3>
                                 <p>Orders or services already processed or initiated may not be eligible for cancellation.</p>

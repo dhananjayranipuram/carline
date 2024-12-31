@@ -43,7 +43,7 @@
                                 <p>Refund requests must be accompanied by the original receipt or proof of purchase.</p>
                                 
                                 <h3>Cancellation Guidelines</h3>
-                                <p>Cancellation requests must be submitted in writing via email to <a href="mailto:info@carline.com">info@carline.com</a> or through the online portal.</p>
+                                <p>Cancellation requests must be submitted in writing via email to <a target="_blank" style="color:#000080;" href="mailto:info@carline.com">info@carline.com</a> or through the online portal.</p>
                                 
                                 <h3>Partial Refunds</h3>
                                 <p>In cases of partial service usage, refunds will be prorated based on the services utilized.</p>
