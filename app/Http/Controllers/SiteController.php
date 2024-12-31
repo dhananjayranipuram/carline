@@ -1043,6 +1043,18 @@ class SiteController extends Controller
         $data = [];
         return view('site/privacy-policy',$data);
     }
+    
+    public function refundPolicy(){
+        $site = new Site();
+        $data = [];
+        return view('site/refund-policy',$data);
+    }
+    
+    public function cancelationPolicy(){
+        $site = new Site();
+        $data = [];
+        return view('site/cancelation-policy',$data);
+    }
 
     public function resetPassword($token)
     {

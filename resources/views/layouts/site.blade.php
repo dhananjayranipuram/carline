@@ -584,8 +584,8 @@
                             <li><a href="{{ url('/contact') }}">Contact Us</a></li> -->
                             <li><a href="{{ url('/terms-conditions') }}">Terms & Conditions</a></li>
                             <li><a href="{{ url('/privacy-policy') }}">Privacy Policy</a></li>
-                            <li><a href="#">Refund policy</a></li>
-                            <li><a href="#">Cancelation policy</a></li>
+                            <li><a href="{{ url('/refund-policy') }}">Refund policy</a></li>
+                            <li><a href="{{ url('/cancelation-policy') }}">Cancelation policy</a></li>
                         </ul>
                     </div>
                     <!-- Footer Menu End -->

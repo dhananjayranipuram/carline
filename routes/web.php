@@ -51,6 +51,8 @@ Route::any('/policies-agreements', [SiteController::class, 'policiesAgreements']
 
 Route::any('/terms-conditions', [SiteController::class, 'termsConditions']);
 Route::any('/privacy-policy', [SiteController::class, 'privacyPolicy']);
+Route::any('/refund-policy', [SiteController::class, 'refundPolicy']);
+Route::any('/cancelation-policy', [SiteController::class, 'cancelationPolicy']);
 
 Route::any('/check-rate', [SiteController::class, 'checkRate']);
 Route::any('/check-time', [SiteController::class, 'checkTime']);
