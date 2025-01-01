@@ -994,18 +994,24 @@ $(document).ready(function () {
                 dataType: "json",
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 success: function(res) {
-                    $.magnificPopup.close();
-                    $('#loginErrors').append('<br><span style="color:green;">'+res.message+'</span>');
+                    
+                    
                     // setTimeout(function () {
                         $('#loginErrors').html('');
                         if(res.status == 200){
+                            $('#loginErrors').append('<br><span style="color:green;">'+res.message+'</span>');
+                            $.magnificPopup.close();
                             $("#userId").val(res.userId);
                             if($('#pickupdate').length){
                                 checkDocumentUploaded();
+                            }else if (window.location.pathname.includes('reset-password')){
+                                window.location.href = baseUrl + '/my-account';
                             }else{
                                 location.reload();
                             }
                             
+                        }else{
+                            $('#loginErrors').append('<br><span style="color:red;">'+res.message+'</span>');
                         }
                     // }, 5000);
 
