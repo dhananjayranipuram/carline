@@ -27,7 +27,8 @@ class AdminController extends Controller
             Session::forget('deleteCarImageData');
         }
 
-        date_default_timezone_set('Asia/Calcutta');
+        // date_default_timezone_set('Asia/Calcutta');
+        date_default_timezone_set('Asia/Dubai');
         $site = new Site();
         $emirates = $site->getEmirates();
         $layoutCarTypes = $site->getCarType();
@@ -380,7 +381,8 @@ class AdminController extends Controller
             if(Session::get('bookingFilter')){
                 $filterData = Session::get('bookingFilter');
             }else{
-                date_default_timezone_set('Asia/Calcutta');
+                date_default_timezone_set('Asia/Dubai');
+                // date_default_timezone_set('Asia/Calcutta');
                 $filterData = [
                     'brand' => '',
                     'type' => '',
