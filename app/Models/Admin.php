@@ -474,8 +474,8 @@ class Admin extends Model
         // }
 
         if (!empty($data['from']) && !empty($data['to'])) {
-            $from = $data['from'] . ' 00:00:00'; // Start of the day
-            $to = $data['to'] . ' 23:59:59';     // End of the day
+            $from = $data['from'] . ' 00:00:00';
+            $to = $data['to'] . ' 23:59:59';
             $query->whereBetween('b.created_on', [$from, $to]);
         }
 

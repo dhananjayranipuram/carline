@@ -9,7 +9,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class BookingConfirmation extends Mailable
+class BookingCancellation extends Mailable
 {
     use Queueable, SerializesModels;
     public $email_data;
@@ -29,7 +29,7 @@ class BookingConfirmation extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Booking Confirmation',
+            subject: 'Booking Cancellation',
         );
     }
 
@@ -39,10 +39,11 @@ class BookingConfirmation extends Mailable
     public function content(): Content
     {
         if($this->user_type == 'user'){
-            return new Content(view: 'emails.site.booking-confirmation');
+            return new Content(view: 'emails.site.booking-cancellation');
         }else{
-            return new Content(view: 'emails.site.booking-confirmation-admin');
+            return new Content(view: 'emails.site.booking-cancellation-admin');
         }
+        
     }
 
     /**

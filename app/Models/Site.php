@@ -685,4 +685,42 @@ class Site extends Model
             now()
         ]);
     }
+
+    public function getBookingDetails($data=[]){
+        return \DB::table('booking as b')
+            ->join('booking_details as bd', 'b.id', '=', 'bd.booking_id')
+            ->leftJoin('cars as c', 'c.id', '=', 'b.car_id')
+            ->leftJoin('car_brand as cb', 'cb.id', '=', 'c.brand_id')
+            ->leftJoin('car_images as ci', 'ci.car_id', '=', 'c.id')
+            ->leftJoin('enduser as eu', 'b.user_id', '=', 'eu.id')
+            ->where('b.id', $data['id'])
+            ->groupBy('b.id')
+            ->select([
+                'b.id',
+                \DB::raw("DATE_FORMAT(b.pickup_date, '%Y-%m-%d') as pickup_date"),
+                \DB::raw("DATE_FORMAT(b.return_date, '%Y-%m-%d') as return_date"),
+                \DB::raw("DATE_FORMAT(b.pickup_time, '%h:%i %p') as pickup_time"),
+                \DB::raw("DATE_FORMAT(b.return_time, '%h:%i %p') as return_time"),
+                'b.rate',
+                \DB::raw("LEFT(bd.s_address, LOCATE(',', bd.s_address) - 1) as source"),
+                'bd.s_address',
+                \DB::raw("LEFT(bd.d_address, LOCATE(',', bd.d_address) - 1) as destination"),
+                'bd.d_address',
+                \DB::raw("CONCAT(cb.name, ' ', c.name, ' ', c.model) as car_name"),
+                \DB::raw("CONCAT(eu.first_name, ' ', eu.last_name) as user_name"),
+                'bd.s_lat',
+                'bd.s_lon',
+                'bd.d_lat',
+                'bd.d_lon',
+                'b.status',
+                \DB::raw("CASE 
+                    WHEN b.status = 1 THEN 'Booked' 
+                    WHEN b.status = 0 THEN 'Canceled' 
+                    ELSE 'unknown' 
+                  END as status_label"),
+                'eu.email',
+                'eu.phone'
+            ])
+            ->get();
+    }
 }

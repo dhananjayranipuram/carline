@@ -8,6 +8,7 @@ use App\Models\Site;
 use App\Models\Admin;
 use App\Mail\OtpVerification;
 use App\Mail\BookingConfirmation;
+use App\Mail\BookingCancellation;
 use App\Mail\ContactUs;
 use App\Mail\ResetPaswordLink;
 use Illuminate\Validation\Rule;
@@ -747,7 +748,8 @@ class SiteController extends Controller
             $userData = $site->getMyDetails($data);
             if($userData){
                 $credentials['user_data'] = $userData;
-                Mail::to($userData[0]->email)->send(new BookingConfirmation((object)$credentials));
+                Mail::to($userData[0]->email)->send(new BookingConfirmation((object)$credentials,'user'));
+                Mail::to(config('constants.ADMIN_EMAIL'))->send(new BookingConfirmation((object)$credentials,'admin'));
             }
             $response['status'] = '200';
             $response['message'] = 'Booked succesfully.';
@@ -768,6 +770,11 @@ class SiteController extends Controller
         ]);
         $res = $site->upateBookingStatus($credentials);
         if($res){
+            $bookingDetails = $site->getBookingDetails($credentials);
+            if($bookingDetails){
+                Mail::to($bookingDetails[0]->email)->send(new BookingCancellation($bookingDetails[0],'user'));
+                Mail::to(config('constants.ADMIN_EMAIL'))->send(new BookingCancellation($bookingDetails[0],'admin'));
+            }
             $response['status'] = '200';
             $response['message'] = 'Booking Caanceled.';
         }else{
