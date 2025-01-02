@@ -225,15 +225,15 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-10"></div>
-                <div class="col-lg-2">
-                    <div class="custom-dropdown occropmm">
-                        <button class="custom-dropdown-btn" id="customSortBtn"><i class="fa fa-exchange" aria-hidden="true"></i> Sort By Price</button>
-                        <div class="custom-dropdown-options" id="customSortOptions">
-                            <div class="custom-option" data-value="low_to_high"><i class="fa fa-arrow-up" aria-hidden="true"></i> Low to High</div>
-                            <div class="custom-option" data-value="high_to_low"><i class="fa fa-arrow-down" aria-hidden="true"></i> High to Low</div>
-                        </div>
+            <div class="col-lg-2">
+                <div class="custom-dropdown occropmm">
+                    <button class="custom-dropdown-btn" id="customSortBtn"><i class="fa fa-exchange" aria-hidden="true"></i> Sort By Price</button>
+                    <div class="custom-dropdown-options" id="customSortOptions">
+                        <div class="custom-option" data-value="low_to_high"><i class="fa fa-arrow-up" aria-hidden="true"></i> Low to High</div>
+                        <div class="custom-option" data-value="high_to_low"><i class="fa fa-arrow-down" aria-hidden="true"></i> High to Low</div>
                     </div>
                 </div>
+            </div>
             <div class="col-lg-3">
                 <!-- Fleets Sidebar Start -->
                 <div class="fleets-sidebar wow fadeInUp">
@@ -250,7 +250,7 @@
 
                     <div class="fleets-sort d-flex flex-column flex-sm-row align-items-center">
                             <!-- Sort Dropdown -->
-                            <div class="custom-dropdown">
+                            <div class="custom-dropdown occrop">
                                 <button class="custom-dropdown-btn" id="customSortBtn"><i class="fa fa-exchange" aria-hidden="true"></i> Sort By Price</button>
                                 <div class="custom-dropdown-options" id="customSortOptions">
                                     <div class="custom-option" data-value="low_to_high"><i class="fa fa-arrow-up" aria-hidden="true"></i> Low to High</div>
@@ -492,37 +492,38 @@ $(document).ready(function () {
     });
 
 
-    document.getElementById('customSortBtn').addEventListener('click', function () {
-        const options = document.getElementById('customSortOptions');
-        options.style.display = options.style.display === 'block' ? 'none' : 'block';
+    document.querySelectorAll('.custom-dropdown-btn').forEach(button => {
+        button.addEventListener('click', function (e) {
+            e.stopPropagation(); // Prevent click event from propagating to the document
+            const dropdown = this.nextElementSibling; // Find the corresponding dropdown
+            const isVisible = dropdown.style.display === 'block';
+            
+            // Hide all dropdowns first
+            document.querySelectorAll('.custom-dropdown-options').forEach(option => {
+                option.style.display = 'none';
+            });
+
+            // Toggle the visibility of the clicked dropdown
+            dropdown.style.display = isVisible ? 'none' : 'block';
+        });
     });
 
     document.querySelectorAll('.custom-option').forEach(option => {
         option.addEventListener('click', function () {
             const selectedValue = this.getAttribute('data-value');
-            const btn = document.getElementById('customSortBtn');
-            btn.textContent = this.textContent;
-            document.getElementById('customSortOptions').style.display = 'none';
-            // console.log('Selected:', selectedValue);
+            const btn = this.closest('.custom-dropdown').querySelector('.custom-dropdown-btn');
+            btn.innerHTML = <i class="fa fa-exchange" aria-hidden="true"></i> ${this.innerHTML};
+            this.closest('.custom-dropdown-options').style.display = 'none';
+            console.log('Selected:', selectedValue);
             getCars(selectedValue);
         });
     });
 
-    // Hide the dropdown when clicking outside
-    document.addEventListener('click', function (e) {
-        const dropdown = document.getElementById('customSortOptions');
-        const button = document.getElementById('customSortBtn');
-        if (!button.contains(e.target) && !dropdown.contains(e.target)) {
+    // Hide all dropdowns when clicking outside
+    document.addEventListener('click', function () {
+        document.querySelectorAll('.custom-dropdown-options').forEach(dropdown => {
             dropdown.style.display = 'none';
-        }
-    });
-
-    // Custom toggle behavior for filter button
-    const filterToggleBtn = document.querySelector('.filter-toggle-btn');
-    const filterOptions = document.getElementById('filterOptions');
-
-    filterToggleBtn.addEventListener('click', () => {
-        filterOptions.classList.toggle('collapse');
+        });
     });
 
     function getCars(sortData){
