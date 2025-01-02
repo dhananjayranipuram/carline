@@ -600,8 +600,8 @@
                         <p><i class="fa fa-home"></i> Near Saffron Boutique Hotel, Omar Bin Al Khattab Road Deira Dubai U.A.E</p>
                         <p><i class="fa fa-phone"></i> <a href="tel:+971565738866">+971 56 573 8866</a></p>
                         <p><i class="fa fa-phone"></i> <a href="tel:+97145292722">+971 4 52 92 722</a></p>
-                        <p><i class="fa fa-envelope"></i> <a href="mailto:carlinellc32@gmail.com">carlinellc32@gmail.com</a></p>
                         <p><i class="fa-brands fa-whatsapp"></i> <a href="https://api.whatsapp.com/send?phone=971565738866">+971 56 573 8866</a></p>
+                        <p><i class="fa fa-envelope"></i> <a href="mailto:info@carline.com">info@carline.com</a></p>
                     </div> </div>
                         
                     </div>
@@ -712,7 +712,7 @@ $(document).ready(function () {
                         $("#otp-section").show();
                         $(".send-otp-button").hide();
                         $('.resend').html('Resend otp after <span class="countdown"></span>');
-                        var timer2 = "15:00";
+                        var timer2 = ":30";
                         var interval = setInterval(function() {
                             var timer = timer2.split(':');
                             //by parsing integer, I avoid all extra string processing
