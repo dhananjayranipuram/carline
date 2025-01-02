@@ -469,8 +469,14 @@ class Admin extends Model
             $query->where('c.type_id', $data['type']);
         }
 
+        // if (!empty($data['from']) && !empty($data['to'])) {
+        //     $query->whereBetween('b.created_on', [$data['from'], $data['to']]);
+        // }
+
         if (!empty($data['from']) && !empty($data['to'])) {
-            $query->whereBetween('b.created_on', [$data['from'], $data['to']]);
+            $from = $data['from'] . ' 00:00:00'; // Start of the day
+            $to = $data['to'] . ' 23:59:59';     // End of the day
+            $query->whereBetween('b.created_on', [$from, $to]);
         }
 
         return $query->groupBy('b.id')
