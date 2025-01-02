@@ -102,6 +102,102 @@
 
 
 </style>
+
+<style>
+     /* Style for the select dropdown */
+    .fleets-sort select {
+        padding: 8px 12px;
+        font-size: 16px;
+        color: #6c757d; /* Default placeholder color */
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        margin-bottom: 20px !important;
+    }
+    /* Style for the filter button */
+    .filter-toggle-btn i {
+        font-size: 18px;
+    }
+    /* Style for icons inside the dropdown */
+    .fleets-sort i {
+        margin-right: 8px;
+        font-size: 18px;
+    }
+    /* Mobile-specific styles */
+    @media only screen and (max-width: 600px) {
+    .fleets-sort {
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: space-between;
+        align-items: center !important;
+    }
+    /* Style for the select dropdown on mobile */
+    .fleets-sort select {
+        color: #ffffff;
+        background: #000000;
+        text-align: center;
+        flex-grow: 1; /* Allow the select to take the remaining space */
+        margin-bottom: 8px !important;
+    }
+    /* Style for the filter button */
+    .filter-toggle-btn {
+        margin-left: 10px; /* Add space between the dropdown and button */
+    }
+    .fleets-sidebar-list {
+        margin-top: 15px;
+    }
+}
+    .custom-dropdown {
+        position: relative;
+        display: inline-block;
+        margin-bottom: 15px !important;
+    }
+    .custom-dropdown-btn {
+        text-align: center;
+        background: #000080;
+        color: #ffffff;
+        padding: 8px 12px;
+        width: 180px;
+        border-radius: 6px;
+        font-size: 1rem;
+    }
+    .custom-dropdown-options {
+        display: none;
+        position: absolute;
+        background-color: white;
+        border: 1px solid #ccc;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        width: 100%;
+    }
+    .custom-option {
+        padding: 7px;
+        cursor: pointer;
+        background: #ffffff;
+        border: 1px solid #ededed;
+        color: #000080;
+    }
+    .custom-option:hover {
+        background-color: #f9f9f9;
+    }
+    @media only screen and (max-width: 600px) {
+        .custom-dropdown-btn {
+        width: 150px;
+        padding: 6px 12px;
+    }
+    .custom-dropdown {
+        margin-bottom: 0px !important;
+    }
+    .occropmm {
+    display: none;
+    }
+    }
+    @media screen and (min-width: 768px) {
+    .occrop {
+    display: none;
+    }
+}
+</style>
 <!-- Page Header Start -->
 <!-- <div class="page-header bg-section parallaxie">
     <div class="container">
@@ -128,6 +224,16 @@
 <div class="page-fleets">
     <div class="container">
         <div class="row">
+            <div class="col-lg-10"></div>
+                <div class="col-lg-2">
+                    <div class="custom-dropdown occropmm">
+                        <button class="custom-dropdown-btn" id="customSortBtn"><i class="fa fa-exchange" aria-hidden="true"></i> Sort By Price</button>
+                        <div class="custom-dropdown-options" id="customSortOptions">
+                            <div class="custom-option" data-value="low_to_high"><i class="fa fa-arrow-up" aria-hidden="true"></i> Low to High</div>
+                            <div class="custom-option" data-value="high_to_low"><i class="fa fa-arrow-down" aria-hidden="true"></i> High to Low</div>
+                        </div>
+                    </div>
+                </div>
             <div class="col-lg-3">
                 <!-- Fleets Sidebar Start -->
                 <div class="fleets-sidebar wow fadeInUp">
@@ -144,13 +250,13 @@
 
                     <div class="fleets-sort d-flex flex-column flex-sm-row align-items-center">
                             <!-- Sort Dropdown -->
-                            <div class="custom-dropdown">
+                            <!-- <div class="custom-dropdown">
                                 <button class="custom-dropdown-btn" id="customSortBtn"><i class="fa fa-exchange" aria-hidden="true"></i> Sort By Price</button>
                                 <div class="custom-dropdown-options" id="customSortOptions">
                                     <div class="custom-option" data-value="low_to_high"><i class="fa fa-arrow-up" aria-hidden="true"></i> Low to High</div>
                                     <div class="custom-option" data-value="high_to_low"><i class="fa fa-arrow-down" aria-hidden="true"></i> High to Low</div>
                                 </div>
-                            </div>
+                            </div> -->
                             
 
                             <!-- Filter Button -->

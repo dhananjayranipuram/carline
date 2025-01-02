@@ -178,9 +178,76 @@
     }
 }
 @media only screen and (max-width: 600px) {
-  .navbar-brand {
-    width: 220px;
+    .navbar-brand {
+        width: 220px;
+    }
 }
+/* Cookie Popup Styles */
+.cookie-popup {
+    display: none; /* Hidden by default */
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #333;
+    color: #fff;
+    padding: 15px;
+    text-align: center;
+    z-index: 9999; /* Ensure it's on top of other elements */
+    font-family: Arial, sans-serif;
+}
+
+.cookie-popup-content {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.cookie-popup p {
+    margin: 10px 0;
+}
+
+.cookie-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.cookie-btn {
+    padding: 10px 20px;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.accept-btn {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.accept-btn:hover {
+    background-color: #45a049;
+}
+
+.decline-btn {
+    background-color: #f44336;
+    color: white;
+}
+
+.decline-btn:hover {
+    background-color: #e53935;
+}
+
+/* Responsive design */
+@media screen and (max-width: 600px) {
+    .cookie-popup {
+        padding: 10px;
+    }
+
+    .cookie-btn {
+        padding: 8px 16px;
+    }
 }
 </style>
 <body>
@@ -537,6 +604,16 @@
 
     @yield('content')
 
+    <!-- Cookie Consent Popup -->
+    <div id="cookiePopup" class="cookie-popup">
+        <div class="cookie-popup-content">
+            <p>We use cookies to improve your experience. By using our site, you agree to our <a href="#">Cookie Policy</a>.</p>
+            <div class="cookie-buttons">
+                <button id="acceptCookies" class="cookie-btn accept-btn">Accept</button>
+                <button id="declineCookies" class="cookie-btn decline-btn">Decline</button>
+            </div>
+        </div>
+    </div>
     <!-- Footer Start -->
     <footer class="main-footer bg-section">
         <div class="container">
@@ -1427,6 +1504,25 @@ $(document).ready(function () {
     $(".type-click").click(function () {
         localStorage.setItem("searchType",$(this).attr('data-id'));
         window.location = baseUrl + '/cars';
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Check if user has already accepted or declined cookies
+    if (!localStorage.getItem('cookieConsent')) {
+        document.getElementById('cookiePopup').style.display = 'block';
+    }
+
+    // Accept button logic
+    document.getElementById('acceptCookies').addEventListener('click', function() {
+        localStorage.setItem('cookieConsent', 'accepted');
+        document.getElementById('cookiePopup').style.display = 'none';
+    });
+
+    // Decline button logic
+    document.getElementById('declineCookies').addEventListener('click', function() {
+        localStorage.setItem('cookieConsent', 'declined');
+        document.getElementById('cookiePopup').style.display = 'none';
     });
 });
 </script>
