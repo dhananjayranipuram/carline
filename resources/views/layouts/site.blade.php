@@ -712,7 +712,7 @@ $(document).ready(function () {
                         $("#otp-section").show();
                         $(".send-otp-button").hide();
                         $('.resend').html('Resend otp after <span class="countdown"></span>');
-                        var timer2 = ":30";
+                        var timer2 = "00:30";
                         var interval = setInterval(function() {
                             var timer = timer2.split(':');
                             //by parsing integer, I avoid all extra string processing
