@@ -250,13 +250,13 @@
 
                     <div class="fleets-sort d-flex flex-column flex-sm-row align-items-center">
                             <!-- Sort Dropdown -->
-                            <!-- <div class="custom-dropdown">
+                            <div class="custom-dropdown">
                                 <button class="custom-dropdown-btn" id="customSortBtn"><i class="fa fa-exchange" aria-hidden="true"></i> Sort By Price</button>
                                 <div class="custom-dropdown-options" id="customSortOptions">
                                     <div class="custom-option" data-value="low_to_high"><i class="fa fa-arrow-up" aria-hidden="true"></i> Low to High</div>
                                     <div class="custom-option" data-value="high_to_low"><i class="fa fa-arrow-down" aria-hidden="true"></i> High to Low</div>
                                 </div>
-                            </div> -->
+                            </div>
                             
 
                             <!-- Filter Button -->
