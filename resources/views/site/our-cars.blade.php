@@ -491,7 +491,6 @@ $(document).ready(function () {
         // });
     });
 
-
     document.querySelectorAll('.custom-dropdown-btn').forEach(button => {
         button.addEventListener('click', function (e) {
             e.stopPropagation(); // Prevent click event from propagating to the document
@@ -515,6 +514,7 @@ $(document).ready(function () {
             btn.innerHTML = <i class="fa fa-exchange" aria-hidden="true"></i> ${this.innerHTML};
             this.closest('.custom-dropdown-options').style.display = 'none';
             console.log('Selected:', selectedValue);
+            // Add your sorting logic here
             getCars(selectedValue);
         });
     });
