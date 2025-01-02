@@ -26,7 +26,7 @@
                                 <h3>{{$value->name}}</h3>
                                 <div class="policy-section">{!!html_entity_decode(nl2br(e($value->content)))!!}</div>
                                 @endforeach
-                                <h3>Terms of Use and Payment Policy</h3>
+                                <!-- <h3>Terms of Use and Payment Policy</h3>
 
                                 <ul>
                                     <li><strong>Website Ownership:</strong> "CAR LINE CAR RENTAL LLC" maintains the <a target="_blank" style="color:#000080;" href="https://carlinerental.com">https://carlinerental.com</a> website.</li>
@@ -39,7 +39,7 @@
                                     <li><strong>Transaction Records:</strong> Cardholders must retain a copy of transaction records and <a target="_blank" style="color:#000080;" href="https://carlinerental.com">https://carlinerental.com</a> policies and rules.</li>
                                     <li><strong>User Responsibility:</strong> Users are responsible for maintaining the confidentiality of their account.</li>
                                     <li><strong>Payment confirmation:</strong> Once the payment is made, the confirmation notice will be sent to the client via email within 24 hours of receipt.</li>
-                                </ul>
+                                </ul> -->
                         </div>
                         <!-- Rental Conditions Faqs End -->
 
