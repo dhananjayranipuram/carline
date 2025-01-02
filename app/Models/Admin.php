@@ -470,7 +470,7 @@ class Admin extends Model
         }
 
         if (!empty($data['from']) && !empty($data['to'])) {
-            $query->whereBetween('b.pickup_date', [$data['from'], $data['to']]);
+            $query->whereBetween('b.created_on', [$data['from'], $data['to']]);
         }
 
         return $query->groupBy('b.id')
