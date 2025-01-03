@@ -493,19 +493,37 @@ $(document).ready(function () {
             if($(this).val() == carType){
                 $(this).prop('checked', true);;
             }
-            getCars();
+            var textContent = $('.custom-dropdown-btn').text().trim();
+            if (textContent.includes("Low to High")) {
+                var sortData = 'low_to_high';
+            } else if (textContent.includes("High to Low")) {
+                var sortData = 'high_to_low';
+            }
+            getCars(sortData);
         });
     }else if(carBrand!=null){
         $('.car-brand').each(function() {
             if($(this).val() == carBrand){
                 $(this).prop('checked', true);;
             }
-            getCars();
+            var textContent = $('.custom-dropdown-btn').text().trim();
+            if (textContent.includes("Low to High")) {
+                var sortData = 'low_to_high';
+            } else if (textContent.includes("High to Low")) {
+                var sortData = 'high_to_low';
+            }
+            getCars(sortData);
         });
     }
 
     $(".form-check-input").click(function () {
-        getCars();
+        var textContent = $('.custom-dropdown-btn').text().trim();
+        if (textContent.includes("Low to High")) {
+            var sortData = 'low_to_high';
+        } else if (textContent.includes("High to Low")) {
+            var sortData = 'high_to_low';
+        }
+        getCars(sortData);
     });
 
     // $("#customSortOptions").change(function () {
@@ -515,7 +533,13 @@ $(document).ready(function () {
     
 
     $("#search").on("keyup change paste", function() {
-        getCars()
+        var textContent = $('.custom-dropdown-btn').text().trim();
+        if (textContent.includes("Low to High")) {
+            var sortData = 'low_to_high';
+        } else if (textContent.includes("High to Low")) {
+            var sortData = 'high_to_low';
+        }
+        getCars(sortData);
         // var searchKeyword = $(this).val().toLowerCase(); // Convert to lowercase for case-insensitive search
         // $(".filterLi").each(function() {
         //     $(this).removeClass('show')

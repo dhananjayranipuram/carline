@@ -184,17 +184,20 @@
 }
 /* Cookie Popup Styles */
 .cookie-popup {
-    display: none; /* Hidden by default */
+    display: none;
     position: fixed;
     bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: #333;
-    color: #fff;
-    padding: 15px;
+    left: 10%;
+    right: 10%;
+    border-radius: 20px;
+    background-color: #ffdf00;
+    border: 5px solid #000080;
+    color: #000000;
+    padding: 25px;
     text-align: center;
-    z-index: 9999; /* Ensure it's on top of other elements */
+    z-index: 9999;
     font-family: Arial, sans-serif;
+    margin-bottom: 25px;
 }
 
 .cookie-popup-content {
@@ -222,21 +225,25 @@
 }
 
 .accept-btn {
-    background-color: #4CAF50;
+    background-color: #000080;
     color: white;
 }
 
 .accept-btn:hover {
-    background-color: #45a049;
+    background-color: #ffffff;
+    color: #000080;
+    border: 2px solid #000080;
 }
 
 .decline-btn {
-    background-color: #f44336;
-    color: white;
+    background-color: #ffffff;
+    color: #000080;
+    border: 2px solid #000080;
 }
 
 .decline-btn:hover {
-    background-color: #e53935;
+    background-color: #000080;
+    color: white;
 }
 
 /* Responsive design */
@@ -249,6 +256,7 @@
         padding: 8px 16px;
     }
 }
+
 </style>
 <body>
     <div class="overlay">
@@ -607,7 +615,7 @@
     <!-- Cookie Consent Popup -->
     <div id="cookiePopup" class="cookie-popup">
         <div class="cookie-popup-content">
-            <p>We use cookies to improve your experience. By using our site, you agree to our <a href="#">Cookie Policy</a>.</p>
+            <p>We use cookies to improve your experience. By using our site, <br> you agree to our Cookie Policy.</p>
             <div class="cookie-buttons">
                 <button id="acceptCookies" class="cookie-btn accept-btn">Accept</button>
                 <button id="declineCookies" class="cookie-btn decline-btn">Decline</button>
@@ -1509,21 +1517,40 @@ $(document).ready(function () {
 
 document.addEventListener('DOMContentLoaded', function() {
     // Check if user has already accepted or declined cookies
-    if (!localStorage.getItem('cookieConsent')) {
+    if (!getCookie('cookieConsent')) {
         document.getElementById('cookiePopup').style.display = 'block';
     }
 
     // Accept button logic
     document.getElementById('acceptCookies').addEventListener('click', function() {
-        localStorage.setItem('cookieConsent', 'accepted');
+        setCookie('cookieConsent', 'accepted', 30);
         document.getElementById('cookiePopup').style.display = 'none';
     });
 
     // Decline button logic
     document.getElementById('declineCookies').addEventListener('click', function() {
-        localStorage.setItem('cookieConsent', 'declined');
+        setCookie('cookieConsent', 'declined', 30);
         document.getElementById('cookiePopup').style.display = 'none';
     });
+
+    function setCookie(name, value, days) {
+        const date = new Date();
+        date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+        const expires = 'expires=' + date.toUTCString();
+        document.cookie = name + '=' + value + '; ' + expires + '; path=/';
+    }
+
+    function getCookie(name) {
+        const nameEQ = name + '=';
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            let cookie = cookies[i].trim();
+            if (cookie.indexOf(nameEQ) === 0) {
+                return cookie.substring(nameEQ.length, cookie.length);
+            }
+        }
+        return null;
+    }
 });
 </script>
 </html>
