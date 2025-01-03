@@ -320,7 +320,8 @@
                             <!-- Feets Single Sidebar Pricing End -->
 
                             <div class="contact-us-form">
-                                <form id="contactForm" action="#" method="POST" data-toggle="validator" class="wow fadeInUp" data-wow-delay="0.5s" novalidate="true" style="visibility: visible; animation-delay: 0.5s; animation-name: fadeInUp;">
+                                <form id="contactForm" action="{{ url('/payment/initiate') }}" method="POST" data-toggle="validator" class="wow fadeInUp" data-wow-delay="0.5s" novalidate="true" style="visibility: visible; animation-delay: 0.5s; animation-name: fadeInUp;">
+                                    @csrf
                                     <div class="row">
                                         
                                         <!-- Pickup Location -->
@@ -993,6 +994,11 @@ function updateRateDetails(res) {
 function bookCarAction(){
     $(".overlay").show();
     if(destinationData.length>0 && sourceData.length>0){
+        if($('#babySeat').is(":checked")){
+            var babySeat = 'on';
+        }else{
+            var babySeat = 'off';
+        }
         $.ajax({
             url: baseUrl + '/check-car-booking',
             type: 'post',
@@ -1007,14 +1013,17 @@ function bookCarAction(){
                 'returntime': $("#returntime").val(),
                 'carId': $("#carId").val(),
                 'userId': $("#userId").val(),
-                'type': 'default'
+                'type': 'default',
+                'babySeat': babySeat,
             },
             dataType: "json",
             headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
             success: function(res) {
-                $(".overlay").hide();
+                // $(".overlay").hide();
                 if(res.status==200){
-                    bookCarActionFinal()
+                    $('#contactForm').submit();
+                    // makePayment()
+                    // bookCarActionFinal()
                 }else{
                     $("#booking-errors").html('<span style="color:red;">Booking cannot be done in these days.</span>');
                     setTimeout(function () {
@@ -1029,6 +1038,40 @@ function bookCarAction(){
         return false;
     }
 
+}
+
+function makePayment(){
+    $.ajax({
+        url: baseUrl + '/payment/initiate',
+        type: 'post',
+        data: { 
+            'destinationData': destinationData[0], 
+            'sourceData': sourceData[0], 
+            'destinationEmirate': destinationData[0].Emirates, 
+            'sourceEmirates': sourceData[0].Emirates,
+            'pickupdate': $("#pickupdate").val(),
+            'returndate': $("#returndate").val(),
+            'pickuptime': $("#pickuptime").val(),
+            'returntime': $("#returntime").val(),
+            'carId': $("#carId").val(),
+            'userId': $("#userId").val(),
+            'type': 'default'
+        },
+        dataType: "json",
+        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+        success: function(res) {
+            $(".overlay").hide();
+            if(res.status==200){
+                // bookCarActionFinal()
+            }else{
+                $("#booking-errors").html('<span style="color:red;">Booking cannot be done in these days.</span>');
+                setTimeout(function () {
+                    $('#booking-errors').html('');
+                }, 2500);
+            }
+            
+        }
+    });
 }
 
 function bookCarActionFinal(){

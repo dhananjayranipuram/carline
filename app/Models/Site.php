@@ -304,6 +304,7 @@ class Site extends Model
         DB::INSERT("INSERT INTO booking (car_id,user_id,pickup_date,return_date,pickup_time,return_time,rate) VALUES ('$data[carId]','$data[userId]','$data[pickupdate]','$data[returndate]','$data[pickuptime]','$data[returntime]','$data[rate]');");
         $bookingId = DB::getPdo()->lastInsertId();
         DB::INSERT("INSERT INTO booking_details (booking_id,s_address,s_emirates,s_lat,s_lon,d_address,d_emirates,d_lat,d_lon) VALUES ('$bookingId','$temp[s_address]','$temp[s_emirates]','$temp[s_latitude]','$temp[s_longitude]','$temp[d_address]','$temp[d_emirates]','$temp[d_latitude]','$temp[d_longitude]');");
+        DB::INSERT("INSERT INTO payment_details (booking_id,vat,emirate,totalRate,deposit,babySeat,total,transaction_date,status) VALUES ('$bookingId','$data[vat]','$data[emirate]','$data[totalRate]','$data[deposit]','$data[babySeat]','$data[rate]','$data[transaction_time]','$data[status]');");
         return $bookingId;
     }
 

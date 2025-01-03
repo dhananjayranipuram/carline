@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\PaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -62,7 +63,17 @@ Route::any('/get-whatsapp-msg', [SiteController::class, 'getWhatsappMsg']);
 Route::any('/site/filter-cars', [SiteController::class, 'filterCars']);
 Route::any('/site/filter-offer-cars', [SiteController::class, 'filterOfferCars']);
 
+Route::any('/sample', [SiteController::class, 'paymentSample']);
+
+/**Payment Routes*/
+Route::post('/payment/initiate', [PaymentController::class, 'initiatePayment']);
+Route::get('/payment/success', [PaymentController::class, 'paymentSuccess']);
+Route::get('/payment/failure', [PaymentController::class, 'paymentFailure']);
+Route::get('/payment/cancel', [PaymentController::class, 'paymentFailure']);
+/**Payment Routes Ends*/
+
 Route::any('/admin/login', [AdminController::class, 'login'])->name('adminLogin');
+
 Route::middleware(['check.session', 'prevent.back.history'])->group(function () {
     
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard']);

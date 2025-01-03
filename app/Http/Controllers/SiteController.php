@@ -312,6 +312,12 @@ class SiteController extends Controller
             'returntime' => ['required'],
             'carId' => ['required'],
             'type' => ['nullable'],
+            'destinationData' => ['required'],
+            'sourceData' => ['required'],
+            'sourceEmirates' => ['required'],
+            'destinationEmirate' => ['required'],
+            'babySeat' => ['required'],
+            'userId' => ['required'],
         ]);
 
         $selectedTime = Carbon::parse("$credentials[pickupdate] $credentials[pickuptime]");
@@ -329,6 +335,7 @@ class SiteController extends Controller
             $response['status'] = '400';
             $response['message'] = 'Booking not available';
         }else{
+            Session::put('bookingDetails', $credentials);
             $response['status'] = '200';
             $response['message'] = 'Booking available';
         }
@@ -1114,5 +1121,9 @@ class SiteController extends Controller
             $response['message'] = 'Email address not registered.';
         }
         return json_encode($response);
+    }
+
+    public function paymentSample(){
+        return view('site/sample');
     }
 }
