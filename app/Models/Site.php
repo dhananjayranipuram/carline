@@ -604,6 +604,7 @@ class Site extends Model
     }
 
     public function checkCarBooking($data=[]){
+        // echo $data['type'];exit;
         switch ($data['type']) {
             case 'date':
                 /*return DB::select("SELECT count(*) cnt
@@ -623,10 +624,38 @@ class Site extends Model
                 break;
 
             default:
-                return DB::select("SELECT count(*) cnt
+                /*return DB::select("SELECT count(*) cnt
                     FROM booking
                     WHERE status=1 AND car_id=$data[carId] AND ((STR_TO_DATE(CONCAT(pickup_date, ' ', pickup_time), '%Y-%m-%d %H:%i:%s') BETWEEN STR_TO_DATE('$data[pickupdate] $data[pickuptime]', '%Y-%m-%d %h:%i %p') AND STR_TO_DATE('$data[returndate] $data[returntime]', '%Y-%m-%d %h:%i %p'))
-                    OR (STR_TO_DATE(CONCAT(return_date, ' ', return_time), '%Y-%m-%d %H:%i:%s') BETWEEN STR_TO_DATE('$data[pickupdate] $data[pickuptime]', '%Y-%m-%d %h:%i %p') AND STR_TO_DATE('$data[returndate] $data[returntime]', '%Y-%m-%d %h:%i %p'))) GROUP BY car_id;");
+                    OR (STR_TO_DATE(CONCAT(return_date, ' ', return_time), '%Y-%m-%d %H:%i:%s') BETWEEN STR_TO_DATE('$data[pickupdate] $data[pickuptime]', '%Y-%m-%d %h:%i %p') AND STR_TO_DATE('$data[returndate] $data[returntime]', '%Y-%m-%d %h:%i %p'))) GROUP BY car_id;");*/
+
+
+                $data['pickuptime'] = date('H:i', strtotime($data['pickuptime']));
+                $data['returntime'] = date('H:i', strtotime($data['returntime']));
+                // print_r($data);exit;
+                return DB::select("SELECT COUNT(*) AS cnt
+                        FROM booking
+                        WHERE status = 1 
+                        AND car_id = $data[carId]
+                        AND (
+                            
+                            STR_TO_DATE('$data[pickupdate] $data[pickuptime]', '%Y-%m-%d %h:%i:%s') BETWEEN 
+                                STR_TO_DATE(CONCAT(pickup_date, ' ', pickup_time), '%Y-%m-%d %H:%i:%s') 
+                                AND STR_TO_DATE(CONCAT(return_date, ' ', return_time), '%Y-%m-%d %H:%i:%s')
+                            
+                            OR STR_TO_DATE('$data[returndate] $data[returntime]', '%Y-%m-%d %h:%i:%s') BETWEEN 
+                                STR_TO_DATE(CONCAT(pickup_date, ' ', pickup_time), '%Y-%m-%d %H:%i:%s') 
+                                AND STR_TO_DATE(CONCAT(return_date, ' ', return_time), '%Y-%m-%d %H:%i:%s')
+                            
+                            OR STR_TO_DATE(CONCAT(pickup_date, ' ', pickup_time), '%Y-%m-%d %H:%i:%s') BETWEEN 
+                                STR_TO_DATE('$data[pickupdate] $data[pickuptime]', '%Y-%m-%d %h:%i:%s') 
+                                AND STR_TO_DATE('$data[returndate] $data[returntime]', '%Y-%m-%d %h:%i:%s')
+
+                            OR STR_TO_DATE(CONCAT(return_date, ' ', return_time), '%Y-%m-%d %H:%i:%s') BETWEEN 
+                                STR_TO_DATE('$data[pickupdate] $data[pickuptime]', '%Y-%m-%d %h:%i:%s') 
+                                AND STR_TO_DATE('$data[returndate] $data[returntime]', '%Y-%m-%d %h:%i:%s')
+
+                        );");
                 break;
         }
         

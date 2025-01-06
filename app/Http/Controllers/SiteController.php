@@ -330,10 +330,16 @@ class SiteController extends Controller
         
         $res = $site->checkCarBooking($credentials);
         $carCount = $site->getCarQty($credentials);
-
+        // print_r($res[0]->cnt);exit;
         if($res){
-            $response['status'] = '400';
-            $response['message'] = 'Booking not available';
+            if($res[0]->cnt > 0){
+                $response['status'] = '400';
+                $response['message'] = 'Booking not available';
+            }else{
+                Session::put('bookingDetails', $credentials);
+                $response['status'] = '200';
+                $response['message'] = 'Booking available';
+            }
         }else{
             Session::put('bookingDetails', $credentials);
             $response['status'] = '200';

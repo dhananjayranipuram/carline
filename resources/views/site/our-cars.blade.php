@@ -249,20 +249,19 @@
                     <!-- Fleets Search Box End -->
 
                     <div class="fleets-sort d-flex flex-column flex-sm-row align-items-center">
-                            <!-- Sort Dropdown -->
-                            <div class="custom-dropdown occrop">
-                                <button class="custom-dropdown-btn" ><i class="fa fa-exchange" aria-hidden="true"></i> Sort By Price</button>
-                                <div class="custom-dropdown-options" >
-                                    <div class="custom-option" data-value="low_to_high"><i class="fa fa-arrow-up" aria-hidden="true"></i> Low to High</div>
-                                    <div class="custom-option" data-value="high_to_low"><i class="fa fa-arrow-down" aria-hidden="true"></i> High to Low</div>
-                                </div>
+                        <!-- Sort Dropdown -->
+                        <div class="custom-dropdown occrop">
+                            <button class="custom-dropdown-btn" ><i class="fa fa-exchange" aria-hidden="true"></i> Sort By Price</button>
+                            <div class="custom-dropdown-options" >
+                                <div class="custom-option" data-value="low_to_high"><i class="fa fa-arrow-up" aria-hidden="true"></i> Low to High</div>
+                                <div class="custom-option" data-value="high_to_low"><i class="fa fa-arrow-down" aria-hidden="true"></i> High to Low</div>
                             </div>
-                            
-
-                            <!-- Filter Button -->
-                            <button class="form-control mb-sm-0 d-lg-none filter-toggle-btn" type="button" style="background: #000080;color: #ffffff;padding: 9px 12px;">
-                                <i class="fa-solid fa-filter me-2"></i>Filters
-                            </button>
+                        </div>
+                        
+                        <!-- Filter Button -->
+                        <button class="form-control mb-sm-0 d-lg-none filter-toggle-btn" type="button" style="background: #000080;color: #ffffff;padding: 9px 12px;">
+                            <i class="fa-solid fa-filter me-2"></i>Filters
+                        </button>
                     </div>
 
                     <div class="filter-section">

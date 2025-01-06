@@ -684,6 +684,7 @@
                         <div class="about-footer-content">
                         <p><i class="fa fa-home"></i> Near Saffron Boutique Hotel, Omar Bin Al Khattab Road Deira Dubai U.A.E</p>
                         <p><i class="fa fa-phone"></i> <a href="tel:+971565738866">+971 56 573 8866</a></p>
+                        <p><i class="fa fa-phone"></i> <a href="tel:+971508689526">+971 50 868 9526</a></p>
                         <p><i class="fa fa-phone"></i> <a href="tel:+97145292722">+971 4 52 92 722</a></p>
                         <p><i class="fa-brands fa-whatsapp"></i> <a href="https://api.whatsapp.com/send?phone=971565738866">+971 56 573 8866</a></p>
                         <p><i class="fa fa-envelope"></i> <a href="mailto:info@carline.com">info@carline.com</a></p>
