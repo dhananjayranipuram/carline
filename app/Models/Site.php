@@ -280,6 +280,19 @@ class Site extends Model
                             WHERE e.deleted=0 AND e.active=1 $condition ORDER BY e.name;");
     }
     
+    public function getEmiratesForRateSingle($data){
+        $condition = '';
+        if(!empty($data['sourceEmirate'])){
+            $condition .= " AND e.name LIKE '%$data[sourceEmirate]%'";
+        }
+        if(!empty($data['destinationEmirate'])){
+            $condition .= " AND e.name LIKE '%$data[destinationEmirate]%'";
+        }
+        
+        return DB::select("SELECT e.id,e.name,e.rate FROM emirates e
+                            WHERE e.deleted=0 AND e.active=1 $condition ORDER BY e.name;");
+    }
+    
     public function getCarlineEmiratesForRate($data){
         
         return DB::select("SELECT office_charge AS rate FROM additional_settings WHERE id=1;");
@@ -723,6 +736,7 @@ class Site extends Model
             ->leftJoin('car_brand as cb', 'cb.id', '=', 'c.brand_id')
             ->leftJoin('car_images as ci', 'ci.car_id', '=', 'c.id')
             ->leftJoin('enduser as eu', 'b.user_id', '=', 'eu.id')
+            ->leftJoin('payment_details as pd', 'pd.booking_id', '=', 'b.id')
             ->where('b.id', $data['id'])
             ->groupBy('b.id')
             ->select([
@@ -749,7 +763,12 @@ class Site extends Model
                     ELSE 'unknown' 
                   END as status_label"),
                 'eu.email',
-                'eu.phone'
+                'eu.phone',
+                'pd.vat',
+                'pd.emirate',
+                'pd.deposit',
+                'pd.babySeat',
+                'pd.status AS payment_status',
             ])
             ->get();
     }

@@ -92,8 +92,10 @@ class PaymentController extends Controller
                     return view('/payment/failure',$data);
                 }else{
                     $res = $site->saveBookingData($credentials);
+                    
                     if($res){
-        
+                        $input['id'] = $res;
+                        $credentials['paymentDetails'] = $site->getBookingDetails($input);
                         $data['id'] = $credentials['userId'];
                         $userData = $site->getMyDetails($data);
                         if($userData){
