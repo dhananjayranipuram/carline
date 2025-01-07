@@ -87,22 +87,28 @@ class PaymentController extends Controller
             $credentials['transaction_time'] = now();
             $bookingCheck = $site->checkCarBooking($credentials);
             if(!$bookingCheck){
-                $res = $site->saveBookingData($credentials);
-                if($res){
-    
-                    $data['id'] = $credentials['userId'];
-                    $userData = $site->getMyDetails($data);
-                    if($userData){
-                        $credentials['user_data'] = $userData;
-                        $credentials['bookingId'] = $res;
-                        Mail::to($userData[0]->email)->send(new BookingConfirmation((object)$credentials,'user'));
-                        // Mail::to(config('constants.ADMIN_EMAIL'))->send(new BookingConfirmation((object)$credentials,'admin'));
-                    }
-                }else{
-                    $data['message'] = 'Transaction Success but Booking Failed';
+                if($bookingCheck[0]->cnt > 0){
+                    $data['message'] = 'Transaction Success but Booking not possible';
                     return view('/payment/failure',$data);
+                }else{
+                    $res = $site->saveBookingData($credentials);
+                    if($res){
+        
+                        $data['id'] = $credentials['userId'];
+                        $userData = $site->getMyDetails($data);
+                        if($userData){
+                            $credentials['user_data'] = $userData;
+                            $credentials['bookingId'] = $res;
+                            Mail::to($userData[0]->email)->send(new BookingConfirmation((object)$credentials,'user'));
+                            // Mail::to(config('constants.ADMIN_EMAIL'))->send(new BookingConfirmation((object)$credentials,'admin'));
+                        }
+                    }else{
+                        $data['message'] = 'Transaction Success but Booking Failed';
+                        return view('/payment/failure',$data);
+                    }
+                    return view('/payment/success',$credentials);
                 }
-                return view('/payment/success',$credentials);
+                
             }else{
                 $data['message'] = 'Transaction Success but Booking not possible';
                 return view('/payment/failure',$data);
