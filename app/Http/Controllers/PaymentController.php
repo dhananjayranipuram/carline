@@ -86,7 +86,7 @@ class PaymentController extends Controller
             $credentials['status'] = 'success';
             $credentials['transaction_time'] = now();
             $bookingCheck = $site->checkCarBooking($credentials);
-            if(!$bookingCheck){
+            if($bookingCheck){
                 if($bookingCheck[0]->cnt > 0){
                     $data['message'] = 'Transaction Success but Booking not possible';
                     return view('/payment/failure',$data);
