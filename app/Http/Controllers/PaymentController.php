@@ -102,7 +102,7 @@ class PaymentController extends Controller
                             $credentials['user_data'] = $userData;
                             $credentials['bookingId'] = $res;
                             Mail::to($userData[0]->email)->send(new BookingConfirmation((object)$credentials,'user'));
-                            // Mail::to(config('constants.ADMIN_EMAIL'))->send(new BookingConfirmation((object)$credentials,'admin'));
+                            Mail::to(config('constants.ADMIN_EMAIL'))->send(new BookingConfirmation((object)$credentials,'admin'));
                         }
                     }else{
                         $data['message'] = 'Transaction Success but Booking Failed';
