@@ -570,7 +570,9 @@ class Site extends Model
                     ELSE 'unknown' 
                   END as status_label")
                 // \DB::raw("LEFT(GROUP_CONCAT(ci.image), LOCATE(',', GROUP_CONCAT(ci.image)) - 1) as image")
-            ])->get();
+            ])
+            ->orderBy('b.pickup_date', 'desc')
+            ->get();
     }
 
     
