@@ -32,18 +32,23 @@ class PaymentController extends Controller
         $siteController = new SiteController();
         $credentials = Session::get('bookingDetails');
         $rateData = $siteController->calculateRate($credentials);
-
+        $input['format'] = 'normal';
+        $input['id'] = $credentials['carId'];
+        $site = new Site();
+        $carName = $site->getCars($input);
+        $credentials['transactionId'] = uniqid();
+        Session::put('bookingDetails', $credentials);
         $data = [
             "method" => "create",
             "store" => config('constants.TELR_STORE_ID'),
             "authkey" => config('constants.TELR_AUTH_KEY'),
             "framed" => 0,
             "order" => [
-                "cartid" => uniqid(),
+                "cartid" => $credentials['transactionId'],
                 "test" => "1",
                 "amount" => $rateData['total'],
                 "currency" => "AED",
-                "description" => "My purchase"
+                "description" => $carName[0]->brand_name .' '. $carName[0]->name .' ' .$carName[0]->model
             ],
             "return" => [
                 "authorised" => url('/payment/success'),

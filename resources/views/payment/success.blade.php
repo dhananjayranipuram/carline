@@ -1,8 +1,7 @@
 @extends('layouts.site')
 
 @section('content')
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
 <style>
     .booking-form-group {
         padding: 50px 0;
@@ -68,8 +67,12 @@
                             <td>{{$bookingId}}</td>
                         </tr>
                         <tr>
+                            <th>Car Name:</th>
+                            <td>{{$paymentDetails[0]->car_name}}</td>
+                        </tr>
+                        <tr>
                             <th>Pickup Location:</th>
-                            <td>{{$paymentDetails[0]->s_address}}</td>
+                            <td>{{str_replace(",", ", ", $paymentDetails[0]->s_address)}}</td>
                         </tr>
                         <tr>
                             <th>Pickup Date:</th>
@@ -82,7 +85,7 @@
 
                         <tr>
                             <th>Dropoff Location:</th>
-                            <td>{{$paymentDetails[0]->d_address}}</td>
+                            <td>{{str_replace(",", ", ", $paymentDetails[0]->d_address)}}</td>
                         </tr>
                         <tr>
                             <th>Dropoff Date:</th>
@@ -103,7 +106,4 @@
         </div>
     </div>
 </div>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.4.4/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 @endsection
