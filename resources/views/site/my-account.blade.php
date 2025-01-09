@@ -244,7 +244,16 @@
                     </div>
                     <!-- Booking History Section End -->
                 @endif
+                @php
+                $dateArray = [];
+                @endphp
                 @foreach($bookingHistory as $key => $value)
+                @if(!in_array($value->pickup_date, $dateArray))
+                    @php
+                        $dateArray[] = $value->pickup_date;
+                    @endphp
+                    <strong>{{$value->pickup_date}}</strong>
+                @endif
                 <!-- Booking History Section Start -->
                 <div class="booking-history">
                     <!-- Booking Item Start -->

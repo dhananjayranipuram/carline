@@ -686,7 +686,7 @@
                         <p><i class="fa fa-phone"></i> <a href="tel:+971565738866">+971 56 573 8866</a></p>
                         <p><i class="fa fa-phone"></i> <a href="tel:+971508689526">+971 50 868 9526</a></p>
                         <p><i class="fa fa-phone"></i> <a href="tel:+97145292722">+971 4 52 92 722</a></p>
-                        <p><i class="fa-brands fa-whatsapp"></i> <a href="https://api.whatsapp.com/send?phone=971565738866">+971 56 573 8866</a></p>
+                        <p><i class="fa-brands fa-whatsapp"></i> <a href="https://api.whatsapp.com/send?phone=971508689526">+971 50 868 9526</a></p>
                         <p><i class="fa fa-envelope"></i> <a href="mailto:info@carline.com">info@carline.com</a></p>
                     </div> </div>
                         
@@ -701,7 +701,7 @@
                     <div class="col-lg-4 col-md-7">
                         <!-- Footer Copyright Start -->
                         <div class="footer-copyright-text">
-                            <p>© 2024 Carline. All Rights Reserved. <br>Designed By  <a href="http://growtharkmedia.com/" target="_blank">GrowthArk Media</a></p>
+                            <p>© 2024 Carline. All Rights Reserved. <br>Designed By  <a href="">GrowthArk Media</a></p>
                         </div>
                         <!-- Footer Copyright End -->
                     </div>

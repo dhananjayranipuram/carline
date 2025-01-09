@@ -552,8 +552,8 @@ class Site extends Model
             ->groupBy('b.id')
             ->select([
                 'b.id',
-                \DB::raw("DATE_FORMAT(b.pickup_date, '%Y-%m-%d') as pickup_date"),
-                \DB::raw("DATE_FORMAT(b.return_date, '%Y-%m-%d') as return_date"),
+                \DB::raw("DATE_FORMAT(b.pickup_date, '%d-%m-%Y') as pickup_date"),
+                \DB::raw("DATE_FORMAT(b.return_date, '%d-%m-%Y') as return_date"),
                 \DB::raw("DATE_FORMAT(b.pickup_time, '%h:%i %p') as pickup_time"),
                 \DB::raw("DATE_FORMAT(b.return_time, '%h:%i %p') as return_time"),
                 'b.rate',
