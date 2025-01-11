@@ -333,7 +333,7 @@
                                         <!-- Pickup Date -->
                                         <div class="form-group col-12 mb-4">
                                             <label>Pickup Date</label>
-                                            <input type="date" name="pickup_date" class="form-control" id="pickupdate" required min="{{ date('Y-m-d') }}" >
+                                            <input type="text" name="pickup_date" placeholder="DD-MM-YYYY" class="form-control" id="pickupdate" required min="{{ date('Y-m-d') }}" >
                                             <div class="help-block with-errors"></div>
                                         </div>
                                         
@@ -366,7 +366,7 @@
                                             <!-- Dropoff Date -->
                                             <div class="form-group col-12 mb-4">
                                                 <label>Dropoff Date</label>
-                                                <input type="date" name="dropoff_date" class="form-control" id="returndate" required min="{{ date('Y-m-d') }}">
+                                                <input type="text" name="dropoff_date" placeholder="DD-MM-YYYY" class="form-control" id="returndate" required min="{{ date('Y-m-d') }}">
                                                 <div class="help-block with-errors"></div>
                                             </div>
                                             
@@ -626,7 +626,12 @@
         </div>
     </div>
     <!-- Page Feets Single End -->
-<script src="{{asset('admin_assets/js/core/jquery-3.7.1.min.js')}}"></script>  
+
+
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+  <script src="https://code.jquery.com/ui/1.14.1/jquery-ui.js"></script>
 <script src="{{asset('assets/js/jquery.magnific-popup.min.js')}}"></script>
 <script src="{{asset('admin_assets/js/moment.min.js')}}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.43/moment-timezone-with-data.min.js"></script>
@@ -652,7 +657,41 @@ var destinationData = [];
 //         "Address": "Dubai Silicon Oasis,Dubai,Dubai,United Arab Emirates,"
 //     }
 // ];
-$(document).ready(function () {
+
+
+    var disabledDates = [];
+    $.ajax({
+        url: baseUrl + '/get-available-dates',
+        type: 'post',
+        data: {
+            'carId': $("#carId").val()},
+        dataType: "json",
+        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+        success: function(res) {
+            disabledDates = res;
+        }
+    });
+
+    function disableDates(date) {
+        const myDate = moment(date, "YYYY-MM-DD");
+        const formattedDate = myDate.format("YYYY-MM-DD");
+        return [!disabledDates.includes(formattedDate)];
+    }
+
+    $("#pickupdate").datepicker({
+        dateFormat: "yy-mm-dd",
+        minDate: 0,
+        beforeShowDay: disableDates,
+        
+    });
+
+    $("#returndate").datepicker({
+        dateFormat: "yy-mm-dd",
+        minDate: 0,
+        beforeShowDay: disableDates
+    });
+    
+$(document).ready(function () { 
 
     // Initialize the Autocomplete object for the input field
     var source = new google.maps.places.Autocomplete(document.getElementById('source'), {

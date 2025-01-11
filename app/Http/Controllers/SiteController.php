@@ -1133,7 +1133,14 @@ class SiteController extends Controller
         return json_encode($response);
     }
 
-    public function paymentSample(){
-        return view('site/sample');
+    public function availableDates(Request $request){
+        $site = new Site();
+        $response = [];
+        $credentials = $request->validate([
+            'carId' => ['required']
+        ]);
+        $credentials['phone'] = '';
+        $response = $site->getAvailableDates($credentials);
+        return response()->json($response);
     }
 }

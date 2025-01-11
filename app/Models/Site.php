@@ -5,6 +5,7 @@ namespace App\Models;
 use DB;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 class Site extends Model
 {
@@ -774,5 +775,30 @@ class Site extends Model
                 'pd.status AS payment_status',
             ])
             ->get();
+    }
+
+    public function getAvailableDates($data=[]){
+        $bookings = \DB::table('booking as b')
+            ->where('b.car_id', $data['carId'])
+            ->select([
+                \DB::raw("DATE_FORMAT(b.pickup_date, '%Y-%m-%d') as pickup_date"),
+                \DB::raw("DATE_FORMAT(b.return_date, '%Y-%m-%d') as return_date"),
+                \DB::raw("DATE_FORMAT(b.pickup_time, '%h:%i %p') as pickup_time"),
+                \DB::raw("DATE_FORMAT(b.return_time, '%h:%i %p') as return_time")
+            ])
+            ->get();
+
+        $bookedDates = [];
+        
+        foreach ($bookings as $booking) {
+            $startDate = Carbon::parse($booking->pickup_date);
+            $endDate = Carbon::parse($booking->return_date);
+
+            while ($startDate->lte($endDate)) {
+                $bookedDates[] = $startDate->format('Y-m-d');
+                $startDate->addDay();
+            }
+        }
+        return $bookedDates;
     }
 }

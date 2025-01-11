@@ -1023,7 +1023,7 @@ header.main-header .header-sticky.active{
 	width: 100%;
 	max-width: 240px;
 	border: 1px solid var(--divider-color);
-	border-radius: 30px;
+	/* border-radius: 30px; */
 	display: none;
 }
 
