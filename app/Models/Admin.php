@@ -484,8 +484,8 @@ class Admin extends Model
                 'b.id',
                 \DB::raw("CONCAT(cb.name, ' ', c.name, ' ', c.model) AS car_name"),
                 \DB::raw("CONCAT(eu.first_name, ' ', eu.last_name) AS user_name"),
-                \DB::raw("DATE_FORMAT(b.pickup_date, '%Y-%m-%d') AS pickup_date"),
-                \DB::raw("DATE_FORMAT(b.return_date, '%Y-%m-%d') AS return_date"),
+                \DB::raw("DATE_FORMAT(b.pickup_date, '%d-%m-%Y') AS pickup_date"),
+                \DB::raw("DATE_FORMAT(b.return_date, '%d-%m-%Y') AS return_date"),
                 \DB::raw("DATE_FORMAT(b.pickup_time, '%h:%i %p') AS pickup_time"),
                 \DB::raw("DATE_FORMAT(b.return_time, '%h:%i %p') AS return_time"),
                 'b.rate',
@@ -871,8 +871,8 @@ class Admin extends Model
             ->groupBy('b.id')
             ->select([
                 'b.id',
-                \DB::raw("DATE_FORMAT(b.pickup_date, '%Y-%m-%d') as pickup_date"),
-                \DB::raw("DATE_FORMAT(b.return_date, '%Y-%m-%d') as return_date"),
+                \DB::raw("DATE_FORMAT(b.pickup_date, '%d-%m-%Y') as pickup_date"),
+                \DB::raw("DATE_FORMAT(b.return_date, '%d-%m-%Y') as return_date"),
                 \DB::raw("DATE_FORMAT(b.pickup_time, '%h:%i %p') as pickup_time"),
                 \DB::raw("DATE_FORMAT(b.return_time, '%h:%i %p') as return_time"),
                 'b.rate',
