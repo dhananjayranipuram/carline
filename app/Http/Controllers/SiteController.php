@@ -662,11 +662,11 @@ class SiteController extends Controller
             $emirateCharges = $emirateCharges / 2;
         }else {
             $input['sourceEmirate'] = $credentials['sourceEmirates'];
-            $resEmirate = $site->getEmiratesForRateSingle($credentials);
+            $resEmirate = $site->getEmiratesForRateSingle($input);
             $emirateCharges += !empty($resEmirate) ? (float) str_replace(',', '', $resEmirate[0]->rate) : 0;
 
             $input['destinationEmirate'] = $credentials['destinationEmirate'];
-            $resEmirate = $site->getEmiratesForRateSingle($credentials);
+            $resEmirate = $site->getEmiratesForRateSingle($input);
             $emirateCharges += !empty($resEmirate) ? (float) str_replace(',', '', $resEmirate[0]->rate) : 0;
         }
         
