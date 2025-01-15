@@ -765,8 +765,11 @@ class SiteController extends Controller
 
             $data['id'] = $credentials['userId'];
             $userData = $site->getMyDetails($data);
+            $input['id'] = $credentials['carId'];
+            $carData = $site->getCars($input);
             if($userData){
                 $credentials['user_data'] = $userData;
+                $credentials['car_data'] = $carData;
                 Mail::to($userData[0]->email)->send(new BookingConfirmation((object)$credentials,'user'));
                 Mail::to(config('constants.ADMIN_EMAIL'))->send(new BookingConfirmation((object)$credentials,'admin'));
             }
