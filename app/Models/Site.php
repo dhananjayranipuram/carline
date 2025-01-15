@@ -557,6 +557,7 @@ class Site extends Model
                 \DB::raw("DATE_FORMAT(b.return_date, '%d-%m-%Y') as return_date"),
                 \DB::raw("DATE_FORMAT(b.pickup_time, '%h:%i %p') as pickup_time"),
                 \DB::raw("DATE_FORMAT(b.return_time, '%h:%i %p') as return_time"),
+                \DB::raw("DATE_FORMAT(b.created_on, '%d-%m-%Y') as created_on"),
                 'b.rate',
                 \DB::raw("LEFT(bd.s_address, LOCATE(',', bd.s_address) - 1) as source"),
                 'bd.s_address',
@@ -572,7 +573,7 @@ class Site extends Model
                   END as status_label")
                 // \DB::raw("LEFT(GROUP_CONCAT(ci.image), LOCATE(',', GROUP_CONCAT(ci.image)) - 1) as image")
             ])
-            ->orderBy('b.pickup_date', 'desc')
+            ->orderBy('b.created_on', 'desc')
             ->get();
     }
 

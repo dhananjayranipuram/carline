@@ -248,11 +248,11 @@
                 $dateArray = [];
                 @endphp
                 @foreach($bookingHistory as $key => $value)
-                @if(!in_array($value->pickup_date, $dateArray))
+                @if(!in_array($value->created_on, $dateArray))
                     @php
-                        $dateArray[] = $value->pickup_date;
+                        $dateArray[] = $value->created_on;
                     @endphp
-                    <strong>{{$value->pickup_date}}</strong>
+                    <strong>{{$value->created_on}}</strong>
                 @endif
                 <!-- Booking History Section Start -->
                 <div class="booking-history">
