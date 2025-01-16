@@ -333,7 +333,7 @@
                                         <!-- Pickup Date -->
                                         <div class="form-group col-12 mb-4">
                                             <label>Pickup Date</label>
-                                            <input type="text" name="pickup_date" placeholder="DD-MM-YYYY" class="form-control" id="pickupdate" required min="{{ date('Y-m-d') }}" >
+                                            <input type="text" name="pickup_date" placeholder="DD-MM-YYYY" class="form-control" id="pickupdate" required min="{{ date('d-m-Y') }}" >
                                             <div class="help-block with-errors"></div>
                                         </div>
                                         
@@ -366,7 +366,7 @@
                                             <!-- Dropoff Date -->
                                             <div class="form-group col-12 mb-4">
                                                 <label>Dropoff Date</label>
-                                                <input type="text" name="dropoff_date" placeholder="DD-MM-YYYY" class="form-control" id="returndate" required min="{{ date('Y-m-d') }}">
+                                                <input type="text" name="dropoff_date" placeholder="DD-MM-YYYY" class="form-control" id="returndate" required min="{{ date('d-m-Y') }}">
                                                 <div class="help-block with-errors"></div>
                                             </div>
                                             
@@ -412,7 +412,7 @@
                                         <div class="fleets-single-sidebar-btn">
                                             <a href="#" class="btn-default popup-with-form book-now-form disabled" id="bookNowButton">book now</a>
                                             <span>or</span>
-                                            <a href="#" class="wp-btn"><i class="fa-brands fa-whatsapp"></i></a>                                
+                                            <a href="#" class="wp-btn @if($carDet[0]->whatsapp_flag == 0) disabled @endif"><i class="fa-brands fa-whatsapp"></i></a>                                
                                         </div>
                                         <!-- Feets Single Sidebar Btn End -->
                                     </div>
@@ -640,6 +640,7 @@
 <script>
 var sourceData = [];
 var destinationData = [];    
+var onlineFlag = '{{$carDet[0]->online_flag}}';
 
 // var sourceData = [
 //     {
@@ -673,20 +674,20 @@ var destinationData = [];
     });
 
     function disableDates(date) {
-        const myDate = moment(date, "YYYY-MM-DD");
-        const formattedDate = myDate.format("YYYY-MM-DD");
+        const myDate = moment(date, "DD-MM-YYYY");
+        const formattedDate = myDate.format("DD-MM-YYYY");
         return [!disabledDates.includes(formattedDate)];
     }
 
     $("#pickupdate").datepicker({
-        dateFormat: "yy-mm-dd",
+        dateFormat: "dd-mm-yy",
         minDate: 0,
         beforeShowDay: disableDates,
         
     });
 
     $("#returndate").datepicker({
-        dateFormat: "yy-mm-dd",
+        dateFormat: "dd-mm-yy",
         minDate: 0,
         beforeShowDay: disableDates
     });
@@ -1023,7 +1024,7 @@ function updateRateDetails(res) {
     });
 
     $("#agreePolicy").click(function() {
-        if ($(this).prop('checked')==true){ 
+        if ($(this).prop('checked')==true && onlineFlag == 1){ 
             $('#bookNowButton').removeClass('disabled')
         }else{
             $('#bookNowButton').addClass('disabled');

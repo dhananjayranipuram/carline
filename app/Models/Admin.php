@@ -19,7 +19,7 @@ class Admin extends Model
         if(!empty($data['id'])){
             $condition .= " AND c.id = $data[id]";
         }
-        return DB::select("SELECT c.id,c.name,c.model,cb.id brand_id,cb.name brand_name,ct.id type_id,ct.name car_type,GROUP_CONCAT(ci.image) AS 'image',c.rent,c.general_info_flag,c.rental_condition_flag,c.offer_flag,c.offer_price,c.deposit,c.qty,c.kmeter,c.daily_mileage,c.weekly_mileage,c.monthly_mileage,c.toll_charges,c.add_mileage_charge,c.per_week,c.offer_flag_weekly,c.offer_price_weekly,c.per_month,c.offer_flag_monthly,c.offer_price_monthly FROM cars c
+        return DB::select("SELECT c.id,c.name,c.model,cb.id brand_id,cb.name brand_name,ct.id type_id,ct.name car_type,GROUP_CONCAT(ci.image) AS 'image',c.rent,c.general_info_flag,c.rental_condition_flag,c.offer_flag,c.offer_price,c.deposit,c.qty,c.kmeter,c.daily_mileage,c.weekly_mileage,c.monthly_mileage,c.toll_charges,c.add_mileage_charge,c.per_week,c.offer_flag_weekly,c.offer_price_weekly,c.per_month,c.offer_flag_monthly,c.offer_price_monthly,c.online_flag,c.whatsapp_flag FROM cars c
                             LEFT JOIN car_brand cb ON cb.id=c.brand_id
                             LEFT JOIN car_type ct ON ct.id=c.type_id
                             LEFT JOIN car_images ci ON ci.car_id=c.id
@@ -72,7 +72,7 @@ class Admin extends Model
         try {
             // Insert into cars table
             DB::insert(
-                "INSERT INTO cars (name, model, brand_id, type_id, general_info_flag, rental_condition_flag, rent, deposit, offer_flag, offer_price,qty,kmeter,daily_mileage,per_week,weekly_mileage,offer_flag_weekly,offer_price_weekly,per_month,monthly_mileage,offer_flag_monthly,offer_price_monthly,toll_charges,add_mileage_charge) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                "INSERT INTO cars (name, model, brand_id, type_id, general_info_flag, rental_condition_flag, rent, deposit, offer_flag, offer_price,qty,kmeter,daily_mileage,per_week,weekly_mileage,offer_flag_weekly,offer_price_weekly,per_month,monthly_mileage,offer_flag_monthly,offer_price_monthly,toll_charges,add_mileage_charge,online_flag,whatsapp_flag) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 [
                     $data['name'],
                     $data['model'],
@@ -97,7 +97,9 @@ class Admin extends Model
                     $data['offerFlagMonthly'],
                     $data['specialOfferMonthly'] ?? null,
                     $data['toll'],
-                    $data['additionalCharge']
+                    $data['additionalCharge'],
+                    $data['online_flag'],
+                    $data['whatsapp_flag']
                 ]
             );
 
