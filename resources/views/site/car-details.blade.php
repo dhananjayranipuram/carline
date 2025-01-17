@@ -246,6 +246,10 @@
 .rental-condition-accordion h3{
     font-size: 1.25rem;
 }
+
+.rental-condition-accordion b,li{
+    color: black;
+}
     </style>
 <!-- Page Header Start -->
 <div class="page-header bg-section parallaxie">
