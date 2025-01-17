@@ -1208,12 +1208,12 @@ $(".policy-link").click(function () {
             var second = res.policy.slice(indexToSplit);
 
             $.each(first, function (index,value) {
-                str1 += '<h3>'+value.name+'</h3>'+
+                str1 += '<b>'+value.name+'</b>'+
                         '<p style="color:black;">'+nl2br(value.content)+'</p>';
             });
 
             $.each(second, function (index,value) {
-                str2 += '<h3>'+value.name+'</h3>'+
+                str2 += '<b>'+value.name+'</b>'+
                         '<p style="color:black;">'+nl2br(value.content)+'</p>';
             });
             
