@@ -23,7 +23,11 @@
                             </div>
                             <!-- Section Title End -->
                                 @foreach($policy as $key => $value)
-                                <h3>{{$value->name}}</h3>
+                                @if($value->name == 'Breakdown Assistance')
+                                <b>{{$value->name}}</b>
+                                @else
+                                    <h3>{{$value->name}}</h3>
+                                @endif
                                 <div class="policy-section">{!!html_entity_decode(nl2br(e($value->content)))!!}</div>
                                 @endforeach
                                 <!-- <h3>Terms of Use and Payment Policy</h3>
