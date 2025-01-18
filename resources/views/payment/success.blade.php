@@ -76,7 +76,7 @@
                         </tr>
                         <tr>
                             <th>Pickup Date:</th>
-                            <td>{{$pickupdate}}</td>
+                            <td>{{date("d-m-Y", strtotime($pickupdate))}}</td>
                         </tr>
                         <tr>
                             <th>Pickup Time:</th>
@@ -89,7 +89,7 @@
                         </tr>
                         <tr>
                             <th>Dropoff Date:</th>
-                            <td>{{$returndate}}</td>
+                            <td>{{date("d-m-Y", strtotime($returndate))}}</td>
                         </tr>
                         <tr>
                             <th>Dropoff Time:</th>

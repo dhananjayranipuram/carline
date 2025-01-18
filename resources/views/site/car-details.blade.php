@@ -337,7 +337,8 @@
                                         <!-- Pickup Date -->
                                         <div class="form-group col-12 mb-4">
                                             <label>Pickup Date</label>
-                                            <input type="text" name="pickup_date" placeholder="DD-MM-YYYY" class="form-control" id="pickupdate" required min="{{ date('d-m-Y') }}" >
+                                            <input type="text" name="pickup_date" placeholder="DD-MM-YYYY" class="form-control" id="pickupdate-hidden" required min="{{ date('d-m-Y') }}" >
+                                            <input type="hidden" id="pickupdate" />
                                             <div class="help-block with-errors"></div>
                                         </div>
                                         
@@ -370,7 +371,8 @@
                                             <!-- Dropoff Date -->
                                             <div class="form-group col-12 mb-4">
                                                 <label>Dropoff Date</label>
-                                                <input type="text" name="dropoff_date" placeholder="DD-MM-YYYY" class="form-control" id="returndate" required min="{{ date('d-m-Y') }}">
+                                                <input type="text" name="dropoff_date" placeholder="DD-MM-YYYY" class="form-control" id="returndate-hidden" required min="{{ date('d-m-Y') }}">
+                                                <input type="hidden" id="returndate" />
                                                 <div class="help-block with-errors"></div>
                                             </div>
                                             
@@ -678,20 +680,24 @@ var onlineFlag = '{{$carDet[0]->online_flag}}';
     });
 
     function disableDates(date) {
-        const myDate = moment(date, "DD-MM-YYYY");
-        const formattedDate = myDate.format("DD-MM-YYYY");
+        const myDate = moment(date, "YYYY-MM-DD");
+        const formattedDate = myDate.format("YYYY-MM-DD");
         return [!disabledDates.includes(formattedDate)];
     }
 
-    $("#pickupdate").datepicker({
-        dateFormat: "dd-mm-yy",
+    $("#pickupdate-hidden").datepicker({
+        dateFormat: "yy-mm-dd",
+        altField: "#pickupdate",
+        altFormat: "yy-mm-dd",
         minDate: 0,
         beforeShowDay: disableDates,
         
     });
 
-    $("#returndate").datepicker({
-        dateFormat: "dd-mm-yy",
+    $("#returndate-hidden").datepicker({
+        dateFormat: "yy-mm-dd",
+        altField: "#returndate",
+        altFormat: "yy-mm-dd",
         minDate: 0,
         beforeShowDay: disableDates
     });
@@ -837,7 +843,7 @@ $("#returnLocationToggle").click(function() {
     }
 });
 
-$("#pickupdate").on("change", function() {
+$("#pickupdate-hidden").on("change", function() {
     var pickupDate = moment($("#pickupdate").val());
     var returnDate = moment($("#returndate").val());
 
@@ -883,7 +889,7 @@ $("#pickupdate").on("change", function() {
     
 });
 
-$("#returndate").on("change", function() {
+$("#returndate-hidden").on("change", function() {
     var pickupDate = moment($("#pickupdate").val());
     var returnDate = moment($("#returndate").val());
 
@@ -954,7 +960,7 @@ $("#pickuptime, #returntime").change(function () {
 
 });
 
-$("#pickupdate, #returndate, #babySeat").on("change paste keyup click", function() {
+$("#pickupdate-hidden, #returndate-hidden, #babySeat").on("change paste keyup click", function() {
 
     checkRate();
 });
