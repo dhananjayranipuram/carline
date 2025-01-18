@@ -21,25 +21,25 @@
 
                             <div class="cancellation-policy">
                                 
-                                <h3>Cancellation Timeframe</h3>
+                                <b>Cancellation Timeframe</b>
                                 <p>Customers can cancel their <em>order/requested services</em> within <strong>24 hours</strong> of placing the order or making the request.</p>
                                 
-                                <h3>Mode of Refund</h3>
+                                <b>Mode of Refund</b>
                                 <p>Refunds will be made back to the <em>original payment solution</em> used by the customer during the transaction.</p>
                                 
-                                <h3>Processing Time</h3>
+                                <b>Processing Time</b>
                                 <p>Please allow up to <strong>45 days</strong> for the refund transfer to be completed, as it depends on the issuing bank or payment provider.</p>
                                 
-                                <h3>Cancellation Process</h3>
+                                <b>Cancellation Process</b>
                                 <p>All cancellation requests must be submitted via email to <a target="_blank" style="color:#000080;" href="mailto:support@example.com">support@example.com</a> or through our customer service portal.</p>
                                 
-                                <h3>Non-Cancellable Orders</h3>
+                                <b>Non-Cancellable Orders</b>
                                 <p>Orders or services already processed or initiated may not be eligible for cancellation.</p>
                                 
-                                <h3>Proof of Cancellation</h3>
+                                <b>Proof of Cancellation</b>
                                 <p>Customers are advised to retain confirmation of the cancellation request for reference in case of disputes.</p>
                                 
-                                <h3>Policy Updates</h3>
+                                <b>Policy Updates</b>
                                 <p>We reserve the right to update or modify the cancellation policy at any time. Any changes will be communicated through our website.</p>
                             </div>
 
