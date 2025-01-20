@@ -686,7 +686,7 @@ var onlineFlag = '{{$carDet[0]->online_flag}}';
     }
 
     $("#pickupdate-hidden").datepicker({
-        dateFormat: "yy-mm-dd",
+        dateFormat: "dd-mm-yy",
         altField: "#pickupdate",
         altFormat: "yy-mm-dd",
         minDate: 0,
@@ -695,7 +695,7 @@ var onlineFlag = '{{$carDet[0]->online_flag}}';
     });
 
     $("#returndate-hidden").datepicker({
-        dateFormat: "yy-mm-dd",
+        dateFormat: "dd-mm-yy",
         altField: "#returndate",
         altFormat: "yy-mm-dd",
         minDate: 0,
