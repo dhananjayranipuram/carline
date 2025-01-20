@@ -418,7 +418,11 @@
                                         <div class="fleets-single-sidebar-btn">
                                             <a href="#" class="btn-default popup-with-form book-now-form disabled" id="bookNowButton">book now</a>
                                             <span>or</span>
-                                            <a href="#" class="wp-btn @if($carDet[0]->whatsapp_flag == 0) disabled @endif"><i class="fa-brands fa-whatsapp"></i></a>                                
+                                            @if($carDet[0]->online_flag == 0)
+                                            <a href="#" class="btn-default book-now-form  @if($carDet[0]->whatsapp_flag == 0) disabled @endif">book now <i class="fa-brands fa-whatsapp"></i></a>
+                                            @else
+                                            <a href="#" class="wp-btn @if($carDet[0]->whatsapp_flag == 0) disabled @endif"><i class="fa-brands fa-whatsapp"></i></a>
+                                            @endif
                                         </div>
                                         <!-- Feets Single Sidebar Btn End -->
                                     </div>
@@ -704,6 +708,10 @@ var onlineFlag = '{{$carDet[0]->online_flag}}';
     
 $(document).ready(function () { 
 
+    if(onlineFlag == 0){
+        $('#bookNowButton').hide();
+        $('#bookNowButton').closest('.fleets-single-sidebar-btn').find('span').hide();
+    }
     // Initialize the Autocomplete object for the input field
     var source = new google.maps.places.Autocomplete(document.getElementById('source'), {
         types: ['geocode', 'establishment'],
@@ -1034,7 +1042,7 @@ function updateRateDetails(res) {
     });
 
     $("#agreePolicy").click(function() {
-        if ($(this).prop('checked')==true && onlineFlag == 1){ 
+        if ($(this).prop('checked')==true){ 
             $('#bookNowButton').removeClass('disabled')
         }else{
             $('#bookNowButton').addClass('disabled');

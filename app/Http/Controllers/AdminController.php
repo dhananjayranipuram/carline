@@ -588,6 +588,9 @@ class AdminController extends Controller
                 'specialOffer' => ['nullable'],
                 'offerFlag' => ['nullable'],
 
+                'online_flag' => ['nullable'],
+                'whatsapp_flag' => ['nullable'],
+
                 'weekly_rent' => ['required'],
                 'weekly_mileage' => ['required'],
                 'offerFlagWeekly' => ['nullable'],
@@ -610,6 +613,8 @@ class AdminController extends Controller
             $filterData['offerFlag'] = isset($filterData['offerFlag']) ? 1 : 0;
             $filterData['offerFlagWeekly'] = isset($filterData['offerFlagWeekly']) ? 1 : 0;
             $filterData['offerFlagMonthly'] = isset($filterData['offerFlagMonthly']) ? 1 : 0;
+            $filterData['online_flag'] = isset($filterData['online_flag']) ? 1 : 0;
+            $filterData['whatsapp_flag'] = isset($filterData['whatsapp_flag']) ? 1 : 0;
 
             $filterData['qty'] = 1;
             // echo '<pre>';print_r($filterData);exit;
