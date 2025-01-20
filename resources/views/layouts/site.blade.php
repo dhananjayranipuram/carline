@@ -292,7 +292,7 @@
                                 <li class="nav-item"><a class="nav-link" href="{{ url('/about') }}">About Us</a></li>
                                 <li class="nav-item"><a class="nav-link" href="{{ url('/cars') }}">Our Cars</a></li>
                                 <li class="nav-item"><a class="nav-link" href="{{ url('/offers') }}">Special Offers</a></li>
-                                <li class="nav-item"><a class="nav-link" href="{{ url('/news') }}">News</a></li>
+                                <!-- <li class="nav-item"><a class="nav-link" href="{{ url('/news') }}">News</a></li> -->
                                 <li class="nav-item"><a class="nav-link" href="{{ url('/contact') }}">Contact Us</a></li>
                                 @if(session()->has('userdata') || session()->has('userId'))
                                     <li class="nav-item"><a href="{{ url('/my-account') }}" class="btn-default" style=" color: #ffffff; ">My Account</a></li>
@@ -671,6 +671,7 @@
                             <li><a href="{{ url('/privacy-policy') }}">Privacy Policy</a></li>
                             <li><a href="{{ url('/refund-policy') }}">Refund policy</a></li>
                             <li><a href="{{ url('/cancelation-policy') }}">Cancelation policy</a></li>
+                            <li><a href="{{ url('/news') }}">News</a></li>
                         </ul>
                     </div>
                     <!-- Footer Menu End -->
@@ -701,7 +702,7 @@
                     <div class="col-lg-4 col-md-7">
                         <!-- Footer Copyright Start -->
                         <div class="footer-copyright-text">
-                            <p>© 2024 Carline. All Rights Reserved. <br>Designed By  <a href="">GrowthArk Media</a></p>
+                            <p>© 2025 Carline. All Rights Reserved. <br>Designed By  <a href="">GrowthArk Media</a></p>
                         </div>
                         <!-- Footer Copyright End -->
                     </div>
