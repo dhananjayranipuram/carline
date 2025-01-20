@@ -239,12 +239,12 @@
                 <div class="fleets-sidebar wow fadeInUp">
                     <!-- Fleets Search Box Start -->
                     <div class="fleets-search-box">
-                        <form id="fleetsForm" action="#" method="POST">
+                        <div id="fleetsForm">
                             <div class="form-group">
                                 <input type="text" name="search" class="form-control"  id="search" placeholder="Search..." required>
-                                <button type="submit" class="section-icon-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+                                <button type="button" class="section-icon-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
                             </div>
-                        </form>
+                        </div>
                     </div>
                     <!-- Fleets Search Box End -->
 
