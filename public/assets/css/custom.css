@@ -1583,7 +1583,7 @@ header.main-header .header-sticky.active{
 
 .luxury-collection-image a{
 	position: relative;
-	cursor: none;
+	/* cursor: none; */
 }
 
 .luxury-collection-image a::before{

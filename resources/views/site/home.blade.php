@@ -519,57 +519,75 @@
 </div>
 <!-- About Us Section End -->
 
+<!-- CTA Box Section Start -->
+<div class="cta-box bg-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-12 col-md-12">
+                <!-- Cta Box Content Start -->
+                <center><div class="cta-box-content">
+                    <!-- Section Title Start -->
+                    <div class="section-title">
+                        <h2 class="text-anime-style-3">Ready to hit the road? <br>Book your car today !</h2>
+                        <p class="wow fadeInUp">Our friendly customer service team is here to help. Contact us anytime for support and inquiries.</p>
+                    </div>
+                    <!-- Section Title End -->
+
+                    <!-- Cta Box Btn Start -->
+                    <div class="cta-box-btn wow fadeInUp" data-wow-delay="0.5s">
+                        <a href="{{ url('/cars') }}" class="btn-default">Book Now</a>
+                    </div>
+                    <!-- Cta Box Btn End -->
+                </div></center>
+                <!-- Cta Box Content End -->
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- CTA Box Section End -->
+
 <!-- Intro Video Section Start -->
-<div class="intro-video bg-section parallaxie">
+<!-- <div class="intro-video bg-section parallaxie">
     <div class="container">
         <div class="row section-row">
             <div class="col-lg-12">
-                <!-- Section Title Start -->
                 <div class="section-title">
                     <h3 class="wow fadeInUp">watch full video</h3>
                     <h2 class="text-anime-style-3">Discover the ease and convenience of renting with Us</h2>
                 </div>
-                <!-- Section Title End -->
             </div>
         </div>
 
         <div class="row">
             <div class="col-lg-12">
-                <!-- Intro Video Box Start -->
                 <div class="intro-video-box">
-                    <!-- Video Play Button Start -->
                     <div class="video-play-button">
                         <a href="https://www.youtube.com/watch?v=IdejM6wCkxA" class="popup-video" data-cursor-text="Play">
                             <i class="fa-solid fa-play"></i>
                         </a>
                     </div>
-                    <!-- Video Play Button End -->
-
-                    <!-- Client Slider Start -->
+                    
                     <div class="client-slider">
                         <div class="swiper client_logo_slider">
                             <div class="swiper-wrapper">
 
                                 @foreach($brands as $key => $value)
-                                    <!-- company Logo Start -->
                                     <div class="swiper-slide brand-click" data-id="{{$value->id}}" style="cursor:pointer;">
                                         <div class="company-logo">
                                             <img src="{{asset($value->image)}}" alt="">
                                         </div>
                                     </div>
-                                    <!-- company Logo End -->
                                 @endforeach
 
                             </div>
                         </div>
                     </div>
-                    <!-- Client Slider End -->
                 </div>
-                <!-- Intro Video Box End -->
             </div>
         </div>
     </div>
-</div>
+</div> -->
 <!-- Intro Video Section End -->
 
 <!-- Why Choose Us Section Start -->
@@ -897,54 +915,22 @@
     </div>
 </div>
 <!-- Our Testiminial End -->
-    
-<!-- CTA Box Section Start -->
-<div class="cta-box bg-section">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-12 col-md-12">
-                <!-- Cta Box Content Start -->
-                <center><div class="cta-box-content">
-                    <!-- Section Title Start -->
-                    <div class="section-title">
-                        <h2 class="text-anime-style-3">Ready to hit the road? <br>Book your car today !</h2>
-                        <p class="wow fadeInUp">Our friendly customer service team is here to help. Contact us anytime for support and inquiries.</p>
-                    </div>
-                    <!-- Section Title End -->
-
-                    <!-- Cta Box Btn Start -->
-                    <div class="cta-box-btn wow fadeInUp" data-wow-delay="0.5s">
-                        <a href="{{ url('/contact') }}" class="btn-default">contact us</a>
-                    </div>
-                    <!-- Cta Box Btn End -->
-                </div></center>
-                <!-- Cta Box Content End -->
-            </div>
-
-        </div>
-    </div>
-</div>
-<!-- CTA Box Section End -->
 
 <!-- Our Latest Article Start -->
-<div class="latest-article">
+<!-- <div class="latest-article">
     <div class="container">
         <div class="row section-row">
             <div class="col-lg-12">
-                <!-- Section Title Start -->
                 <div class="section-title">
                     <h3 class="wow fadeInUp">latest articles</h3>
                     <h2 class="text-anime-style-3">Stay informed and inspired for your next journey</h2>
                 </div>
-                <!-- Section Title End -->
             </div>
         </div>
 
         <div class="row">
             <div class="col-lg-6">
-                <!-- Highlighted Article Post Start -->
                 <div class="highlighted-article-post wow fadeInUp">
-                    <!-- Highlighted Article Featured Image Start -->
                     <div class="highlighted-article-featured-img">
                         <figure>
                             <a href="#" class="image-anime" data-cursor-text="View">
@@ -952,33 +938,24 @@
                             </a>
                         </figure>
                     </div>
-                    <!-- Highlighted Article Featured Image End -->
-
-                    <!-- Highlighted Article Body Start -->
+                    
                     <div class="highlighted-article-body">
-                        <!-- Article Meta Start -->
                         <div class="article-meta">
                             <ul>
                                 <li><a href="#"><i class="fa-solid fa-calendar-days"></i> sep 19, 2024</a></li>
                             </ul>
                         </div>
-                        <!-- Article Meta End -->
-
-                        <!-- Highlighted Article Content Start -->
+                        
                         <div class="highlighted-article-content">
                             <h3><a href="#">Road Trip Essentials: What to Pack for a Smooth Journey</a></h3>
                             <a href="news1.html" class="section-icon-btn">
                                 <img src="{{asset('assets/images/arrow-white.svg')}}" alt="">
                             </a>
                         </div>
-                        <!-- Highlighted Article Content End -->
                     </div>
-                    <!-- Highlighted Article Body End -->
                 </div>
-                <!-- Highlighted Article Post End -->
             </div>
             <div class="col-lg-6">
-                <!-- Article Post Start -->
                 <div class="article-post wow fadeInUp">
                     <div class="article-featured-img">
                         <figure>
@@ -989,13 +966,11 @@
                     </div>
 
                     <div class="article-post-body">
-                        <!-- Article Meta Start -->
                         <div class="article-meta">
                             <ul>
                                 <li><a href="#"><i class="fa-solid fa-calendar-days"></i> sep 20, 2024</a></li>
                             </ul>
                         </div>
-                        <!-- Article Meta End -->
 
                         <div class="article-post-content">
                             <h3><a href="#">Exploring the City: Best Urban Destinations for a Weekend Getaway</a></h3>
@@ -1003,9 +978,7 @@
                         </div>
                     </div>
                 </div>
-                <!-- Article Post End -->
-
-                <!-- Article Post Start -->
+                
                 <div class="article-post wow fadeInUp" data-wow-delay="0.25s">
                     <div class="article-featured-img">
                         <figure>
@@ -1016,13 +989,11 @@
                     </div>
 
                     <div class="article-post-body">
-                        <!-- Article Meta Start -->
                         <div class="article-meta">
                             <ul>
                                 <li><a href="#"><i class="fa-solid fa-calendar-days"></i> sep 21, 2024</a></li>
                             </ul>
                         </div>
-                        <!-- Article Meta End -->
 
                         <div class="article-post-content">
                             <h3><a href="#">Exploring the City: Best Urban Destinations for a Weekend Getaway</a></h3>
@@ -1030,9 +1001,7 @@
                         </div>
                     </div>
                 </div>
-                <!-- Article Post End -->
-
-                <!-- Article Post Start -->
+                
                 <div class="article-post wow fadeInUp" data-wow-delay="0.5s">
                     <div class="article-featured-img">
                         <figure>
@@ -1043,13 +1012,11 @@
                     </div>
 
                     <div class="article-post-body">
-                        <!-- Article Meta Start -->
                         <div class="article-meta">
                             <ul>
                                 <li><a href="#"><i class="fa-solid fa-calendar-days"></i> sep 22, 2024</a></li>
                             </ul>
                         </div>
-                        <!-- Article Meta End -->
 
                         <div class="article-post-content">
                             <h3><a href="#">Exploring the City: Best Urban Destinations for a Weekend Getaway</a></h3>
@@ -1057,11 +1024,10 @@
                         </div>
                     </div>
                 </div>
-                <!-- Article Post End -->
             </div>
         </div>
     </div>
-</div>
+</div> -->
 <!-- Our Latest Article End -->
 <script src="{{asset('admin_assets/js/core/jquery-3.7.1.min.js')}}"></script> 
 <script>
