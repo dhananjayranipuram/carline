@@ -438,6 +438,12 @@
 <script src="{{asset('admin_assets/js/core/jquery-3.7.1.min.js')}}"></script> 
 <script>
 var xhr = null;
+const filterToggleBtn = document.querySelector('.filter-toggle-btn');
+const filterOptions = document.getElementById('filterOptions');
+
+filterToggleBtn.addEventListener('click', () => {
+    filterOptions.classList.toggle('collapse');
+});
 document.addEventListener('DOMContentLoaded', function () {
     // Add click event to all custom dropdown buttons
     document.querySelectorAll('.custom-dropdown-btn').forEach(button => {

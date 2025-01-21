@@ -102,6 +102,102 @@
 
 
 </style>
+
+<style>
+     /* Style for the select dropdown */
+    .fleets-sort select {
+        padding: 8px 12px;
+        font-size: 16px;
+        color: #6c757d; /* Default placeholder color */
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        margin-bottom: 20px !important;
+    }
+    /* Style for the filter button */
+    .filter-toggle-btn i {
+        font-size: 18px;
+    }
+    /* Style for icons inside the dropdown */
+    .fleets-sort i {
+        margin-right: 8px;
+        font-size: 18px;
+    }
+    /* Mobile-specific styles */
+    @media only screen and (max-width: 600px) {
+    .fleets-sort {
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: space-between;
+        align-items: center !important;
+    }
+    /* Style for the select dropdown on mobile */
+    .fleets-sort select {
+        color: #ffffff;
+        background: #000000;
+        text-align: center;
+        flex-grow: 1; /* Allow the select to take the remaining space */
+        margin-bottom: 8px !important;
+    }
+    /* Style for the filter button */
+    .filter-toggle-btn {
+        margin-left: 10px; /* Add space between the dropdown and button */
+    }
+    .fleets-sidebar-list {
+        margin-top: 15px;
+    }
+}
+    .custom-dropdown {
+        position: relative;
+        display: inline-block;
+        margin-bottom: 15px !important;
+    }
+    .custom-dropdown-btn {
+        text-align: center;
+        background: #000080;
+        color: #ffffff;
+        padding: 8px 12px;
+        width: 180px;
+        border-radius: 6px;
+        font-size: 1rem;
+    }
+    .custom-dropdown-options {
+        display: none;
+        position: absolute;
+        background-color: white;
+        border: 1px solid #ccc;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        width: 100%;
+    }
+    .custom-option {
+        padding: 7px;
+        cursor: pointer;
+        background: #ffffff;
+        border: 1px solid #ededed;
+        color: #000080;
+    }
+    .custom-option:hover {
+        background-color: #f9f9f9;
+    }
+    @media only screen and (max-width: 600px) {
+        .custom-dropdown-btn {
+        width: 150px;
+        padding: 6px 12px;
+    }
+    .custom-dropdown {
+        margin-bottom: 0px !important;
+    }
+    .occropmm {
+    display: none;
+    }
+    }
+    @media screen and (min-width: 768px) {
+    .occrop {
+    display: none;
+    }
+}
+</style>
 <!-- Page Header Start -->
 <!-- <div class="page-header bg-section parallaxie">
     <div class="container">
@@ -128,35 +224,44 @@
 <div class="page-fleets">
     <div class="container">
         <div class="row">
+            <div class="col-lg-10"></div>
+            <div class="col-lg-2">
+                <div class="custom-dropdown occropmm">
+                    <button class="custom-dropdown-btn" ><i class="fa fa-exchange" aria-hidden="true"></i> Sort By Price</button>
+                    <div class="custom-dropdown-options" >
+                        <div class="custom-option" data-value="low_to_high"><i class="fa fa-arrow-up" aria-hidden="true"></i> Low to High</div>
+                        <div class="custom-option" data-value="high_to_low"><i class="fa fa-arrow-down" aria-hidden="true"></i> High to Low</div>
+                    </div>
+                </div>
+            </div>
             <div class="col-lg-3">
                 <!-- Fleets Sidebar Start -->
                 <div class="fleets-sidebar wow fadeInUp">
                     <!-- Fleets Search Box Start -->
                     <div class="fleets-search-box">
-                        <form id="fleetsForm" action="#" method="POST">
+                        <div id="fleetsForm">
                             <div class="form-group">
                                 <input type="text" name="search" class="form-control"  id="search" placeholder="Search..." required>
-                                <button type="submit" class="section-icon-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+                                <button type="button" class="section-icon-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
                             </div>
-                        </form>
+                        </div>
                     </div>
                     <!-- Fleets Search Box End -->
 
                     <div class="fleets-sort d-flex flex-column flex-sm-row align-items-center">
-                            <!-- Sort Dropdown -->
-                            <div class="custom-dropdown">
-                                <button class="custom-dropdown-btn" id="customSortBtn"><i class="fa fa-exchange" aria-hidden="true"></i> Sort By Price</button>
-                                <div class="custom-dropdown-options" id="customSortOptions">
-                                    <div class="custom-option" data-value="low_to_high"><i class="fa fa-arrow-up" aria-hidden="true"></i> Low to High</div>
-                                    <div class="custom-option" data-value="high_to_low"><i class="fa fa-arrow-down" aria-hidden="true"></i> High to Low</div>
-                                </div>
+                        <!-- Sort Dropdown -->
+                        <div class="custom-dropdown occrop">
+                            <button class="custom-dropdown-btn" ><i class="fa fa-exchange" aria-hidden="true"></i> Sort By Price</button>
+                            <div class="custom-dropdown-options" >
+                                <div class="custom-option" data-value="low_to_high"><i class="fa fa-arrow-up" aria-hidden="true"></i> Low to High</div>
+                                <div class="custom-option" data-value="high_to_low"><i class="fa fa-arrow-down" aria-hidden="true"></i> High to Low</div>
                             </div>
-                            
+                        </div>
 
-                            <!-- Filter Button -->
-                            <button class="form-control mb-sm-0 d-lg-none filter-toggle-btn" type="button" style="background: #000080;color: #ffffff;padding: 9px 12px;">
-                                <i class="fa-solid fa-filter me-2"></i>Filters
-                            </button>
+                        <!-- Filter Button -->
+                        <button class="form-control mb-sm-0 d-lg-none filter-toggle-btn" type="button" style="background: #000080;color: #ffffff;padding: 9px 12px;">
+                            <i class="fa-solid fa-filter me-2"></i>Filters
+                        </button>
                     </div>
 
                     <div class="filter-section">
@@ -332,8 +437,58 @@
 <!-- Page Fleets End -->
 <script src="{{asset('admin_assets/js/core/jquery-3.7.1.min.js')}}"></script> 
 <script>
+var xhr = null;
+const filterToggleBtn = document.querySelector('.filter-toggle-btn');
+const filterOptions = document.getElementById('filterOptions');
+
+filterToggleBtn.addEventListener('click', () => {
+    filterOptions.classList.toggle('collapse');
+});
+document.addEventListener('DOMContentLoaded', function () {
+    // Add click event to all custom dropdown buttons
+    document.querySelectorAll('.custom-dropdown-btn').forEach(button => {
+        button.addEventListener('click', function (e) {
+            e.stopPropagation(); // Prevent click from propagating to the document
+            
+            const dropdown = this.nextElementSibling; // Get the corresponding dropdown options
+            const isVisible = dropdown.style.display === 'block';
+
+            // Hide all dropdowns first
+            document.querySelectorAll('.custom-dropdown-options').forEach(option => {
+                option.style.display = 'none';
+            });
+
+            // Toggle visibility of the current dropdown
+            dropdown.style.display = isVisible ? 'none' : 'block';
+        });
+    });
+
+    // Add click event to all dropdown options
+    document.querySelectorAll('.custom-option').forEach(option => {
+        option.addEventListener('click', function () {
+            const selectedValue = this.getAttribute('data-value');
+            const btn = this.closest('.custom-dropdown').querySelector('.custom-dropdown-btn');
+            
+            // Update button with the selected option
+            btn.innerHTML = `<i class="fa fa-exchange" aria-hidden="true"></i> ${this.innerHTML}`;
+            
+            // Hide the dropdown
+            this.closest('.custom-dropdown-options').style.display = 'none';
+
+            // console.log('Selected:', selectedValue);
+            getCars(selectedValue)
+        });
+    });
+
+    // Hide all dropdowns when clicking outside
+    document.addEventListener('click', function () {
+        document.querySelectorAll('.custom-dropdown-options').forEach(dropdown => {
+            dropdown.style.display = 'none';
+        });
+    });
+});
 $(document).ready(function () {
-    var xhr = null;
+    
     var carType = localStorage.getItem("searchType");
     var carBrand = localStorage.getItem("brandClick");
     localStorage.clear();
@@ -384,148 +539,115 @@ $(document).ready(function () {
         //     }
         // });
     });
+ 
+});
 
-
-    document.getElementById('customSortBtn').addEventListener('click', function () {
-        const options = document.getElementById('customSortOptions');
-        options.style.display = options.style.display === 'block' ? 'none' : 'block';
-    });
-
-    document.querySelectorAll('.custom-option').forEach(option => {
-        option.addEventListener('click', function () {
-            const selectedValue = this.getAttribute('data-value');
-            const btn = document.getElementById('customSortBtn');
-            btn.textContent = this.textContent;
-            document.getElementById('customSortOptions').style.display = 'none';
-            // console.log('Selected:', selectedValue);
-            getCars(selectedValue);
-        });
-    });
-
-    // Hide the dropdown when clicking outside
-    document.addEventListener('click', function (e) {
-        const dropdown = document.getElementById('customSortOptions');
-        const button = document.getElementById('customSortBtn');
-        if (!button.contains(e.target) && !dropdown.contains(e.target)) {
-            dropdown.style.display = 'none';
-        }
-    });
-
-    // Custom toggle behavior for filter button
-    const filterToggleBtn = document.querySelector('.filter-toggle-btn');
-    const filterOptions = document.getElementById('filterOptions');
-
-    filterToggleBtn.addEventListener('click', () => {
-        filterOptions.classList.toggle('collapse');
-    });
-
-    function getCars(sortData){
+function getCars(sortData){
         
-        var carType = [];
-        var carBrand = [];
-        var carTransmission = [];
-        var carSeats = [];
-        $('.car-type').each(function() {
-            if($(this).prop('checked') == true){
-                carType.push($(this).val());
-            }
-        });
-
-        $('.car-brand').each(function() {
-            if($(this).prop('checked') == true){
-                carBrand.push($(this).val());
-            }
-        });
-        $('.car-transmision').each(function() {
-            if($(this).prop('checked') == true){
-                carTransmission.push($(this).val());
-            }
-        });
-        $('.car-seats').each(function() {
-            if($(this).prop('checked') == true){
-                carSeats.push($(this).val());
-            }
-        });
-        if (xhr !== null) {
-            xhr.abort();
+    var carType = [];
+    var carBrand = [];
+    var carTransmission = [];
+    var carSeats = [];
+    $('.car-type').each(function() {
+        if($(this).prop('checked') == true){
+            carType.push($(this).val());
         }
-        xhr = $.ajax({
-            url: baseUrl + '/site/filter-offer-cars',
-            type: 'post',
-            dataType: "json",
-            data: {
-                'type' : carType,
-                'brand':carBrand,
-                'carTransmission':carTransmission,
-                'carSeats':carSeats,
-                'transId':$(".transmission-id").attr('data-value'),
-                'seatId':$(".seat-id").attr('data-value'),
-                'searchText':$("#search").val(),
-                'sortBy':(sortData === 'low_to_high') ? 'asc' : (sortData === 'high_to_low') ? 'desc' : 'asc',
-            },
-            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-            success: function(res) {
-                var html = '';
-                res.carDet.forEach(function(item) {
-                    if(item.image!=null)
-                        var image = item.image.split(',');
-                    else
-                        var image = '';
-                    // console.log(window.btoa(item.id));
-                    html += '<div class="col-lg-4 col-md-6">'
-                        +'<div class="perfect-fleet-item fleets-collection-item wow fadeInUp">'
-                                +'<div class="image-box">'
-                                        +'<a href="'+baseUrl+'/car-details?id='+window.btoa(item.id)+'"><img src="'+baseUrl+'/'+image[0]+'" alt="Image not available"></a>'
+    });
+
+    $('.car-brand').each(function() {
+        if($(this).prop('checked') == true){
+            carBrand.push($(this).val());
+        }
+    });
+    $('.car-transmision').each(function() {
+        if($(this).prop('checked') == true){
+            carTransmission.push($(this).val());
+        }
+    });
+    $('.car-seats').each(function() {
+        if($(this).prop('checked') == true){
+            carSeats.push($(this).val());
+        }
+    });
+    if (xhr !== null) {
+        xhr.abort();
+    }
+    xhr = $.ajax({
+        url: baseUrl + '/site/filter-offer-cars',
+        type: 'post',
+        dataType: "json",
+        data: {
+            'type' : carType,
+            'brand':carBrand,
+            'carTransmission':carTransmission,
+            'carSeats':carSeats,
+            'transId':$(".transmission-id").attr('data-value'),
+            'seatId':$(".seat-id").attr('data-value'),
+            'searchText':$("#search").val(),
+            'sortBy':(sortData === 'low_to_high') ? 'asc' : (sortData === 'high_to_low') ? 'desc' : 'asc',
+        },
+        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+        success: function(res) {
+            var html = '';
+            res.carDet.forEach(function(item) {
+                if(item.image!=null)
+                    var image = item.image.split(',');
+                else
+                    var image = '';
+                // console.log(window.btoa(item.id));
+                html += '<div class="col-lg-4 col-md-6">'
+                    +'<div class="perfect-fleet-item fleets-collection-item wow fadeInUp">'
+                            +'<div class="image-box">'
+                                    +'<a href="'+baseUrl+'/car-details?id='+window.btoa(item.id)+'"><img src="'+baseUrl+'/'+image[0]+'" alt="Image not available"></a>'
+                            +'</div>'
+                            +'<div class="perfect-fleet-content">'
+                                +'<div class="perfect-fleet-title">'
+                                    +'<h3>'+item.car_type+'</h3>'
+                                    +'<a href="'+baseUrl+'/car-details?id='+window.btoa(item.id)+'"><h2>'+item.brand_name+' '+item.name+' '+item.model+'</h2></a>'
                                 +'</div>'
-                                +'<div class="perfect-fleet-content">'
-                                    +'<div class="perfect-fleet-title">'
-                                        +'<h3>'+item.car_type+'</h3>'
-                                        +'<a href="'+baseUrl+'/car-details?id='+window.btoa(item.id)+'"><h2>'+item.brand_name+' '+item.name+' '+item.model+'</h2></a>'
-                                    +'</div>'
-                                    +'<div class="perfect-fleet-body">'
-                                        +'<ul>';
-                                            if(res.specs[item.id] != null){
-                                                res.specs[item.id].forEach(function(items,keys) {
-                                                    // console.log(items)
-                                                    if(keys<=3){
-                                                        html+='<li class="break-word"><img src="'+baseUrl+'/'+items.image+'" alt="" width="21">';
-                                                        if(items.name!="Transmission"){
-                                                            if(items.details!='Yes'){
-                                                                html+=items.details;
-                                                            } 
-                                                            html+=' '+items.name+'</li>';
-                                                        }else{
-                                                            if(items.details!='Yes'){
-                                                                html+=items.details;
-                                                            } 
-                                                        }
+                                +'<div class="perfect-fleet-body">'
+                                    +'<ul>';
+                                        if(res.specs[item.id] != null){
+                                            res.specs[item.id].forEach(function(items,keys) {
+                                                // console.log(items)
+                                                if(keys<=3){
+                                                    html+='<li class="break-word"><img src="'+baseUrl+'/'+items.image+'" alt="" width="21">';
+                                                    if(items.name!="Transmission"){
+                                                        if(items.details!='Yes'){
+                                                            html+=items.details;
+                                                        } 
+                                                        html+=' '+items.name+'</li>';
+                                                    }else{
+                                                        if(items.details!='Yes'){
+                                                            html+=items.details;
+                                                        } 
                                                     }
-                                                });
-                                            }
-                                        html+='</ul>'
-                                    +'</div>'
-                                    +'<div class="perfect-fleet-footer">'
-                                        +'<div class="perfect-fleet-pricing">'
-                                            if(item.offer_flag == 1){
-                                                html+= '<del><h6>AED '+item.rent+'<span>/day</span></h6></del>'
-                                                    +'<h2>AED '+item.offer_price+' <span>/day</span></h2>';
-                                            }else{
-                                                html+= '<h2>AED '+item.rent+'<span>/day</span></h2>';
-                                            }
-                                            
-                                        html+='</div>'
-                                        +'<div class="perfect-fleet-btn">'
-                                            +"<a href='"+baseUrl+"/car-details?id="+window.btoa(item.id)+"' class='section-icon-btn'><img src='"+baseUrl+'/'+"assets/images/arrow-white.svg' alt=''></a>"
-                                        +'</div>'
+                                                }
+                                            });
+                                        }
+                                    html+='</ul>'
+                                +'</div>'
+                                +'<div class="perfect-fleet-footer">'
+                                    +'<div class="perfect-fleet-pricing">'
+                                        if(item.offer_flag == 1){
+                                            html+= '<del><h6>AED '+item.rent+'<span>/day</span></h6></del>'
+                                                +'<h2>AED '+item.offer_price+' <span>/day</span></h2>';
+                                        }else{
+                                            html+= '<h2>AED '+item.rent+'<span>/day</span></h2>';
+                                        }
+                                        
+                                    html+='</div>'
+                                    +'<div class="perfect-fleet-btn">'
+                                        +"<a href='"+baseUrl+"/car-details?id="+window.btoa(item.id)+"' class='section-icon-btn'><img src='"+baseUrl+'/'+"assets/images/arrow-white.svg' alt=''></a>"
                                     +'</div>'
                                 +'</div>'
                             +'</div>'
-                        +'</div>';
-                });
-                $("#carList").html(html)
-            }
-        });
-    }
-});
+                        +'</div>'
+                    +'</div>';
+            });
+            $("#carList").html(html)
+        }
+    });
+}
 </script>
 @endsection
