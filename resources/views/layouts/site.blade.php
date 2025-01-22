@@ -258,6 +258,96 @@
 }
 
 </style>
+
+<style>
+    .floating-chat-container {
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        z-index: 1000;
+    }
+  
+    /* Main round button */
+    .floating-chat-btn {
+        width: 60px;
+        height: 60px;
+        background-color: #000080;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 24px;
+        box-shadow: 0 4px 6px rgba(255, 255, 255, 0.2);
+        cursor: pointer;
+        position: relative;
+    }
+  
+    .floating-chat-btn i {
+        pointer-events: none;
+    }
+  
+    /* Hidden menu for buttons */
+    .floating-chat-menu {
+        display: none;
+        flex-direction: column;
+        gap: 10px;
+        position: absolute;
+        bottom: 70px; /* Space above the main button */
+        left: 0;
+    }
+  
+    .floating-chat-menu.active {
+        display: flex;
+    }
+  
+    /* Individual buttons with different colors */
+    .chat-call-btn {
+        width: 50px;
+        height: 50px;
+        background-color: #28a745; /* Green */
+        border: none;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        font-size: 20px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+      }
+  
+    .chat-whatsapp-btn {
+        width: 50px;
+        height: 50px;
+        background-color: #25d366; /* WhatsApp Green */
+        border: none;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        font-size: 20px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+      }
+  
+    .chat-email-btn {
+        width: 50px;
+        height: 50px;
+        background-color: #ff5722; /* Orange */
+        border: none;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        font-size: 20px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+    }
+</style>
 <body>
     <div class="overlay">
         <div class="overlay__inner">
@@ -612,6 +702,27 @@
 
     @yield('content')
 
+    
+    <div class="floating-chat-container">
+        <!-- Round message icon -->
+        <button class="floating-chat-btn" id="chat-main-btn" type="button">
+            <i class="fas fa-comments"></i>
+        </button>
+    
+        <!-- Hidden buttons for call, WhatsApp, and email -->
+        <div class="floating-chat-menu" id="chat-menu">
+            <button class="chat-call-btn" type="button" onclick="window.location.href='tel:971565738866'">
+                <i class="fas fa-phone"></i>
+            </button>
+            <button class="chat-whatsapp-btn" type="button" onclick="window.location.href='https://wa.me/971508689526'">
+                <i class="fab fa-whatsapp"></i>
+            </button>
+            <button class="chat-email-btn" type="button" onclick="window.location.href='mailto:info@carline.com'">
+                <i class="fas fa-envelope"></i>
+            </button>
+        </div>
+    </div>
+
     <!-- Cookie Consent Popup -->
     <div id="cookiePopup" class="cookie-popup">
         <div class="cookie-popup-content">
@@ -769,7 +880,14 @@
 </body>
 <script src="{{asset('admin_assets/js/core/jquery-3.7.1.min.js')}}"></script> 
 <script src="{{asset('assets/js/jquery.magnific-popup.min.js')}}"></script>
-
+<script>
+    // Toggle menu visibility
+    document.getElementById('chat-main-btn').addEventListener('click', function(event) {
+        const menu = document.getElementById('chat-menu');
+        menu.classList.toggle('active');
+        event.preventDefault(); // Prevent default action to stop any jump
+    });
+</script>
 <script>
 $(document).ready(function () {
     $(".send-otp").click(function () {
