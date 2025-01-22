@@ -327,7 +327,7 @@ $(document).ready(function () {
     });
 
     $(".carTypes").on("click", function () {
-        $(".filter-dropdown").not($(this)).each(function () {
+        $(".filter-dropdown").not($(this)).not(".carSort").each(function () {
             $(this).val('');
         });
     });
