@@ -62,6 +62,7 @@ Route::any('/check-time', [SiteController::class, 'checkTime']);
 Route::any('/get-whatsapp-msg', [SiteController::class, 'getWhatsappMsg']);
 
 Route::any('/site/filter-cars', [SiteController::class, 'filterCars']);
+Route::any('/site/get-filters', [SiteController::class, 'getFilters']);
 Route::any('/site/filter-offer-cars', [SiteController::class, 'filterOfferCars']);
 
 Route::any('/sample', [SiteController::class, 'paymentSample']);

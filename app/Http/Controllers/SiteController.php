@@ -1148,4 +1148,27 @@ class SiteController extends Controller
         $response = $site->getAvailableDates($credentials);
         return response()->json($response);
     }
+
+    public function getFilters(Request $request){
+        $site = new Site();
+        if($request->method() == 'POST'){
+            $filterData = $request->validate([
+                'type' => [''],
+                'brand' => [''],
+                'carTransmission' => [''],
+                'carSeats' => [''],
+                'transId' => [''],
+                'seatId' => [''],
+                'carFuel' => [''],
+            ]);
+            
+            $data['types'] = $site->getFilters($filterData,'type');
+            $data['brand'] = $site->getFilters($filterData,'brand');
+            $data['transmission'] = $site->getFilters($filterData,'transmission');
+            $data['seat'] = $site->getFilters($filterData,'seat');
+            $data['fuel'] = $site->getFilters($filterData,'fuel');
+
+            return json_encode($data);
+        }
+    }
 }
