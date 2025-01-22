@@ -399,19 +399,38 @@ input[type="text"]:not(:placeholder-shown) + .input-placeholder {
                                         </div>
                                     </div>
                                     <div class="card">
-                                <div class="card-header">
-                                    <h4 class="card-title">Booking Type</h4>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="form-check">
-                                            <input type="checkbox" class="form-check-input" name="online_flag" @if($cars[0]->online_flag == 1) checked @endif> Book through online
+                                        <div class="card-header">
+                                            <h4 class="card-title">Fuel Type</h4>
                                         </div>
-                                        <div class="form-check">
-                                            <input type="checkbox" class="form-check-input" name="whatsapp_flag" @if($cars[0]->whatsapp_flag == 1) checked @endif> Book through whatsapp
+                                        <div class="card-body">
+                                            <div class="form-check">
+                                                <select class="form-control" name="fuel_type">
+                                                    <option value="" disabled selected>Fuel Type</option>
+                                                    @foreach(['Petrol', 'Diesel', 'Electric', 'Hybrid'] as $fuelType)
+                                                        <option value="{{ strtolower($fuelType) }}" @selected($cars[0]->fuel_type == strtolower($fuelType))>{{ $fuelType }}</option>
+                                                    @endforeach
+                                                </select>
+                                                @error('fuel_type')
+                                                    <div class="text-danger">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                            
                                         </div>
-                                        
                                     </div>
-                                </div>
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h4 class="card-title">Booking Type</h4>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" name="online_flag" @if($cars[0]->online_flag == 1) checked @endif> Book through online
+                                            </div>
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" name="whatsapp_flag" @if($cars[0]->whatsapp_flag == 1) checked @endif> Book through whatsapp
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

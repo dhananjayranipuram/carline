@@ -489,6 +489,7 @@ class AdminController extends Controller
                 'kmeter' => ['required','numeric'],
                 'toll' => ['required','numeric'],
                 'additionalCharge' => ['required','numeric'],
+                'fuel_type' => ['required'],
             ],[
                 'carImages.*.max' => 'Each image must not exceed 2 MB in size.',
             ]);
@@ -605,6 +606,7 @@ class AdminController extends Controller
                 'kmeter' => ['required','numeric'],
                 'toll' => ['required','numeric'],
                 'additionalCharge' => ['required','numeric'],
+                'fuel_type' => ['required'],
             ]);
 
             // Set flags for general info and rental conditions

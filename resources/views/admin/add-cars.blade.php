@@ -290,31 +290,7 @@ input[type="text"]:not(:placeholder-shown) + .input-placeholder {
                                     </div>
                                 </div>
                             </div>
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4 class="card-title">Others</h4>
-                                </div>
-                                <div class="card-body">
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" name="general_info" @if(old('general_info')) checked @endif> Include general information
-                                    </div>
-                                    
-                                </div>
-                            </div>
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4 class="card-title">Booking Type</h4>
-                                </div>
-                                <div class="card-body">
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" name="online_flag" @if(old('online_flag')) checked @endif> Book through online
-                                    </div>
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" name="whatsapp_flag" @if(old('whatsapp_flag')) checked @endif> Book through whatsapp
-                                    </div>
-                                    
-                                </div>
-                            </div>
+                            
                         </div>
 
                         <div class="col-md-6">
@@ -346,6 +322,51 @@ input[type="text"]:not(:placeholder-shown) + .input-placeholder {
                                             </div>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">Others</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" name="general_info" @if(old('general_info')) checked @endif> Include general information
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">Fuel Type</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-check">
+                                        <select class="form-control" name="fuel_type">
+                                            <option value="" disabled selected>Fuel Type</option>
+                                            @foreach(['Petrol', 'Diesel', 'Electric', 'Hybrid'] as $fuelType)
+                                                <option value="{{ strtolower($fuelType) }}" @if(old('fuel_type') == strtolower($fuelType)) selected @endif>{{ $fuelType }}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('fuel_type')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">Booking Type</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" name="online_flag" @if(old('online_flag')) checked @endif> Book through online
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" name="whatsapp_flag" @if(old('whatsapp_flag')) checked @endif> Book through whatsapp
+                                    </div>
+                                    
                                 </div>
                             </div>
                         </div>
