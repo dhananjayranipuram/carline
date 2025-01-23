@@ -1171,4 +1171,27 @@ class SiteController extends Controller
             return json_encode($data);
         }
     }
+    
+    public function getOfferFilters(Request $request){
+        $site = new Site();
+        if($request->method() == 'POST'){
+            $filterData = $request->validate([
+                'type' => [''],
+                'brand' => [''],
+                'carTransmission' => [''],
+                'carSeats' => [''],
+                'transId' => [''],
+                'seatId' => [''],
+                'carFuel' => [''],
+            ]);
+            
+            $data['types'] = $site->getOfferFilters($filterData,'type');
+            $data['brand'] = $site->getOfferFilters($filterData,'brand');
+            $data['transmission'] = $site->getOfferFilters($filterData,'transmission');
+            $data['seat'] = $site->getOfferFilters($filterData,'seat');
+            $data['fuel'] = $site->getOfferFilters($filterData,'fuel');
+
+            return json_encode($data);
+        }
+    }
 }

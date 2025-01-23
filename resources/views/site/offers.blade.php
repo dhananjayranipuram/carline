@@ -14,190 +14,73 @@
 }
 </style>
 <style>
-     /* Style for the select dropdown */
-    .fleets-sort select {
-        padding: 8px 12px;
-        font-size: 16px;
-        color: #6c757d; /* Default placeholder color */
-        font-weight: 500;
-        display: inline-flex;
-        align-items: center;
-        margin-bottom: 20px !important;
-    }
-    /* Style for the filter button */
-    .filter-toggle-btn i {
-        font-size: 18px;
-    }
-    /* Style for icons inside the dropdown */
-    .fleets-sort i {
-        margin-right: 8px;
-        font-size: 18px;
-    }
-    /* Mobile-specific styles */
-    @media only screen and (max-width: 600px) {
-    .fleets-sort {
-        display: flex !important;
-        flex-direction: row !important;
-        justify-content: space-between;
-        align-items: center !important;
-    }
-    /* Style for the select dropdown on mobile */
-    .fleets-sort select {
-        color: #ffffff;
-        background: #000000;
-        text-align: center;
-        flex-grow: 1; /* Allow the select to take the remaining space */
-        margin-bottom: 8px !important;
-    }
-    /* Style for the filter button */
-    .filter-toggle-btn {
-        margin-left: 10px; /* Add space between the dropdown and button */
-    }
-    .fleets-sidebar-list {
-        margin-top: 15px;
-    }
+        .filter-bar {
+            display: flex;
+            gap: 10px;
+            padding: 15px;
+            background-color: #efefef;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+    
+        .filter-group {
+            flex: 1;
+            min-width: 150px;
+        }
+    
+        .filter-dropdown {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+    
+        .search-btn {
+            background-color: #000080;
+            color: #fff;
+            border: none;
+            padding: 5px 25px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .search-btn:hover {
+            background-color: #000000;
+        }
+    
+        .page-fleets {
+            padding: 30px 0;
+        }
+    
+        @media (max-width: 768px) {
+            .filter-group {
+                min-width: 48%;
+            }
+            .form-control {
+                width: 195px;
+            }
+            .page-fleets {
+                padding: 5px 0;
+            }
+        }
+    
+        /* Sticky filter bar on scroll for desktops and laptops */
+        @media (min-width: 769px) {
+            .filter-bar {
+                position: -webkit-sticky; /* For Safari */
+                position: sticky;
+                top: 0;
+                z-index: 10;
+                width: 100%;
+            }
+        }
+        @media only screen and (max-width: 600px) {
+            .filter-bar {
+    background-color: #f6f7ff;
 }
-    .custom-dropdown {
-        position: relative;
-        display: inline-block;
-        margin-bottom: 15px !important;
-    }
-    .custom-dropdown-btn {
-        text-align: left;
-        background: #000080;
-        color: #ffffff;
-        padding: 8px 12px;
-        width: 250px;
-        border-radius: 6px;
-        font-size: 1rem;
-    }
-    .custom-dropdown-options {
-        display: none;
-        position: absolute;
-        background-color: white;
-        border: 1px solid #ccc;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        z-index: 1000;
-        width: 100%;
-    }
-    .custom-option {
-        padding: 7px;
-        cursor: pointer;
-        background: #ffffff;
-        border: 1px solid #ededed;
-        color: #000080;
-    }
-    .custom-option:hover {
-        background-color: #f9f9f9;
-    }
-    @media only screen and (max-width: 600px) {
-        .custom-dropdown-btn {
-        width: 150px;
-        padding: 6px 12px;
-    }
-    .custom-dropdown {
-        margin-bottom: 0px !important;
-    }
 }
-
-
-</style>
-
-<style>
-     /* Style for the select dropdown */
-    .fleets-sort select {
-        padding: 8px 12px;
-        font-size: 16px;
-        color: #6c757d; /* Default placeholder color */
-        font-weight: 500;
-        display: inline-flex;
-        align-items: center;
-        margin-bottom: 20px !important;
-    }
-    /* Style for the filter button */
-    .filter-toggle-btn i {
-        font-size: 18px;
-    }
-    /* Style for icons inside the dropdown */
-    .fleets-sort i {
-        margin-right: 8px;
-        font-size: 18px;
-    }
-    /* Mobile-specific styles */
-    @media only screen and (max-width: 600px) {
-    .fleets-sort {
-        display: flex !important;
-        flex-direction: row !important;
-        justify-content: space-between;
-        align-items: center !important;
-    }
-    /* Style for the select dropdown on mobile */
-    .fleets-sort select {
-        color: #ffffff;
-        background: #000000;
-        text-align: center;
-        flex-grow: 1; /* Allow the select to take the remaining space */
-        margin-bottom: 8px !important;
-    }
-    /* Style for the filter button */
-    .filter-toggle-btn {
-        margin-left: 10px; /* Add space between the dropdown and button */
-    }
-    .fleets-sidebar-list {
-        margin-top: 15px;
-    }
-}
-    .custom-dropdown {
-        position: relative;
-        display: inline-block;
-        margin-bottom: 15px !important;
-    }
-    .custom-dropdown-btn {
-        text-align: center;
-        background: #000080;
-        color: #ffffff;
-        padding: 8px 12px;
-        width: 180px;
-        border-radius: 6px;
-        font-size: 1rem;
-    }
-    .custom-dropdown-options {
-        display: none;
-        position: absolute;
-        background-color: white;
-        border: 1px solid #ccc;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        z-index: 1000;
-        width: 100%;
-    }
-    .custom-option {
-        padding: 7px;
-        cursor: pointer;
-        background: #ffffff;
-        border: 1px solid #ededed;
-        color: #000080;
-    }
-    .custom-option:hover {
-        background-color: #f9f9f9;
-    }
-    @media only screen and (max-width: 600px) {
-        .custom-dropdown-btn {
-        width: 150px;
-        padding: 6px 12px;
-    }
-    .custom-dropdown {
-        margin-bottom: 0px !important;
-    }
-    .occropmm {
-    display: none;
-    }
-    }
-    @media screen and (min-width: 768px) {
-    .occrop {
-    display: none;
-    }
-}
-</style>
+    </style>
 <!-- Page Header Start -->
 <!-- <div class="page-header bg-section parallaxie">
     <div class="container">
@@ -224,133 +107,77 @@
 <div class="page-fleets">
     <div class="container">
         <div class="row">
-            <div class="col-lg-10"></div>
-            <div class="col-lg-2">
-                <div class="custom-dropdown occropmm">
-                    <button class="custom-dropdown-btn" ><i class="fa fa-exchange" aria-hidden="true"></i> Sort By Price</button>
-                    <div class="custom-dropdown-options" >
-                        <div class="custom-option" data-value="low_to_high"><i class="fa fa-arrow-up" aria-hidden="true"></i> Low to High</div>
-                        <div class="custom-option" data-value="high_to_low"><i class="fa fa-arrow-down" aria-hidden="true"></i> High to Low</div>
-                    </div>
+            <!-- Filter Bar Start -->
+            <div class="filter-bar">
+                        
+                <div class="filter-group">
+                    <select class="filter-dropdown carTypes" data-label="type">
+                        <option value="">Car Type</option>
+                        @foreach($carType as $key => $value)
+                            <option value="{{$value->id}}">{{$value->name}}</option>
+                        @endforeach
+                    </select>
                 </div>
-            </div>
-            <div class="col-lg-3">
-                <!-- Fleets Sidebar Start -->
-                <div class="fleets-sidebar wow fadeInUp">
-                    <!-- Fleets Search Box Start -->
-                    <div class="fleets-search-box">
-                        <div id="fleetsForm">
-                            <div class="form-group">
-                                <input type="text" name="search" class="form-control"  id="search" placeholder="Search..." required>
-                                <button type="button" class="section-icon-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Fleets Search Box End -->
-
-                    <div class="fleets-sort d-flex flex-column flex-sm-row align-items-center">
-                        <!-- Sort Dropdown -->
-                        <div class="custom-dropdown occrop">
-                            <button class="custom-dropdown-btn" ><i class="fa fa-exchange" aria-hidden="true"></i> Sort By Price</button>
-                            <div class="custom-dropdown-options" >
-                                <div class="custom-option" data-value="low_to_high"><i class="fa fa-arrow-up" aria-hidden="true"></i> Low to High</div>
-                                <div class="custom-option" data-value="high_to_low"><i class="fa fa-arrow-down" aria-hidden="true"></i> High to Low</div>
-                            </div>
-                        </div>
-
-                        <!-- Filter Button -->
-                        <button class="form-control mb-sm-0 d-lg-none filter-toggle-btn" type="button" style="background: #000080;color: #ffffff;padding: 9px 12px;">
-                            <i class="fa-solid fa-filter me-2"></i>Filters
-                        </button>
-                    </div>
-
-                    <div class="filter-section">
-                        <div class="collapse d-lg-block" id="filterOptions">
-                            <!-- Fleets Sidebar List Start -->
-                            <div class="fleets-sidebar-list">
-                                <div class="fleets-list-title">
-                                    <h3>Car Type</h3>
-                                </div>
-
-                                <ul>
-                                    @foreach($carType as $key => $value)
-                                    <li class="form-check filterLi" search-value="{{$value->name}}">
-                                        <input class="form-check-input car-type" type="checkbox" value="{{$value->id}}">
-                                        <label class="form-check-label" for="checkbox1">{{$value->name}}</label>
-                                    </li>
-                                    @endforeach                                
-                                </ul>
-                            </div>
-                            <!-- Fleets Sidebar List End -->
-
-                            <!-- Fleets Sidebar List Start -->
-                            <div class="fleets-sidebar-list">
-                                <div class="fleets-list-title">
-                                    <h3>Car Brands</h3>
-                                </div>
-
-                                <ul>
-                                    @foreach($brands as $key => $value)
-                                    <li class="form-check filterLi" search-value="{{$value->name}}">
-                                        <input class="form-check-input car-brand" type="checkbox" value="{{$value->id}}">
-                                        <label class="form-check-label" for="checkbox7">{{$value->name}}</label>
-                                    </li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                            <!-- Fleets Sidebar List End -->
-                            <!-- Fleets Sidebar List Start -->
-                            <div class="fleets-sidebar-list">
-                                <div class="fleets-list-title">
-                                    <h3>Transmission</h3>
-                                </div>
-                                @foreach($all_specs as $keyspec => $valuespec)
-                                    @if($valuespec->name=='Transmission')
-                                        @php $transArr = explode('~',$valuespec->options); @endphp
-                                        @php $transId = $valuespec->id; @endphp
-                                    @endif
-                                    @if($valuespec->name=='Passenger')
-                                        @php $passArr = explode('~',$valuespec->options); @endphp
-                                        @php $seatId = $valuespec->id; @endphp
-                                    @endif
-                                @endforeach
-                                <ul class="transmission-id" data-value="{{$transId}}">
-                                    @foreach($transArr as $key1 => $value1)
-                                        <li class="form-check filterLi" search-value="{{$value1}}">
-                                            <input class="form-check-input car-transmision" type="checkbox" value="{{$value1}}">
-                                            <label class="form-check-label" for="checkbox7">{{$value1}}</label>
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                            <!-- Fleets Sidebar List End -->
-                            <!-- Fleets Sidebar List Start -->
-                            <div class="fleets-sidebar-list">
-                                <div class="fleets-list-title">
-                                    <h3>Seat</h3>
-                                </div>
-                                <ul class="seat-id" data-value="{{$seatId}}">
-                                    @foreach($passArr as $key2 => $value2)
-                                        <li class="form-check filterLi" search-value="{{$value2}}">
-                                            <input class="form-check-input car-seats" type="checkbox" value="{{$value2}}">
-                                            <label class="form-check-label" for="checkbox7">{{$value2}}</label>
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                            <!-- Fleets Sidebar List End -->
-                        </div> 
-                    </div>                        
+                <div class="filter-group">
+                    <select class="filter-dropdown carBrands" data-label="brand">
+                        <option value="">Car Brands</option>
+                        @foreach($brands as $key => $value)
+                            <option value="{{$value->id}}">{{$value->name}}</option>
+                        @endforeach
+                    </select>
                 </div>
-                <!-- Fleets Sidebar End -->
+                @foreach($all_specs as $keyspec => $valuespec)
+                    @if($valuespec->name=='Transmission')
+                        @php $transArr = explode('~',$valuespec->options); @endphp
+                        @php $transId = $valuespec->id; @endphp
+                    @endif
+                    @if($valuespec->name=='Passenger')
+                        @php $passArr = explode('~',$valuespec->options); @endphp
+                        @php $seatId = $valuespec->id; @endphp
+                    @endif
+                @endforeach
+                <div class="filter-group">
+                    <select class="filter-dropdown carFuel" data-label="fuel">
+                        <option value="">Fuel Type</option>
+                        <option value="Petrol">Petrol</option>
+                        <option value="Diesel">Diesel</option>
+                        <option value="Electric">Electric</option>
+                        <option value="Hybrid">Hybrid</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <select class="filter-dropdown carTransmission" data-value="{{$transId}}" data-label="transmission">
+                        <option value="">Transmission</option>
+                        @foreach($transArr as $key1 => $value1)
+                            <option value="{{$value1}}">{{$value1}}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <select class="filter-dropdown carSeats" data-value="{{$seatId}}" data-label="seats">
+                        <option value="">Seats</option>
+                        @foreach($passArr as $key2 => $value2)
+                            <option value="{{$value2}}">{{$value2}} Seats</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <select class="filter-dropdown carSort" data-label="sort">
+                        <option value="">Sort by Price</option>
+                        <option value="low_to_high">Low to High</option>
+                        <option value="high_to_low">High to Low</option>
+                    </select>
+                </div>
+                <!-- Search Form End -->
             </div>
+            <!-- Filter Bar End -->
             
-            <div class="col-lg-9">
+            <div class="col-lg-12">
                 <!-- Fleets Collection Box Start -->
                 <div class="fleets-collection-box">
                     <div class="row" id="carList">
                         @foreach($cars as $key => $value)
-                        <div class="col-lg-4 col-md-6">
+                        <div class="col-lg-3 col-md-6">
                             <!-- Perfect Fleets Item Start -->
                             <div class="perfect-fleet-item fleets-collection-item wow fadeInUp">
                                 <!-- Image Box Start -->
@@ -438,109 +265,181 @@
 <script src="{{asset('admin_assets/js/core/jquery-3.7.1.min.js')}}"></script> 
 <script>
 var xhr = null;
-const filterToggleBtn = document.querySelector('.filter-toggle-btn');
-const filterOptions = document.getElementById('filterOptions');
 
-filterToggleBtn.addEventListener('click', () => {
-    filterOptions.classList.toggle('collapse');
-});
-document.addEventListener('DOMContentLoaded', function () {
-    // Add click event to all custom dropdown buttons
-    document.querySelectorAll('.custom-dropdown-btn').forEach(button => {
-        button.addEventListener('click', function (e) {
-            e.stopPropagation(); // Prevent click from propagating to the document
-            
-            const dropdown = this.nextElementSibling; // Get the corresponding dropdown options
-            const isVisible = dropdown.style.display === 'block';
-
-            // Hide all dropdowns first
-            document.querySelectorAll('.custom-dropdown-options').forEach(option => {
-                option.style.display = 'none';
-            });
-
-            // Toggle visibility of the current dropdown
-            dropdown.style.display = isVisible ? 'none' : 'block';
-        });
-    });
-
-    // Add click event to all dropdown options
-    document.querySelectorAll('.custom-option').forEach(option => {
-        option.addEventListener('click', function () {
-            const selectedValue = this.getAttribute('data-value');
-            const btn = this.closest('.custom-dropdown').querySelector('.custom-dropdown-btn');
-            
-            // Update button with the selected option
-            btn.innerHTML = `<i class="fa fa-exchange" aria-hidden="true"></i> ${this.innerHTML}`;
-            
-            // Hide the dropdown
-            this.closest('.custom-dropdown-options').style.display = 'none';
-
-            // console.log('Selected:', selectedValue);
-            getCars(selectedValue)
-        });
-    });
-
-    // Hide all dropdowns when clicking outside
-    document.addEventListener('click', function () {
-        document.querySelectorAll('.custom-dropdown-options').forEach(dropdown => {
-            dropdown.style.display = 'none';
-        });
-    });
-});
 $(document).ready(function () {
     
-    var carType = localStorage.getItem("searchType");
-    var carBrand = localStorage.getItem("brandClick");
-    localStorage.clear();
-
-    if(carType!=null){
-        $('.car-type').each(function() {
-            if($(this).val() == carType){
-                $(this).prop('checked', true);;
-            }
-            getCars();
-        });
-    }else if(carBrand!=null){
-        $('.car-brand').each(function() {
-            if($(this).val() == carBrand){
-                $(this).prop('checked', true);;
-            }
-            getCars();
-        });
-    }
-
-    $(".form-check-input").click(function () {
-        getCars();
+    $(".filter-dropdown").change(function () {
+        var sortData = $(".carSort").val();
+        var dataLabel = $(this).data('label');
+        getCarsNew(sortData);
+        getFiltersNew(dataLabel);
     });
 
-    // $("#customSortOptions").change(function () {
-    //     getCars();
-    // });
-
-    
-
-    $("#search").on("keyup change paste", function() {
-        getCars()
-        // var searchKeyword = $(this).val().toLowerCase(); // Convert to lowercase for case-insensitive search
-        // $(".filterLi").each(function() {
-        //     $(this).removeClass('show')
-        //     $(this).removeClass('hide')
-        //     // $(this).addClass('active');
-        // });
-        // if(searchKeyword==''){
-        //     return false;
-        // }
-        // $(".filterLi").each(function() {
-        //     var searchValue = $(this).attr('search-value').toLowerCase(); // Convert to lowercase for comparison
-        //     if (searchValue.includes(searchKeyword) && searchKeyword) {
-        //         $(this).addClass('show').removeClass('hide');
-        //     } else {
-        //         $(this).removeClass('show').addClass('hide');
-        //     }
-        // });
+    $(".carTypes").on("click", function () {
+        $(".filter-dropdown").not($(this)).not(".carSort").each(function () {
+            $(this).val('');
+        });
     });
  
 });
+
+function getCarsNew(sortData){
+        
+    var carType = [];
+    var carBrand = [];
+    var carTransmission = [];
+    var carSeats = [];
+    var carFuel = [];
+
+    $(".carTypes").val() && carType.push($(".carTypes").val());
+    $(".carBrands").val() && carBrand.push($(".carBrands").val());
+    $(".carTransmission").val() && carTransmission.push($(".carTransmission").val());
+    $(".carSeats").val() && carSeats.push($(".carSeats").val());
+    $(".carFuel").val() && carFuel.push($(".carFuel").val());
+    
+    if (xhr !== null) {
+        xhr.abort();
+    }
+    xhr = $.ajax({
+        url: baseUrl + '/site/filter-offer-cars',
+        type: 'post',
+        dataType: "json",
+        data: {
+            'type' : carType,
+            'brand':carBrand,
+            'carTransmission':carTransmission,
+            'carSeats':carSeats,
+            'carFuel':carFuel,
+            'transId':$(".carTransmission").attr('data-value'),
+            'seatId':$(".carSeats").attr('data-value'),
+            'searchText':$("#search").val(),
+            'sortBy':(sortData === 'low_to_high') ? 'asc' : (sortData === 'high_to_low') ? 'desc' : 'asc',
+        },
+        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+        success: function(res) {
+            var html = '';
+            res.carDet.forEach(function(item) {
+                if(item.image!=null)
+                    var image = item.image.split(',');
+                else
+                    var image = '';
+                // console.log(window.btoa(item.id));
+                html += '<div class="col-lg-3 col-md-6">'
+                    +'<div class="perfect-fleet-item fleets-collection-item wow fadeInUp">'
+                            +'<div class="image-box">'
+                                    +'<a href="'+baseUrl+'/car-details?id='+window.btoa(item.id)+'"><img src="'+baseUrl+'/'+image[0]+'" alt="Image not available"></a>'
+                            +'</div>'
+                            +'<div class="perfect-fleet-content">'
+                                +'<div class="perfect-fleet-title">'
+                                    +'<h3>'+item.car_type+'</h3>'
+                                    +'<a href="'+baseUrl+'/car-details?id='+window.btoa(item.id)+'"><h2>'+item.brand_name+' '+item.name+' '+item.model+'</h2></a>'
+                                +'</div>'
+                                +'<div class="perfect-fleet-body">'
+                                    +'<ul>';
+                                        if(res.specs[item.id] != null){
+                                            res.specs[item.id].forEach(function(items,keys) {
+                                                // console.log(items)
+                                                if(keys<=3){
+                                                    html+='<li class="break-word"><img src="'+baseUrl+'/'+items.image+'" alt="" width="21">';
+                                                    if(items.name!="Transmission"){
+                                                        if(items.details!='Yes'){
+                                                            html+=items.details;
+                                                        } 
+                                                        html+=' '+items.name+'</li>';
+                                                    }else{
+                                                        if(items.details!='Yes'){
+                                                            html+=items.details;
+                                                        } 
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    html+='</ul>'
+                                +'</div>'
+                                +'<div class="perfect-fleet-footer">'
+                                    +'<div class="perfect-fleet-pricing">'
+                                        if(item.offer_flag == 1){
+                                            html+= '<del><h6>AED '+item.rent+'<span>/day</span></h6></del>'
+                                                +'<h2>AED '+item.offer_price+' <span>/day</span></h2>';
+                                        }else{
+                                            html+= '<h2>AED '+item.rent+'<span>/day</span></h2>';
+                                        }
+                                    html+='</div>'
+                                    +'<div class="perfect-fleet-btn">'
+                                        +"<a href='"+baseUrl+"/car-details?id="+window.btoa(item.id)+"' class='section-icon-btn'><img src='"+baseUrl+'/'+"assets/images/arrow-white.svg' alt=''></a>"
+                                    +'</div>'
+                                +'</div>'
+                            +'</div>'
+                        +'</div>'
+                    +'</div>';
+            });
+            $("#carList").html(html)
+        }
+    });
+}
+
+function getFiltersNew(dataLabel){
+        
+        var carType = [];
+        var carBrand = [];
+        var carTransmission = [];
+        var carSeats = [];
+        var carFuel = [];
+        
+        $(".carTypes").val() && carType.push($(".carTypes").val());
+        $(".carBrands").val() && carBrand.push($(".carBrands").val());
+        $(".carTransmission").val() && carTransmission.push($(".carTransmission").val());
+        $(".carSeats").val() && carSeats.push($(".carSeats").val());
+        $(".carFuel").val() && carFuel.push($(".carFuel").val());
+
+        $.ajax({
+            url: baseUrl + '/site/get-offer-filters',
+            type: 'post',
+            dataType: "json",
+            data: {
+                'type' : carType,
+                'brand':carBrand,
+                'carTransmission':carTransmission,
+                'carSeats':carSeats,
+                'carFuel':carFuel,
+                'transId':$(".carTransmission").attr('data-value'),
+                'seatId':$(".carSeats").attr('data-value'),
+            },
+            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+            success: function(res) {
+                if(dataLabel == 'type'){
+                    populateDropdownWithSelectedValue($(".carBrands"), "Car Brands", res.brand, "id", "name");
+                    populateDropdownWithSelectedValue($(".carTransmission"), "Transmission", res.transmission, "details", "details");
+                    populateDropdownWithSelectedValue($(".carSeats"), "Seats", res.seat, "details", "details");
+                    populateDropdownWithSelectedValue($(".carFuel"), "Fuel Type", res.fuel, "fuel_type", "fuel_type");
+                }else if(dataLabel == 'brand'){
+                    populateDropdownWithSelectedValue($(".carTransmission"), "Transmission", res.transmission, "details", "details");
+                    populateDropdownWithSelectedValue($(".carSeats"), "Seats", res.seat, "details", "details");
+                    populateDropdownWithSelectedValue($(".carFuel"), "Fuel Type", res.fuel, "fuel_type", "fuel_type");
+                }else if(dataLabel == 'fuel'){
+                    populateDropdownWithSelectedValue($(".carTransmission"), "Transmission", res.transmission, "details", "details");
+                    populateDropdownWithSelectedValue($(".carSeats"), "Seats", res.seat, "details", "details");
+                }else if(dataLabel == 'transmission'){
+                    populateDropdownWithSelectedValue($(".carSeats"), "Seats", res.seat, "details", "details");
+                }
+            }
+        });
+    }
+
+function populateDropdownWithSelectedValue(dropdown, defaultOption, data, valueKey, textKey) {
+    const selectedValue = dropdown.val();
+
+    dropdown.empty(); 
+    dropdown.append(`<option value="">${defaultOption}</option>`);
+
+    data.forEach(function (item) {
+        if (item[textKey]) {
+            const optionLabel = item[textKey].charAt(0).toUpperCase() + item[textKey].slice(1);
+            const isSelected = item[valueKey] == selectedValue ? 'selected' : '';
+            dropdown.append(`<option value="${item[valueKey]}" ${isSelected}>${optionLabel}</option>`);
+        }
+    });
+}   
 
 function getCars(sortData){
         
@@ -548,6 +447,8 @@ function getCars(sortData){
     var carBrand = [];
     var carTransmission = [];
     var carSeats = [];
+    var carFuel = [];
+
     $('.car-type').each(function() {
         if($(this).prop('checked') == true){
             carType.push($(this).val());

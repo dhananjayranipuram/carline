@@ -878,4 +878,80 @@ class Site extends Model
         }
         
     }
+    
+    public function getOfferFilters($data=[],$filter){
+        $condition = '';
+        if(!empty($data['type'])){
+            $condition .= " AND ct.id IN(".implode(',', $data['type']).")";
+        }
+        if(!empty($data['brand'])){
+            $condition .= " AND cb.id IN(".implode(',', $data['brand']).")";
+        }
+        if(!empty($data['carTransmission'])){
+            $str = '';
+            foreach ($data['carTransmission'] as $key => $value) {
+                $str .= "'".$value."',";
+            }
+            $condition .= " AND cst.details IN(".rtrim($str,',').")";
+        }
+        if(!empty($data['carSeats'])){
+            $condition .= " AND css.details IN(".implode(',', $data['carSeats']).")";
+        }
+        
+        switch ($filter) {
+            case 'type':
+                return DB::select("SELECT DISTINCT ct.id,ct.name FROM cars c
+                            LEFT JOIN car_brand cb ON cb.id=c.brand_id
+                            LEFT JOIN car_type ct ON ct.id=c.type_id
+                            LEFT JOIN car_images ci ON ci.car_id=c.id
+                            LEFT JOIN car_specification cst ON cst.car_id = c.id AND cst.spec_id=$data[transId]
+                            LEFT JOIN car_specification css ON css.car_id = c.id AND css.spec_id=$data[seatId]
+                            WHERE c.active=1 AND c.deleted=0 AND c.offer_flag=1 $condition GROUP BY c.id;");
+                break;
+            
+            case 'brand':
+                return DB::select("SELECT DISTINCT cb.id,cb.name FROM cars c
+                            LEFT JOIN car_brand cb ON cb.id=c.brand_id
+                            LEFT JOIN car_type ct ON ct.id=c.type_id
+                            LEFT JOIN car_images ci ON ci.car_id=c.id
+                            LEFT JOIN car_specification cst ON cst.car_id = c.id AND cst.spec_id=$data[transId]
+                            LEFT JOIN car_specification css ON css.car_id = c.id AND css.spec_id=$data[seatId]
+                            WHERE c.active=1 AND c.deleted=0 AND c.offer_flag=1 $condition GROUP BY c.id;");
+            
+            case 'transmission':
+                return DB::select("SELECT DISTINCT cst.details FROM cars c
+                            LEFT JOIN car_brand cb ON cb.id=c.brand_id
+                            LEFT JOIN car_type ct ON ct.id=c.type_id
+                            LEFT JOIN car_images ci ON ci.car_id=c.id
+                            LEFT JOIN car_specification cst ON cst.car_id = c.id AND cst.spec_id=$data[transId]
+                            LEFT JOIN car_specification css ON css.car_id = c.id AND css.spec_id=$data[seatId]
+                            WHERE c.active=1 AND c.deleted=0 AND c.offer_flag=1 $condition GROUP BY c.id;");
+                break;
+
+            case 'seat':
+                return DB::select("SELECT DISTINCT css.details FROM cars c
+                            LEFT JOIN car_brand cb ON cb.id=c.brand_id
+                            LEFT JOIN car_type ct ON ct.id=c.type_id
+                            LEFT JOIN car_images ci ON ci.car_id=c.id
+                            LEFT JOIN car_specification cst ON cst.car_id = c.id AND cst.spec_id=$data[transId]
+                            LEFT JOIN car_specification css ON css.car_id = c.id AND css.spec_id=$data[seatId]
+                            WHERE c.active=1 AND c.deleted=0 AND c.offer_flag=1 $condition GROUP BY c.id;");
+                break;
+            
+            case 'fuel':
+                return DB::select("SELECT DISTINCT c.fuel_type FROM cars c
+                            LEFT JOIN car_brand cb ON cb.id=c.brand_id
+                            LEFT JOIN car_type ct ON ct.id=c.type_id
+                            LEFT JOIN car_images ci ON ci.car_id=c.id
+                            LEFT JOIN car_specification cst ON cst.car_id = c.id AND cst.spec_id=$data[transId]
+                            LEFT JOIN car_specification css ON css.car_id = c.id AND css.spec_id=$data[seatId]
+                            WHERE c.active=1 AND c.deleted=0 AND c.offer_flag=1 $condition GROUP BY c.id;");
+                break;
+            
+            default:
+                # code...
+                break;
+        }
+        
+    }
 }
