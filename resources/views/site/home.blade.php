@@ -287,19 +287,31 @@
         </div>
 
         <div class="row">
-            @foreach($brands as $key => $value)
-                <div class="col-lg-3 col-6" style="cursor:pointer;">
-                    <!-- Partners Logo Start -->
-                    <div class="partners-logo wow fadeInUp brand-click" data-wow-delay="0.2s" data-id="{{$value->id}}">
-                        <img src="{{asset($value->image)}}" alt="{{asset($value->name)}}">
+            <div class="car-details-slider">
+                <div class="swiper swiper-initialized swiper-horizontal">
+                    <div class="swiper-wrapper" data-cursor-text="Drag" id="swiper-wrapper-9ebdd264537877106" aria-live="off" style="transition-duration: 0ms; transform: translate3d(-3805px, 0px, 0px); transition-delay: 0ms;">
+                        
+                        @foreach($brands as $key => $value)
+                        <!-- Testimonial Slide Start -->
+                        <div class="swiper-slide" role="group" aria-label="1 / 14" data-swiper-slide-index="1" style="width: 350.5px; margin-right: 30px;">
+                            <div class="partners-logo wow fadeInUp brand-click" data-wow-delay="0.2s" data-id="{{$value->id}}">
+                                <img src="{{asset($value->image)}}" alt="{{asset($value->name)}}">
+                            </div>                             
+                        </div>
+                        <!-- Testimonial Slide End -->
+                        @endforeach
+
+                        </div>
+                    <div class="car-details-btn">
+                        <div class="car-button-prev" tabindex="0" role="button" aria-label="Previous slide" aria-controls="swiper-wrapper-871148932a4101eae"></div>
+                        <div class="car-button-next" tabindex="0" role="button" aria-label="Next slide" aria-controls="swiper-wrapper-871148932a4101eae"></div>
                     </div>
-                    <!-- Partners Logo End -->
-                </div>
-            @endforeach
+                <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span></div>
+            </div>
         </div>
     </div>
 </div>
-<!-- Exclusive Partners Section End -->
+<!-- Exclusive Partners Section End -->
 
 <!-- Hero Slider Section End -->
 <div class="perfect-fleet bg-section">
