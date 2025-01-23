@@ -269,7 +269,7 @@ input[type="text"]:not(:placeholder-shown) + .input-placeholder {
                                     </div>
                                 </div>
                             </div>
-                            <!-- <div class="card">
+                            <div class="card">
                                 <div class="card-header">
                                     <h4 class="card-title">Quantity</h4>
                                 </div>
@@ -277,8 +277,8 @@ input[type="text"]:not(:placeholder-shown) + .input-placeholder {
                                     <input type="text" name="qty" placeholder="Enter Quantity" class="form-control" value="{{old('qty')}}">
                                     @error('qty') <span class="text-danger">{{ $message }}</span> @enderror
                                 </div>
-                            </div> -->
-                            <div class="card">
+                            </div>
+                            <!--<div class="card">
                                 <div class="card-header">
                                     <h4 class="card-title">Kilometers Driven</h4>
                                 </div>
@@ -289,7 +289,7 @@ input[type="text"]:not(:placeholder-shown) + .input-placeholder {
                                         <label for="input-box" class="input-placeholder">Kilometers Driven (KM)</label>
                                     </div>
                                 </div>
-                            </div>
+                            </div>-->
                             
                         </div>
 

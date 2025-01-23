@@ -1088,6 +1088,10 @@ function bookCarAction(){
                     // bookCarActionFinal()
                 }else{
                     $("#booking-errors").html('<span style="color:red;">Booking cannot be done in these days.</span>');
+                    
+                    $('html, body').animate({
+                        scrollTop: $('#booking-errors').offset().top
+                    }, 1000);
                     setTimeout(function () {
                         $('#booking-errors').html('');
                     }, 2500);

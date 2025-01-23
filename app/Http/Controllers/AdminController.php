@@ -485,8 +485,8 @@ class AdminController extends Controller
                 'specialOfferMonthly' => ['nullable'],
 
                 'deposit' => ['required'],
-                'qty' => ['nullable','numeric'],
-                'kmeter' => ['required','numeric'],
+                'qty' => ['required','numeric'],
+                'kmeter' => ['nullable','numeric'],
                 'toll' => ['required','numeric'],
                 'additionalCharge' => ['required','numeric'],
                 'fuel_type' => ['required'],
@@ -503,7 +503,7 @@ class AdminController extends Controller
             $filterData['online_flag'] = isset($filterData['online_flag']) ? 1 : 0;
             $filterData['whatsapp_flag'] = isset($filterData['whatsapp_flag']) ? 1 : 0;
 
-            $filterData['qty'] = 1;
+            $filterData['kmeter'] = 1;
             
             // Handle file uploads
             $uploadedImages = [];
@@ -602,8 +602,8 @@ class AdminController extends Controller
                 'offerFlagMonthly' => ['nullable'],
                 'specialOfferMonthly' => ['nullable'],
 
-                'qty' => ['nullable','numeric'],
-                'kmeter' => ['required','numeric'],
+                'qty' => ['required','numeric'],
+                'kmeter' => ['nullable','numeric'],
                 'toll' => ['required','numeric'],
                 'additionalCharge' => ['required','numeric'],
                 'fuel_type' => ['required'],
@@ -618,7 +618,8 @@ class AdminController extends Controller
             $filterData['online_flag'] = isset($filterData['online_flag']) ? 1 : 0;
             $filterData['whatsapp_flag'] = isset($filterData['whatsapp_flag']) ? 1 : 0;
 
-            $filterData['qty'] = 1;
+            // $filterData['qty'] = 1;
+            $filterData['kmeter'] = 1;
             // echo '<pre>';print_r($filterData);exit;
             if(Session::get('deleteCarImageData')){
                 $CarImageData = Session::get('deleteCarImageData');

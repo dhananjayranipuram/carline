@@ -651,7 +651,42 @@ class Site extends Model
                 $data['pickuptime'] = date('H:i', strtotime($data['pickuptime']));
                 $data['returntime'] = date('H:i', strtotime($data['returntime']));
                 // print_r($data);exit;
-                return DB::select("SELECT COUNT(*) AS cnt
+                return DB::select("SELECT COUNT(*) AS cnt                        
+                        FROM booking                      
+                        WHERE STATUS = 1                         
+                        AND car_id = $data[carId]                         
+                        AND (
+                            -- New booking starts during an existing booking
+                            STR_TO_DATE('$data[pickupdate] $data[pickuptime]', '%Y-%m-%d %H:%i:%s') BETWEEN STR_TO_DATE(CONCAT(pickup_date, ' ', pickup_time), '%Y-%m-%d %H:%i:%s') 
+                            AND STR_TO_DATE(CONCAT(return_date, ' ', return_time), '%Y-%m-%d %H:%i:%s')
+                            
+                            OR
+                            
+                            -- New booking ends during an existing booking
+                            STR_TO_DATE('$data[returndate] $data[returntime]', '%Y-%m-%d %H:%i:%s') BETWEEN STR_TO_DATE(CONCAT(pickup_date, ' ', pickup_time), '%Y-%m-%d %H:%i:%s') 
+                            AND STR_TO_DATE(CONCAT(return_date, ' ', return_time), '%Y-%m-%d %H:%i:%s')
+                            
+                            OR
+                            
+                            -- New booking completely encloses an existing booking
+                            STR_TO_DATE(CONCAT(pickup_date, ' ', pickup_time), '%Y-%m-%d %H:%i:%s') BETWEEN STR_TO_DATE('$data[pickupdate] $data[pickuptime]', '%Y-%m-%d %H:%i:%s') 
+                            AND STR_TO_DATE('$data[returndate] $data[returntime]', '%Y-%m-%d %H:%i:%s')
+                            
+                            OR
+                            
+                            -- Existing booking completely encloses the new booking
+                            STR_TO_DATE(CONCAT(return_date, ' ', return_time), '%Y-%m-%d %H:%i:%s') BETWEEN STR_TO_DATE('$data[pickupdate] $data[pickuptime]', '%Y-%m-%d %H:%i:%s') 
+                            AND STR_TO_DATE('$data[returndate] $data[returntime]', '%Y-%m-%d %H:%i:%s')
+                        );");
+                /*return DB::select("SELECT COUNT(*) AS cnt                        
+                        FROM booking                      
+                        WHERE STATUS = 1                         
+                        AND car_id = $data[carId]                        
+                        AND (
+                            STR_TO_DATE('$data[pickupdate] $data[pickuptime]', '%Y-%m-%d %H:%i:%s') < STR_TO_DATE(CONCAT(return_date, ' ', return_time), '%Y-%m-%d %H:%i:%s') 
+                            AND STR_TO_DATE('$data[returndate] $data[returntime]', '%Y-%m-%d %H:%i:%s') > STR_TO_DATE(CONCAT(pickup_date, ' ', pickup_time), '%Y-%m-%d %H:%i:%s')
+                        );");*/
+                /*return DB::select("SELECT COUNT(*) AS cnt
                         FROM booking
                         WHERE status = 1 
                         AND car_id = $data[carId]
@@ -673,7 +708,7 @@ class Site extends Model
                                 STR_TO_DATE('$data[pickupdate] $data[pickuptime]', '%Y-%m-%d %h:%i:%s') 
                                 AND STR_TO_DATE('$data[returndate] $data[returntime]', '%Y-%m-%d %h:%i:%s')
 
-                        );");
+                        );");*/
                 break;
         }
         
@@ -778,29 +813,75 @@ class Site extends Model
             ->get();
     }
 
-    public function getAvailableDates($data=[]){
+    // public function getAvailableDates($data=[]){
+    //     $bookings = \DB::table('booking as b')
+    //         ->where('b.car_id', $data['carId'])
+    //         ->select([
+    //             \DB::raw("DATE_FORMAT(b.pickup_date, '%Y-%m-%d') as pickup_date"),
+    //             \DB::raw("DATE_FORMAT(b.return_date, '%Y-%m-%d') as return_date"),
+    //             \DB::raw("DATE_FORMAT(b.pickup_time, '%h:%i %p') as pickup_time"),
+    //             \DB::raw("DATE_FORMAT(b.return_time, '%h:%i %p') as return_time")
+    //         ])
+    //         ->get();
+
+    //     $bookedDates = [];
+        
+    //     foreach ($bookings as $booking) {
+    //         $startDate = Carbon::parse($booking->pickup_date);
+    //         $endDate = Carbon::parse($booking->return_date);
+
+    //         while ($startDate->lte($endDate)) {
+    //             $bookedDates[] = $startDate->format('Y-m-d');
+    //             $startDate->addDay();
+    //         }
+    //     }
+    //     return $bookedDates;
+    // }
+
+    public function getAvailableDates($data = [])
+    {
+        $carId = $data['carId'];
+        $carQuantity = DB::table('cars')
+                ->where('id', $data['carId'])->pluck('qty')->first();
+
         $bookings = \DB::table('booking as b')
-            ->where('b.car_id', $data['carId'])
+            ->where('b.car_id', $carId)
+            ->where('b.status', 1) // Optional: Filter only active bookings
             ->select([
                 \DB::raw("DATE_FORMAT(b.pickup_date, '%Y-%m-%d') as pickup_date"),
                 \DB::raw("DATE_FORMAT(b.return_date, '%Y-%m-%d') as return_date"),
-                \DB::raw("DATE_FORMAT(b.pickup_time, '%h:%i %p') as pickup_time"),
-                \DB::raw("DATE_FORMAT(b.return_time, '%h:%i %p') as return_time")
             ])
             ->get();
 
-        $bookedDates = [];
-        
+        // Create an array to count bookings for each date
+        $dateCounts = [];
+
         foreach ($bookings as $booking) {
             $startDate = Carbon::parse($booking->pickup_date);
             $endDate = Carbon::parse($booking->return_date);
 
             while ($startDate->lte($endDate)) {
-                $bookedDates[] = $startDate->format('Y-m-d');
+                $currentDate = $startDate->format('Y-m-d');
+                
+                // Increment the count for the current date
+                if (!isset($dateCounts[$currentDate])) {
+                    $dateCounts[$currentDate] = 0;
+                }
+                $dateCounts[$currentDate]++;
+
                 $startDate->addDay();
             }
         }
-        return $bookedDates;
+
+        // Get fully booked dates where the count exceeds or matches the car quantity
+        $fullyBookedDates = [];
+        foreach ($dateCounts as $date => $count) {
+            if ($count >= $carQuantity) {
+                $fullyBookedDates[] = $date;
+            }
+        }
+
+        return $fullyBookedDates;
     }
     
     public function getFilters($data=[],$filter){
