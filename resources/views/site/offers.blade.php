@@ -145,14 +145,14 @@
                         <option value="Hybrid">Hybrid</option>
                     </select>
                 </div>
-                <div class="filter-group">
+                <!-- <div class="filter-group">
                     <select class="filter-dropdown carTransmission" data-value="{{$transId}}" data-label="transmission">
                         <option value="">Transmission</option>
                         @foreach($transArr as $key1 => $value1)
                             <option value="{{$value1}}">{{$value1}}</option>
                         @endforeach
                     </select>
-                </div>
+                </div> -->
                 <div class="filter-group">
                     <select class="filter-dropdown carSeats" data-value="{{$seatId}}" data-label="seats">
                         <option value="">Seats</option>
@@ -160,6 +160,12 @@
                             <option value="{{$value2}}">{{$value2}} Seats</option>
                         @endforeach
                     </select>
+                </div>
+                <div class="filter-group">
+                    <div style="position: relative; display: inline-block; width: 100%;">
+                        <input type="text" name="search" class="form-control" id="search" placeholder="Search cars" style="padding-left: 40px;">
+                        <i class="fa fa-search" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #aaa;"></i>
+                    </div>
                 </div>
                 <div class="filter-group">
                     <select class="filter-dropdown carSort" data-label="sort">
@@ -267,6 +273,11 @@
 var xhr = null;
 
 $(document).ready(function () {
+    
+    $("#search").on("keyup change paste", function() {
+        var sortData = $(".carSort").val();
+        getCarsNew(sortData);
+    });
     
     $(".filter-dropdown").change(function () {
         var sortData = $(".carSort").val();
