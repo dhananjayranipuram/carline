@@ -163,8 +163,27 @@
                         </div>
                         <div class="filter-group">
                             <div style="position: relative; display: inline-block; width: 100%;">
-                                <input type="text" name="search" class="form-control" id="search" placeholder="Search cars" style="padding-left: 40px;">
+                                <!-- Input field -->
+                                <input 
+                                    type="text" 
+                                    name="search" 
+                                    class="form-control" 
+                                    id="search" 
+                                    placeholder="Search cars" 
+                                    style="padding-left: 40px; padding-right: 40px;"
+                                    oninput="toggleClearIcon(this)"
+                                >
+
+                                <!-- Search icon -->
                                 <i class="fa fa-search" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #aaa;"></i>
+
+                                <!-- Clear text icon -->
+                                <i 
+                                    class="fa fa-times" 
+                                    id="clear-icon" 
+                                    style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: #aaa; cursor: pointer; display: none;"
+                                    onclick="clearSearch()"
+                                ></i>
                             </div>
                         </div>
                         <div class="filter-group">
@@ -271,6 +290,24 @@
 <script src="{{asset('admin_assets/js/core/jquery-3.7.1.min.js')}}"></script> 
 <script>
 var xhr = null;
+
+function toggleClearIcon(input) {
+    const clearIcon = document.getElementById('clear-icon');
+    if (input.value.trim() !== '') {
+        clearIcon.style.display = 'block';
+    } else {
+        clearIcon.style.display = 'none';
+    }
+}
+
+// Clear the input field and hide the clear icon
+function clearSearch() {
+    const searchInput = document.getElementById('search');
+    searchInput.value = '';
+    toggleClearIcon(searchInput);
+    var sortData = $(".carSort").val();
+    getCarsNew(sortData);
+}
 
 $(document).ready(function () {
     var carType = localStorage.getItem("searchType");
