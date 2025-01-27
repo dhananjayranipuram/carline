@@ -818,7 +818,7 @@
                     <div class="col-lg-4 col-md-7">
                         <!-- Footer Copyright Start -->
                         <div class="footer-copyright-text">
-                            <p>© 2025 Carline. All Rights Reserved. <br>Designed By  <a href="">GrowthArk Media</a></p>
+                            <p>© 2025 Carline. All Rights Reserved. <br>Designed By  <a href="" onclick="return false;" style="cursor: default;">GrowthArk Media</a></p>
                         </div>
                         <!-- Footer Copyright End -->
                     </div>
