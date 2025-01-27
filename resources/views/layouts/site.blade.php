@@ -711,13 +711,18 @@
     
         <!-- Hidden buttons for call, WhatsApp, and email -->
         <div class="floating-chat-menu" id="chat-menu">
-            <button class="chat-call-btn" type="button" onclick="window.location.href='tel:971565738866'">
+            <!-- Call Button -->
+            <button class="chat-call-btn" type="button" onclick="window.open('tel:971565738866', '_blank')">
                 <i class="fas fa-phone"></i>
             </button>
-            <button class="chat-whatsapp-btn" type="button" onclick="window.location.href='https://wa.me/971508689526'">
+            
+            <!-- WhatsApp Button -->
+            <button class="chat-whatsapp-btn" type="button" onclick="window.open('https://wa.me/971508689526', '_blank')">
                 <i class="fab fa-whatsapp"></i>
             </button>
-            <button class="chat-email-btn" type="button" onclick="window.location.href='mailto:info@carline.com'">
+            
+            <!-- Email Button -->
+            <button class="chat-email-btn" type="button" onclick="window.open('mailto:info@carline.com', '_blank')">
                 <i class="fas fa-envelope"></i>
             </button>
         </div>

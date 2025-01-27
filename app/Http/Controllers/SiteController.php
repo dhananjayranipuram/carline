@@ -21,6 +21,7 @@ use File;
 use \Illuminate\Http\UploadedFile;
 use URL;
 use Mail;
+use Exception;
 
 class SiteController extends Controller
 {
@@ -595,106 +596,110 @@ class SiteController extends Controller
 
     public function calculateRate($credentials) {
 
-        $site = new Site();
-        $admin = new Admin();
-        $res = [];
-        $rentDays = $monthlyRate = $weeklyRate = $deposit = $rate = $emirateCharges = $babySeatCharges = $total = 0;
-        $data = $admin->getAdditionalSettingsData();
-        
-        $daysInWeek = config('constants.DAYS_IN_WEEK');
-        $daysInMonth = config('constants.DAYS_IN_MONTH');
-        $vatRate = $data[0]->vat_rate/100;
-        $bsCharges = $data[0]->baby_seat_charge;
-        $carlineName = config('constants.CAR_LINE_NAME');
-        // Calculate the time difference in days and hours
-        $pickupdate = strtotime($credentials['pickupdate'] . ' ' . $credentials['pickuptime']);
-        $returndate = strtotime($credentials['returndate'] . ' ' . $credentials['returntime']);
-        $datediff = $returndate - $pickupdate;
-    
-        // Calculate the number of complete days
-        $days = floor($datediff / (60 * 60 * 24));
-        // Calculate any extra hours after full days
-        $extraHours = ($datediff % (60 * 60 * 24)) / (60 * 60);
-    
-        // Add an additional day if extra hours exceed one-hour buffer
-        if ($extraHours > 1) {
-            $days++;
-        }
-    
-        // Retrieve car details and calculate rate and deposit
-        $credentials['format'] = 'normal';
-        $carRes = $site->getCarsRate($credentials);
-        
-        if (!empty($carRes)) {
-            // Apply offer price if available, otherwise use regular rent
-            $rate = (float) str_replace(',', '', $carRes[0]->offer_flag == 1 ? $carRes[0]->offer_price : $carRes[0]->rent);
-            $weeklyRate = (float) str_replace(',', '', $carRes[0]->offer_flag_weekly == 1 ? $carRes[0]->offer_price_weekly : $carRes[0]->per_week);
-            $monthlyRate = (float) str_replace(',', '', $carRes[0]->offer_flag_monthly == 1 ? $carRes[0]->offer_price_monthly : $carRes[0]->per_month);
-            $deposit = !empty($carRes[0]->deposit) ? (float) str_replace(',', '', $carRes[0]->deposit) : 0;
-        }
-
-        $months = floor($days / $daysInMonth);
-        $weeks = floor($days / $daysInWeek);
-        if($months>0){
-            $remainingDays = $days % $daysInMonth;
-            $remainingWeeks = floor($remainingDays / $daysInWeek);
-            if($remainingWeeks>0){
-                $remainingDays = $remainingDays % $daysInWeek;
-                $rentDays = $months*$monthlyRate + $remainingWeeks*$weeklyRate + $remainingDays*$rate;
-            }else{
-                $rentDays = $months*$monthlyRate + $remainingDays*$rate;
-            }
-        }else if($weeks>0){
-            $remainingDays = $days % $daysInWeek;
-            $rentDays = $weeks*$weeklyRate + $remainingDays*$rate;
-        }else{
-            $rentDays = $days*$rate;
-        }
-        
-        // Additional charge if pickup and destination emirates differ
-        // if($credentials['destinationData'][0]['placeName'] == '')
-        if($credentials['sourceData']['placeName'] == $carlineName && $credentials['destinationData']['placeName'] == $carlineName){
-            $resEmirate = $site->getCarlineEmiratesForRate($credentials);
-            $emirateCharges = !empty($resEmirate) ? (float) str_replace(',', '', $resEmirate[0]->rate) : 0;
-        }else if($credentials['sourceData']['placeName'] == $carlineName || $credentials['destinationData']['placeName'] == $carlineName){
-            $resEmirate = $site->getEmiratesForRate($credentials);
+        try{
+            $site = new Site();
+            $admin = new Admin();
+            $res = [];
+            $rentDays = $monthlyRate = $weeklyRate = $deposit = $rate = $emirateCharges = $babySeatCharges = $total = 0;
+            $data = $admin->getAdditionalSettingsData();
             
-            $emirateCharges = !empty($resEmirate) ? (float) str_replace(',', '', $resEmirate[0]->rate) : 0;
-            $emirateCharges = $emirateCharges / 2;
-        }else {
-            $input = [];
-            $input['sourceEmirate'] = $credentials['sourceEmirates'];
-            $resEmirate = $site->getEmiratesForRateSingle($input);
-            $emirateCharges += !empty($resEmirate) ? (float) str_replace(',', '', $resEmirate[0]->rate) : 0;
-
-            $input = [];
-            $input['destinationEmirate'] = $credentials['destinationEmirate'];
-            $resEmirate = $site->getEmiratesForRateSingle($input);
-            $emirateCharges += !empty($resEmirate) ? (float) str_replace(',', '', $resEmirate[0]->rate) : 0;
-        }
+            $daysInWeek = config('constants.DAYS_IN_WEEK');
+            $daysInMonth = config('constants.DAYS_IN_MONTH');
+            $vatRate = $data[0]->vat_rate/100;
+            $bsCharges = $data[0]->baby_seat_charge;
+            $carlineName = config('constants.CAR_LINE_NAME');
+            // Calculate the time difference in days and hours
+            $pickupdate = strtotime($credentials['pickupdate'] . ' ' . $credentials['pickuptime']);
+            $returndate = strtotime($credentials['returndate'] . ' ' . $credentials['returntime']);
+            $datediff = $returndate - $pickupdate;
         
-        if($months>0){
-            $emirateCharges = 0;
-        }
+            // Calculate the number of complete days
+            $days = floor($datediff / (60 * 60 * 24));
+            // Calculate any extra hours after full days
+            $extraHours = ($datediff % (60 * 60 * 24)) / (60 * 60);
+        
+            // Add an additional day if extra hours exceed one-hour buffer
+            if ($extraHours > 1) {
+                $days++;
+            }
+        
+            // Retrieve car details and calculate rate and deposit
+            $credentials['format'] = 'normal';
+            $carRes = $site->getCarsRate($credentials);
+            
+            if (!empty($carRes)) {
+                // Apply offer price if available, otherwise use regular rent
+                $rate = (float) str_replace(',', '', $carRes[0]->offer_flag == 1 ? $carRes[0]->offer_price : $carRes[0]->rent);
+                $weeklyRate = (float) str_replace(',', '', $carRes[0]->offer_flag_weekly == 1 ? $carRes[0]->offer_price_weekly : $carRes[0]->per_week);
+                $monthlyRate = (float) str_replace(',', '', $carRes[0]->offer_flag_monthly == 1 ? $carRes[0]->offer_price_monthly : $carRes[0]->per_month);
+                $deposit = !empty($carRes[0]->deposit) ? (float) str_replace(',', '', $carRes[0]->deposit) : 0;
+            }
 
-        if($credentials['babySeat']=='on'){
-            $babySeatCharges = $bsCharges;
-        }
+            $months = floor($days / $daysInMonth);
+            $weeks = floor($days / $daysInWeek);
+            if($months>0){
+                $remainingDays = $days % $daysInMonth;
+                $remainingWeeks = floor($remainingDays / $daysInWeek);
+                if($remainingWeeks>0){
+                    $remainingDays = $remainingDays % $daysInWeek;
+                    $rentDays = $months*$monthlyRate + $remainingWeeks*$weeklyRate + $remainingDays*$rate;
+                }else{
+                    $rentDays = $months*$monthlyRate + $remainingDays*$rate;
+                }
+            }else if($weeks>0){
+                $remainingDays = $days % $daysInWeek;
+                $rentDays = $weeks*$weeklyRate + $remainingDays*$rate;
+            }else{
+                $rentDays = $days*$rate;
+            }
+            
+            // Additional charge if pickup and destination emirates differ
+            // if($credentials['destinationData'][0]['placeName'] == '')
+            if($credentials['sourceData']['placeName'] == $carlineName && $credentials['destinationData']['placeName'] == $carlineName){
+                $resEmirate = $site->getCarlineEmiratesForRate($credentials);
+                $emirateCharges = !empty($resEmirate) ? (float) str_replace(',', '', $resEmirate[0]->rate) : 0;
+            }else if($credentials['sourceData']['placeName'] == $carlineName || $credentials['destinationData']['placeName'] == $carlineName){
+                $resEmirate = $site->getEmiratesForRate($credentials);
+                
+                $emirateCharges = !empty($resEmirate) ? (float) str_replace(',', '', $resEmirate[0]->rate) : 0;
+                $emirateCharges = $emirateCharges / 2;
+            }else {
+                $input = [];
+                $input['sourceEmirate'] = $credentials['sourceEmirates'];
+                $resEmirate = $site->getEmiratesForRateSingle($input);
+                $emirateCharges += !empty($resEmirate) ? (float) str_replace(',', '', $resEmirate[0]->rate) : 0;
 
-        // Calculate the total amount and VAT
-        $total = $rentDays + $deposit + $emirateCharges + $babySeatCharges;
-        $vat = $vatRate * $rentDays;
-    
-        // Prepare result data
-        $res['days'] = $days;
-        $res['vat'] = number_format($vat, 2, '.', '');
-        $res['emirate'] = number_format($emirateCharges, 2, '.', '');
-        $res['rate'] = number_format($rentDays, 2, '.', '');
-        $res['deposit'] = number_format($deposit, 2, '.', '');
-        $res['babySeat'] = number_format($babySeatCharges, 2, '.', '');
-        $res['total'] = number_format($total + $vat, 2, '.', '');
-    
-        return $res;
+                $input = [];
+                $input['destinationEmirate'] = $credentials['destinationEmirate'];
+                $resEmirate = $site->getEmiratesForRateSingle($input);
+                $emirateCharges += !empty($resEmirate) ? (float) str_replace(',', '', $resEmirate[0]->rate) : 0;
+            }
+            
+            if($months>0){
+                $emirateCharges = 0;
+            }
+
+            if($credentials['babySeat']=='on'){
+                $babySeatCharges = $bsCharges;
+            }
+
+            // Calculate the total amount and VAT
+            $total = $rentDays + $deposit + $emirateCharges + $babySeatCharges;
+            $vat = $vatRate * $rentDays;
+        
+            // Prepare result data
+            $res['days'] = $days;
+            $res['vat'] = number_format($vat, 2, '.', '');
+            $res['emirate'] = number_format($emirateCharges, 2, '.', '');
+            $res['rate'] = number_format($rentDays, 2, '.', '');
+            $res['deposit'] = number_format($deposit, 2, '.', '');
+            $res['babySeat'] = number_format($babySeatCharges, 2, '.', '');
+            $res['total'] = number_format($total + $vat, 2, '.', '');
+        
+            return $res;
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     public function loginUser(Request $request){
@@ -996,16 +1001,16 @@ class SiteController extends Controller
         $site = new Site();
         $response = [];
         $credentials = $request->validate([
-            'destinationData' => ['required'],
-            'sourceData' => ['required'],
-            'sourceEmirates' => ['required'],
-            'destinationEmirate' => ['required'],
-            'pickupdate' => ['required'],
-            'returndate' => ['required'],
-            'pickuptime' => ['required'],
-            'returntime' => ['required'],
-            'babySeat' => ['required'],
-            'carId' => ['required'],
+            'destinationData' => ['nullable'],
+            'sourceData' => ['nullable'],
+            'sourceEmirates' => ['nullable'],
+            'destinationEmirate' => ['nullable'],
+            'pickupdate' => ['nullable'],
+            'returndate' => ['nullable'],
+            'pickuptime' => ['nullable'],
+            'returntime' => ['nullable'],
+            'babySeat' => ['nullable'],
+            'carId' => ['nullable'],
         ]);
         $rateData = $this->calculateRate($credentials);
         $credentials['id'] = $credentials['carId'];
@@ -1024,41 +1029,94 @@ class SiteController extends Controller
         return json_encode($response);
     }
     
-    private function generateWhatsappMsg($credentials,$carData,$rateData){
-        $destinationData = $credentials['destinationData'];
-        $sourceData = $credentials['sourceData'];
-        $pickupdate = $credentials['pickupdate'];
-        $returndate = $credentials['returndate'];
-        $pickuptime = $credentials['pickuptime'];
-        $returntime = $credentials['returntime'];
-        $babySeat = $credentials['babySeat'] === 'on' ? 'Included' : 'Not included';
-        $carData = $carData[0];
-        
-        return "*Pickup Details:*\n" .
-               "- Place Name: " . ($sourceData['placeName'] ?? '') . "\n" .
-               "- Emirate: " . ($sourceData['Emirates'] ?? '') . "\n" .
-               "- Map: http://maps.google.co.in/maps?q=".urlencode($sourceData['placeName'])."&ll=$sourceData[Latitude],$sourceData[Longitude]&region=ae\n\n" .
-               "*Dropoff Details:*\n" .
-               "- Place Name: " . ($destinationData['placeName'] ?? '') . "\n" .
-               "- Emirate: " . ($destinationData['Emirates'] ?? '') . "\n" .
-               "- Map: https://maps.google.com/?q=".urlencode($destinationData['placeName'])."&ll=$destinationData[Latitude],$destinationData[Longitude]&region=ae\n\n" .
-               "*Booking Details:*\n" .
-               "- Pickup Date: ".date("d/m/Y", strtotime($pickupdate))."\n" .
-               "- Pickup Time: $pickuptime\n" .
-               "- Dropoff Date: ".date("d/m/Y", strtotime($returndate))."\n" .
-               "- Dropoff Time: $returntime\n" .
-               "- Baby Seat: $babySeat\n\n" .
-               "*Car Details:*\n" .
-               "- Car Name: $carData->brand_name $carData->name $carData->model\n" .
-               "- Car Type: $carData->car_type\n\n".
-               "*Rent Details:*\n" .
-               "- Rent: $rateData[rate]\n" .
-               "- Deposit: $rateData[deposit]\n".
-               "- Pick & Drop Charges: $rateData[emirate]\n".
-               "- VAT: $rateData[vat]\n".
-               "- Baby seat charges: $rateData[babySeat]\n".
-               "- Total: $rateData[total]\n" ;
+    private function generateWhatsappMsg($credentials, $carData, $rateData)
+    {
+        // Extract and apply null-safe checks for input data
+        $destinationData = $credentials['destinationData'] ?? [];
+        $sourceData = $credentials['sourceData'] ?? [];
+        $pickupdate = $credentials['pickupdate'] ?? '';
+        $returndate = $credentials['returndate'] ?? '';
+        $pickuptime = $credentials['pickuptime'] ?? '';
+        $returntime = $credentials['returntime'] ?? '';
+        $babySeat = ($credentials['babySeat'] ?? '') === 'on' ? 'Included' : 'Not included';
+        $carData = $carData[0] ?? (object) ['brand_name' => '', 'name' => '', 'model' => '', 'car_type' => ''];
 
+        // Formatting source and destination data with null-safe checks
+        $sourcePlaceName = $sourceData['placeName'] ?? null;
+        $sourceEmirate = $sourceData['Emirates'] ?? null;
+        $sourceLatitude = $sourceData['Latitude'] ?? null;
+        $sourceLongitude = $sourceData['Longitude'] ?? null;
+
+        $destinationPlaceName = $destinationData['placeName'] ?? null;
+        $destinationEmirate = $destinationData['Emirates'] ?? null;
+        $destinationLatitude = $destinationData['Latitude'] ?? null;
+        $destinationLongitude = $destinationData['Longitude'] ?? null;
+
+        // Formatting dates with null-safe checks
+        $formattedPickupDate = !empty($pickupdate) ? date("d/m/Y", strtotime($pickupdate)) : null;
+        $formattedReturnDate = !empty($returndate) ? date("d/m/Y", strtotime($returndate)) : null;
+
+        // Formatting rate details with null-safe checks
+        $rate = $rateData['rate'] ?? '0.00';
+        $deposit = $rateData['deposit'] ?? '0.00';
+        $emirateCharges = $rateData['emirate'] ?? '0.00';
+        $vat = $rateData['vat'] ?? '0.00';
+        $babySeatCharges = $rateData['babySeat'] ?? '0.00';
+        $total = $rateData['total'] ?? '0.00';
+
+        // Generate pickup details only if relevant data exists
+        $pickupDetails = "";
+        if ($sourcePlaceName || $sourceEmirate || (!is_null($sourceLatitude) && !is_null($sourceLongitude))) {
+            $pickupDetails .= "*Pickup Details:*\n";
+            if ($sourcePlaceName) $pickupDetails .= "- Place Name: $sourcePlaceName\n";
+            if ($sourceEmirate) $pickupDetails .= "- Emirate: $sourceEmirate\n";
+            if (!is_null($sourceLatitude) && !is_null($sourceLongitude)) {
+                $pickupDetails .= "- Map: http://maps.google.co.in/maps?q=" . urlencode($sourcePlaceName) . "&ll=$sourceLatitude,$sourceLongitude&region=ae\n";
+            }
+            $pickupDetails .= "\n";
+        }
+
+        // Generate dropoff details only if relevant data exists
+        $dropoffDetails = "";
+        if ($destinationPlaceName || $destinationEmirate || (!is_null($destinationLatitude) && !is_null($destinationLongitude))) {
+            $dropoffDetails .= "*Dropoff Details:*\n";
+            if ($destinationPlaceName) $dropoffDetails .= "- Place Name: $destinationPlaceName\n";
+            if ($destinationEmirate) $dropoffDetails .= "- Emirate: $destinationEmirate\n";
+            if (!is_null($destinationLatitude) && !is_null($destinationLongitude)) {
+                $dropoffDetails .= "- Map: https://maps.google.com/?q=" . urlencode($destinationPlaceName) . "&ll=$destinationLatitude,$destinationLongitude&region=ae\n";
+            }
+            $dropoffDetails .= "\n";
+        }
+
+        // Generate booking details only if relevant data exists
+        $bookingDetails = "";
+        if ($formattedPickupDate || $pickuptime || $formattedReturnDate || $returntime) {
+            $bookingDetails .= "*Booking Details:*\n";
+            if ($formattedPickupDate) $bookingDetails .= "- Pickup Date: $formattedPickupDate\n";
+            if ($pickuptime) $bookingDetails .= "- Pickup Time: $pickuptime\n";
+            if ($formattedReturnDate) $bookingDetails .= "- Dropoff Date: $formattedReturnDate\n";
+            if ($returntime) $bookingDetails .= "- Dropoff Time: $returntime\n";
+            if ($babySeat === 'Included') $bookingDetails .= "- Baby Seat: $babySeat\n";
+            $bookingDetails .= "\n";
+        }
+
+        // Generate car details
+        $carDetails = "*Car Details:*\n" .
+            "- Car Name: {$carData->brand_name} {$carData->name} {$carData->model}\n" .
+            "- Car Type: {$carData->car_type}\n\n";
+
+        // Generate rent details only if they are non-zero
+        $rentDetails = "";
+        if (floatval($rate) > 0) $rentDetails .= "*Rent Details:*\n";
+        if (floatval($rate) > 0) $rentDetails .= "- Rent: $rate\n";
+        if (floatval($deposit) > 0) $rentDetails .= "- Deposit: $deposit\n";
+        if (floatval($emirateCharges) > 0) $rentDetails .= "- Pick & Drop Charges: $emirateCharges\n";
+        if (floatval($vat) > 0) $rentDetails .= "- VAT: $vat\n";
+        if (floatval($babySeatCharges) > 0) $rentDetails .= "- Baby seat charges: $babySeatCharges\n";
+        if (floatval($total) > 0) $rentDetails .= "- Total: $total\n";
+
+        // Combine all sections
+        return $pickupDetails . $dropoffDetails . $bookingDetails . $carDetails . $rentDetails;
     }
 
     public function termsConditions(){

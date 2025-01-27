@@ -424,7 +424,7 @@
                                                 @endif
                                             @else
                                                 @if($carDet[0]->whatsapp_flag != 0)
-                                                    <a href="#" class="wp-btn"><i class="fa-brands fa-whatsapp"></i></a>
+                                                    <a class="wp-btn"><i class="fa-brands fa-whatsapp"></i></a>
                                                 @endif
                                             @endif
                                         </div>
@@ -1352,22 +1352,22 @@ function isPreviousDate(inputDate) {
 }
 
 $(".wp-btn").click(function () {
-    if(!validateBookingForm()){
+    // if(!validateBookingForm()){
 
         $.ajax({
             url: baseUrl + '/get-whatsapp-msg',
             type: 'post',
             data: { 
-                'destinationData': destinationData[0], 
-                'sourceData': sourceData[0], 
-                'destinationEmirate': destinationData[0].Emirates, 
-                'sourceEmirates': sourceData[0].Emirates,
-                'pickupdate': $("#pickupdate").val(),
-                'returndate': $("#returndate").val(),
-                'pickuptime': $("#pickuptime").val(),
-                'returntime': $("#returntime").val(),
+                'destinationData': destinationData?.[0] || null, 
+                'sourceData': sourceData?.[0] || null, 
+                'destinationEmirate': destinationData?.[0]?.Emirates || null, 
+                'sourceEmirates': sourceData?.[0]?.Emirates || null,
+                'pickupdate': $("#pickupdate").val() || null,
+                'returndate': $("#returndate").val() || null,
+                'pickuptime': $("#pickuptime").val() || null,
+                'returntime': $("#returntime").val() || null,
                 'babySeat': $('#babySeat').is(":checked") ? 'on' : 'off',
-                'carId': $("#carId").val()
+                'carId': $("#carId").val() || null
             },
             dataType: "json",
             headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
@@ -1379,7 +1379,7 @@ $(".wp-btn").click(function () {
             }
         });
         
-    }
+    // }
 });
 </script>
 

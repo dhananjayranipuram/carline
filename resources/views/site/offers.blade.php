@@ -58,7 +58,7 @@
                 min-width: 48%;
             }
             .form-control {
-                width: 195px;
+                width: 100%;
             }
             .page-fleets {
                 padding: 5px 0;
