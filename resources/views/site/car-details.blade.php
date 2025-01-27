@@ -420,11 +420,11 @@
                                             <span>or</span>
                                             @if($carDet[0]->online_flag == 0)
                                                 @if($carDet[0]->whatsapp_flag != 0)
-                                                    <a href="#" class="btn-default book-now-form">book now <i class="fa-brands fa-whatsapp"></i></a>
+                                                    <a class="btn-default wp-msg-button">book now <i class="fa-brands fa-whatsapp"></i></a>
                                                 @endif
                                             @else
                                                 @if($carDet[0]->whatsapp_flag != 0)
-                                                    <a class="wp-btn"><i class="fa-brands fa-whatsapp"></i></a>
+                                                    <a class="wp-btn wp-msg-button"><i class="fa-brands fa-whatsapp"></i></a>
                                                 @endif
                                             @endif
                                         </div>
@@ -1351,7 +1351,7 @@ function isPreviousDate(inputDate) {
     return date < today;
 }
 
-$(".wp-btn").click(function () {
+$(".wp-msg-button").click(function () {
     // if(!validateBookingForm()){
 
         $.ajax({
