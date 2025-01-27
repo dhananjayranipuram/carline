@@ -417,7 +417,9 @@
                                         <!-- Feets Single Sidebar Btn Start -->
                                         <div class="fleets-single-sidebar-btn">
                                             <a href="#" class="btn-default popup-with-form book-now-form disabled" id="bookNowButton">book now</a>
-                                            <span>or</span>
+                                            @if($carDet[0]->online_flag != 0 && $carDet[0]->whatsapp_flag != 0)
+                                                <span>or</span>
+                                            @endif
                                             @if($carDet[0]->online_flag == 0)
                                                 @if($carDet[0]->whatsapp_flag != 0)
                                                     <a class="btn-default wp-msg-button">book now <i class="fa-brands fa-whatsapp"></i></a>
