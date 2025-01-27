@@ -303,10 +303,10 @@
                   <p>Hi {{$email_data->user_data[0]->first_name}}</p>
                   <p>Your booking is confirmed and details are as given below</p>
                   <p>Pickup Location :<b>{{ str_replace(",", ", ", $email_data->sourceData['Address'])}}</b></p>
-                  <p>Pickup Date :<b>{{$email_data->pickupdate}}</b></p>
+                  <p>Pickup Date :<b>{{ date('d-m-Y', strtotime($email_data->pickupdate)) }}</b></p>
                   <p>Pickup Time :<b>{{$email_data->pickuptime}}</b></p>
                   <p>Drop off Location :<b>{{str_replace(",", ", ", $email_data->destinationData['Address'])}}</b></p>
-                  <p>Drop off Date :<b>{{$email_data->returndate}}</b></p>
+                  <p>Drop off Date :<b>{{ date('d-m-Y', strtotime($email_data->returndate)) }}</b></p>
                   <p>Drop off Time :<b>{{$email_data->returntime}}</b></p>
                   <p>Rate :<b>{{$email_data->rate}}</b></p>
                 </td>
