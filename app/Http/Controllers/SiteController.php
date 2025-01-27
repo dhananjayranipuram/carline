@@ -1101,10 +1101,16 @@ class SiteController extends Controller
         }
 
         // Generate car details
-        $carDetails = "*Car Details:*\n" .
+        if (empty($pickupDetails) && empty($dropoffDetails) && empty($bookingDetails)) {
+            $carDetails = "Hi, I would like to book\n\n" .
             "- Car Name: {$carData->brand_name} {$carData->name} {$carData->model}\n" .
             "- Car Type: {$carData->car_type}\n\n";
-
+        }else{
+            $carDetails = "*Car Details:*\n" .
+            "- Car Name: {$carData->brand_name} {$carData->name} {$carData->model}\n" .
+            "- Car Type: {$carData->car_type}\n\n";
+        }
+        
         // Generate rent details only if they are non-zero
         $rentDetails = "";
         if (floatval($rate) > 0) $rentDetails .= "*Rent Details:*\n";
