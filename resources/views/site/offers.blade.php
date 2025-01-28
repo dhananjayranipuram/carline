@@ -332,7 +332,7 @@ $(document).ready(function () {
 });
 
 function getCarsNew(sortData){
-        
+    $(".overlay").show();
     var carType = [];
     var carBrand = [];
     var carTransmission = [];
@@ -365,6 +365,7 @@ function getCarsNew(sortData){
         },
         headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
         success: function(res) {
+            $(".overlay").hide();
             var html = '';
             res.carDet.forEach(function(item) {
                 if(item.image!=null)
@@ -427,7 +428,7 @@ function getCarsNew(sortData){
 }
 
 function getFiltersNew(dataLabel){
-        
+        $(".overlay").show();
         var carType = [];
         var carBrand = [];
         var carTransmission = [];
@@ -455,6 +456,7 @@ function getFiltersNew(dataLabel){
             },
             headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
             success: function(res) {
+                $(".overlay").hide();
                 if(dataLabel == 'type'){
                     populateDropdownWithSelectedValue($(".carBrands"), "Car Brands", res.brand, "id", "name");
                     populateDropdownWithSelectedValue($(".carTransmission"), "Transmission", res.transmission, "details", "details");
