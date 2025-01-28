@@ -350,6 +350,8 @@ $(document).ready(function () {
         $(".filter-dropdown").not($(this)).not(".carSort").each(function () {
             $(this).val('');
         });
+        var sortData = $(".carSort").val();
+        getCarsNew(sortData);
     });
 });
 
