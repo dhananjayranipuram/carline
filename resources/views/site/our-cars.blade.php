@@ -315,31 +315,13 @@ $(document).ready(function () {
     localStorage.clear();
 
     if(carType!=null){
-        $('.car-type').each(function() {
-            if($(this).val() == carType){
-                $(this).prop('checked', true);;
-            }
-            var textContent = $('.custom-dropdown-btn').text().trim();
-            if (textContent.includes("Low to High")) {
-                var sortData = 'low_to_high';
-            } else if (textContent.includes("High to Low")) {
-                var sortData = 'high_to_low';
-            }
-            getCars(sortData);
-        });
+        $('.carTypes').val(carType);
+        var sortData = $(".carSort").val();
+        getCarsNew(sortData);
     }else if(carBrand!=null){
-        $('.car-brand').each(function() {
-            if($(this).val() == carBrand){
-                $(this).prop('checked', true);;
-            }
-            var textContent = $('.custom-dropdown-btn').text().trim();
-            if (textContent.includes("Low to High")) {
-                var sortData = 'low_to_high';
-            } else if (textContent.includes("High to Low")) {
-                var sortData = 'high_to_low';
-            }
-            getCars(sortData);
-        });
+        $('.carBrands').val(carBrand);
+        var sortData = $(".carSort").val();
+        getCarsNew(sortData);
     }
 
     $(".form-check-input").click(function () {

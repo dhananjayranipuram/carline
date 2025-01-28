@@ -393,8 +393,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="fleets-single-sidebar-list" id="booking-errors">
-                                        </div>
+                                        
                                         <div class="fleets-single-sidebar-list" id="rate-details" style="display:none;">
                                             <ul>
                                                 <li><img src="{{asset('assets/images/icon-how-it-work-2.svg')}}" alt="">Rate <span id="rate-message"> AED 1500</span></li>
@@ -430,6 +429,8 @@
                                                 @endif
                                             @endif
                                         </div>
+
+                                        <div class="fleets-single-sidebar-list" id="booking-errors"></div>
                                         <!-- Feets Single Sidebar Btn End -->
                                     </div>
                                 </form>
