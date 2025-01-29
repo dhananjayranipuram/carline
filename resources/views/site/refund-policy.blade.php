@@ -34,7 +34,7 @@
                                     <li><strong>Return of Deposits:</strong> Deposits are subject to deduction if any penalties or service fees apply.</li>
                                     <li><strong>Proof of Purchase:</strong> Refund requests must be accompanied by the original receipt or proof of purchase.</li>
                                     <li><strong>Cancellation Guidelines:</strong> Cancellation requests must be submitted in writing via email to 
-                                        <a target="_blank" style="color:#000080;" href="mailto:info@carline.com">info@carline.com</a> or through the online portal.
+                                        <a target="_blank" style="color:#000080;" href="mailto:info@carlinerental.com">info@carlinerental.com</a> or through the online portal.
                                     </li>
                                     <li><strong>Partial Refunds:</strong> In cases of partial service usage, refunds will be prorated based on the services utilized.</li>
                                     <li><strong>Disputes and Resolution:</strong> Any disputes regarding refunds will be addressed through our customer service team.</li>

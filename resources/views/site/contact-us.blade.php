@@ -69,7 +69,7 @@
 
                                 <!-- Contact Info Content Start -->
                                 <div class="contact-info-content">
-                                    <p>Info@carline.com</p>
+                                    <p>info@carlinerental.com</p>
                                 </div>
                                 <!-- Contact Info Content End -->
                             </div>

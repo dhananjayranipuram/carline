@@ -722,7 +722,7 @@
             </button>
             
             <!-- Email Button -->
-            <button class="chat-email-btn" type="button" onclick="window.open('mailto:info@carline.com', '_blank')">
+            <button class="chat-email-btn" type="button" onclick="window.open('mailto:info@carlinerental.com', '_blank')">
                 <i class="fas fa-envelope"></i>
             </button>
         </div>
@@ -804,7 +804,7 @@
                         <p><i class="fa fa-phone"></i> <a href="tel:+971508689526">+971 50 868 9526</a></p>
                         <p><i class="fa fa-phone"></i> <a href="tel:+97145292722">+971 4 52 92 722</a></p>
                         <p><i class="fa-brands fa-whatsapp"></i> <a href="https://api.whatsapp.com/send?phone=971508689526">+971 50 868 9526</a></p>
-                        <p><i class="fa fa-envelope"></i> <a href="mailto:info@carline.com">info@carline.com</a></p>
+                        <p><i class="fa fa-envelope"></i> <a href="mailto:info@carlinerental.com">info@carlinerental.com</a></p>
                     </div> </div>
                         
                     </div>

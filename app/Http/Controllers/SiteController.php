@@ -741,7 +741,7 @@ class SiteController extends Controller
                 'message' => ['required']
             ]);
             
-            Mail::to('info@carline.com')->send(new ContactUs((object)$filterData));
+            Mail::to('info@carlinerental.com')->send(new ContactUs((object)$filterData));
             session()->flash('success', 'Your message has been sent! Thank you.');
             return Redirect::to('/contact');
         }
