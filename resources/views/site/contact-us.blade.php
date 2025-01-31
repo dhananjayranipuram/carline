@@ -96,10 +96,10 @@
                         <!-- Contact Information Social Start -->
                         <div class="contact-info-social wow fadeInUp" data-wow-delay="0.5s">
                             <ul>
-                                <li><a href="#"><i class="fa-brands fa-facebook-f"></i></a></li>
-                                <li><a href="#"><i class="fa-brands fa-twitter"></i></a></li>
-                                <li><a href="#"><i class="fa-brands fa-linkedin-in"></i></a></li>
-                                <li><a href="#"><i class="fa-brands fa-instagram"></i></a></li>                                                                
+                                <li><a href="https://www.facebook.com/AdsRentACar" target="_blank"><i class="fa-brands fa-facebook-f"></i></a></li>
+                                <li><a href="https://x.com/carlinecarrent?t=shn3hwBqpzzUOHUfLtv3_w&s=09" target="_blank"><i class="fa-brands fa-twitter"></i></a></li>
+                                <li><a href="https://www.linkedin.com/in/car-line-car-rental-080693349?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank"><i class="fa-brands fa-linkedin-in"></i></a></li>
+                                <li><a href="https://www.instagram.com/car_line.car_rental?igsh=c2g1MXlnaTQxbjYx" target="_blank"><i class="fa-brands fa-instagram"></i></a></li>                                                                
                             </ul>
                         </div>
                         <!-- Contact Information Social End -->

@@ -348,6 +348,29 @@
         cursor: pointer;
     }
 </style>
+<style>
+#backToTop {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 24px;
+    cursor: pointer;
+    display: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: opacity 0.3s, transform 0.3s;
+    z-index: 999;
+}
+#backToTop:hover {
+        background-color: #0056b3;
+        transform: scale(1.1);
+}
+</style>
 <body>
     <div class="overlay">
         <div class="overlay__inner">
@@ -835,9 +858,9 @@
                         <!-- Footer Social Link Start -->
                         <div class="footer-social-links">
                             <ul>
-                                <li><a href="#"><i class="fa-brands fa-youtube"></i></a></li>
-                                <li><a href="#"><i class="fa-brands fa-facebook-f"></i></a></li>
-                                <li><a href="#"><i class="fa-brands fa-instagram"></i></a></li>
+                                <li><a href="https://www.linkedin.com/in/car-line-car-rental-080693349?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"><i class="fa-brands fa-linkedin-in"></i></a></li>
+                                <li><a href="https://www.facebook.com/AdsRentACar" target="_blank"><i class="fa-brands fa-facebook-f"></i></a></li>
+                                <li><a href="https://www.instagram.com/car_line.car_rental?igsh=c2g1MXlnaTQxbjYx" target="_blank"><i class="fa-brands fa-instagram"></i></a></li>
                             </ul>
                         </div>
                         <!-- Footer Social Link End -->
@@ -847,6 +870,7 @@
             <!-- Footer Copyright Section End -->
         </div>
     </footer>
+    <button id="backToTop" onclick="scrollToTop()">↑</button>
     <!-- Footer End -->
 
     <!-- Jquery Library File -->
@@ -1677,5 +1701,20 @@ document.addEventListener('DOMContentLoaded', function() {
         return null;
     }
 });
+</script>
+<script>
+window.onscroll = function () {
+    let button = document.getElementById("backToTop");
+    if (document.documentElement.scrollTop > 300) {
+        button.style.display = "block";
+    } else {
+        button.style.display = "none";
+    }
+};
+
+function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
 </script>
 </html>
