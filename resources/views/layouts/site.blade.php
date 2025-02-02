@@ -355,7 +355,7 @@
     right: 20px;
     width: 50px;
     height: 50px;
-    background-color: #007bff;
+    background-color: #000080;
     color: white;
     border: none;
     border-radius: 50%;
@@ -367,7 +367,7 @@
     z-index: 999;
 }
 #backToTop:hover {
-        background-color: #0056b3;
+        background-color: #FFDF00;
         transform: scale(1.1);
 }
 </style>
@@ -858,6 +858,8 @@
                         <!-- Footer Social Link Start -->
                         <div class="footer-social-links">
                             <ul>
+                                <li><a href="https://x.com/carlinecarrent?t=shn3hwBqpzzUOHUfLtv3_w&s=09" target="_blank"><i class="fa-brands fa-x-twitter"></i></a></li>
+                                <li><a href="https://www.tiktok.com/@carliine2?_t=ZS-8tVBaxLhhY7&_r=1" target="_blank"><i class="fa-brands fa-tiktok"></i></a></li>
                                 <li><a href="https://www.linkedin.com/in/car-line-car-rental-080693349?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank"><i class="fa-brands fa-linkedin-in"></i></a></li>
                                 <li><a href="https://www.facebook.com/AdsRentACar" target="_blank"><i class="fa-brands fa-facebook-f"></i></a></li>
                                 <li><a href="https://www.instagram.com/car_line.car_rental?igsh=c2g1MXlnaTQxbjYx" target="_blank"><i class="fa-brands fa-instagram"></i></a></li>
