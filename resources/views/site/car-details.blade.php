@@ -745,11 +745,7 @@ $(document).ready(function () {
             // Find the Emirates name from address components
             var tempAddress = '';
 
-            place.types.forEach(function (type) {
-                if (type === 'airport' || place.name.toLowerCase().includes('airport')) {
-                    isAirport = true;
-                }
-            });
+            isAirport = isAirportPlace(place);
 
             place.address_components.forEach(function(component) {
                 if (component.types.includes('administrative_area_level_1')) {
@@ -768,15 +764,16 @@ $(document).ready(function () {
                     'Address': place.name + ',' + tempAddress,
                 });
             } else {
-                $("#booking-errors").html('<span style="color:red;">Cannot pickup from airports.</span>');
+                $("#source").css('border-color', 'red');
+                $("#source").closest('div').find('.with-errors').html('Cannot pickup from airports.');
                 $("#source").val('');
                 sourceData = [];
                 setTimeout(function () {
-                    $('#booking-errors').html('');
+                    $("#source").css('border-color', '');
+                    $("#source").closest('div').find('.with-errors').html('');
                 }, 2500);
             }
             checkRate();
-            // console.log(sourceData);
         } else {
             console.log('No geometry data found for this place.');
         }
@@ -797,11 +794,7 @@ $(document).ready(function () {
             // Find the Emirates name from address components
             var tempAddress = '';
 
-            place.types.forEach(function (type) {
-                if (type === 'airport' || place.name.toLowerCase().includes('airport')) {
-                    isAirport = true;
-                }
-            });
+            isAirport = isAirportPlace(place);
 
             place.address_components.forEach(function(component) {
                 if (component.types.includes('administrative_area_level_1')) {
@@ -821,15 +814,17 @@ $(document).ready(function () {
                 });
 
             } else {
-                $("#booking-errors").html('<span style="color:red;">Cannot drop off to airports.</span>');
+                $("#destination").css('border-color', 'red');
+                $("#destination").closest('div').find('.with-errors').html('Cannot drop off to airports.');
                 $("#destination").val('');
-                destinationData = []; 
+                destinationData = [];
                 setTimeout(function () {
-                    $('#booking-errors').html('');
+                    $("#destination").css('border-color', '');
+                    $("#destination").closest('div').find('.with-errors').html('');
                 }, 2500);
+               
             }
             checkRate();
-            // console.log(destinationData);
         } else {
             console.log('No geometry data found for this place.');
         }
@@ -838,6 +833,35 @@ $(document).ready(function () {
     
 
 });
+
+function isAirportPlace(place) {
+    let isAirport = false;
+
+    const placeName = place.name ? place.name.toLowerCase() : '';
+    const formattedAddress = place.formatted_address ? place.formatted_address.toLowerCase() : '';
+
+    if (place.types && place.types.includes('airport')) {
+        isAirport = true;
+    }
+
+    if (placeName.includes('airport') || formattedAddress.includes('airport') ||
+        placeName.includes('terminal 1') || formattedAddress.includes('terminal 1') ||
+        placeName.includes('terminal 2') || formattedAddress.includes('terminal 2') ||
+        placeName.includes('terminal 3') || formattedAddress.includes('terminal 3')) {
+        isAirport = true;
+    }
+
+    if (place.address_components) {
+        place.address_components.forEach(component => {
+            const longName = component.long_name ? component.long_name.toLowerCase() : '';
+            if (longName.includes('terminal 1') || longName.includes('terminal 2') || longName.includes('terminal 3')) {
+                isAirport = true;
+            }
+        });
+    }
+
+    return isAirport;
+}
 
 $("#source").keyup(function(){
     if($('#returnLocationToggle').is(":checked")){
