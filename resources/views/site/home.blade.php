@@ -315,53 +315,53 @@
 
 <!-- Hero Slider Section End -->
 <div class="perfect-fleet bg-section">
-        <div class="container-fluid">
-            <div class="row section-row">
-                <div class="col-lg-12">
-                    <!-- Section Title Start -->
-                    <div class="section-title">
-                        <h3 class="wow fadeInUp">Choose Your Car Type</h3>
-                        <h2 class="text-anime-style-3">Find the Perfect Fit</h2>
-                    </div>
-                    <!-- Section Title End -->
+    <div class="container-fluid">
+        <div class="row section-row">
+            <div class="col-lg-12">
+                <!-- Section Title Start -->
+                <div class="section-title">
+                    <h3 class="wow fadeInUp">Choose Your Car Type</h3>
+                    <h2 class="text-anime-style-3">Find the Perfect Fit</h2>
                 </div>
-            </div>
-
-            <div class="row">
-                <div class="col-lg-12">
-                    <!-- Testimonial Slider Start -->
-                    <div class="car-details-slider">
-                        <div class="swiper">
-                            <div class="swiper-wrapper" data-cursor-text="Drag">
-
-                                @foreach($carType as $key => $value)
-                                    <!-- Testimonial Slide Start -->
-                                    <div class="swiper-slide type-click" data-id="{{$value->id}}">
-                                        <div class="luxury-collection-image" data-cursor-text="View">
-                                            <a ><figure><img src="{{asset($value->image)}}" alt=""></figure></a>
-                                        </div>
-                                        <div class="luxury-collection-title"><h2>{{$value->name}}</h2></div>
-                                        <div class="luxury-collection-btn"><a  class="section-icon-btn"><img src="{{asset('assets/images/arrow-white.svg')}}" alt=""></a></div>                               
-                                    </div>
-                                    <!-- Testimonial Slide End -->
-                                @endforeach
-
-                               
-
-                                
-                                </div>
-                            </div>
-                            <div class="car-details-btn">
-                                <div class="car-button-prev"></div>
-				                <div class="car-button-next"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Testimonial Slider End -->
-                </div>
+                <!-- Section Title End -->
             </div>
         </div>
-    </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <!-- Testimonial Slider Start -->
+                <div class="car-details-slider">
+                    <div class="swiper">
+                        <div class="swiper-wrapper" data-cursor-text="Drag">
+
+                            @foreach($carType as $key => $value)
+                                <!-- Testimonial Slide Start -->
+                                <div class="swiper-slide type-click" data-id="{{$value->id}}">
+                                    <div class="luxury-collection-image" data-cursor-text="View">
+                                        <a ><figure><img src="{{asset($value->image)}}" alt=""></figure></a>
+                                    </div>
+                                    <div class="luxury-collection-title"><h2>{{$value->name}}</h2></div>
+                                    <div class="luxury-collection-btn"><a  class="section-icon-btn"><img src="{{asset('assets/images/arrow-white.svg')}}" alt=""></a></div>                               
+                                </div>
+                                <!-- Testimonial Slide End -->
+                            @endforeach
+
+                            
+
+                            
+                            </div>
+                        </div>
+                        <div class="car-details-btn">
+                            <div class="car-button-prev"></div>
+                            <div class="car-button-next"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Testimonial Slider End -->
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <!-- Our Services Section Start -->
@@ -385,10 +385,10 @@
                     <div class="service-content">
                         <img src="{{asset('assets/images/destination/1.jpg')}}" alt="" style="padding-bottom: 15px;">
                         <h3>Dubai</h3>
-                        <p>Home to the opulent Burj Khalifa, Dubai is leading the list of the best places to visit in UAE with family.</p>
+                        <p>Home to the opulent Burj Khalifa, Palm Jumeirah, and Dubai Mall, Dubai is a top destination for luxury, shopping, and adventure.</p>
                     </div>
                     <div class="service-footer">
-                        <a href="#" class="section-icon-btn"><img src="{{asset('assets/images/arrow-white.svg')}}" alt=""></a>
+                        <a href="{{ url('/destinations') }}?place=dubai" class="section-icon-btn"><img src="{{asset('assets/images/arrow-white.svg')}}" alt=""></a>
                     </div>
                 </div>
                 <!-- Service Item End -->
@@ -400,10 +400,10 @@
                     <div class="service-content">
                         <img src="{{asset('assets/images/destination/2.jpg')}}" alt="" style="padding-bottom: 15px;">
                         <h3>Sharjah</h3>
-                        <p>A wonderful city to explore the heritage of UAE, Sharjah is packed with a number of sites giving you a rich culture. </p>
+                        <p>A wonderful city to explore the heritage and culture of the UAE, Sharjah is known for its museums, art galleries, and Islamic architecture.</p>
                     </div>
                     <div class="service-footer">
-                        <a href="#" class="section-icon-btn"><img src="{{asset('assets/images/arrow-white.svg')}}" alt=""></a>
+                        <a href="{{ url('/destinations') }}?place=sharjah" class="section-icon-btn"><img src="{{asset('assets/images/arrow-white.svg')}}" alt=""></a>
                     </div>
                 </div>
                 <!-- Service Item End -->
@@ -415,10 +415,27 @@
                     <div class="service-content">
                         <img src="{{asset('assets/images/destination/3.jpg')}}" alt="" style="padding-bottom: 15px;">
                         <h3>Abu Dhabi</h3>
-                        <p>One of the best places to visit in UAE during summer as it has a number of waterparks, and a stunning shore.</p>
+                        <p>The capital of the UAE, Abu Dhabi is famous for the Sheikh Zayed Grand Mosque, Louvre Abu Dhabi, and Yas Island’s theme parks and beaches.</p>
                     </div>
                     <div class="service-footer">
-                        <a href="#" class="section-icon-btn"><img src="{{asset('assets/images/arrow-white.svg')}}" alt=""></a>
+                        <a href="{{ url('/destinations') }}?place=abu-dhabi" class="section-icon-btn"><img src="{{asset('assets/images/arrow-white.svg')}}" alt=""></a>
+                    </div>
+                </div>
+                <!-- Service Item End -->
+            </div>
+
+            
+
+            <div class="col-lg-3 col-md-6">
+                <!-- Service Item Start -->
+                <div class="service-item wow fadeInUp" data-wow-delay="0.75s">
+                    <div class="service-content">
+                        <img src="{{asset('assets/images/destination/4.jpg')}}" alt="" style="padding-bottom: 15px;">
+                        <h3>Ajman</h3>
+                        <p>The smallest emirate, Ajman is known for its relaxed coastal vibes, Ajman Beach, and Al Zorah Nature Reserve, perfect for kayaking and birdwatching.</p>
+                    </div>
+                    <div class="service-footer">
+                        <a href="{{ url('/destinations') }}?place=ajman" class="section-icon-btn"><img src="{{asset('assets/images/arrow-white.svg')}}" alt=""></a>
                     </div>
                 </div>
                 <!-- Service Item End -->
@@ -428,24 +445,63 @@
                 <!-- Service Item Start -->
                 <div class="service-item wow fadeInUp" data-wow-delay="0.75s">
                     <div class="service-content">
-                        <img src="{{asset('assets/images/destination/4.jpg')}}" alt="" style="padding-bottom: 15px;">
-                        <h3>Al Ain</h3>
-                        <p>Also known as the Garden city of the Gulf, Al Ain is known to be one of the greenest cities of UAE.</p>
+                        <img src="{{asset('assets/images/destination/20.jpg')}}" alt="" style="padding-bottom: 15px;">
+                        <h3>Umm Al Quwain</h3>
+                        <p>A peaceful emirate with a laid-back charm, Umm Al Quwain is known for its mangroves, Dreamland Aqua Park, and traditional dhow boat-building heritage.</p>
                     </div>
                     <div class="service-footer">
-                        <a href="#" class="section-icon-btn"><img src="{{asset('assets/images/arrow-white.svg')}}" alt=""></a>
+                        <a href="{{ url('/destinations') }}?place=ummalquwain" class="section-icon-btn"><img src="{{asset('assets/images/arrow-white.svg')}}" alt=""></a>
                     </div>
                 </div>
                 <!-- Service Item End -->
             </div>
 
-            <div class="col-lg-12">
-                <!-- Service Box Footer Start -->
-                <div class="services-box-footer wow fadeInUp" data-wow-delay="1s">
-                    <a href="#" class="btn-default">view all Destinations</a>
+            <div class="col-lg-3 col-md-6">
+                <!-- Service Item Start -->
+                <div class="service-item wow fadeInUp" data-wow-delay="0.75s">
+                    <div class="service-content">
+                        <img src="{{asset('assets/images/destination/21.jpg')}}" alt="" style="padding-bottom: 15px;">
+                        <h3>Ras Al Khaimah</h3>
+                        <p>A paradise for adventure lovers, Ras Al Khaimah boasts Jebel Jais (UAE’s highest mountain), the world’s longest zipline, and desert experiences.</p>
+                    </div>
+                    <div class="service-footer">
+                        <a href="{{ url('/destinations') }}?place=rasalkhaimah" class="section-icon-btn"><img src="{{asset('assets/images/arrow-white.svg')}}" alt=""></a>
+                    </div>
                 </div>
-                <!-- Service Box Footer End -->
+                <!-- Service Item End -->
             </div>
+
+            <div class="col-lg-3 col-md-6">
+                <!-- Service Item Start -->
+                <div class="service-item wow fadeInUp" data-wow-delay="0.75s">
+                    <div class="service-content">
+                        <img src="{{asset('assets/images/destination/22.jpg')}}" alt="" style="padding-bottom: 15px;">
+                        <h3>Fujairah</h3>
+                        <p>The only emirate on the Gulf of Oman, Fujairah is perfect for diving, snorkeling, and exploring ancient forts like Fujairah Fort and Al Bidyah Mosque.</p>
+                    </div>
+                    <div class="service-footer">
+                        <a href="{{ url('/destinations') }}?place=fujairah" class="section-icon-btn"><img src="{{asset('assets/images/arrow-white.svg')}}" alt=""></a>
+                    </div>
+                </div>
+                <!-- Service Item End -->
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <!-- Service Item Start -->
+                <div class="service-item wow fadeInUp" data-wow-delay="0.75s">
+                    <div class="service-content">
+                        <img src="{{asset('assets/images/destination/23.jpg')}}" alt="" style="padding-bottom: 15px;">
+                        <h3>Al Ain</h3>
+                        <p>Known as the "Garden City" of the UAE, Al Ain is famous for its lush oases, Jebel Hafeet mountain, Al Ain Zoo, and rich heritage sites like Al Jahili Fort.</p>
+                    </div>
+                    <div class="service-footer">
+                        <a href="{{ url('/destinations') }}?place=alain" class="section-icon-btn"><img src="{{asset('assets/images/arrow-white.svg')}}" alt=""></a>
+                    </div>
+                </div>
+                <!-- Service Item End -->
+            </div>
+
+            
         </div>
     </div>
 </div>

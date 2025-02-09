@@ -57,6 +57,42 @@ class SiteController extends Controller
         $data['specs'] = $temp;
         return view('site/home',$data);
     }
+    
+    public function destinations(){
+        $queries = [];
+        parse_str($_SERVER['QUERY_STRING'], $queries);
+        $queries['place'];
+        switch ($queries['place']) {
+            case 'dubai':
+                return view('destinations/dubai');
+                break;
+            case 'sharjah':
+                return view('destinations/sharjah');
+                break;
+            case 'abu-dhabi':
+                return view('destinations/abu-dhabi');
+                break;
+            case 'ajman':
+                return view('destinations/ajman');
+                break;
+            case 'ummalquwain':
+                return view('destinations/ummalquwain');
+                break;
+            case 'rasalkhaimah':
+                return view('destinations/rasalkhaimah');
+                break;
+            case 'fujairah':
+                return view('destinations/fujairah');
+                break;
+            case 'alain':
+                return view('destinations/alain');
+                break;
+            
+            default:
+                return view('destinations/dubai');
+                break;
+        }
+    }
 
     public function ourCars(){
         $site = new Site();

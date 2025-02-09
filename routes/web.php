@@ -19,6 +19,7 @@ use App\Http\Controllers\PaymentController;
 Auth::routes();
 
 Route::any('/home', [SiteController::class, 'index']);
+Route::any('/destinations', [SiteController::class, 'destinations']);
 Route::get('/about', [SiteController::class, 'aboutUs']);
 Route::get('/cars', [SiteController::class, 'ourCars']);
 Route::get('/car-details', [SiteController::class, 'carDetails']);
