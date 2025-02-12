@@ -179,7 +179,7 @@
                     <!-- Vertical Form -->
                     <div class="row g-3">
                         @php
-                            // List of document fields with display names and correct doc values
+                            // List of document fields with display names
                             $documentFields = [
                                 'pf' => ['field' => 'pass_front', 'label' => 'Passport Front'],
                                 'pb' => ['field' => 'pass_back', 'label' => 'Visit/Tourist Visa'],
@@ -196,50 +196,39 @@
                             @php
                                 $field = $docInfo['field'];
                                 $label = $docInfo['label'];
+                                $fileData = $user[0]->base64_images[$field] ?? null; // Get Base64 data if available
+                                $isBase64 = preg_match('/^data:(.*?);base64,/', $fileData, $matches);
+                                $mimeType = $isBase64 ? $matches[1] : null; // Extract MIME type from Base64
+                                $filePath = $user[0]->$field ? asset($user[0]->$field) : null; // Get regular file path
                             @endphp
 
-                            @if (!empty($user[0]->$field) && 
-                                (($field === 'cdl_front' || $field === 'cdl_back') ? $user[0]->user_type === 'T' : true) &&
-                                (($field === 'eid_front' || $field === 'eid_back') ? $user[0]->user_type === 'R' : true))
-                                
+                            @if (!empty($user[0]->$field))
                                 <div class="col-2">
                                     <strong>{{ $label }}</strong><br>
                                     <label class="imagecheck mb-2 image-outer">
                                         <figure class="imagecheck-figure">
-                                            @php
-                                                $fileData = $user[0]->base64_images[$field] ?? null; // Get Base64 data
-                                                $isBase64 = preg_match('/^data:(.*?);base64,/', $fileData, $matches);
-                                            @endphp
-
-                                            @if ($isBase64) <!-- Encrypted Image (Base64) -->
-                                                @php
-                                                    $mimeType = $matches[1]; // Get MIME type from Base64
-                                                    $fileType = explode('/', $mimeType)[0]; // Check file type (image, pdf)
-                                                @endphp
-
-                                                @if ($fileType === 'image')
-                                                    <img src="{{ $fileData }}" alt="No document found" class="imagecheck-image">
+                                            @if ($isBase64) 
+                                                <!-- Display Encrypted File (Base64) -->
+                                                @php $fileSource = $fileData; @endphp
+                                                @if (strpos($mimeType, 'image/') === 0)
+                                                    <img src="{{ $fileSource }}" alt="No document found" class="imagecheck-image">
                                                 @elseif ($mimeType === 'application/pdf')
-                                                    <embed src="{{ $fileData }}" type="application/pdf" width="100%" height="200px" alt="No document found">
+                                                    <embed src="{{ $fileSource }}" type="application/pdf" width="100%" height="200px" alt="No document found">
                                                 @endif
-
-                                            @else <!-- Unencrypted Image (Direct File Path) -->
-                                                @php
-                                                    $filePath = asset($user[0]->$field); // Get file path for unencrypted file
-                                                    $fileExtension = pathinfo($filePath, PATHINFO_EXTENSION);
-                                                @endphp
-
-                                                @if (in_array(strtolower($fileExtension), ['jpg', 'jpeg', 'png', 'gif']))
+                                            @else 
+                                                <!-- Display Non-Encrypted File (Regular File Path) -->
+                                                @php $fileSource = $filePath; @endphp
+                                                @if (in_array(strtolower(pathinfo($filePath, PATHINFO_EXTENSION)), ['jpg', 'jpeg', 'png', 'gif']))
                                                     <img src="{{ $filePath }}" alt="No document found" class="imagecheck-image">
-                                                @elseif (strtolower($fileExtension) === 'pdf')
+                                                @elseif (strtolower(pathinfo($filePath, PATHINFO_EXTENSION)) === 'pdf')
                                                     <embed src="{{ $filePath }}" type="application/pdf" width="100%" height="200px" alt="No document found">
                                                 @endif
                                             @endif
-                                            
+
                                             <!-- Lightbox -->
                                             <a class="view-icon view-doc lightbox-trigger"
                                             href="#" 
-                                            data-base64="{{ $fileData ?? $filePath }}" 
+                                            data-base64="{{ $fileSource }}" 
                                             data-mime-type="{{ $mimeType ?? 'image/jpeg' }}" 
                                             data-lightbox="user-documents" 
                                             data-title="{{ $label }}">
@@ -258,7 +247,8 @@
                                 </div>
                             @endif
                         @endforeach
-                    </div><!-- Vertical Form -->
+                    </div>
+                    <!-- Vertical Form -->
                     <br>
                     <div class="row g-3">
                         <div class="col-2">
@@ -301,20 +291,19 @@ document.addEventListener("DOMContentLoaded", function () {
         let base64Data = link.getAttribute("data-base64");
         let mimeType = link.getAttribute("data-mime-type");
 
-        // If it's a Base64 image, convert it to Blob URL
-        if (base64Data && mimeType) {
+        if (base64Data.startsWith("data:")) {
             fetch(base64Data)
                 .then(res => res.blob())
                 .then(blob => {
                     let blobUrl = URL.createObjectURL(blob);
-                    link.setAttribute("href", blobUrl); // Set Blob URL for Lightbox
+                    link.setAttribute("href", blobUrl);
                 })
                 .catch(err => console.error("Error converting Base64 to Blob:", err));
         } else {
-            // For regular file URLs (images and PDFs), just set the URL
             link.setAttribute("href", base64Data);
         }
     });
 });
+
 </script>
 @endsection

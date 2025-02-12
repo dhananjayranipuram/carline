@@ -231,90 +231,77 @@
 
                         <!-- Vertical Form -->
                         <div class="row g-3">
-                        @php
-                            // List of document fields with display names and correct doc values
-                            $documentFields = [
-                                'pf' => ['field' => 'pass_front', 'label' => 'Passport Front'],
-                                'pb' => ['field' => 'pass_back', 'label' => 'Visit/Tourist Visa'],
-                                'df' => ['field' => 'dl_front', 'label' => 'Driving License Front'],
-                                'db' => ['field' => 'dl_back', 'label' => 'Driving License Back'],
-                                'ef' => ['field' => 'eid_front', 'label' => 'EID Front'],
-                                'eb' => ['field' => 'eid_back', 'label' => 'EID Back'],
-                                'cf' => ['field' => 'cdl_front', 'label' => 'Country License Front'],
-                                'cb' => ['field' => 'cdl_back', 'label' => 'Country License Back']
-                            ];
-                        @endphp
-
-                        @foreach ($documentFields as $docKey => $docInfo)
                             @php
-                                $field = $docInfo['field'];
-                                $label = $docInfo['label'];
+                                // Document fields with labels
+                                $documentFields = [
+                                    'pf' => ['field' => 'pass_front', 'label' => 'Passport Front'],
+                                    'pb' => ['field' => 'pass_back', 'label' => 'Visit/Tourist Visa'],
+                                    'df' => ['field' => 'dl_front', 'label' => 'Driving License Front'],
+                                    'db' => ['field' => 'dl_back', 'label' => 'Driving License Back'],
+                                    'ef' => ['field' => 'eid_front', 'label' => 'EID Front'],
+                                    'eb' => ['field' => 'eid_back', 'label' => 'EID Back'],
+                                    'cf' => ['field' => 'cdl_front', 'label' => 'Country License Front'],
+                                    'cb' => ['field' => 'cdl_back', 'label' => 'Country License Back']
+                                ];
                             @endphp
 
-                            @if (!empty($user[0]->$field) && 
-                                (($field === 'cdl_front' || $field === 'cdl_back') ? $user[0]->user_type === 'T' : true) &&
-                                (($field === 'eid_front' || $field === 'eid_back') ? $user[0]->user_type === 'R' : true))
-                                
-                                <div class="col-2">
-                                    <strong>{{ $label }}</strong><br>
-                                    <label class="imagecheck mb-2 image-outer">
-                                        <figure class="imagecheck-figure">
-                                            @php
-                                                // Get Base64 image data
-                                                $fileData = $user[0]->base64_images[$field] ?? null; 
-                                                // Check if the image is Base64 encoded
-                                                $isBase64 = preg_match('/^data:(.*?);base64,/', $fileData, $matches);
-                                            @endphp
+                            @foreach ($documentFields as $docKey => $docInfo)
+                                @php
+                                    $field = $docInfo['field'];
+                                    $label = $docInfo['label'];
+                                    $fileData = $user[0]->base64_images[$field] ?? null; // Get Base64 data (if exists)
+                                    $isBase64 = preg_match('/^data:(.*?);base64,/', $fileData, $matches);
+                                    $mimeType = $isBase64 ? $matches[1] : null; // Extract MIME type
+                                    $filePath = $user[0]->$field ? asset($user[0]->$field) : null; // Get file path for unencrypted file
+                                @endphp
 
-                                            @if ($isBase64) <!-- For Base64 Encrypted Image -->
-                                                @php
-                                                    $mimeType = $matches[1]; // Extract MIME type
-                                                    $fileType = explode('/', $mimeType)[0]; // Determine if it's an image or PDF
-                                                @endphp
-
-                                                @if ($fileType === 'image')
-                                                    <img src="{{ $fileData }}" alt="No document found" class="imagecheck-image">
-                                                @elseif ($mimeType === 'application/pdf')
-                                                    <embed src="{{ $fileData }}" type="application/pdf" width="100%" height="200px" alt="No document found">
+                                @if (!empty($user[0]->$field))
+                                    <div class="col-2">
+                                        <strong>{{ $label }}</strong><br>
+                                        <label class="imagecheck mb-2 image-outer">
+                                            <figure class="imagecheck-figure">
+                                                @if ($isBase64) 
+                                                    <!-- Encrypted (Base64) -->
+                                                    @php $fileSource = $fileData; @endphp
+                                                    @if (strpos($mimeType, 'image/') === 0)
+                                                        <img src="{{ $fileSource }}" alt="No document found" class="imagecheck-image">
+                                                    @elseif ($mimeType === 'application/pdf')
+                                                        <embed src="{{ $fileSource }}" type="application/pdf" width="100%" height="200px" alt="No document found">
+                                                    @endif
+                                                @else 
+                                                    <!-- Non-Encrypted (Regular File Path) -->
+                                                    @php $fileSource = $filePath; @endphp
+                                                    @if (in_array(strtolower(pathinfo($filePath, PATHINFO_EXTENSION)), ['jpg', 'jpeg', 'png', 'gif']))
+                                                        <img src="{{ $filePath }}" alt="No document found" class="imagecheck-image">
+                                                    @elseif (strtolower(pathinfo($filePath, PATHINFO_EXTENSION)) === 'pdf')
+                                                        <embed src="{{ $filePath }}" type="application/pdf" width="100%" height="200px" alt="No document found">
+                                                    @endif
                                                 @endif
-                                            @else <!-- For Unencrypted Image -->
-                                                @php
-                                                    // If the image is unencrypted, get the file path and extension
-                                                    $filePath = asset($user[0]->$field); 
-                                                    $fileExtension = pathinfo($filePath, PATHINFO_EXTENSION);
-                                                @endphp
 
-                                                @if (in_array(strtolower($fileExtension), ['jpg', 'jpeg', 'png', 'gif']))
-                                                    <img src="{{ $filePath }}" alt="No document found" class="imagecheck-image">
-                                                @elseif (strtolower($fileExtension) === 'pdf')
-                                                    <embed src="{{ $filePath }}" type="application/pdf" width="100%" height="200px" alt="No document found">
-                                                @endif
-                                            @endif
-                                            
-                                            <!-- Lightbox -->
-                                            <a class="view-icon view-doc lightbox-trigger"
-                                            href="#" 
-                                            data-base64="{{ $fileData ?? $filePath }}" 
-                                            data-mime-type="{{ $mimeType ?? 'image/jpeg' }}" 
-                                            data-lightbox="user-documents" 
-                                            data-title="{{ $label }}">
-                                                <i class="far fa-eye"></i>
-                                            </a>
+                                                <!-- Lightbox -->
+                                                <a class="view-icon view-doc lightbox-trigger"
+                                                href="#" 
+                                                data-base64="{{ $fileSource }}" 
+                                                data-mime-type="{{ $mimeType ?? 'image/jpeg' }}" 
+                                                data-lightbox="user-documents" 
+                                                data-title="{{ $label }}">
+                                                    <i class="far fa-eye"></i>
+                                                </a>
 
-                                            <!-- Delete & Download -->
-                                            <a class="delete-icon delete-doc" data-type="{{ $docKey }}" data-id="{{ $user[0]->id }}">
-                                                <i class="far fa-trash-alt"></i>
-                                            </a>
-                                            <a class="download-icon" href="{{ url('/admin/download-document') }}?id={{ base64_encode($user[0]->id) }}&doc={{ $docKey }}">
-                                                <i class="fas fa-download"></i>
-                                            </a>
-                                        </figure>
-                                    </label>
-                                    <input type="file" accept="image/*" name="{{ $field }}">
-                                </div>
-                            @endif
-                        @endforeach
+                                                <!-- Delete & Download -->
+                                                <a class="delete-icon delete-doc" data-type="{{ $docKey }}" data-id="{{ $user[0]->id }}">
+                                                    <i class="far fa-trash-alt"></i>
+                                                </a>
+                                                <a class="download-icon" href="{{ url('/admin/download-document') }}?id={{ base64_encode($user[0]->id) }}&doc={{ $docKey }}">
+                                                    <i class="fas fa-download"></i>
+                                                </a>
+                                            </figure>
+                                        </label>
+                                    </div>
+                                @endif
+                            @endforeach
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -383,8 +370,8 @@ document.addEventListener("DOMContentLoaded", function () {
         let base64Data = link.getAttribute("data-base64");
         let mimeType = link.getAttribute("data-mime-type");
 
-        // If it's a Base64 image, convert it to Blob URL
-        if (base64Data && mimeType) {
+        // Check if base64Data starts with "data:" (Base64 format)
+        if (base64Data.startsWith("data:")) {
             fetch(base64Data)
                 .then(res => res.blob())
                 .then(blob => {
@@ -393,10 +380,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 })
                 .catch(err => console.error("Error converting Base64 to Blob:", err));
         } else {
-            // For regular file URLs (images and PDFs), just set the URL
+            // If it's a regular file URL, use it directly
             link.setAttribute("href", base64Data);
         }
     });
 });
+
 </script>
 @endsection
