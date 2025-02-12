@@ -22,6 +22,7 @@ use \Illuminate\Http\UploadedFile;
 use URL;
 use Mail;
 use Exception;
+use Illuminate\Support\Facades\Crypt;
 
 class SiteController extends Controller
 {
@@ -580,7 +581,7 @@ class SiteController extends Controller
         ]);
 
         // Handle file uploads using the helper function
-        $uploadedFiles = $this->handleFileUploads($request, [
+        $uploadedFiles = $this->handleFileUploadsAndEncrypt($request, [
             'pass_front', 
             'pass_back', 
             'dl_front', 
@@ -608,6 +609,34 @@ class SiteController extends Controller
         } else {
             return response()->json(['status' => '500', 'message' => 'Something went wrong.'], 500);
         }
+    }
+
+    private function handleFileUploadsAndEncrypt(Request $request, array $fileFields)
+    {
+        $uploadedFiles = [];
+        $errors = [];
+
+        foreach ($fileFields as $field) {
+            if ($request->hasFile($field)) {
+                $file = $request->file($field);
+                $fileContents = file_get_contents($file->getRealPath());
+
+                try {
+                    $encryptedContents = Crypt::encrypt($fileContents);
+                    $fileName = 'private_documents/' . uniqid() . '_' . $file->getClientOriginalName() . '.enc';
+                    
+                    // Store encrypted file securely
+                    Storage::disk('local')->put($fileName, $encryptedContents);
+                    
+                    // Save the file path instead of raw file data
+                    $uploadedFiles[$field] = $fileName;
+                } catch (\Exception $e) {
+                    $uploadedFiles['errors'][] = "Error encrypting file: " . $file->getClientOriginalName();
+                }
+            }
+        }
+
+        return ['uploadedFiles' => $uploadedFiles, 'errors' => $errors];
     }
 
     private function handleFileUploads(Request $request, array $fields)
@@ -882,7 +911,60 @@ class SiteController extends Controller
             Session::flush();
             return Redirect::to('/home');
         }
+
+        if (!empty($data['userDocument'])) {
+            foreach ($data['userDocument'] as $doc) {
+                $decryptedFiles = [];
+    
+                foreach ($doc as $key => $filePath) {
+                    if (!in_array($key, ['id', 'user_type']) && !empty($filePath)) {
+    
+                        if (strpos($filePath, '.enc') !== false) {
+                            if (Storage::exists($filePath)) {
+                                try {
+                                    $encryptedContents = Storage::get($filePath);
+
+                                    $decryptedContents = Crypt::decrypt($encryptedContents);
+    
+                                    $fileExtension = pathinfo(str_replace('.enc', '', $filePath), PATHINFO_EXTENSION);
+    
+                                    $mimeType = $this->getMimeTypeFromExtension($fileExtension);
+    
+                                    $base64Content = base64_encode($decryptedContents);
+    
+                                    $dataUrl = "data:{$mimeType};base64,{$base64Content}";
+    
+                                    $decryptedFiles[$key] = $dataUrl;
+                                } catch (\Exception $e) {
+                                    $decryptedFiles[$key] = 'Error decrypting file';
+                                }
+                            } else {
+                                $decryptedFiles[$key] = 'File not found';
+                            }
+                        } else {
+                            $decryptedFiles[$key] = asset('storage/' . $filePath);
+                        }
+                    }
+                }
+                $doc->decrypted_files = $decryptedFiles;
+            }
+        }
         return view('site/my-document',$data);
+    }
+
+    private function getMimeTypeFromExtension($extension)
+    {
+        $mimeTypes = [
+            'jpg' => 'image/jpeg',
+            'jpeg' => 'image/jpeg',
+            'png' => 'image/png',
+            'gif' => 'image/gif',
+            'pdf' => 'application/pdf',
+            'txt' => 'text/plain',
+            'html' => 'text/html',
+        ];
+
+        return $mimeTypes[$extension] ?? 'application/octet-stream';
     }
 
     public function editUploadDocuments(Request $request)
@@ -903,7 +985,7 @@ class SiteController extends Controller
         ]);
 
         // Handle file uploads using the helper function
-        $uploadedFiles = $this->handleFileUploads($request, [
+        $uploadedFiles = $this->handleFileUploadsAndEncrypt($request, [
             'edit_pass_front', 
             'edit_pass_back', 
             'edit_dl_front', 
@@ -962,7 +1044,7 @@ class SiteController extends Controller
         ]);
 
         // Handle file uploads using the helper function
-        $uploadedFiles = $this->handleFileUploads($request, [
+        $uploadedFiles = $this->handleFileUploadsAndEncrypt($request, [
             'pass_front', 
             'pass_back', 
             'dl_front', 
@@ -1294,5 +1376,17 @@ class SiteController extends Controller
 
             return json_encode($data);
         }
+    }
+
+    function encryptAndStoreFile($file)
+    {
+        $fileContents = file_get_contents($file);
+        $encryptedContents = Crypt::encrypt($fileContents);
+        
+        // Store in storage/app/encrypted_files
+        $fileName = 'encrypted_files/' . $file->getClientOriginalName() . '.enc';
+        Storage::put($fileName, $encryptedContents);
+
+        return $fileName;
     }
 }

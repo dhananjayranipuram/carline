@@ -354,6 +354,8 @@ class Site extends Model
     {
         DB::beginTransaction();
         try {
+
+            // print_r($data);exit;
             // Insert document records
             DB::table('user_documents')->insert([
                 'user_id' => $data['id'],

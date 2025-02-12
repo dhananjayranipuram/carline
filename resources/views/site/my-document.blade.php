@@ -242,245 +242,117 @@
             <div class="col-lg-7">
                 @if(empty($userDocument[0]->pass_front) && empty($userDocument[0]->pass_back) && empty($userDocument[0]->dl_front) && empty($userDocument[0]->dl_back) && empty($userDocument[0]->eid_front) && empty($userDocument[0]->eid_back))
                     <div class="booking-history">
-                        <!-- Booking Item Start -->
                         <div class="booking-item">
                             <div class="row">
                                 <h3>No Documents Found!</h3>
-                                
                             </div>            
                         </div>
-                        <!-- Booking Item End -->
                     </div>
-                    <!-- Booking History Section End -->
-                @endif
-                @if((!empty($userDocument[0]->pass_front) || !empty($userDocument[0]->pass_back)) && $userDocument[0]->user_type =='T')
-                    <!-- Booking History Section Start -->
-                    <div class="booking-history">
-                        <!-- Booking Item Start -->
-                        <div class="booking-item">
-                            <div class="row">
-                                
-                                <!-- Car Image Column Start -->
-                                <div class="col-md-5">
-                                    <p><strong>Passport Front Page</strong></p>
-                                    <div class="car-image">
-                                        @php
-                                            $frontFile = asset($userDocument[0]->pass_front);
-                                            $frontFileExtension = strtolower(pathinfo($frontFile, PATHINFO_EXTENSION));
-                                        @endphp
-                                        @if (in_array($frontFileExtension, ['jpg', 'jpeg', 'png', 'gif', 'bmp']))
-                                            <img src="{{asset($userDocument[0]->pass_front)}}" alt="Passport Front">
-                                        @elseif ($frontFileExtension === 'pdf')
-                                            <iframe src="{{ $frontFile }}" style="width: 100%; height: 250px;" frameborder="0"></iframe>
-                                        @endif
-                                    </div>
-                                </div>
-                                <!-- Car Image Column End -->
-                
-                               <!-- Car Image Column Start -->
-                                <div class="col-md-5">
-                                <p><strong>Visit/Tourist Visa</strong></p>
-                                <div class="car-image">
-                                    @php
-                                        $backFile = asset($userDocument[0]->pass_back);
-                                        $backFileExtension = strtolower(pathinfo($backFile, PATHINFO_EXTENSION));
-                                    @endphp
-                                    @if (in_array($backFileExtension, ['jpg', 'jpeg', 'png', 'gif', 'bmp']))
-                                        <img src="{{asset($userDocument[0]->pass_back)}}" alt="Visit/Tourist Visa">
-                                    @elseif ($backFileExtension === 'pdf')
-                                        <iframe src="{{ $backFile }}" style="width: 100%; height: 250px;" frameborder="0"></iframe>
-                                    @endif
-                                </div>
-                            </div>
-                            <!-- Car Image Column End -->
-                
-                                <!-- Buttons Column Start -->
-                                <div class="col-md-2 text-right">
-                                    <div class="booking-actions">
-                                        <button class="btn btn-edit upload-doc" data-section="passport">Edit</button>
-                                        <!-- <button class="btn btn-view">Delete</button> -->
-                                    </div>
-                                </div>
-                                <!-- Buttons Column End -->
-                            </div>
-                        </div>
-                        <!-- Booking Item End -->
-                    </div>
-                    <!-- Booking History Section End -->
                 @endif
 
-                @if(!empty($userDocument[0]->dl_front) || !empty($userDocument[0]->dl_back))
-                     <!-- Booking History Section Start -->
-                    <div class="booking-history">
-                        <!-- Booking Item Start -->
-                        <div class="booking-item">
-                            <div class="row">
-                                @if($userDocument[0]->user_type =='T')
-                                <h3>INTERNATIONAL DRIVING LICENCE</h3>
-                                @else
-                                <h3>DRIVING LICENCE</h3>
-                                @endif
-                                <!-- Car Image Column Start -->
-                                <div class="col-md-5">
-                                    <p><strong>Front Page</strong></p>
-                                    <div class="car-image">
-                                        @php
-                                            $frontFile = asset($userDocument[0]->dl_front);
-                                            $frontFileExtension = strtolower(pathinfo($frontFile, PATHINFO_EXTENSION));
-                                        @endphp
-                                        @if (in_array($frontFileExtension, ['jpg', 'jpeg', 'png', 'gif', 'bmp']))
-                                            <img src="{{asset($userDocument[0]->dl_front)}}" alt="Driving Licence Front">
-                                        @elseif ($frontFileExtension === 'pdf')
-                                            <iframe src="{{ $frontFile }}" style="width: 100%; height: 250px;" frameborder="0"></iframe>
-                                        @endif
-                                    </div>
-                                </div>
-                                <!-- Car Image Column End -->
-                
-                               <!-- Car Image Column Start -->
-                               <div class="col-md-5">
-                                <p><strong>Back Page</strong></p>
-                                <div class="car-image">
-                                    @php
-                                        $backFile = asset($userDocument[0]->dl_back);
-                                        $backFileExtension = strtolower(pathinfo($backFile, PATHINFO_EXTENSION));
-                                    @endphp
-                                    @if (in_array($backFileExtension, ['jpg', 'jpeg', 'png', 'gif', 'bmp']))
-                                        <img src="{{asset($userDocument[0]->dl_back)}}" alt="Driving Licence Back">
-                                    @elseif ($backFileExtension === 'pdf')
-                                        <iframe src="{{ $backFile }}" style="width: 100%; height: 250px;" frameborder="0"></iframe>
-                                    @endif
-                                </div>
-                            </div>
-                            <!-- Car Image Column End -->
-                
-                                <!-- Buttons Column Start -->
-                                <div class="col-md-2 text-right">
-                                    <div class="booking-actions">
-                                        <button class="btn btn-edit upload-doc" data-section="dl">Edit</button>
-                                        <!-- <button class="btn btn-view">Delete</button> -->
-                                    </div>
-                                </div>
-                                <!-- Buttons Column End -->
-                            </div>
-                        </div>
-                        <!-- Booking Item End -->
-                    </div>
-                    <!-- Booking History Section End -->
-                @endif
+                @php
+                    // Document field pairs (Front & Back should appear in the same row)
+                    $documentGroups = [
+                        'pass' => ['pass_front' => 'Passport Front', 'pass_back' => 'Visit/Tourist Visa'],
+                        'dl' => ['dl_front' => 'Driving License Front', 'dl_back' => 'Driving License Back'],
+                        'eid' => ['eid_front' => 'EID Front', 'eid_back' => 'EID Back'],
+                        'cdl' => ['cdl_front' => 'Country License Front', 'cdl_back' => 'Country License Back']
+                    ];
+                @endphp
 
-                @if((!empty($userDocument[0]->eid_front) || !empty($userDocument[0]->eid_back)) && $userDocument[0]->user_type =='R')
-                    <!-- Booking History Section Start -->
-                    <div class="booking-history">
-                        <!-- Booking Item Start -->
-                        <div class="booking-item">
-                            <div class="row">
-                                <h3>EID</h3>
-                                <!-- Car Image Column Start -->
-                                <div class="col-md-5">
-                                    <p><strong>Front Page</strong></p>
-                                    <div class="car-image">
-                                        @php
-                                            $frontFile = asset($userDocument[0]->eid_front);
-                                            $frontFileExtension = strtolower(pathinfo($frontFile, PATHINFO_EXTENSION));
-                                        @endphp
-                                        @if (in_array($frontFileExtension, ['jpg', 'jpeg', 'png', 'gif', 'bmp']))
-                                            <img src="{{asset($userDocument[0]->eid_front)}}" alt="EID Front">
-                                        @elseif ($frontFileExtension === 'pdf')
-                                            <iframe src="{{ $frontFile }}" style="width: 100%; height: 250px;" frameborder="0"></iframe>
-                                        @endif
-                                    </div>
-                                </div>
-                                <!-- Car Image Column End -->
-                
-                               <!-- Car Image Column Start -->
-                               <div class="col-md-5">
-                                <p><strong>Back Page</strong></p>
-                                <div class="car-image">
-                                    @php
-                                        $backFile = asset($userDocument[0]->eid_back);
-                                        $backFileExtension = strtolower(pathinfo($backFile, PATHINFO_EXTENSION));
-                                    @endphp
-                                    @if (in_array($backFileExtension, ['jpg', 'jpeg', 'png', 'gif', 'bmp']))
-                                        <img src="{{asset($userDocument[0]->eid_back)}}" alt="EID Back">
-                                    @elseif ($backFileExtension === 'pdf')
-                                        <iframe src="{{ $backFile }}" style="width: 100%; height: 250px;" frameborder="0"></iframe>
-                                    @endif
-                                </div>
-                            </div>
-                            <!-- Car Image Column End -->
-                
-                                <!-- Buttons Column Start -->
-                                <div class="col-md-2 text-right">
-                                    <div class="booking-actions">
-                                        <button class="btn btn-edit upload-doc" data-section="eid">Edit</button>
-                                        <!-- <button class="btn btn-view">Delete</button> -->
-                                    </div>
-                                </div>
-                                <!-- Buttons Column End -->
-                            </div>
-                        </div>
-                        <!-- Booking Item End -->
-                    </div>
-                    <!-- Booking History Section End -->
-                @endif
+                @foreach ($documentGroups as $sectionKey => $group)
+                    @php
+                        $firstField = key($group);  // First document field in the group
+                        $firstLabel = current($group);  // Label for first field
+                        next($group); // Move pointer to next field
+                        $secondField = key($group);  // Second document field in the group
+                        $secondLabel = current($group);  // Label for second field
+                    @endphp
 
-                @if((!empty($userDocument[0]->cdl_front) || !empty($userDocument[0]->cdl_back)) && $userDocument[0]->user_type =='T')
-                    <!-- Booking History Section Start -->
-                    <div class="booking-history">
-                        <!-- Booking Item Start -->
-                        <div class="booking-item">
-                            <div class="row">
-                                <h3>Country License</h3>
-                                <!-- Car Image Column Start -->
-                                <div class="col-md-5">
-                                    <p><strong>Front Page</strong></p>
-                                    <div class="car-image">
-                                    @php
-                                        $frontFile = asset($userDocument[0]->cdl_front);
-                                        $frontFileExtension = strtolower(pathinfo($frontFile, PATHINFO_EXTENSION));
-                                    @endphp
-                                    @if (in_array($frontFileExtension, ['jpg', 'jpeg', 'png', 'gif', 'bmp']))
-                                        <img src="{{asset($userDocument[0]->cdl_front)}}" alt="Country Lisence Front">
-                                    @elseif ($frontFileExtension === 'pdf')
-                                        <iframe src="{{ $frontFile }}" style="width: 100%; height: 250px;" frameborder="0"></iframe>
-                                    @endif
+                    @if (!empty($userDocument[0]->$firstField) || !empty($userDocument[0]->$secondField))
+                        <div class="booking-history">
+                            <div class="booking-item">
+                                <div class="row">
+
+                                    <!-- First Document (Front) -->
+                                    <div class="col-md-5">
+                                        <p><strong>{{ $firstLabel }}</strong></p>
+                                        <div class="car-image">
+                                            @php
+                                                $firstBase64 = $userDocument[0]->decrypted_files[$firstField] ?? null;
+                                                $firstIsBase64 = $firstBase64 && preg_match('/^data:(.*?);base64,/', $firstBase64, $matches);
+                                                $firstPath = $userDocument[0]->$firstField ? asset($userDocument[0]->$firstField) : null;
+                                                $firstExt = $firstPath ? strtolower(pathinfo($firstPath, PATHINFO_EXTENSION)) : null;
+                                            @endphp
+
+                                            @if ($firstIsBase64)
+                                                @php
+                                                    $firstMimeType = $matches[1];
+                                                    $firstFileType = explode('/', $firstMimeType)[0];
+                                                @endphp
+                                                @if ($firstFileType === 'image')
+                                                    <img src="{{ $firstBase64 }}" alt="{{ $firstLabel }}">
+                                                @elseif ($firstMimeType === 'application/pdf')
+                                                    <iframe src="{{ $firstBase64 }}" style="width: 100%; height: 250px;" frameborder="0"></iframe>
+                                                @endif
+                                            @elseif ($firstPath)
+                                                @if (in_array($firstExt, ['jpg', 'jpeg', 'png', 'gif', 'bmp']))
+                                                    <img src="{{ $firstPath }}" alt="{{ $firstLabel }}">
+                                                @elseif ($firstExt === 'pdf')
+                                                    <iframe src="{{ $firstPath }}" style="width: 100%; height: 250px;" frameborder="0"></iframe>
+                                                @endif
+                                            @endif
+                                        </div>
                                     </div>
-                                </div>
-                                <!-- Car Image Column End -->
-                
-                               <!-- Car Image Column Start -->
-                               <div class="col-md-5">
-                                <p><strong>Back Page</strong></p>
-                                <div class="car-image">
-                                    @php
-                                        $backFile = asset($userDocument[0]->cdl_back);
-                                        $backFileExtension = strtolower(pathinfo($backFile, PATHINFO_EXTENSION));
-                                    @endphp
-                                    @if (in_array($backFileExtension, ['jpg', 'jpeg', 'png', 'gif', 'bmp']))
-                                        <img src="{{asset($userDocument[0]->cdl_back)}}" alt="Country Lisence Front">
-                                    @elseif ($backFileExtension === 'pdf')
-                                        <iframe src="{{ $backFile }}" style="width: 100%; height: 250px;" frameborder="0"></iframe>
-                                    @endif
-                                </div>
-                            </div>
-                            <!-- Car Image Column End -->
-                
-                                <!-- Buttons Column Start -->
-                                <div class="col-md-2 text-right">
-                                    <div class="booking-actions">
-                                        <button class="btn btn-edit upload-doc" data-section="cdl">Edit</button>
-                                        <!-- <button class="btn btn-view">Delete</button> -->
+
+                                    <!-- Second Document (Back) -->
+                                    <div class="col-md-5">
+                                        <p><strong>{{ $secondLabel }}</strong></p>
+                                        <div class="car-image">
+                                            @php
+                                                $secondBase64 = $userDocument[0]->decrypted_files[$secondField] ?? null;
+                                                $secondIsBase64 = $secondBase64 && preg_match('/^data:(.*?);base64,/', $secondBase64, $matches);
+                                                $secondPath = $userDocument[0]->$secondField ? asset($userDocument[0]->$secondField) : null;
+                                                $secondExt = $secondPath ? strtolower(pathinfo($secondPath, PATHINFO_EXTENSION)) : null;
+                                            @endphp
+
+                                            @if ($secondIsBase64)
+                                                @php
+                                                    $secondMimeType = $matches[1];
+                                                    $secondFileType = explode('/', $secondMimeType)[0];
+                                                @endphp
+                                                @if ($secondFileType === 'image')
+                                                    <img src="{{ $secondBase64 }}" alt="{{ $secondLabel }}">
+                                                @elseif ($secondMimeType === 'application/pdf')
+                                                    <iframe src="{{ $secondBase64 }}" style="width: 100%; height: 250px;" frameborder="0"></iframe>
+                                                @endif
+                                            @elseif ($secondPath)
+                                                @if (in_array($secondExt, ['jpg', 'jpeg', 'png', 'gif', 'bmp']))
+                                                    <img src="{{ $secondPath }}" alt="{{ $secondLabel }}">
+                                                @elseif ($secondExt === 'pdf')
+                                                    <iframe src="{{ $secondPath }}" style="width: 100%; height: 250px;" frameborder="0"></iframe>
+                                                @endif
+                                            @endif
+                                        </div>
                                     </div>
+
+                                    <!-- Buttons (One Edit Button for Both) -->
+                                    <div class="col-md-2 text-right">
+                                        <div class="booking-actions">
+                                            <button class="btn btn-edit upload-doc" data-section="{{ $sectionKey }}">Edit</button>
+
+                                            
+                                        </div>
+                                    </div>
+                                    
                                 </div>
-                                <!-- Buttons Column End -->
                             </div>
                         </div>
-                        <!-- Booking Item End -->
-                    </div>
-                    <!-- Booking History Section End -->
-                @endif
+                    @endif
+                @endforeach
             </div>
+
+
             
             
 
@@ -492,7 +364,7 @@
 <script src="{{asset('admin_assets/js/core/jquery-3.7.1.min.js')}}"></script> 
 <script>
 $(".upload-doc").click(function() {
-    if($(this).attr('data-section')=='passport'){
+    if($(this).attr('data-section')=='pass'){
         $("#edit_passport-section").show();
         $("#edit_dl-section").hide();
         $("#edit_eid-section").hide();

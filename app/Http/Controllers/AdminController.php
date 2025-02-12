@@ -16,6 +16,8 @@ use Storage;
 use File;
 use \Illuminate\Http\UploadedFile;
 use URL;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Response;
 
 class AdminController extends Controller
 {
@@ -171,99 +173,225 @@ class AdminController extends Controller
         $input['id'] = base64_decode($queries['id']);
 
         $data['user'] = $admin->getUsersDetails($input);
-        
+
+        if (!empty($data['user'])) {
+            foreach ($data['user'] as $user) {
+                $base64Images = [];
+
+                // List of fields that contain encrypted images
+                $imageFields = ['pass_front', 'dl_front', 'dl_back', 'eid_front', 'eid_back'];
+
+                foreach ($imageFields as $field) {
+                    if (!empty($user->$field)) {
+                        if (Storage::exists($user->$field)) {
+                            try {
+                                // Read encrypted content
+                                $encryptedContents = Storage::get($user->$field);
+                                $decryptedContents = Crypt::decrypt($encryptedContents);
+
+                                // Get file extension (remove .enc)
+                                $fileExtension = pathinfo(str_replace('.enc', '', $user->$field), PATHINFO_EXTENSION);
+
+                                // Map file extension to MIME type
+                                $mimeType = $this->getMimeTypeFromExtension($fileExtension);
+
+                                // Convert decrypted file to Base64
+                                $base64Image = "data:{$mimeType};base64," . base64_encode($decryptedContents);
+
+                                // Store in array
+                                $base64Images[$field] = $base64Image;
+                            } catch (\Exception $e) {
+                                $base64Images[$field] = 'Error decrypting file';
+                            }
+                        } else {
+                            $base64Images[$field] = 'File not found';
+                        }
+                    }
+                }
+
+                // Attach base64 images to user object
+                $user->base64_images = $base64Images;
+            }
+        }
+        // echo '<pre>';print_r($data);exit;
         return view('admin/view-user', $data);
     }
-    
+
+    private function getMimeTypeFromExtension($extension)
+    {
+        $mimeTypes = [
+            'jpg' => 'image/jpeg',
+            'jpeg' => 'image/jpeg',
+            'png' => 'image/png',
+            'gif' => 'image/gif',
+            'pdf' => 'application/pdf',
+        ];
+
+        return $mimeTypes[$extension] ?? 'application/octet-stream';
+    }
+
     public function downloadDocument(Request $request)
     {
         $admin = new Admin();
         
-        $queries = $files = [];
+        $queries = [];
         parse_str($_SERVER['QUERY_STRING'], $queries);
+        
         $input['userId'] = base64_decode($queries['id']);
         $input['id'] = base64_decode($queries['id']);
         $input['doc'] = $queries['doc'];
-        
-        // $documents = $admin->getMyDocumentDetails($input);
+
+        // Retrieve user document details
         $documents = $admin->getUsersDetails($input);
-        // echo '<pre>';print_r($documents);exit;
-        switch ($input['doc']) {
-            case 'pf':
-                $file = public_path($documents[0]->pass_front);
-                break;
 
-            case 'pb':
-                $file = public_path($documents[0]->pass_back);
-                break;
-
-            case 'df':
-                $file = public_path($documents[0]->dl_front);
-                break;
-                    
-            case 'db':
-                $file = public_path($documents[0]->dl_back);
-                break;
-
-            case 'ef':
-                $file = public_path($documents[0]->eid_front);
-                break;
-
-            case 'eb':
-                $file = public_path($documents[0]->eid_back);
-                break;
-            case 'cf':
-                $file = public_path($documents[0]->cdl_front);
-                break;
-            case 'cb':
-                $file = public_path($documents[0]->cdl_back);
-                break;
-            
-            default:
-                if($documents[0]->user_type == 'R'){
-                    array_push($files,public_path($documents[0]->pass_front));
-                    array_push($files,public_path($documents[0]->dl_front));
-                    array_push($files,public_path($documents[0]->dl_back));
-                    array_push($files,public_path($documents[0]->eid_front));
-                    array_push($files,public_path($documents[0]->eid_back));
-                }else{
-                    array_push($files,public_path($documents[0]->pass_front));
-                    array_push($files,public_path($documents[0]->pass_back));
-                    array_push($files,public_path($documents[0]->dl_front));
-                    array_push($files,public_path($documents[0]->dl_back));
-                    array_push($files,public_path($documents[0]->cdl_front));
-                    array_push($files,public_path($documents[0]->cdl_back));
-                }
-                // $files = $documents[0];
-                break;
+        if (empty($documents) || empty($documents[0])) {
+            return response()->json(['error' => 'No document found'], 404);
         }
 
-        if($input['doc'] == 'all'){
-            $zipFileName = 'files.zip';
+        $user = $documents[0];
+        $files = [];
 
-            $zip = new \ZipArchive;
+        // Corrected Mapping: doc values from URL now correctly match database fields
+        $docFields = [
+            'pf' => 'pass_front',
+            'pb' => 'pass_back',
+            'df' => 'dl_front',
+            'db' => 'dl_back',
+            'ef' => 'eid_front',
+            'eb' => 'eid_back',
+            'cf' => 'cdl_front',
+            'cb' => 'cdl_back'
+        ];
 
-            $zipPath = public_path($zipFileName);
+        if ($input['doc'] == 'all') {
+            // Add all encrypted files based on user type
+            $fields = ($user->user_type == 'R')
+                ? ['pass_front', 'dl_front', 'dl_back', 'eid_front', 'eid_back']
+                : ['pass_front', 'pass_back', 'dl_front', 'dl_back', 'cdl_front', 'cdl_back'];
 
-            if ($zip->open($zipPath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) === true) {
-                foreach ($files as $file) {
-                    if (file_exists($file)) {
-                        $zip->addFile($file, basename($file));
+            foreach ($fields as $field) {
+                if (strpos($user->$field, '.enc') == false) {
+                    if (!empty($user->$field) && file_exists($user->$field)) {
+                        $files[$field] = $user->$field;
+                    }
+                }else{
+                    if (!empty($user->$field) && Storage::exists($user->$field)) {
+                        
+                        $files[$field] = $user->$field;
                     }
                 }
-                $zip->close();
-            } else {
-                return response()->json(['error' => 'Unable to create ZIP file'], 500);
             }
-        
-            return response()->download($zipPath)->deleteFileAfterSend(true);
-        }else{
-            if (file_exists($file)) {
-                return response()->download($file);
+
+            return $this->createZipAndDownload($files);
+        } else {
+            // Download a single encrypted file
+            if (!isset($docFields[$input['doc']])) {
+                return response()->json(['error' => 'Invalid document type'], 400);
+            }
+
+            $filePath = $user->{$docFields[$input['doc']]};
+
+            if (strpos($filePath, '.enc') !== false) {
+                if (empty($filePath) || !Storage::exists($filePath)) {
+                    return response()->json(['error' => 'File not found'], 404);
+                }
+            }else{
+                if (empty($filePath) || !file_exists($filePath)) {
+                    return response()->json(['error' => 'File not found'], 404);
+                }
+            }
+
+            // Check if the file is encrypted or unencrypted
+            if (strpos($filePath, '.enc') !== false) {
+                return $this->decryptAndDownloadFile($filePath); // Decrypt and download the file
             } else {
-                return response()->json(['error' => 'File not found'], 404);
+                return $this->downloadUnencryptedFile($filePath); // Direct download for unencrypted files
             }
         }
+    }
+
+    /**
+     * Decrypts a single file and streams it for download.
+     */
+    private function decryptAndDownloadFile($filePath)
+    {
+        try {
+            // Read encrypted content
+            $encryptedContents = Storage::get($filePath);
+            $decryptedContents = Crypt::decrypt($encryptedContents);
+
+            // Determine file extension by removing ".enc"
+            $originalFileName = str_replace('.enc', '', basename($filePath));
+            $extension = pathinfo($originalFileName, PATHINFO_EXTENSION);
+            $mimeType = $this->getMimeTypeFromExtension($extension);
+
+            return Response::make($decryptedContents, 200, [
+                'Content-Type' => $mimeType,
+                'Content-Disposition' => 'attachment; filename="' . $originalFileName . '"'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error decrypting file'], 500);
+        }
+    }
+
+    /**
+     * Streams a direct unencrypted file for download.
+     */
+    private function downloadUnencryptedFile($filePath)
+    {
+        if (file_exists($filePath)) {
+            // echo $filePath;exit;
+            return response()->download(public_path($filePath));
+        } else {
+            return response()->json(['error' => 'File not found'], 404);
+        }
+    }
+
+    /**
+     * Creates a ZIP file with decrypted documents and sends it for download.
+     */
+    private function createZipAndDownload($files)
+    {
+        $zipFileName = 'documents.zip';
+        $zip = new \ZipArchive;
+        $zipPath = public_path($zipFileName);
+
+        if ($zip->open($zipPath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) === true) {
+            foreach ($files as $fileName => $filePath) {
+                if (strpos($filePath, '.enc') == false) {
+                    
+                    if (file_exists($filePath)) {
+                        try {
+                            $zip->addFile($filePath, basename($filePath));
+                        } catch (\Exception $e) {
+                            continue;
+                        }
+                    }
+                }else{
+                    if (Storage::exists($filePath)) {
+                        try {
+                            // Decrypt the file if it's encrypted
+                            $encryptedContents = Storage::get($filePath);
+                            $decryptedContents = Crypt::decrypt($encryptedContents);
+                            $originalFileName = str_replace('.enc', '', basename($filePath));
+                            // Temporarily store the decrypted content in memory
+                            $tempFilePath = tempnam(sys_get_temp_dir(), 'decrypted_');
+                            file_put_contents($tempFilePath, $decryptedContents);
+
+                            $zip->addFile($tempFilePath, $originalFileName);
+                            
+                        } catch (\Exception $e) {
+                            continue;
+                        }
+                    }
+                }
+            }
+
+            $zip->close();
+        } else {
+            return response()->json(['error' => 'Unable to create ZIP file'], 500);
+        }
+        return response()->download($zipPath)->deleteFileAfterSend(true);
     }
     
     public function editUsers(Request $request)
@@ -294,7 +422,7 @@ class AdminController extends Controller
             ]);
 
             // Handle file uploads using the helper function
-            $uploadedFiles = $this->handleFileUploads($request, [
+            $uploadedFiles = $this->handleFileUploadsAndEncrypt($request, [
                 'pass_front', 
                 'pass_back', 
                 'dl_front', 
@@ -337,6 +465,46 @@ class AdminController extends Controller
     
             $data['user'] = $admin->getUsersDetails($input);
             $data['country'] = $admin->getContry();
+
+            if (!empty($data['user'])) {
+                foreach ($data['user'] as $user) {
+                    $base64Images = [];
+    
+                    // List of fields that contain encrypted images
+                    $imageFields = ['pass_front', 'dl_front', 'dl_back', 'eid_front', 'eid_back'];
+    
+                    foreach ($imageFields as $field) {
+                        if (!empty($user->$field)) {
+                            if (Storage::exists($user->$field)) {
+                                try {
+                                    // Read encrypted content
+                                    $encryptedContents = Storage::get($user->$field);
+                                    $decryptedContents = Crypt::decrypt($encryptedContents);
+    
+                                    // Get file extension (remove .enc)
+                                    $fileExtension = pathinfo(str_replace('.enc', '', $user->$field), PATHINFO_EXTENSION);
+    
+                                    // Map file extension to MIME type
+                                    $mimeType = $this->getMimeTypeFromExtension($fileExtension);
+    
+                                    // Convert decrypted file to Base64
+                                    $base64Image = "data:{$mimeType};base64," . base64_encode($decryptedContents);
+    
+                                    // Store in array
+                                    $base64Images[$field] = $base64Image;
+                                } catch (\Exception $e) {
+                                    $base64Images[$field] = 'Error decrypting file';
+                                }
+                            } else {
+                                $base64Images[$field] = 'File not found';
+                            }
+                        }
+                    }
+    
+                    // Attach base64 images to user object
+                    $user->base64_images = $base64Images;
+                }
+            }
             // echo '<pre>';print_r($data);exit;
             return view('admin/edit-user', $data);
         }
@@ -356,6 +524,34 @@ class AdminController extends Controller
                 // Collect errors for missing required files if needed
                 if (in_array($field, ['eid_front', 'eid_back']) && $request->rider_type === 'resident') {
                     $errors[] = "Please select " . ucfirst(str_replace('_', ' ', $field)) . " image.";
+                }
+            }
+        }
+
+        return ['uploadedFiles' => $uploadedFiles, 'errors' => $errors];
+    }
+
+    private function handleFileUploadsAndEncrypt(Request $request, array $fileFields)
+    {
+        $uploadedFiles = [];
+        $errors = [];
+
+        foreach ($fileFields as $field) {
+            if ($request->hasFile($field)) {
+                $file = $request->file($field);
+                $fileContents = file_get_contents($file->getRealPath());
+
+                try {
+                    $encryptedContents = Crypt::encrypt($fileContents);
+                    $fileName = 'private_documents/' . uniqid() . '_' . $file->getClientOriginalName() . '.enc';
+                    
+                    // Store encrypted file securely
+                    Storage::disk('local')->put($fileName, $encryptedContents);
+                    
+                    // Save the file path instead of raw file data
+                    $uploadedFiles[$field] = $fileName;
+                } catch (\Exception $e) {
+                    $uploadedFiles['errors'][] = "Error encrypting file: " . $file->getClientOriginalName();
                 }
             }
         }
