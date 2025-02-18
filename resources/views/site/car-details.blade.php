@@ -466,6 +466,9 @@
 
                                 </div>
                                 <div class="swiper-pagination"></div>
+                                <!-- Navigation Arrows -->
+                                <div class="swiper-button-prev"></div>
+                                <div class="swiper-button-next"></div>
                             </div>
                         </div>
                         <!-- Feets Single Slider End -->
@@ -538,6 +541,8 @@
                                         @foreach($pieces[0] as $key => $value)
                                         <li><img src="{{asset($value->image)}}" alt="">{{$value->name}} <span>{{$value->details}}</span></li>
                                         @endforeach
+                                        <li class="additional-charges" style="display:none;"><img src="{{asset('assets/images/tower.svg')}}" alt="">Salik ? Toll charges<span>{{$carDet[0]->toll_charges}}/Salik or toll</span></li>
+                                        <li class="additional-charges" style="display:none;"><img src="{{asset('assets/images/petrol.svg')}}" alt="">Fuel policy <span>Same to Same</span></li>
                                     </ul>
                                 </div>
                                 <div class="col-md-6">
@@ -545,6 +550,7 @@
                                         @foreach($pieces[1] as $key => $value)
                                         <li><img src="{{asset($value->image)}}" alt="">{{$value->name}} <span>{{$value->details}}</span></li>
                                         @endforeach
+                                        <li class="additional-charges" style="display:none;"><img src="{{asset('assets/images/milage.svg')}}" alt="">Additional mileage charges<span>{{$carDet[0]->add_mileage_charge}}/km</span></li>
                                     </ul>
                                 </div>
                             </div>
@@ -653,8 +659,21 @@
 <script src="{{asset('admin_assets/js/moment.min.js')}}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.43/moment-timezone-with-data.min.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmX5w5ltGt09cjDod_YMamphRRgS8L-ZQ&components=country:ae&libraries=places"></script>
-
+<script src="{{asset('assets/js/swiper-bundle.min.js')}}"></script>
 <script>
+var swiper = new Swiper(".swiper", {
+    loop: true,
+    navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
+    },
+    pagination: {
+        el: ".swiper-pagination",
+        clickable: true,
+    },
+});
+
+
 var sourceData = [];
 var destinationData = [];    
 var onlineFlag = '{{$carDet[0]->online_flag}}';
@@ -988,7 +1007,7 @@ $("#pickuptime, #returntime").change(function () {
             checkRate();
         } else {
             $("#rate-details").hide();
-            $("#additionalNotes").hide();
+            $(".additional-charges").hide();
             $("#booking-errors").append('<span style="color:red;">Return time must be at least 2 hours after the pickup time.</span>');
             setTimeout(function () {
                 $('#booking-errors').html('');
@@ -1030,7 +1049,7 @@ function checkRate(){
                     updateRateDetails(res);
                 },error: function(xhr, status, error) {
                     $("#rate-details").hide();
-                    $("#additionalNotes").hide();
+                    $(".additional-charges").hide();
                 }
             });
         }else{
@@ -1053,7 +1072,7 @@ function updateRateDetails(res) {
         </ul>`;
 
     $("#rate-details").show().html(str);
-    $("#additionalNotes").show();
+    $(".additional-charges").show();
 }
 
     $(".book-now-form").click(function () {
