@@ -545,7 +545,7 @@
                                         @foreach($pieces[0] as $key => $value)
                                         <li><img src="{{asset($value->image)}}" alt="">{{$value->name}} <span>{{$value->details}}</span></li>
                                         @endforeach
-                                        <li><img src="{{asset('assets/images/milage.svg')}}" alt="">Additional mileage charges<span>AED {{$carDet[0]->add_mileage_charge}}/km</span></li>
+                                        <li><img src="{{asset('assets/images/petrol.svg')}}" alt="">Fuel policy <span>Same to Same</span></li>
                                     </ul>
                                 </div>
                                 <div class="col-md-6">
@@ -553,7 +553,7 @@
                                         @foreach($pieces[1] as $key => $value)
                                         <li><img src="{{asset($value->image)}}" alt="">{{$value->name}} <span>{{$value->details}}</span></li>
                                         @endforeach
-                                        <li><img src="{{asset('assets/images/petrol.svg')}}" alt="">Fuel policy <span>Same to Same</span></li>
+                                        <li><img src="{{asset('assets/images/milage.svg')}}" alt="">Additional mileage charges<span>AED {{$carDet[0]->add_mileage_charge}}/KM</span></li>
                                     </ul>
                                 </div>
                             </div>
