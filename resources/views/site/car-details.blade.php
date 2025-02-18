@@ -250,6 +250,10 @@
 .rental-condition-accordion b,li{
     color: black;
 }
+
+.swiper-button-next, .swiper-button-prev{
+    color: #000080 !important;
+}
     </style>
 <!-- Page Header Start -->
 <div class="page-header bg-section parallaxie">
@@ -542,10 +546,10 @@
                                         <li><img src="{{asset($value->image)}}" alt="">{{$value->name}} <span>{{$value->details}}</span></li>
                                         @endforeach
                                         @if(count($pieces[0]) == count($pieces[1]))
-                                            <li class="additional-charges" style="display:none;"><img src="{{asset('assets/images/tower.svg')}}" alt="">Salik ? Toll charges<span>{{$carDet[0]->toll_charges}}/Salik or toll</span></li>
-                                            <li class="additional-charges" style="display:none;"><img src="{{asset('assets/images/petrol.svg')}}" alt="">Fuel policy <span>Same to Same</span></li>
+                                            <!-- <li class="additional-charges" style="display:none;"><img src="{{asset('assets/images/tower.svg')}}" alt="">Salik ? Toll charges<span>{{$carDet[0]->toll_charges}}/Salik or toll</span></li> -->
+                                            <li><img src="{{asset('assets/images/petrol.svg')}}" alt="">Fuel policy <span>Same to Same</span></li>
                                         @else
-                                            <li class="additional-charges" style="display:none;"><img src="{{asset('assets/images/tower.svg')}}" alt="">Salik ? Toll charges<span>{{$carDet[0]->toll_charges}}/Salik or toll</span></li>
+                                            <!-- <li class="additional-charges" style="display:none;"><img src="{{asset('assets/images/tower.svg')}}" alt="">Salik ? Toll charges<span>{{$carDet[0]->toll_charges}}/Salik or toll</span></li> -->
                                         @endif
                                     </ul>
                                 </div>
@@ -555,10 +559,10 @@
                                         <li><img src="{{asset($value->image)}}" alt="">{{$value->name}} <span>{{$value->details}}</span></li>
                                         @endforeach
                                         @if(count($pieces[0]) == count($pieces[1]))
-                                            <li class="additional-charges" style="display:none;"><img src="{{asset('assets/images/milage.svg')}}" alt="">Additional mileage charges<span>{{$carDet[0]->add_mileage_charge}}/km</span></li>
+                                            <li><img src="{{asset('assets/images/milage.svg')}}" alt="">Additional mileage charges<span>AED {{$carDet[0]->add_mileage_charge}}/km</span></li>
                                         @else
-                                            <li class="additional-charges" style="display:none;"><img src="{{asset('assets/images/petrol.svg')}}" alt="">Fuel policy <span>Same to Same</span></li>
-                                            <li class="additional-charges" style="display:none;"><img src="{{asset('assets/images/milage.svg')}}" alt="">Additional mileage charges<span>{{$carDet[0]->add_mileage_charge}}/km</span></li>
+                                            <li><img src="{{asset('assets/images/petrol.svg')}}" alt="">Fuel policy <span>Same to Same</span></li>
+                                            <li><img src="{{asset('assets/images/milage.svg')}}" alt="">Additional mileage charges<span>AED {{$carDet[0]->add_mileage_charge}}/km</span></li>
                                         @endif
                                     </ul>
                                 </div>
@@ -1016,7 +1020,7 @@ $("#pickuptime, #returntime").change(function () {
             checkRate();
         } else {
             $("#rate-details").hide();
-            $(".additional-charges").hide();
+            // $(".additional-charges").hide();
             $("#booking-errors").append('<span style="color:red;">Return time must be at least 2 hours after the pickup time.</span>');
             setTimeout(function () {
                 $('#booking-errors').html('');
@@ -1058,7 +1062,7 @@ function checkRate(){
                     updateRateDetails(res);
                 },error: function(xhr, status, error) {
                     $("#rate-details").hide();
-                    $(".additional-charges").hide();
+                    // $(".additional-charges").hide();
                 }
             });
         }else{
@@ -1081,7 +1085,7 @@ function updateRateDetails(res) {
         </ul>`;
 
     $("#rate-details").show().html(str);
-    $(".additional-charges").show();
+    // $(".additional-charges").show();
 }
 
     $(".book-now-form").click(function () {
