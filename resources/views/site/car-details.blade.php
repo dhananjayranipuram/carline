@@ -541,8 +541,12 @@
                                         @foreach($pieces[0] as $key => $value)
                                         <li><img src="{{asset($value->image)}}" alt="">{{$value->name}} <span>{{$value->details}}</span></li>
                                         @endforeach
-                                        <li class="additional-charges" style="display:none;"><img src="{{asset('assets/images/tower.svg')}}" alt="">Salik ? Toll charges<span>{{$carDet[0]->toll_charges}}/Salik or toll</span></li>
-                                        <li class="additional-charges" style="display:none;"><img src="{{asset('assets/images/petrol.svg')}}" alt="">Fuel policy <span>Same to Same</span></li>
+                                        @if(count($pieces[0]) == count($pieces[1]))
+                                            <li class="additional-charges" style="display:none;"><img src="{{asset('assets/images/tower.svg')}}" alt="">Salik ? Toll charges<span>{{$carDet[0]->toll_charges}}/Salik or toll</span></li>
+                                            <li class="additional-charges" style="display:none;"><img src="{{asset('assets/images/petrol.svg')}}" alt="">Fuel policy <span>Same to Same</span></li>
+                                        @else
+                                            <li class="additional-charges" style="display:none;"><img src="{{asset('assets/images/tower.svg')}}" alt="">Salik ? Toll charges<span>{{$carDet[0]->toll_charges}}/Salik or toll</span></li>
+                                        @endif
                                     </ul>
                                 </div>
                                 <div class="col-md-6">
@@ -550,7 +554,12 @@
                                         @foreach($pieces[1] as $key => $value)
                                         <li><img src="{{asset($value->image)}}" alt="">{{$value->name}} <span>{{$value->details}}</span></li>
                                         @endforeach
-                                        <li class="additional-charges" style="display:none;"><img src="{{asset('assets/images/milage.svg')}}" alt="">Additional mileage charges<span>{{$carDet[0]->add_mileage_charge}}/km</span></li>
+                                        @if(count($pieces[0]) == count($pieces[1]))
+                                            <li class="additional-charges" style="display:none;"><img src="{{asset('assets/images/milage.svg')}}" alt="">Additional mileage charges<span>{{$carDet[0]->add_mileage_charge}}/km</span></li>
+                                        @else
+                                            <li class="additional-charges" style="display:none;"><img src="{{asset('assets/images/petrol.svg')}}" alt="">Fuel policy <span>Same to Same</span></li>
+                                            <li class="additional-charges" style="display:none;"><img src="{{asset('assets/images/milage.svg')}}" alt="">Additional mileage charges<span>{{$carDet[0]->add_mileage_charge}}/km</span></li>
+                                        @endif
                                     </ul>
                                 </div>
                             </div>
