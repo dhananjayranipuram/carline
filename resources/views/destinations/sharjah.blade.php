@@ -50,12 +50,12 @@
                                     <!-- Section Title Start -->
                                     <div class="section-title">
                                         <h3 class="wow fadeInUp">Sharjah</h3>
-                                        <h2 class="text-anime-style-3" data-cursor="-opaque">Sharjah – The Cultural Capital of UAE</h2>
+                                        <h2 class="text-anime-style-3" data-cursor="-opaque">Sharjah - The Cultural Capital of UAE</h2>
                                         <p class="wow fadeInUp" data-wow-delay="0.25s">
-                                            Sharjah, known as the **Cultural Capital of the UAE**, is a city that beautifully blends tradition with modernity. 
-                                            At Carline, we strive to make your journeys seamless and comfortable while you explore Sharjah’s incredible heritage, 
-                                            vibrant souks, and stunning coastline. Whether you're visiting the **Sharjah Museum of Islamic Civilization**, enjoying a 
-                                            serene walk along the **Al Majaz Waterfront**, or immersing yourself in the artistic ambiance of the **Heart of Sharjah**, 
+                                            Sharjah, known as the <b>Cultural Capital of the UAE</b>, is a city that beautifully blends tradition with modernity. 
+                                            At Carline, we strive to make your journeys seamless and comfortable while you explore Sharjah's incredible heritage, 
+                                            vibrant souks, and stunning coastline. Whether you're visiting the <b>Sharjah Museum of Islamic Civilization</b>, enjoying a 
+                                            serene walk along the <b>Al Majaz Waterfront</b>, or immersing yourself in the artistic ambiance of the <b>Heart of Sharjah</b>, 
                                             we ensure a hassle-free car rental experience. Our transparent pricing and premium service make every ride in 
                                             Sharjah an experience worth cherishing. Let us be a part of your journey through this culturally rich and dynamic city.
                                         </p>

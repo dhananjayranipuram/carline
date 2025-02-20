@@ -50,12 +50,12 @@
                                 <!-- Section Title Start -->
                                 <div class="section-title">
                                     <h3 class="wow fadeInUp">Ajman</h3>
-                                    <h2 class="text-anime-style-3" data-cursor="-opaque">Ajman – The Hidden Gem of the UAE</h2>
+                                    <h2 class="text-anime-style-3" data-cursor="-opaque">Ajman - The Hidden Gem of the UAE</h2>
                                     <p class="wow fadeInUp" data-wow-delay="0.25s">
                                         Ajman, the smallest emirate of the UAE, is a perfect blend of serenity, heritage, and modernity. 
-                                        At Carline, we provide seamless car rental services to help you explore Ajman’s beautiful coastline, 
-                                        vibrant souks, and rich history. Whether you're strolling along **Ajman Corniche**, discovering the 
-                                        **Ajman Museum**, or enjoying a relaxing getaway at **Al Zorah Nature Reserve**, we ensure a smooth, 
+                                        At Carline, we provide seamless car rental services to help you explore Ajman's beautiful coastline, 
+                                        vibrant souks, and rich history. Whether you're strolling along <b>Ajman Corniche</b>, discovering the 
+                                        <b>Ajman Museum</b>, or enjoying a relaxing getaway at <b>Al Zorah Nature Reserve</b>, we ensure a smooth, 
                                         comfortable, and transparent rental experience. With our commitment to top-tier service, we aim to 
                                         make your visit to Ajman truly memorable.
                                     </p>

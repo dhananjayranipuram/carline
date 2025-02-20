@@ -50,14 +50,14 @@
                                     <!-- Section Title Start -->
                                     <div class="section-title">
                                         <h3 class="wow fadeInUp">Al Ain</h3>
-                                        <h2 class="text-anime-style-3" data-cursor="-opaque">Al Ain – The Garden City of the UAE</h2>
+                                        <h2 class="text-anime-style-3" data-cursor="-opaque">Al Ain - The Garden City of the UAE</h2>
                                         <p class="wow fadeInUp" data-wow-delay="0.25s">
                                             Al Ain, known as the "Garden City," is a city of lush green landscapes, majestic mountains, 
                                             and rich cultural heritage. At Carline, our mission is to offer an effortless travel experience, 
-                                            providing luxury car rentals that allow you to explore Al Ain’s serene beauty and historical treasures. 
-                                            From the awe-inspiring **Jebel Hafeet** to the peaceful **Al Ain Oasis**, we ensure every journey in Al Ain is 
-                                            comfortable and memorable. Whether you're visiting the **Al Ain National Museum**, enjoying the tranquility of 
-                                            **Green Mubazzarah**, or marveling at the ancient **Al Jahili Fort**, we provide you with exceptional car rental 
+                                            providing luxury car rentals that allow you to explore Al Ain's serene beauty and historical treasures. 
+                                            From the awe-inspiring <b>Jebel Hafeet</b> to the peaceful <b>Al Ain Oasis</b>, we ensure every journey in Al Ain is 
+                                            comfortable and memorable. Whether you're visiting the <b>Al Ain National Museum</b>, enjoying the tranquility of 
+                                            <b>Green Mubazzarah</b>, or marveling at the ancient <b>Al Jahili Fort</b>, we provide you with exceptional car rental 
                                             services that reflect the beauty and charm of this extraordinary city.
                                         </p>
                                     </div>

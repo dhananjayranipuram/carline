@@ -50,13 +50,13 @@
                                 <!-- Section Title Start -->
                                 <div class="section-title">
                                     <h3 class="wow fadeInUp">Fujairah</h3>
-                                    <h2 class="text-anime-style-3" data-cursor="-opaque">Fujairah – A Gateway to Nature</h2>
+                                    <h2 class="text-anime-style-3" data-cursor="-opaque">Fujairah - A Gateway to Nature</h2>
                                     <p class="wow fadeInUp" data-wow-delay="0.25s">
                                         Fujairah, the easternmost emirate of the UAE, is known for its stunning landscapes, majestic mountains, 
                                         and serene beaches. At Carline, our goal is to make exploring Fujairah a seamless experience, offering top-notch 
                                         car rental services that give you access to both its natural beauty and cultural heritage. Whether you're relaxing 
-                                        on the beaches of **Khor Fakkan**, exploring the **Fujairah Fort**, or enjoying the scenic drive along the **Hajar 
-                                        Mountains**, we guarantee a comfortable and hassle-free ride. Fujairah is an undiscovered gem in the UAE, and we are here 
+                                        on the beaches of <b>Khor Fakkan</b>, exploring the <b>Fujairah Fort</b>, or enjoying the scenic drive along the <b>Hajar 
+                                        Mountains</b>, we guarantee a comfortable and hassle-free ride. Fujairah is an undiscovered gem in the UAE, and we are here 
                                         to help you make the most of your time in this peaceful oasis with our luxury car rental services and outstanding customer 
                                         care.
                                     </p>

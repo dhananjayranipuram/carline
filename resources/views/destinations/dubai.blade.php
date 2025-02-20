@@ -50,9 +50,9 @@
                                     <!-- Section Title Start -->
                                     <div class="section-title">
                                         <h3 class="wow fadeInUp">Dubai</h3>
-                                        <h2 class="text-anime-style-3" data-cursor="-opaque">Dubai – A City of Dreams and Discoveries</h2>
+                                        <h2 class="text-anime-style-3" data-cursor="-opaque">Dubai - A City of Dreams and Discoveries</h2>
                                         <p class="wow fadeInUp" data-wow-delay="0.25s">Dubai, a city of wonders, is the ultimate destination for travelers seeking luxury, adventure, and 
-                                            cultural richness. At Carline, our vision is to revolutionize car rentals by offering seamless mobility solutions tailored for Dubai’s 
+                                            cultural richness. At Carline, our vision is to revolutionize car rentals by offering seamless mobility solutions tailored for Dubai's 
                                             dynamic landscape. From the towering Burj Khalifa to the pristine beaches of Jumeirah, we aim to enhance every journey with convenience, 
                                             reliability, and premium service. Whether you're exploring the vibrant streets of Downtown Dubai, venturing into the golden dunes of 
                                             the Arabian Desert, or cruising along the stunning Palm Jumeirah, we ensure a hassle-free experience with transparent pricing and 

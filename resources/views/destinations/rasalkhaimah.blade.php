@@ -50,12 +50,12 @@
                                 <!-- Section Title Start -->
                                 <div class="section-title">
                                     <h3 class="wow fadeInUp">Ras Al Khaimah</h3>
-                                    <h2 class="text-anime-style-3" data-cursor="-opaque">Ras Al Khaimah – Adventure Awaits</h2>
+                                    <h2 class="text-anime-style-3" data-cursor="-opaque">Ras Al Khaimah - Adventure Awaits</h2>
                                     <p class="wow fadeInUp" data-wow-delay="0.25s">
                                         Ras Al Khaimah, the northernmost emirate of the UAE, offers a breathtaking mix of mountains, beaches, and 
                                         deserts. At Carline, our mission is to provide seamless car rental services that let you explore Ras Al 
-                                        Khaimah’s natural beauty and adventurous experiences. Whether you’re hiking the rugged **Hajar Mountains**, 
-                                        relaxing on the pristine **Al Marjan Island**, or discovering the **Al Hamra Fort**, we ensure a smooth and 
+                                        Khaimah's natural beauty and adventurous experiences. Whether you're hiking the rugged <b>Hajar Mountains</b>, 
+                                        relaxing on the pristine <b>Al Marjan Island</b>, or discovering the <b>Al Hamra Fort</b>, we ensure a smooth and 
                                         luxurious experience with transparent pricing and excellent service. Ras Al Khaimah is a playground for adventure, 
                                         and we are here to make your journey through it truly unforgettable, offering you flexibility and comfort every 
                                         step of the way.

@@ -50,10 +50,10 @@
                                     <!-- Section Title Start -->
                                     <div class="section-title">
                                         <h3 class="wow fadeInUp">Abu Dhabi</h3>
-                                        <h2 class="text-anime-style-3" data-cursor="-opaque">Abu Dhabi – The Capital of Culture and Innovation</h2>
+                                        <h2 class="text-anime-style-3" data-cursor="-opaque">Abu Dhabi - The Capital of Culture and Innovation</h2>
                                         <p class="wow fadeInUp" data-wow-delay="0.25s">Abu Dhabi, the capital of the UAE, blends modernity with deep-rooted heritage, offering a journey 
                                             through architectural wonders, cultural landmarks, and scenic landscapes. At Carline, we are dedicated to providing seamless car rental 
-                                            experiences tailored for this majestic city. Whether you’re visiting the iconic Sheikh Zayed Grand Mosque, indulging in world-class art at 
+                                            experiences tailored for this majestic city. Whether you're visiting the iconic Sheikh Zayed Grand Mosque, indulging in world-class art at 
                                             the Louvre Abu Dhabi, or seeking adrenaline at Ferrari World, we ensure you travel in comfort and style. Our commitment to reliability, 
                                             transparency, and customer satisfaction makes every ride a refined experience, allowing you to explore the grandeur of Abu Dhabi without limits.</p>
                                     </div>

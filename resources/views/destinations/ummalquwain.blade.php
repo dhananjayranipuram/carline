@@ -50,13 +50,13 @@
                                 <!-- Section Title Start -->
                                 <div class="section-title">
                                     <h3 class="wow fadeInUp">Umm Al Quwain</h3>
-                                    <h2 class="text-anime-style-3" data-cursor="-opaque">Umm Al Quwain – A Tranquil Escape</h2>
+                                    <h2 class="text-anime-style-3" data-cursor="-opaque">Umm Al Quwain - A Tranquil Escape</h2>
                                     <p class="wow fadeInUp" data-wow-delay="0.25s">
-                                        Umm Al Quwain is one of the UAE’s hidden gems, offering a unique blend of serene beaches, historical 
+                                        Umm Al Quwain is one of the UAE's hidden gems, offering a unique blend of serene beaches, historical 
                                         landmarks, and nature reserves. At Carline, we are committed to enhancing your journey through Umm Al Quwain 
-                                        by offering premium car rental services that give you the freedom to explore. Whether you’re enjoying the 
-                                        pristine beauty of **Umm Al Quwain Beach**, visiting the historic **Umm Al Quwain Fort**, or discovering 
-                                        the rich wildlife at **Al Sinniyah Island**, we ensure a seamless and luxurious experience. Our fleet, 
+                                        by offering premium car rental services that give you the freedom to explore. Whether you're enjoying the 
+                                        pristine beauty of <b>Umm Al Quwain Beach</b>, visiting the historic <b>Umm Al Quwain Fort</b>, or discovering 
+                                        the rich wildlife at <b>Al Sinniyah Island</b>, we ensure a seamless and luxurious experience. Our fleet, 
                                         customer-centric services, and transparent pricing guarantee a stress-free and memorable adventure in this 
                                         tranquil emirate.
                                     </p>
