@@ -139,9 +139,14 @@
     }
 </style>
 <style>
-        @media only screen and (max-width: 991px) {
+@media only screen and (max-width: 991px) {
     .fleets-single-slider {
         margin-bottom: 2px;
+    }
+
+    .pricing-table {
+        overflow-x: auto;
+        margin: 10px;
     }
 }
 @media only screen and (max-width: 991px) {

@@ -179,7 +179,7 @@
 }
 @media only screen and (max-width: 600px) {
     .navbar-brand {
-        width: 220px;
+        width: 180px;
     }
 }
 /* Cookie Popup Styles */
