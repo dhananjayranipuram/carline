@@ -11,7 +11,7 @@ class Admin extends Model
     use HasFactory;
 
     public function authenticateAdmin($data){
-        return DB::select("SELECT id,first_name,last_name FROM admin_user WHERE email='$data[email]' AND password='$data[password]';");
+        return DB::select("SELECT id,first_name,last_name,email FROM admin_user WHERE email='$data[email]' AND password='$data[password]';");
     }
 
     public function getCars($data=[]){

@@ -225,7 +225,7 @@
                 <li class="nav-item topbar-user dropdown hidden-caret">
                   <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#" aria-expanded="false" >
                     <div class="avatar-sm">
-                      <img src="{{asset('admin_assets/img/profile.jpg')}}" alt="..." class="avatar-img rounded-circle" />
+                      <i class="fa fa-user-tie fa-2x"></i>
                     </div>
                     <span class="profile-username">
                       <span class="op-7">Hi,</span>
@@ -237,26 +237,23 @@
                       <li>
                         <div class="user-box">
                           <div class="avatar-lg">
-                            <img
+                            <i class="fa fa-user-tie fa-3x"></i>
+                            <!-- <img
                               src="{{asset('admin_assets/img/profile.jpg')}}"
                               alt="image profile"
                               class="avatar-img rounded"
-                            />
+                            /> -->
                           </div>
                           <div class="u-text">
-                            <h4>Hizrian</h4>
-                            <p class="text-muted">hello@example.com</p>
-                            <a
-                              href="profile.html"
-                              class="btn btn-xs btn-secondary btn-sm"
-                              >View Profile</a
-                            >
+                            <h4>{{$userAdminData->first_name}}</h4>
+                            <p class="text-muted">{{$userAdminData->email}}</p>
+                            <!-- <a href="profile.html" class="btn btn-xs btn-secondary btn-sm">View Profile</a> -->
                           </div>
                         </div>
                       </li>
                       <li>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">My Profile</a>
+                        <!-- <div class="dropdown-divider"></div> -->
+                        <!-- <a class="dropdown-item" href="#">My Profile</a> -->
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{{url('/admin/logout')}}">Logout</a>
                       </li>

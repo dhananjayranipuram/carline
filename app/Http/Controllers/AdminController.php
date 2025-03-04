@@ -29,13 +29,20 @@ class AdminController extends Controller
             Session::forget('deleteCarImageData');
         }
 
+        $this->middleware(function ($request, $next) {
+            $userData = Session::get('userAdminData'); 
+            view()->share('userAdminData', $userData);
+            return $next($request);
+        });
+
         // date_default_timezone_set('Asia/Calcutta');
         date_default_timezone_set('Asia/Dubai');
         $site = new Site();
         $emirates = $site->getEmirates();
         $layoutCarTypes = $site->getCarType();
         $country = $site->getCountry();
-    
+        
+
         view()->share('emirates', $emirates);
         view()->share('country', $country);
         view()->share('layoutCarTypes', $layoutCarTypes);
@@ -48,7 +55,7 @@ class AdminController extends Controller
                 'password' => ['required']
             ]);
             $data = $admin->authenticateAdmin($filterData);    
-             
+            // echo '<pre>';print_r($data);exit;
             if(!empty($data)){
                 Session::put('userAdminData', $data[0]);
                 return Redirect::to('/admin/dashboard');
