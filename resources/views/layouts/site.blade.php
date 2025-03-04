@@ -181,6 +181,21 @@
     .navbar-brand {
         width: 180px;
     }
+    .slicknav_menu {
+        background: #ffffff;
+    }
+    .slicknav_nav .slicknav_row, .slicknav_nav li a {
+        border: 1px solid #ededed;
+        color: #000080;
+    }
+    .search-form-container {
+        padding: 5px;
+        width: 320px;
+        margin: 15px auto;
+    }
+    .form-select {
+        padding: 10px 30px 10px 10px;
+    }
 }
 /* Cookie Popup Styles */
 .cookie-popup {

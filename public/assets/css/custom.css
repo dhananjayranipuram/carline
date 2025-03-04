@@ -1556,6 +1556,51 @@ header.main-header .header-sticky.active{
 	transform: rotate(225deg);
 }
 
+
+/**/
+
+.brand-details-slider .brand-button-next,
+.brand-details-slider .brand-button-prev{
+	position: relative;
+	width: 48px;
+	height: 48px;
+	background-color: var(--accent-color);
+	border-radius: 100%;
+	transition: all 0.4s ease-in-out;
+}
+
+.brand-details-slider .brand-button-next{
+	margin-left: 20px;
+}
+
+
+.brand-details-slider .brand-button-next:hover,
+.brand-details-slider .brand-button-prev:hover{
+	background-color: var(--primary-color);
+}
+
+.brand-details-slider .brand-button-next::before,
+.brand-details-slider .brand-button-prev::before{
+	content: '';
+	position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: url("../images/arrow-white.svg") no-repeat center center;
+    background-size: 14px auto;
+    transform: rotate(45deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.4s ease-in-out;
+}
+
+.brand-details-slider .brand-button-prev::before{
+	transform: rotate(225deg);
+}
+/**/
+
 /************************************/
 /***   08. Luxury Collection css  ***/
 /************************************/

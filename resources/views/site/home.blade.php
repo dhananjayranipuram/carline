@@ -290,7 +290,7 @@
         </div>
 
         <div class="row">
-            <div class="car-details-slider">
+            <div class="brand-details-slider">
                 <div class="swiper swiper-initialized swiper-horizontal">
                     <div class="swiper-wrapper" data-cursor-text="Drag" id="swiper-wrapper-9ebdd264537877106" aria-live="off" style="transition-duration: 0ms; transform: translate3d(-3805px, 0px, 0px); transition-delay: 0ms;">
                         
@@ -306,8 +306,8 @@
 
                         </div>
                     <div class="car-details-btn">
-                        <div class="car-button-prev" tabindex="0" role="button" aria-label="Previous slide" aria-controls="swiper-wrapper-871148932a4101eae"></div>
-                        <div class="car-button-next" tabindex="0" role="button" aria-label="Next slide" aria-controls="swiper-wrapper-871148932a4101eae"></div>
+                        <div class="brand-button-prev" tabindex="0" role="button" aria-label="Previous slide" aria-controls="swiper-wrapper-871148932a4101eae"></div>
+                        <div class="brand-button-next" tabindex="0" role="button" aria-label="Next slide" aria-controls="swiper-wrapper-871148932a4101eae"></div>
                     </div>
                 <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span></div>
             </div>

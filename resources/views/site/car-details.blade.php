@@ -160,15 +160,18 @@
         padding-bottom: 5px;
     }
     .pricing-table {
-    margin-top: 1px;
-    overflow-x: auto;
-}
-.fleets-slider-image {
-    position: relative;
-    border-radius: 30px;
-    overflow: hidden;
-    padding-top: 20px;
-}
+        margin-top: 1px;
+        overflow-x: auto;
+    }
+    .fleets-slider-image {
+        position: relative;
+        border-radius: 30px;
+        overflow: hidden;
+        padding-top: 20px;
+    }
+    .fleets-single-sidebar-list ul li {
+        margin-top: 20px;
+    }
 }
 
 /* Hide the page header on desktop and laptop (above 1024px) */
@@ -666,7 +669,7 @@
 <script src="{{asset('assets/js/jquery.magnific-popup.min.js')}}"></script>
 <script src="{{asset('admin_assets/js/moment.min.js')}}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.43/moment-timezone-with-data.min.js"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmX5w5ltGt09cjDod_YMamphRRgS8L-ZQ&components=country:ae&libraries=places"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google.maps_api_key') }}&components=country:ae&libraries=places"></script>
 <script src="{{asset('assets/js/swiper-bundle.min.js')}}"></script>
 <script>
 var swiper = new Swiper(".swiper", {
