@@ -302,15 +302,15 @@
                 <td class="wrapper">
                   <p>Hi Admin</p>
                   <p>One booking is cancelled and details are as given below</p>
-                  <p>Customer Name :<b>{{$email_data->user_name}}</b></p>
-                  <p>Mobile Number :<b>{{$email_data->phone}}</b></p>
-                  <p>Pickup Location :<b>{{$email_data->s_address}}</b></p>
-                  <p>Pickup Date :<b>{{$email_data->pickup_date}}</b></p>
-                  <p>Pickup Time :<b>{{$email_data->pickup_time}}</b></p>
-                  <p>Drop off Location :<b>{{$email_data->d_address}}</b></p>
-                  <p>Drop off Date :<b>{{$email_data->return_date}}</b></p>
-                  <p>Drop off Time :<b>{{$email_data->return_time}}</b></p>
-                  <p>Rate :<b>{{$email_data->rate}}</b></p>
+                  <p>Customer Name : <b>{{$email_data->user_name}}</b></p>
+                  <p>Mobile Number : <b>{{$email_data->phone}}</b></p>
+                  <p>Pickup Location : <b>{{$email_data->s_address}}</b></p>
+                  <p>Pickup Date : <b>{{$email_data->pickup_date}}</b></p>
+                  <p>Pickup Time : <b>{{$email_data->pickup_time}}</b></p>
+                  <p>Drop off Location : <b>{{$email_data->d_address}}</b></p>
+                  <p>Drop off Date : <b>{{$email_data->return_date}}</b></p>
+                  <p>Drop off Time : <b>{{$email_data->return_time}}</b></p>
+                  <p>Rate : <b>AED {{$email_data->rate}}</b></p>
                 </td>
               </tr>
 

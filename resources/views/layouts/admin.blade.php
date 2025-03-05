@@ -104,7 +104,7 @@
                                 <a href="{{url('/admin/add-emirates')}}" ><i class="fas fa-list"></i><p>Emirates</p></a>
                             </li>
                             <li class="nav-item @if(Request::path() == 'admin/users') active @endif">
-                                <a href="{{url('/admin/users')}}" ><i class="fas fa-list"></i><p>User List</p></a>
+                                <a href="{{url('/admin/users')}}" ><i class="fas fa-list"></i><p>Customers</p></a>
                             </li>
                             <li class="nav-item @if(Request::path() == 'admin/bookings') active @endif">
                                 <a href="{{url('/admin/bookings')}}" ><i class="fas fa-list"></i><p>Bookings</p></a>

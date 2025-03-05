@@ -302,16 +302,16 @@
                 <td class="wrapper">
                   <p>Hi Admin</p>
                   <p>One booking is received and details are as given below</p>
-                  <p>Customer Name :<b>{{$email_data->user_data[0]->first_name}}</b></p>
-                  <p>Car Name :<b>{{$email_data->car_data[0]->brand_name}} {{$email_data->car_data[0]->name}} {{$email_data->car_data[0]->model}}</b></p>
-                  <p>Mobile Number :<b>{{$email_data->user_data[0]->phone}}</b></p>
-                  <p>Pickup Location :<b>{{str_replace(",", ", ", $email_data->sourceData['Address'])}}</b></p>
-                  <p>Pickup Date :<b>{{ date('d-m-Y', strtotime($email_data->pickupdate)) }}</b></p>
-                  <p>Pickup Time :<b>{{$email_data->pickuptime}}</b></p>
-                  <p>Drop off Location :<b>{{str_replace(",", ", ", $email_data->destinationData['Address'])}}</b></p>
-                  <p>Drop off Date :<b>{{ date('d-m-Y', strtotime($email_data->returndate)) }}</b></p>
-                  <p>Drop off Time :<b>{{$email_data->returntime}}</b></p>
-                  <p>Rate :<b>{{$email_data->rate}}</b></p>
+                  <p>Customer Name : <b>{{$email_data->user_data[0]->first_name}}</b></p>
+                  <p>Car Name : <b>{{$email_data->car_data[0]->brand_name}} {{$email_data->car_data[0]->name}} {{$email_data->car_data[0]->model}}</b></p>
+                  <p>Mobile Number : <b>{{$email_data->user_data[0]->phone}}</b></p>
+                  <p>Pickup Location : <b>{{str_replace(",", ", ", $email_data->sourceData['Address'])}}</b></p>
+                  <p>Pickup Date : <b>{{ date('d-m-Y', strtotime($email_data->pickupdate)) }}</b></p>
+                  <p>Pickup Time : <b>{{$email_data->pickuptime}}</b></p>
+                  <p>Drop off Location : <b>{{str_replace(",", ", ", $email_data->destinationData['Address'])}}</b></p>
+                  <p>Drop off Date : <b>{{ date('d-m-Y', strtotime($email_data->returndate)) }}</b></p>
+                  <p>Drop off Time : <b>{{$email_data->returntime}}</b></p>
+                  <p>Rate : <b>AED {{$email_data->rate}}</b></p>
                 </td>
               </tr>
 

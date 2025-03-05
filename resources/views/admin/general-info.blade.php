@@ -45,7 +45,7 @@
                         <div class="row">
                             <div class="col-md-12 col-lg-12">
                                 <div class="form-group">
-                                    <textarea class="form-control" name="content" placeholder="Enter content">{{ old('content', $content[0]->content ?? '') }}</textarea>
+                                    <textarea rows="6" class="form-control" name="content" placeholder="Enter content">{{ old('content', $content[0]->content ?? '') }}</textarea>
                                     @error('content') <span class="text-danger">{{ $message }}</span> @enderror
                                 </div>
                             </div>

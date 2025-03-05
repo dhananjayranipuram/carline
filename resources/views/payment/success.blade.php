@@ -98,7 +98,7 @@
 
                         <tr>
                             <th>Rate:</th>
-                            <td>{{$paymentDetails[0]->rate}}</td>
+                            <td>AED {{$paymentDetails[0]->rate}}</td>
                         </tr>
                     </tbody>
                 </table>

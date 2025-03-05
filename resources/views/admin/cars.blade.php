@@ -104,6 +104,7 @@ $("#multi-filter-select").DataTable({
 $(".delete-car").click(function () {
     var t = $('#multi-filter-select').DataTable();
     var id = $(this).attr("data-id");
+    var row = $(this).closest("tr");
     if(confirm("Do you want to delete this car?")){
         $.ajax({
             url: baseUrl + '/admin/delete-car',
@@ -115,7 +116,7 @@ $(".delete-car").click(function () {
             headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
             success: function(res) {
                 if(res.status == 200 ){
-                    t.row("#row"+id).remove().draw();
+                    t.row(row).remove().draw(false);
                 }
             }
         });

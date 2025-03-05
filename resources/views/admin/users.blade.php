@@ -9,7 +9,7 @@
             <div class="card">
                 <div class="card-header row">
                     <div class="col-md-8">
-                        <h4 class="card-title">User List</h4>
+                        <h4 class="card-title">Customers</h4>
                     </div>
                     <div class="col-md-4" style="text-align: right;">
                         <a class="btn btn-primary" href="{{url('/admin/export-users')}}">Export</a>

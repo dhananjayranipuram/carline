@@ -212,7 +212,7 @@
                                 <li><span>Address: </span>{{$userAccount[0]->flat}}, {{$userAccount[0]->building}}, {{$userAccount[0]->landmark}}, {{$userAccount[0]->city}}, {{$userAccount[0]->emirates}}</li>
                             </ul>
                             <a href="{{ url('/my-account') }}" class="responsive-button">Booking History</a>
-                            <a href="{{ url('/my-documents') }}" class="responsive-button">My Documents</a>
+                            <a href="{{ url('/my-documents') }}" class="responsive-button">Manage Account</a>
                         </div>
                         <!-- Team member Body End -->
 

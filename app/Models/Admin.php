@@ -462,6 +462,7 @@ class Admin extends Model
             ->leftJoin('car_brand as cb', 'cb.id', '=', 'c.brand_id')
             ->leftJoin('car_images as ci', 'ci.car_id', '=', 'c.id')
             ->leftJoin('enduser as eu', 'b.user_id', '=', 'eu.id')
+            ->leftJoin('payment_details as pd', 'b.id', '=', 'pd.booking_id')
             ->where('c.active', 1);
 
         if (!empty($data['brand'])) {
@@ -488,6 +489,7 @@ class Admin extends Model
                 \DB::raw("CONCAT(cb.name, ' ', c.name, ' ', c.model) AS car_name"),
                 \DB::raw("CONCAT(eu.first_name, ' ', eu.last_name) AS user_name"),
                 \DB::raw("DATE_FORMAT(b.pickup_date, '%d-%m-%Y') AS pickup_date"),
+                \DB::raw("DATE_FORMAT(b.created_on, '%d-%m-%Y') AS booked_date"),
                 \DB::raw("DATE_FORMAT(b.return_date, '%d-%m-%Y') AS return_date"),
                 \DB::raw("DATE_FORMAT(b.pickup_time, '%h:%i %p') AS pickup_time"),
                 \DB::raw("DATE_FORMAT(b.return_time, '%h:%i %p') AS return_time"),
@@ -495,7 +497,8 @@ class Admin extends Model
                 \DB::raw("LEFT(bd.s_address, LOCATE(',', bd.s_address) - 1) AS source"),
                 'bd.s_address',
                 \DB::raw("LEFT(bd.d_address, LOCATE(',', bd.d_address) - 1) AS destination"),
-                'bd.d_address'
+                'bd.d_address',
+                'pd.transaction_id'
             ])
             ->get();
     }
@@ -870,6 +873,7 @@ class Admin extends Model
             ->leftJoin('car_brand as cb', 'cb.id', '=', 'c.brand_id')
             ->leftJoin('car_images as ci', 'ci.car_id', '=', 'c.id')
             ->leftJoin('enduser as eu', 'b.user_id', '=', 'eu.id')
+            ->leftJoin('payment_details as pd', 'b.id', '=', 'pd.booking_id')
             ->where('b.id', $data['id'])
             ->groupBy('b.id')
             ->select([
@@ -890,6 +894,14 @@ class Admin extends Model
                 'bd.d_lat',
                 'bd.d_lon',
                 'b.status',
+                'pd.transaction_id',
+                'pd.totalRate AS carRent',
+                'pd.vat',
+                'pd.emirate',
+                'pd.deposit',
+                'pd.babySeat',
+                'pd.total',
+                \DB::raw("DATE_FORMAT(b.created_on, '%d-%m-%Y') as booked_on"),
                 \DB::raw("CASE 
                     WHEN b.status = 1 THEN 'Booked' 
                     WHEN b.status = 0 THEN 'Canceled' 

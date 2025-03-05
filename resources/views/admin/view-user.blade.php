@@ -75,7 +75,7 @@
                 <div class="card card-round">
                     <div class="card-header">
                         <div class="card-head-row card-tools-still-right">
-                            <div class="card-title">User Details
+                            <div class="card-title">Customer Details
                             </div>
                                 <div class="card-tools">
                                     <a href="{{url('/admin/users')}}" class="btn btn-primary">
