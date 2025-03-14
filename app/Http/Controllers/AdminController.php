@@ -627,8 +627,8 @@ class AdminController extends Controller
             
             if($data){
                 $img = $admin->getImage($filterData);
-                if (File::exists($img->image)) {
-                    File::delete($img->image);
+                if (Storage::exists($img->image)) {
+                    Storage::delete($img->image);
                     $admin->updateDocImage($filterData,$img); 
                 }
                 $res['status'] = 200;
@@ -804,6 +804,7 @@ class AdminController extends Controller
                 'monthly_mileage' => ['required'],
                 'offerFlagMonthly' => ['nullable'],
                 'specialOfferMonthly' => ['nullable'],
+                'active' => ['nullable'],
 
                 'qty' => ['required','numeric'],
                 'kmeter' => ['nullable','numeric'],
@@ -818,6 +819,7 @@ class AdminController extends Controller
             $filterData['offerFlag'] = isset($filterData['offerFlag']) ? 1 : 0;
             $filterData['offerFlagWeekly'] = isset($filterData['offerFlagWeekly']) ? 1 : 0;
             $filterData['offerFlagMonthly'] = isset($filterData['offerFlagMonthly']) ? 1 : 0;
+            $filterData['active'] = isset($filterData['active']) ? 1 : 0;
             $filterData['online_flag'] = isset($filterData['online_flag']) ? 1 : 0;
             $filterData['whatsapp_flag'] = isset($filterData['whatsapp_flag']) ? 1 : 0;
 

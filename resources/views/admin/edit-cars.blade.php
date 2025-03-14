@@ -396,6 +396,9 @@ input[type="text"]:not(:placeholder-shown) + .input-placeholder {
                                             <div class="form-group">
                                                 <input type="checkbox" name="general_info" @if($cars[0]->general_info_flag == 1) checked @endif> Include General Information
                                             </div>
+                                            <div class="form-group">
+                                                <input type="checkbox" name="active" @if($cars[0]->active == 1) checked @endif> Active
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="card">

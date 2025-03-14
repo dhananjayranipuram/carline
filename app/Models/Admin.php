@@ -19,7 +19,7 @@ class Admin extends Model
         if(!empty($data['id'])){
             $condition .= " AND c.id = $data[id]";
         }
-        return DB::select("SELECT c.id,c.name,c.model,cb.id brand_id,cb.name brand_name,ct.id type_id,ct.name car_type,GROUP_CONCAT(ci.image) AS 'image',c.rent,c.general_info_flag,c.rental_condition_flag,c.offer_flag,c.offer_price,c.deposit,c.qty,c.kmeter,c.daily_mileage,c.weekly_mileage,c.monthly_mileage,c.toll_charges,c.add_mileage_charge,c.per_week,c.offer_flag_weekly,c.offer_price_weekly,c.per_month,c.offer_flag_monthly,c.offer_price_monthly,c.online_flag,c.whatsapp_flag,c.fuel_type FROM cars c
+        return DB::select("SELECT c.id,c.name,c.model,cb.id brand_id,cb.name brand_name,ct.id type_id,ct.name car_type,GROUP_CONCAT(ci.image) AS 'image',c.rent,c.general_info_flag,c.rental_condition_flag,c.offer_flag,c.offer_price,c.deposit,c.qty,c.kmeter,c.daily_mileage,c.weekly_mileage,c.monthly_mileage,c.toll_charges,c.add_mileage_charge,c.per_week,c.offer_flag_weekly,c.offer_price_weekly,c.per_month,c.offer_flag_monthly,c.offer_price_monthly,c.online_flag,c.whatsapp_flag,c.fuel_type,c.active FROM cars c
                             LEFT JOIN car_brand cb ON cb.id=c.brand_id
                             LEFT JOIN car_type ct ON ct.id=c.type_id
                             LEFT JOIN car_images ci ON ci.car_id=c.id
@@ -147,7 +147,7 @@ class Admin extends Model
         DB::beginTransaction();
         try {
             $carId = $data['carId'];
-            DB::UPDATE("UPDATE cars SET name='$data[name]',model='$data[model]',brand_id='$data[brand]',type_id='$data[cartype]',general_info_flag='$data[general_info]',rental_condition_flag='$data[rental_condition]',rent='$data[rent]',offer_price='$data[specialOffer]',offer_flag='$data[offerFlag]',deposit='$data[deposit]',qty='$data[qty]',kmeter='$data[kmeter]',daily_mileage='$data[daily_mileage]',weekly_mileage='$data[weekly_mileage]',monthly_mileage='$data[monthly_mileage]',add_mileage_charge='$data[additionalCharge]',toll_charges='$data[toll]',per_week='$data[weekly_rent]',offer_flag_weekly='$data[offerFlagWeekly]',offer_price_weekly='$data[specialOfferWeekly]',per_month='$data[monthly_rent]',offer_flag_monthly='$data[offerFlagMonthly]',offer_price_monthly='$data[specialOfferMonthly]',online_flag='$data[online_flag]',whatsapp_flag='$data[whatsapp_flag]',fuel_type='$data[fuel_type]' WHERE id=$carId;");
+            DB::UPDATE("UPDATE cars SET name='$data[name]',model='$data[model]',brand_id='$data[brand]',type_id='$data[cartype]',general_info_flag='$data[general_info]',rental_condition_flag='$data[rental_condition]',rent='$data[rent]',offer_price='$data[specialOffer]',offer_flag='$data[offerFlag]',deposit='$data[deposit]',qty='$data[qty]',kmeter='$data[kmeter]',daily_mileage='$data[daily_mileage]',weekly_mileage='$data[weekly_mileage]',monthly_mileage='$data[monthly_mileage]',add_mileage_charge='$data[additionalCharge]',toll_charges='$data[toll]',per_week='$data[weekly_rent]',offer_flag_weekly='$data[offerFlagWeekly]',offer_price_weekly='$data[specialOfferWeekly]',per_month='$data[monthly_rent]',offer_flag_monthly='$data[offerFlagMonthly]',offer_price_monthly='$data[specialOfferMonthly]',online_flag='$data[online_flag]',whatsapp_flag='$data[whatsapp_flag]',fuel_type='$data[fuel_type]',active='$data[active]' WHERE id=$carId;");
 
             //Update Car Specifications
             DB::DELETE("DELETE FROM car_specification WHERE car_id='$carId';");
@@ -915,14 +915,14 @@ class Admin extends Model
     {
         // Define mapping of docType to database columns
         $docTypeToColumn = [
-            'pass_front' => 'passf_flag',
-            'pass_back'  => 'passb_flag',
-            'dl_front'   => 'dlf_flag',
-            'dl_back'    => 'dlb_flag',
-            'eid_front'  => 'eidf_flag',
-            'eid_back'   => 'eidb_flag',
-            'cdl_front'   => 'cdlf_flag',
-            'cdl_back'   => 'cdlb_flag',
+            'pf' => 'passf_flag',
+            'pb'  => 'passb_flag',
+            'df'   => 'dlf_flag',
+            'db'    => 'dlb_flag',
+            'ef'  => 'eidf_flag',
+            'eb'   => 'eidb_flag',
+            'cf'   => 'cdlf_flag',
+            'cb'   => 'cdlb_flag',
         ];
 
         // Check if the docType is valid
@@ -940,14 +940,14 @@ class Admin extends Model
     {
         // Define the mapping of docType to database column
         $docTypeToColumn = [
-            'pass_front' => 'pass_front',
-            'pass_back'  => 'pass_back',
-            'dl_front'   => 'dl_front',
-            'dl_back'    => 'dl_back',
-            'eid_front'  => 'eid_front',
-            'eid_back'   => 'eid_back',
-            'cdl_front'   => 'cdl_front',
-            'cdl_back'   => 'cdl_back',
+            'pf' => 'pass_front',
+            'pb'  => 'pass_back',
+            'df'   => 'dl_front',
+            'db'    => 'dl_back',
+            'ef'  => 'eid_front',
+            'eb'   => 'eid_back',
+            'cf'   => 'cdl_front',
+            'cb'   => 'cdl_back',
         ];
 
         // Validate if the provided docType exists in the mapping
@@ -968,14 +968,14 @@ class Admin extends Model
     {
         // Define the mapping of docType to database column
         $docTypeToColumn = [
-            'pass_front' => 'pass_front',
-            'pass_back'  => 'pass_back',
-            'dl_front'   => 'dl_front',
-            'dl_back'    => 'dl_back',
-            'eid_front'  => 'eid_front',
-            'eid_back'   => 'eid_back',
-            'cdl_front'   => 'cdl_front',
-            'cdl_back'   => 'cdl_back',
+            'pf' => 'pass_front',
+            'pb'  => 'pass_back',
+            'df'   => 'dl_front',
+            'db'    => 'dl_back',
+            'ef'  => 'eid_front',
+            'eb'   => 'eid_back',
+            'cf'   => 'cdl_front',
+            'cb'   => 'cdl_back',
         ];
 
         // Validate if the provided docType exists in the mapping
