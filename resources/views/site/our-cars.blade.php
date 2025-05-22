@@ -81,25 +81,6 @@
 }
 }
     </style>
-<style>
-    .no-cars {
-    text-align: center;
-    padding: 20px;
-    font-family: Arial, sans-serif;
-}
-
-.no-cars i {
-    font-size: 50px;
-    color: gray;
-}
-
-.no-cars p {
-    font-size: 18px;
-    color: red;
-    margin-top: 10px;
-}
-
-</style>
 <!-- Page Header Start -->
 <!-- <div class="page-header bg-section parallaxie">
     <div class="container">
@@ -220,83 +201,82 @@
                 <!-- Fleets Collection Box Start -->
                 <div class="fleets-collection-box">
                     <div class="row" id="carList">
-                        @if($cars)
-                            @foreach($cars as $key => $value)
-                            <div class="col-lg-3 col-md-6">
-                                <!-- Perfect Fleets Item Start -->
-                                <div class="perfect-fleet-item fleets-collection-item wow fadeInUp">
-                                    <!-- Image Box Start -->
-                                    <div class="image-box">
-                                        @if($value->image!='')
-                                            @php $imgArr = explode(',',$value->image); @endphp
-                                            @if(!empty($imgArr))
-                                                <a href="{{url('/car-details')}}?id={{base64_encode($value->id)}}"><img src="{{asset($imgArr[0])}}" alt="Image not available"></a>
-                                            @endif
-                                        @else
-                                            <img src="" alt="Image not available">
+                        @foreach($cars as $key => $value)
+                        <div class="col-lg-3 col-md-6">
+                            <!-- Perfect Fleets Item Start -->
+                            <div class="perfect-fleet-item fleets-collection-item wow fadeInUp">
+                                <!-- Image Box Start -->
+                                <div class="image-box">
+                                    @if($value->image!='')
+                                        @php $imgArr = explode(',',$value->image); @endphp
+                                        @if(!empty($imgArr))
+                                            <a href="{{url('/car-details')}}?id={{base64_encode($value->id)}}"><img src="{{asset($imgArr[0])}}" alt="Image not available"></a>
                                         @endif
-                                    </div>
-                                    <!-- Image Box End -->
+                                    @else
+                                        <img src="" alt="Image not available">
+                                    @endif
+                                </div>
+                                <!-- Image Box End -->
 
-                                    <!-- Perfect Fleets Content Start -->
-                                    <div class="perfect-fleet-content">
-                                        <!-- Perfect Fleets Title Start -->
-                                        <div class="perfect-fleet-title">
-                                            <h3>{{$value->car_type}}</h3>
-                                            <a href="{{url('/car-details')}}?id={{base64_encode($value->id)}}"><h2>{{$value->brand_name}} {{$value->name}} {{$value->model}}</h2></a>
-                                        </div>
-                                        <!-- Perfect Fleets Content End -->
-
-                                        <!-- Perfect Fleets Body Start -->
-                                        <div class="perfect-fleet-body">
-                                            <ul>
-                                                @if(!empty($specs[$value->id]))
-                                                    @foreach($specs[$value->id] as $keys => $values)
-                                                        <li class="break-word"><img src="{{asset($values->image)}}" alt="" width="21">
-                                                        @if($values->name=='Transmission')
-                                                            {{$values->details}}
-                                                        @else
-                                                            @if($values->details!='Yes')
-                                                                {{$values->details}}
-                                                            @endif 
-                                                            {{$values->name}}
-                                                        @endif
-                                                        
-                                                        </li>
-                                                        @if($keys==3) @break @endif
-                                                    @endforeach
-                                                @endif
-                                            </ul>
-                                        </div>
-                                        <!-- Perfect Fleets Body End -->
-
-                                        <!-- Perfect Fleets Footer Start -->
-                                        <div class="perfect-fleet-footer">
-                                            <!-- Perfect Fleets Pricing Start -->
-                                            <div class="perfect-fleet-pricing">
-                                                @if($value->offer_flag==1) 
-                                                    <del><h6>AED {{$value->rent}}<span>/day</span></h6></del>
-                                                    <h2>AED {{$value->offer_price}} <span>/day</span></h2>
-                                                @else
-                                                    <h2>AED {{$value->rent}} <span>/day</span></h2>
-                                                @endif
-                                            </div>
-                                            <!-- Perfect Fleets Pricing End -->
-
-                                            <!-- Perfect Fleets Btn Start -->
-                                            <div class="perfect-fleet-btn">
-                                                <a href="{{url('/car-details')}}?id={{base64_encode($value->id)}}" class="section-icon-btn"><img src="{{asset('assets/images/arrow-white.svg')}}" alt=""></a>
-                                            </div>
-                                            <!-- Perfect Fleets Btn End -->
-                                        </div>
-                                        <!-- Perfect Fleets Footer End -->
+                                <!-- Perfect Fleets Content Start -->
+                                <div class="perfect-fleet-content">
+                                    <!-- Perfect Fleets Title Start -->
+                                    <div class="perfect-fleet-title">
+                                        <h3>{{$value->car_type}}</h3>
+                                        <a href="{{url('/car-details')}}?id={{base64_encode($value->id)}}"><h2>{{$value->brand_name}} {{$value->name}} {{$value->model}}</h2></a>
                                     </div>
                                     <!-- Perfect Fleets Content End -->
+
+                                    <!-- Perfect Fleets Body Start -->
+                                    <div class="perfect-fleet-body">
+                                        <ul>
+                                            @if(!empty($specs[$value->id]))
+                                                @foreach($specs[$value->id] as $keys => $values)
+                                                    <li class="break-word"><img src="{{asset($values->image)}}" alt="" width="21">
+                                                    @if($values->name=='Transmission')
+                                                        {{$values->details}}
+                                                    @else
+                                                        @if($values->details!='Yes')
+                                                            {{$values->details}}
+                                                        @endif 
+                                                        {{$values->name}}
+                                                    @endif
+                                                    
+                                                    </li>
+                                                    @if($keys==3) @break @endif
+                                                @endforeach
+                                            @endif
+                                        </ul>
+                                    </div>
+                                    <!-- Perfect Fleets Body End -->
+
+                                    <!-- Perfect Fleets Footer Start -->
+                                    <div class="perfect-fleet-footer">
+                                        <!-- Perfect Fleets Pricing Start -->
+                                        <div class="perfect-fleet-pricing">
+                                            @if($value->offer_flag==1) 
+                                                <del><h6>AED {{$value->rent}}<span>/day</span></h6></del>
+                                                <h2>AED {{$value->offer_price}} <span>/day</span></h2>
+                                            @else
+                                                <h2>AED {{$value->rent}} <span>/day</span></h2>
+                                            @endif
+                                        </div>
+                                        <!-- Perfect Fleets Pricing End -->
+
+                                        <!-- Perfect Fleets Btn Start -->
+                                        <div class="perfect-fleet-btn">
+                                            <a href="{{url('/car-details')}}?id={{base64_encode($value->id)}}" class="section-icon-btn"><img src="{{asset('assets/images/arrow-white.svg')}}" alt=""></a>
+                                        </div>
+                                        <!-- Perfect Fleets Btn End -->
+                                    </div>
+                                    <!-- Perfect Fleets Footer End -->
                                 </div>
-                                <!-- Perfect Fleets Item End -->
+                                <!-- Perfect Fleets Content End -->
                             </div>
-                            @endforeach
-                        @endif
+                            <!-- Perfect Fleets Item End -->
+                        </div>
+                        @endforeach
+
                         
                         
                     </div>
@@ -422,68 +402,61 @@ function getCars(sortData){
         headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
         success: function(res) {
             var html = '';
-            if (res.carDet && res.carDet.length != 0) {
-                res.carDet.forEach(function(item) {
-                    if(item.image!=null)
-                        var image = item.image.split(',');
-                    else
-                        var image = '';
-                    // console.log(window.btoa(item.id));
-                    html += '<div class="col-lg-4 col-md-6">'
-                        +'<div class="perfect-fleet-item fleets-collection-item wow fadeInUp">'
-                                +'<div class="image-box">'
-                                        +'<a href="'+baseUrl+'/car-details?id='+window.btoa(item.id)+'"><img src="'+baseUrl+'/'+image[0]+'" alt="Image not available"></a>'
+            res.carDet.forEach(function(item) {
+                if(item.image!=null)
+                    var image = item.image.split(',');
+                else
+                    var image = '';
+                // console.log(window.btoa(item.id));
+                html += '<div class="col-lg-4 col-md-6">'
+                    +'<div class="perfect-fleet-item fleets-collection-item wow fadeInUp">'
+                            +'<div class="image-box">'
+                                    +'<a href="'+baseUrl+'/car-details?id='+window.btoa(item.id)+'"><img src="'+baseUrl+'/'+image[0]+'" alt="Image not available"></a>'
+                            +'</div>'
+                            +'<div class="perfect-fleet-content">'
+                                +'<div class="perfect-fleet-title">'
+                                    +'<h3>'+item.car_type+'</h3>'
+                                    +'<a href="'+baseUrl+'/car-details?id='+window.btoa(item.id)+'"><h2>'+item.brand_name+' '+item.name+' '+item.model+'</h2></a>'
                                 +'</div>'
-                                +'<div class="perfect-fleet-content">'
-                                    +'<div class="perfect-fleet-title">'
-                                        +'<h3>'+item.car_type+'</h3>'
-                                        +'<a href="'+baseUrl+'/car-details?id='+window.btoa(item.id)+'"><h2>'+item.brand_name+' '+item.name+' '+item.model+'</h2></a>'
-                                    +'</div>'
-                                    +'<div class="perfect-fleet-body">'
-                                        +'<ul>';
-                                            if(res.specs[item.id] != null){
-                                                res.specs[item.id].forEach(function(items,keys) {
-                                                    // console.log(items)
-                                                    if(keys<=3){
-                                                        html+='<li class="break-word"><img src="'+baseUrl+'/'+items.image+'" alt="" width="21">';
-                                                        if(items.name!="Transmission"){
-                                                            if(items.details!='Yes'){
-                                                                html+=items.details;
-                                                            } 
-                                                            html+=' '+items.name+'</li>';
-                                                        }else{
-                                                            if(items.details!='Yes'){
-                                                                html+=items.details;
-                                                            } 
-                                                        }
+                                +'<div class="perfect-fleet-body">'
+                                    +'<ul>';
+                                        if(res.specs[item.id] != null){
+                                            res.specs[item.id].forEach(function(items,keys) {
+                                                // console.log(items)
+                                                if(keys<=3){
+                                                    html+='<li class="break-word"><img src="'+baseUrl+'/'+items.image+'" alt="" width="21">';
+                                                    if(items.name!="Transmission"){
+                                                        if(items.details!='Yes'){
+                                                            html+=items.details;
+                                                        } 
+                                                        html+=' '+items.name+'</li>';
+                                                    }else{
+                                                        if(items.details!='Yes'){
+                                                            html+=items.details;
+                                                        } 
                                                     }
-                                                });
-                                            }
-                                        html+='</ul>'
-                                    +'</div>'
-                                    +'<div class="perfect-fleet-footer">'
-                                        +'<div class="perfect-fleet-pricing">'
-                                            if(item.offer_flag == 1){
-                                                html+= '<del><h6>AED '+item.rent+'<span>/day</span></h6></del>'
-                                                    +'<h2>AED '+item.offer_price+' <span>/day</span></h2>';
-                                            }else{
-                                                html+= '<h2>AED '+item.rent+'<span>/day</span></h2>';
-                                            }
-                                        html+='</div>'
-                                        +'<div class="perfect-fleet-btn">'
-                                            +"<a href='"+baseUrl+"/car-details?id="+window.btoa(item.id)+"' class='section-icon-btn'><img src='"+baseUrl+'/'+"assets/images/arrow-white.svg' alt=''></a>"
-                                        +'</div>'
+                                                }
+                                            });
+                                        }
+                                    html+='</ul>'
+                                +'</div>'
+                                +'<div class="perfect-fleet-footer">'
+                                    +'<div class="perfect-fleet-pricing">'
+                                        if(item.offer_flag == 1){
+                                            html+= '<del><h6>AED '+item.rent+'<span>/day</span></h6></del>'
+                                                +'<h2>AED '+item.offer_price+' <span>/day</span></h2>';
+                                        }else{
+                                            html+= '<h2>AED '+item.rent+'<span>/day</span></h2>';
+                                        }
+                                    html+='</div>'
+                                    +'<div class="perfect-fleet-btn">'
+                                        +"<a href='"+baseUrl+"/car-details?id="+window.btoa(item.id)+"' class='section-icon-btn'><img src='"+baseUrl+'/'+"assets/images/arrow-white.svg' alt=''></a>"
                                     +'</div>'
                                 +'</div>'
                             +'</div>'
-                        +'</div>';
-                });
-            }else{
-                html += '<div class="no-cars">'
-                            +'<i class="fa fa-car"></i>'
-                            +'<p>No Cars Available</p>'
-                        +'</div>';
-            }
+                        +'</div>'
+                    +'</div>';
+            });
             $("#carList").html(html)
         }
     });
@@ -522,68 +495,61 @@ function getCarsNew(sortData){
         success: function(res) {
             $(".overlay").hide();
             var html = '';
-            if (res.carDet && res.carDet.length != 0) {
-                res.carDet.forEach(function(item) {
-                    if(item.image!=null)
-                        var image = item.image.split(',');
-                    else
-                        var image = '';
-                    // console.log(window.btoa(item.id));
-                    html += '<div class="col-lg-3 col-md-6">'
-                        +'<div class="perfect-fleet-item fleets-collection-item wow fadeInUp">'
-                                +'<div class="image-box">'
-                                        +'<a href="'+baseUrl+'/car-details?id='+window.btoa(item.id)+'"><img src="'+baseUrl+'/'+image[0]+'" alt="Image not available"></a>'
+            res.carDet.forEach(function(item) {
+                if(item.image!=null)
+                    var image = item.image.split(',');
+                else
+                    var image = '';
+                // console.log(window.btoa(item.id));
+                html += '<div class="col-lg-3 col-md-6">'
+                    +'<div class="perfect-fleet-item fleets-collection-item wow fadeInUp">'
+                            +'<div class="image-box">'
+                                    +'<a href="'+baseUrl+'/car-details?id='+window.btoa(item.id)+'"><img src="'+baseUrl+'/'+image[0]+'" alt="Image not available"></a>'
+                            +'</div>'
+                            +'<div class="perfect-fleet-content">'
+                                +'<div class="perfect-fleet-title">'
+                                    +'<h3>'+item.car_type+'</h3>'
+                                    +'<a href="'+baseUrl+'/car-details?id='+window.btoa(item.id)+'"><h2>'+item.brand_name+' '+item.name+' '+item.model+'</h2></a>'
                                 +'</div>'
-                                +'<div class="perfect-fleet-content">'
-                                    +'<div class="perfect-fleet-title">'
-                                        +'<h3>'+item.car_type+'</h3>'
-                                        +'<a href="'+baseUrl+'/car-details?id='+window.btoa(item.id)+'"><h2>'+item.brand_name+' '+item.name+' '+item.model+'</h2></a>'
-                                    +'</div>'
-                                    +'<div class="perfect-fleet-body">'
-                                        +'<ul>';
-                                            if(res.specs[item.id] != null){
-                                                res.specs[item.id].forEach(function(items,keys) {
-                                                    // console.log(items)
-                                                    if(keys<=3){
-                                                        html+='<li class="break-word"><img src="'+baseUrl+'/'+items.image+'" alt="" width="21">';
-                                                        if(items.name!="Transmission"){
-                                                            if(items.details!='Yes'){
-                                                                html+=items.details;
-                                                            } 
-                                                            html+=' '+items.name+'</li>';
-                                                        }else{
-                                                            if(items.details!='Yes'){
-                                                                html+=items.details;
-                                                            } 
-                                                        }
+                                +'<div class="perfect-fleet-body">'
+                                    +'<ul>';
+                                        if(res.specs[item.id] != null){
+                                            res.specs[item.id].forEach(function(items,keys) {
+                                                // console.log(items)
+                                                if(keys<=3){
+                                                    html+='<li class="break-word"><img src="'+baseUrl+'/'+items.image+'" alt="" width="21">';
+                                                    if(items.name!="Transmission"){
+                                                        if(items.details!='Yes'){
+                                                            html+=items.details;
+                                                        } 
+                                                        html+=' '+items.name+'</li>';
+                                                    }else{
+                                                        if(items.details!='Yes'){
+                                                            html+=items.details;
+                                                        } 
                                                     }
-                                                });
-                                            }
-                                        html+='</ul>'
-                                    +'</div>'
-                                    +'<div class="perfect-fleet-footer">'
-                                        +'<div class="perfect-fleet-pricing">'
-                                            if(item.offer_flag == 1){
-                                                html+= '<del><h6>AED '+item.rent+'<span>/day</span></h6></del>'
-                                                    +'<h2>AED '+item.offer_price+' <span>/day</span></h2>';
-                                            }else{
-                                                html+= '<h2>AED '+item.rent+'<span>/day</span></h2>';
-                                            }
-                                        html+='</div>'
-                                        +'<div class="perfect-fleet-btn">'
-                                            +"<a href='"+baseUrl+"/car-details?id="+window.btoa(item.id)+"' class='section-icon-btn'><img src='"+baseUrl+'/'+"assets/images/arrow-white.svg' alt=''></a>"
-                                        +'</div>'
+                                                }
+                                            });
+                                        }
+                                    html+='</ul>'
+                                +'</div>'
+                                +'<div class="perfect-fleet-footer">'
+                                    +'<div class="perfect-fleet-pricing">'
+                                        if(item.offer_flag == 1){
+                                            html+= '<del><h6>AED '+item.rent+'<span>/day</span></h6></del>'
+                                                +'<h2>AED '+item.offer_price+' <span>/day</span></h2>';
+                                        }else{
+                                            html+= '<h2>AED '+item.rent+'<span>/day</span></h2>';
+                                        }
+                                    html+='</div>'
+                                    +'<div class="perfect-fleet-btn">'
+                                        +"<a href='"+baseUrl+"/car-details?id="+window.btoa(item.id)+"' class='section-icon-btn'><img src='"+baseUrl+'/'+"assets/images/arrow-white.svg' alt=''></a>"
                                     +'</div>'
                                 +'</div>'
                             +'</div>'
-                        +'</div>';
-                });
-            }else{
-                html += '<div class="no-cars">'
-                            +'<i class="fa fa-car"></i>'
-                            +'<p>No Cars Available</p>'
-                        +'</div>';
-            }
+                        +'</div>'
+                    +'</div>';
+            });
             $("#carList").html(html)
         }
     });

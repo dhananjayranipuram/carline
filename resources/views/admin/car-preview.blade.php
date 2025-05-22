@@ -2,7 +2,6 @@
 
 @section('content')
 <!-- Page Feets Single Start -->
-<!-- Page Feets Single Start -->
 <style>
     .pac-container {
         z-index: 10000;
@@ -14,9 +13,6 @@
     .pricing-table {
         margin-top: 30px;
         overflow-x: auto; /* Allows horizontal scroll on small screens */
-    }
-    .with-errors{
-        color:red;
     }
 
     .pricing-table table {
@@ -72,11 +68,11 @@
             padding: 10px;
         }
     }
-    /* ul{
+    ul{
         color: var(--white-color);
         margin: 0;
         font-weight: normal;
-    } */
+    }
     a.disabled {
         pointer-events: none;
         cursor: default;
@@ -91,179 +87,6 @@
         cursor: pointer;
     }
 </style>
-<style>
-    .booking-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 20px 0;
-        font-size: 16px;
-        color: #333;
-        background-color: #f9f9f9; /* Subtle background color */
-        border: 1px solid #ddd; /* Border for the table */
-        border-radius: 8px;
-        overflow: hidden;
-    }
-
-    .booking-table th, .booking-table td {
-        text-align: left;
-        padding: 12px 15px;
-        border-bottom: 1px solid #ddd;
-    }
-
-    .booking-table th {
-        background-color: #f1f1f1; /* Faded header color */
-        color: #000080;
-        font-weight: bold;
-    }
-
-    .booking-table tr:nth-child(even) {
-        background-color: #f7f7f7; /* Alternating row color */
-    }
-
-    .booking-table tr:nth-child(odd) {
-        background-color: #ffffff; /* Alternating row color */
-    }
-
-    .booking-table tr:last-child td {
-        border-bottom: none;
-    }
-
-    /* Responsive Design */
-    @media (max-width: 768px) {
-        .booking-table {
-            font-size: 14px;
-        }
-
-        .booking-table th, .booking-table td {
-            padding: 10px;
-        }
-    }
-</style>
-<style>
-@media only screen and (max-width: 991px) {
-    .fleets-single-slider {
-        margin-bottom: 2px;
-    }
-
-    .pricing-table {
-        overflow-x: auto;
-        margin: 10px;
-    }
-}
-@media only screen and (max-width: 991px) {
-    .page-fleets-single {
-        padding: 0px 0;
-    }
-}
-@media only screen and (max-width: 991px) {
-    .fleets-information {
-        margin-bottom: 5px;
-        padding-bottom: 5px;
-    }
-    .pricing-table {
-        margin-top: 1px;
-        overflow-x: auto;
-    }
-    .fleets-slider-image {
-        position: relative;
-        border-radius: 30px;
-        overflow: hidden;
-        padding-top: 20px;
-    }
-    .fleets-single-sidebar-list ul li {
-        margin-top: 20px;
-    }
-}
-
-/* Hide the page header on desktop and laptop (above 1024px) */
-@media only screen and (min-width: 1025px) {
-    .page-header {
-        display: none;
-    }
-}
-
-/* Ensure the page header is visible on mobile and tablets (up to 1024px) */
-@media only screen and (max-width: 1024px) {
-    .page-header {
-        display: block;
-    }
-}
-    </style>
-<style>
-        /* General Popup Styles */
-.carline-popup {
-    display: none; /* Hidden by default */
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Overlay effect */
-    z-index: 1050; /* Above other content */
-    overflow: auto; /* Enable scrolling */
-}
-
-.carline-popup-content {
-    background: #fff;
-    margin: 5% auto;
-    padding: 20px;
-    width: 90%;
-    max-width: 800px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    font-family: 'Poppins Semibold', sans-serif;
-}
-
-/* Close Button */
-.carline-close-btn {
-    float: right;
-    font-size: 1.5em;
-    cursor: pointer;
-    color: #333;
-}
-
-/* Two-Column Container */
-.carline-terms-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    margin-top: 10px;
-}
-
-.carline-terms-column {
-    flex: 1;
-    min-width: 300px;
-    max-height: 400px; /* Set scrollable height */
-    overflow-y: auto; /* Scrollbar for overflow */
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    background: #f9f9f9;
-}
-
-/* Column Content Styling */
-.carline-terms-column h3 {
-    font-family: 'Copperplate Gothic', sans-serif;
-    margin-top: 0;
-}
-
-.carline-terms-column p {
-    line-height: 1.5;
-    margin: 10px 0;
-}
-
-.rental-condition-accordion h3{
-    font-size: 1.25rem;
-}
-
-.rental-condition-accordion b,li{
-    color: black;
-}
-
-.swiper-button-next, .swiper-button-prev{
-    color: #000080 !important;
-}
-    </style>
 @php
 $timeSlots = [];
 $startTime = strtotime("12:00 AM");
@@ -528,7 +351,6 @@ while ($startTime <= $endTime) {
                                         @foreach($pieces[0] as $key => $value)
                                         <li><img src="{{asset($value->image)}}" alt="">{{$value->name}} <span>{{$value->details}}</span></li>
                                         @endforeach
-                                        <li><img src="{{asset('assets/images/petrol.svg')}}" alt="">Fuel policy <span>Same to Same</span></li>
                                     </ul>
                                 </div>
                                 <div class="col-md-6">
@@ -536,7 +358,6 @@ while ($startTime <= $endTime) {
                                         @foreach($pieces[1] as $key => $value)
                                         <li><img src="{{asset($value->image)}}" alt="">{{$value->name}} <span>{{$value->details}}</span></li>
                                         @endforeach
-                                        <li><img src="{{asset('assets/images/milage.svg')}}" alt="">Additional mileage charges<span>AED {{$carDet[0]->add_mileage_charge}}/KM</span></li>
                                     </ul>
                                 </div>
                             </div>
@@ -637,7 +458,7 @@ while ($startTime <= $endTime) {
     <!-- Page Feets Single End -->
 <script src="{{asset('admin_assets/js/core/jquery-3.7.1.min.js')}}"></script>  
 <script src="{{asset('assets/js/jquery.magnific-popup.min.js')}}"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google.maps_api_key') }}&components=country:ae&libraries=places"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmX5w5ltGt09cjDod_YMamphRRgS8L-ZQ&components=country:ae&libraries=places"></script>
 
 <script>
 var sourceData = [];

@@ -38,37 +38,37 @@ class PaymentController extends Controller
         $carName = $site->getCars($input);
         $credentials['transactionId'] = uniqid();
         Session::put('bookingDetails', $credentials);
-        $data = [
-            "method" => "create",
-            "store" => config('constants.TELR_STORE_ID'),
-            "authkey" => config('constants.TELR_AUTH_KEY'),
-            "framed" => 0,
-            "order" => [
-                "cartid" => $credentials['transactionId'],
-                "test" => "1",
-                "amount" => $rateData['total'],
-                "currency" => "AED",
-                "description" => $carName[0]->brand_name .' '. $carName[0]->name .' ' .$carName[0]->model
-            ],
-            "return" => [
-                "authorised" => url('/payment/success'),
-                "declined" => url('/payment/failure'),
-                "cancelled" => url('/payment/cancel')
-            ]
-        ];
+        // $data = [
+        //     "method" => "create",
+        //     "store" => config('constants.TELR_STORE_ID'),
+        //     "authkey" => config('constants.TELR_AUTH_KEY'),
+        //     "framed" => 0,
+        //     "order" => [
+        //         "cartid" => $credentials['transactionId'],
+        //         "test" => "0",
+        //         "amount" => $rateData['total'],
+        //         "currency" => "AED",
+        //         "description" => $carName[0]->brand_name .' '. $carName[0]->name .' ' .$carName[0]->model
+        //     ],
+        //     "return" => [
+        //         "authorised" => url('/payment/success'),
+        //         "declined" => url('/payment/failure'),
+        //         "cancelled" => url('/payment/cancel')
+        //     ]
+        // ];
 
-        $response = Http::withOptions([
-            'verify' => false,
-        ])->withHeaders([
-            'Content-Type' => 'application/json',
-            'accept' => 'application/json',
-        ])->post('https://secure.telr.com/gateway/order.json', $data);
+        // $response = Http::withOptions([
+        //     'verify' => false,
+        // ])->withHeaders([
+        //     'Content-Type' => 'application/json',
+        //     'accept' => 'application/json',
+        // ])->post('https://secure.telr.com/gateway/order.json', $data);
 
 
-        if ($response->successful()) {
+        if (1) {
             Session::put('transactionStatus', 'Started');
-            $responseData = $response->json();
-            return redirect($responseData['order']['url']);
+            // $responseData = $response->json();
+            return redirect('/payment/success');
         } else {
             dd($response->status(), $response->body());
         }

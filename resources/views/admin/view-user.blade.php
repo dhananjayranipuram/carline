@@ -75,7 +75,7 @@
                 <div class="card card-round">
                     <div class="card-header">
                         <div class="card-head-row card-tools-still-right">
-                            <div class="card-title">Customer Details
+                            <div class="card-title">User Details
                             </div>
                                 <div class="card-tools">
                                     <a href="{{url('/admin/users')}}" class="btn btn-primary">
@@ -226,14 +226,14 @@
                                             @endif
 
                                             <!-- Lightbox -->
-                                            @if ($isBase64 && strpos($mimeType, 'image/') === 0 || !$isBase64 && in_array(strtolower(pathinfo($filePath, PATHINFO_EXTENSION)), ['jpg', 'jpeg', 'png', 'gif']))
-                                                <a class="view-icon view-doc lightbox-trigger"
-                                                href="{{ $fileSource }}" 
-                                                data-lightbox="user-documents" 
-                                                data-title="{{ $label }}">
-                                                    <i class="far fa-eye"></i>
-                                                </a>
-                                            @endif
+                                            <a class="view-icon view-doc lightbox-trigger"
+                                            href="#" 
+                                            data-base64="{{ $fileSource }}" 
+                                            data-mime-type="{{ $mimeType ?? 'image/jpeg' }}" 
+                                            data-lightbox="user-documents" 
+                                            data-title="{{ $label }}">
+                                                <i class="far fa-eye"></i>
+                                            </a>
 
                                             <!-- Delete & Download -->
                                             <a class="delete-icon delete-doc" data-type="{{ $docKey }}" data-id="{{ $user[0]->id }}">
@@ -280,7 +280,7 @@ $(".delete-doc").click(function () {
         dataType: "json",
         headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
         success: function(res) {
-            // location.reload();
+            location.reload();
         }
     });
     

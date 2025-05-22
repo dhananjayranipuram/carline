@@ -61,13 +61,12 @@ tbody > tr{
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th style="width: 77px;">Booking Date</th>
                                 <th>Customer Name</th>
                                 <th>Car Name</th>
-                                <th style="width: 77px;">Pickup Date</th>
+                                <th>Pickup Date</th>
                                 <th>Pickup Time</th>
                                 <th>Pickup Location</th>
-                                <th style="width: 77px;">Return Date</th>
+                                <th>Return Date</th>
                                 <th>Return Time</th>
                                 <th>Return Location</th>
                                 <th>Rate</th>
@@ -77,7 +76,6 @@ tbody > tr{
                             @foreach($bookings as $key => $value)
                             <tr data-url="{{url('/admin/booking-details')}}?id={{base64_encode($value->id)}}">
                                 <td>{{$value->id}}</td>
-                                <td>{{$value->booked_date}}</td>
                                 <td>{{$value->user_name}}</td>
                                 <td>{{$value->car_name}}</td>
                                 <td>{{$value->pickup_date}}</td>
@@ -198,7 +196,6 @@ function buildTable(){
                     let row = `
                         <tr data-url="${baseUrl}/admin/booking-details?id=${encodedId}">
                             <td>${data.id}</td>
-                            <td>${data.booked_date}</td>
                             <td>${data.user_name}</td>
                             <td>${data.car_name}</td>
                             <td>${data.pickup_date}</td>

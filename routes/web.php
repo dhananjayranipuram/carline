@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\SignatureController;
 
 /*
 |--------------------------------------------------------------------------
@@ -71,15 +72,22 @@ Route::any('/sample', [SiteController::class, 'paymentSample']);
 
 /**Payment Routes*/
 Route::post('/payment/initiate', [PaymentController::class, 'initiatePayment']);
+// Route::post('/payment/initiate', [SiteController::class, 'saveCarBooking']);
 Route::get('/payment/success', [PaymentController::class, 'paymentSuccess']);
 Route::get('/payment/failure', [PaymentController::class, 'paymentFailure']);
 Route::get('/payment/cancel', [PaymentController::class, 'paymentFailure']);
 /**Payment Routes Ends*/
 
+Route::get('/document/signature', [SignatureController::class, 'show'])->name('signature.page');
+Route::post('/signature-upload', [SignatureController::class, 'upload'])->name('signature.upload');
+Route::get('/document/generate-pdf', [SignatureController::class, 'generate'])->name('pdf.generate');
+Route::get('/document/view-pdf/{filename}', [SignatureController::class, 'view'])->name('pdf.view');
+
+
 Route::any('/admin/login', [AdminController::class, 'login'])->name('adminLogin');
 
 Route::middleware(['check.session', 'prevent.back.history'])->group(function () {
-    
+
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard']);
     Route::any('/admin/get-dashboard-booking-data', [AdminController::class, 'dashboardAjax']);
     Route::any('/admin/reports', [AdminController::class, 'reports']);
@@ -136,7 +144,7 @@ Route::middleware(['check.session', 'prevent.back.history'])->group(function () 
     Route::any('/admin/edit-policy-agreement', [AdminController::class, 'editPolicyAgreement']);
     Route::any('/admin/update-policy-agreement', [AdminController::class, 'updatePolicyAgreement']);
     Route::any('/admin/delete-policy-agreement', [AdminController::class, 'deletePolicyAgreement']);
-    
+
     Route::any('/admin/update-add-settings', [AdminController::class, 'updateAdditionalSettings']);
     Route::any('/admin/get-additional-settings', [AdminController::class, 'getAdditionalSettings']);
 
@@ -146,37 +154,37 @@ Route::middleware(['check.session', 'prevent.back.history'])->group(function () 
     Route::get('/admin/logout', [AdminController::class, 'logout']);
 });
 //Clear Cache facade value:
-Route::get('/clear-cache', function() {
+Route::get('/clear-cache', function () {
     $exitCode = Artisan::call('cache:clear');
     return '<h1>Cache facade value cleared</h1>';
 });
 
 //Reoptimized class loader:
-Route::get('/optimize', function() {
+Route::get('/optimize', function () {
     $exitCode = Artisan::call('optimize');
     return '<h1>Reoptimized class loader</h1>';
 });
 
 //Route cache:
-Route::get('/route-cache', function() {
+Route::get('/route-cache', function () {
     $exitCode = Artisan::call('route:cache');
     return '<h1>Routes cached</h1>';
 });
 
 //Clear Route cache:
-Route::get('/route-clear', function() {
+Route::get('/route-clear', function () {
     $exitCode = Artisan::call('route:clear');
     return '<h1>Route cache cleared</h1>';
 });
 
 //Clear View cache:
-Route::get('/view-clear', function() {
+Route::get('/view-clear', function () {
     $exitCode = Artisan::call('view:clear');
     return '<h1>View cache cleared</h1>';
 });
 
 //Clear Config cache:
-Route::get('/config-cache', function() {
+Route::get('/config-cache', function () {
     $exitCode = Artisan::call('config:cache');
     return '<h1>Clear Config cleared</h1>';
 });

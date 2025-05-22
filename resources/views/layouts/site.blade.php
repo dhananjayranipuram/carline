@@ -10,7 +10,7 @@
 	<meta name="author" content="Awaiken">
     <meta content="{{ csrf_token() }}" name="csrf-token">
 	<!-- Page Title -->
-	<title>Home - CarLine</title>
+	<title>Home - CarRental</title>
 	<!-- Favicon Icon -->
 	<link rel="shortcut icon" type="image/x-icon" href="{{asset('assets/images/favicon.png')}}">
 	<!-- Google Fonts Css-->
@@ -180,21 +180,6 @@
 @media only screen and (max-width: 600px) {
     .navbar-brand {
         width: 180px;
-    }
-    .slicknav_menu {
-        background: #ffffff;
-    }
-    .slicknav_nav .slicknav_row, .slicknav_nav li a {
-        border: 1px solid #ededed;
-        color: #000080;
-    }
-    .search-form-container {
-        padding: 5px;
-        width: 320px;
-        margin: 15px auto;
-    }
-    .form-select {
-        padding: 10px 30px 10px 10px;
     }
 }
 /* Cookie Popup Styles */
@@ -387,18 +372,18 @@
 }
 </style>
 <body>
-    <div class="overlay">
-        <div class="overlay__inner">
-            <div class="overlay__content"><span class="spinner"></span></div>
-        </div>
-    </div>
+    <!--<div class="overlay">-->
+    <!--    <div class="overlay__inner">-->
+    <!--        <div class="overlay__content"><span class="spinner"></span></div>-->
+    <!--    </div>-->
+    <!--</div>-->
     <!-- Preloader Start -->
-	<div class="preloader">
-		<div class="loading-container">
-			<div class="loading"></div>
-			<div id="loading-icon"><img src="{{asset('assets/images/loader.svg')}}" alt=""></div>
-		</div>
-	</div>
+	<!--<div class="preloader">-->
+	<!--	<div class="loading-container">-->
+	<!--		<div class="loading"></div>-->
+	<!--		<div id="loading-icon"><img src="{{asset('assets/images/loader.svg')}}" alt=""></div>-->
+	<!--	</div>-->
+	<!--</div>-->
 	<!-- Preloader End -->
 
     <!-- Header Start -->
@@ -408,7 +393,7 @@
 				<div class="container">
 					<!-- Logo Start -->
 					<a class="navbar-brand" href="{{ url('/home') }}">
-						<img src="{{asset('assets/images/logo.png')}}" alt="Logo">
+						<img src="{{asset('assets/images/logo.png')}}" alt="Logo" style="height: 65px;">
 					</a>
 					<!-- Logo End -->
 
@@ -750,17 +735,17 @@
         <!-- Hidden buttons for call, WhatsApp, and email -->
         <div class="floating-chat-menu" id="chat-menu">
             <!-- Call Button -->
-            <button class="chat-call-btn" type="button" onclick="window.open('tel:971565738866', '_blank')">
+            <button class="chat-call-btn" type="button" onclick="window.open('tel:971581567345', '_blank')">
                 <i class="fas fa-phone"></i>
             </button>
             
             <!-- WhatsApp Button -->
-            <button class="chat-whatsapp-btn" type="button" onclick="window.open('https://wa.me/971508689526', '_blank')">
+            <button class="chat-whatsapp-btn" type="button" onclick="window.open('https://wa.me/971581567345', '_blank')">
                 <i class="fab fa-whatsapp"></i>
             </button>
             
             <!-- Email Button -->
-            <button class="chat-email-btn" type="button" onclick="window.open('mailto:info@carlinerental.com', '_blank')">
+            <button class="chat-email-btn" type="button" onclick="window.open('mailto:contact@growtharkmedia.com', '_blank')">
                 <i class="fas fa-envelope"></i>
             </button>
         </div>
@@ -791,7 +776,7 @@
 
                         <!-- About Footer Content Start -->
                          <div class="about-footer-content">
-                            <p>At Carline, we're fully flexible and client-focused, delivering cars when and where you need them. Our goal is to provide a seamless rental experience tailored to your schedule. </p>
+                            <p>We're fully flexible and client-focused, delivering cars when and where you need them. Our goal is to provide a seamless rental experience tailored to your schedule. </p>
                          </div>
                         <!-- About Footer Content End -->
                      </div>
@@ -837,12 +822,12 @@
                         <h3>Our Address</h3>
                         <div class="about-footer">
                         <div class="about-footer-content">
-                        <p><i class="fa fa-home"></i> Near Saffron Boutique Hotel, Omar Bin Al Khattab Road Deira Dubai U.A.E</p>
-                        <p><i class="fa fa-phone"></i> <a href="tel:+971565738866">+971 56 573 8866</a></p>
-                        <p><i class="fa fa-phone"></i> <a href="tel:+971508689526">+971 50 868 9526</a></p>
-                        <p><i class="fa fa-phone"></i> <a href="tel:+97145292722">+971 4 52 92 722</a></p>
-                        <p><i class="fa-brands fa-whatsapp"></i> <a href="https://api.whatsapp.com/send?phone=971508689526">+971 50 868 9526</a></p>
-                        <p><i class="fa fa-envelope"></i> <a href="mailto:info@carlinerental.com">info@carlinerental.com</a></p>
+                        <p><i class="fa fa-home"></i> Alliance Business Center<br>Dubai Silicon Oasis , Dubai<br>United Arab Emirates</p>
+                        <p><i class="fa fa-phone"></i> <a href="tel:+971581567345">+971 58 156 7345</a></p>
+                        <!--<p><i class="fa fa-phone"></i> <a href="tel:+971508689526">+971 50 868 9526</a></p>-->
+                        <!--<p><i class="fa fa-phone"></i> <a href="tel:+97145292722">+971 4 52 92 722</a></p>-->
+                        <p><i class="fa-brands fa-whatsapp"></i> <a href="https://api.whatsapp.com/send?phone=971581567345">+971 58 156 7345</a></p>
+                        <p><i class="fa fa-envelope"></i> <a href="mailto:contact@growtharkmedia.com">contact@growtharkmedia.com</a></p>
                     </div> </div>
                         
                     </div>
@@ -856,7 +841,7 @@
                     <div class="col-lg-4 col-md-7">
                         <!-- Footer Copyright Start -->
                         <div class="footer-copyright-text">
-                            <p>© 2025 Carline. All Rights Reserved. <br>Designed By  <a href="" onclick="return false;" style="cursor: default;">GrowthArk Media</a></p>
+                            <p>© 2025 Carrental. All Rights Reserved. <br>Designed By  <a href="" onclick="return false;" style="cursor: default;">GrowthArk Media</a></p>
                         </div>
                         <!-- Footer Copyright End -->
                     </div>
@@ -873,11 +858,11 @@
                         <!-- Footer Social Link Start -->
                         <div class="footer-social-links">
                             <ul>
-                                <li><a href="https://x.com/carlinecarrent?t=shn3hwBqpzzUOHUfLtv3_w&s=09" target="_blank"><i class="fa-brands fa-x-twitter"></i></a></li>
-                                <li><a href="https://www.tiktok.com/@carliine2?_t=ZS-8tVBaxLhhY7&_r=1" target="_blank"><i class="fa-brands fa-tiktok"></i></a></li>
-                                <li><a href="https://www.linkedin.com/in/car-line-car-rental-080693349?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank"><i class="fa-brands fa-linkedin-in"></i></a></li>
-                                <li><a href="https://www.facebook.com/AdsRentACar" target="_blank"><i class="fa-brands fa-facebook-f"></i></a></li>
-                                <li><a href="https://www.instagram.com/car_line.car_rental?igsh=c2g1MXlnaTQxbjYx" target="_blank"><i class="fa-brands fa-instagram"></i></a></li>
+                                <li><a href="#" target="_blank"><i class="fa-brands fa-x-twitter"></i></a></li>
+                                <li><a href="#" target="_blank"><i class="fa-brands fa-tiktok"></i></a></li>
+                                <li><a href="#" target="_blank"><i class="fa-brands fa-linkedin-in"></i></a></li>
+                                <li><a href="#" target="_blank"><i class="fa-brands fa-facebook-f"></i></a></li>
+                                <li><a href="#" target="_blank"><i class="fa-brands fa-instagram"></i></a></li>
                             </ul>
                         </div>
                         <!-- Footer Social Link End -->

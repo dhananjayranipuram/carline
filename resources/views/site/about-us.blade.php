@@ -93,7 +93,7 @@
                     </div>
                     <div class="why-choose-content">
                         <h3>Rent a Car with Best Prices</h3>
-                        <p>Get the best car rental price in Dubai when you book direct with carline</p>
+                        <p>Get the best car rental price in Dubai when you book direct with CarRental</p>
                     </div>
                 </div>
                 <!-- Why Choose Item End -->
@@ -143,7 +143,7 @@
                     <div class="section-title">
                         <h3 class="wow fadeInUp">about us</h3>
                         <h2 class="text-anime-style-3">What We Do</h2>
-                        <p class="wow fadeInUp" data-wow-delay="0.25s">At Carline, we specialize in providing flexible, convenient, and reliable car rental solutions. Whether you need a car for a day, a week, or longer, we ensure a hassle-free experience. Our service is tailored to meet your specific needs, delivering vehicles to your preferred location at the right time. From economy to luxury vehicles, we offer a wide range of options, all maintained to the highest standards to guarantee your satisfaction.</p>
+                        <p class="wow fadeInUp" data-wow-delay="0.25s">At CarRental, we specialize in providing flexible, convenient, and reliable car rental solutions. Whether you need a car for a day, a week, or longer, we ensure a hassle-free experience. Our service is tailored to meet your specific needs, delivering vehicles to your preferred location at the right time. From economy to luxury vehicles, we offer a wide range of options, all maintained to the highest standards to guarantee your satisfaction.</p>
                     </div>
                     <!-- Section Title End -->
 

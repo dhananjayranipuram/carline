@@ -97,12 +97,15 @@
                 <div class="swiper-slide">
                     <div class="hero-slide">
                         <!-- Slider Image Start -->
-                        <div class="hero-slider-image">
-                            <video autoplay muted loop id="heroVideo" class="hero-video">
-                                <source src="{{asset('assets/images/videos.mp4')}}" type="video/mp4">
-                            </video>
-                        </div>
+                        <!--<div class="hero-slider-image">-->
+                        <!--    <video autoplay muted loop id="heroVideo" class="hero-video">-->
+                        <!--        <source src="{{asset('assets/images/videos.mp4')}}" type="video/mp4">-->
+                        <!--    </video>-->
+                        <!--</div>-->
                         <!-- Slider Image End -->
+                        <div class="hero-slider-image">
+                            <img src="{{asset('assets/images/cardubai.jpg')}}" alt="Hero Image" class="hero-image"> 
+                        </div>
 
                         <!-- Slider Content Start -->
                         <div class="container">
@@ -111,7 +114,7 @@
                                     <!-- Hero Content Start -->
                                     <div class="hero-content text-center">
                                         <div class="section-title">
-                                            <h3 class="fadeInUp">Welcome to Carline Car Rental</h3>
+                                            <h3 class="fadeInUp">Welcome to Car Rental</h3>
                                             <h1 class="text-highlight">Dubai’s Trusted Car Rental Experts</h1>
                                             <p class="fadeInUp" data-wow-delay="0.25s">
                                                 Whether you're planning a weekend getaway, a business trip, or just need a reliable ride for the day, we offer a wide range of vehicles to suit your needs.
@@ -290,7 +293,7 @@
         </div>
 
         <div class="row">
-            <div class="brand-details-slider">
+            <div class="car-details-slider">
                 <div class="swiper swiper-initialized swiper-horizontal">
                     <div class="swiper-wrapper" data-cursor-text="Drag" id="swiper-wrapper-9ebdd264537877106" aria-live="off" style="transition-duration: 0ms; transform: translate3d(-3805px, 0px, 0px); transition-delay: 0ms;">
                         
@@ -306,8 +309,8 @@
 
                         </div>
                     <div class="car-details-btn">
-                        <div class="brand-button-prev" tabindex="0" role="button" aria-label="Previous slide" aria-controls="swiper-wrapper-871148932a4101eae"></div>
-                        <div class="brand-button-next" tabindex="0" role="button" aria-label="Next slide" aria-controls="swiper-wrapper-871148932a4101eae"></div>
+                        <div class="car-button-prev" tabindex="0" role="button" aria-label="Previous slide" aria-controls="swiper-wrapper-871148932a4101eae"></div>
+                        <div class="car-button-next" tabindex="0" role="button" aria-label="Next slide" aria-controls="swiper-wrapper-871148932a4101eae"></div>
                     </div>
                 <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span></div>
             </div>
@@ -730,7 +733,7 @@
                     </div>
                     <div class="why-choose-content">
                         <h3>Rent a Car with Best Prices</h3>
-                        <p>Get the best car rental price in Dubai when you book direct with carline</p>
+                        <p>Get the best car rental price in Dubai when you book direct with CarRental</p>
                     </div>
                 </div>
                 <!-- Why Choose Item End -->
@@ -866,7 +869,7 @@
                                             <i class="fa-solid fa-star"></i>
                                         </div>
                                         <div class="testimonial-content">
-                                            <p>Renting a car from carline was a great decision. Not only did I get a reliable and comfortable vehicle, but the prices were also very competitive.</p>								
+                                            <p>Renting a car from CarRental was a great decision. Not only did I get a reliable and comfortable vehicle, but the prices were also very competitive.</p>								
                                         </div>
                                     </div>
                                     <div class="testimonial-body">
@@ -896,7 +899,7 @@
                                             <i class="fa-regular fa-star"></i>
                                         </div>
                                         <div class="testimonial-content">
-                                            <p>Renting a car from carline was a great decision. Not only did I get a reliable and comfortable vehicle, but the prices were also very competitive.</p>								
+                                            <p>Renting a car from CarRental was a great decision. Not only did I get a reliable and comfortable vehicle, but the prices were also very competitive.</p>								
                                         </div>
                                     </div>
                                     <div class="testimonial-body">
@@ -926,7 +929,7 @@
                                             <i class="fa-regular fa-star"></i>
                                         </div>
                                         <div class="testimonial-content">
-                                            <p>Renting a car from carline was a great decision. Not only did I get a reliable and comfortable vehicle, but the prices were also very competitive.</p>								
+                                            <p>Renting a car from CarRental was a great decision. Not only did I get a reliable and comfortable vehicle, but the prices were also very competitive.</p>								
                                         </div>
                                     </div>
                                     <div class="testimonial-body">
@@ -956,7 +959,7 @@
                                             <i class="fa-solid fa-star"></i>
                                         </div>
                                         <div class="testimonial-content">
-                                            <p>Renting a car from carline was a great decision. Not only did I get a reliable and comfortable vehicle, but the prices were also very competitive.</p>								
+                                            <p>Renting a car from CarRental was a great decision. Not only did I get a reliable and comfortable vehicle, but the prices were also very competitive.</p>								
                                         </div>
                                     </div>
                                     <div class="testimonial-body">

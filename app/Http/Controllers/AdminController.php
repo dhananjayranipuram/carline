@@ -29,20 +29,13 @@ class AdminController extends Controller
             Session::forget('deleteCarImageData');
         }
 
-        $this->middleware(function ($request, $next) {
-            $userData = Session::get('userAdminData'); 
-            view()->share('userAdminData', $userData);
-            return $next($request);
-        });
-
         // date_default_timezone_set('Asia/Calcutta');
         date_default_timezone_set('Asia/Dubai');
         $site = new Site();
         $emirates = $site->getEmirates();
         $layoutCarTypes = $site->getCarType();
         $country = $site->getCountry();
-        
-
+    
         view()->share('emirates', $emirates);
         view()->share('country', $country);
         view()->share('layoutCarTypes', $layoutCarTypes);
@@ -55,7 +48,7 @@ class AdminController extends Controller
                 'password' => ['required']
             ]);
             $data = $admin->authenticateAdmin($filterData);    
-            // echo '<pre>';print_r($data);exit;
+             
             if(!empty($data)){
                 Session::put('userAdminData', $data[0]);
                 return Redirect::to('/admin/dashboard');
@@ -627,8 +620,8 @@ class AdminController extends Controller
             
             if($data){
                 $img = $admin->getImage($filterData);
-                if (Storage::exists($img->image)) {
-                    Storage::delete($img->image);
+                if (File::exists($img->image)) {
+                    File::delete($img->image);
                     $admin->updateDocImage($filterData,$img); 
                 }
                 $res['status'] = 200;
@@ -804,7 +797,6 @@ class AdminController extends Controller
                 'monthly_mileage' => ['required'],
                 'offerFlagMonthly' => ['nullable'],
                 'specialOfferMonthly' => ['nullable'],
-                'active' => ['nullable'],
 
                 'qty' => ['required','numeric'],
                 'kmeter' => ['nullable','numeric'],
@@ -819,7 +811,6 @@ class AdminController extends Controller
             $filterData['offerFlag'] = isset($filterData['offerFlag']) ? 1 : 0;
             $filterData['offerFlagWeekly'] = isset($filterData['offerFlagWeekly']) ? 1 : 0;
             $filterData['offerFlagMonthly'] = isset($filterData['offerFlagMonthly']) ? 1 : 0;
-            $filterData['active'] = isset($filterData['active']) ? 1 : 0;
             $filterData['online_flag'] = isset($filterData['online_flag']) ? 1 : 0;
             $filterData['whatsapp_flag'] = isset($filterData['whatsapp_flag']) ? 1 : 0;
 

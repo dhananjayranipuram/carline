@@ -279,7 +279,6 @@
                                                 @endif
 
                                                 <!-- Lightbox -->
-                                                @if ($isBase64 && strpos($mimeType, 'image/') === 0 || !$isBase64 && in_array(strtolower(pathinfo($filePath, PATHINFO_EXTENSION)), ['jpg', 'jpeg', 'png', 'gif']))
                                                 <a class="view-icon view-doc lightbox-trigger"
                                                 href="#" 
                                                 data-base64="{{ $fileSource }}" 
@@ -288,8 +287,7 @@
                                                 data-title="{{ $label }}">
                                                     <i class="far fa-eye"></i>
                                                 </a>
-                                                @endif
-                                                
+
                                                 <!-- Delete & Download -->
                                                 <a class="delete-icon delete-doc" data-type="{{ $docKey }}" data-id="{{ $user[0]->id }}">
                                                     <i class="far fa-trash-alt"></i>
