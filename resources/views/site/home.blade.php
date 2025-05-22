@@ -1,6 +1,93 @@
 @extends('layouts.site')
 
 @section('content')
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCq0y9JbWvjemcHSpRNzUwstBeCQs0VS9k&libraries=places"></script>
+<style>
+@media only screen and (max-width: 600px) {
+    .bannneru {
+        width: 200%;
+    }
+}
+.search-form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #ffffff;
+    padding: 10px;
+    width: 350px;
+    margin: 20px auto;
+    border-radius: 30px;
+}
+    
+.search-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px; /* Adds spacing between elements */
+}
+
+.form-icon-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.form-icon {
+    width: 40px;
+    height: 40px;
+}
+
+.form-field {
+    display: flex;
+    align-items: center;
+}
+
+.form-select {
+    width: 100%;
+    max-width: 300px;
+    padding: 10px 30px 10px 30px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: #fff;
+}
+
+.search-button {
+    color: #ffffff;
+    background-color: var(--accent-color);
+    border-radius: 50%;
+    width: 50px !important;
+    height: 50px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease-in-out;
+}
+
+.search-button:hover {
+    background-color: #000000;
+}
+
+@media screen and (max-width: 768px) {
+    .search-form {
+        flex-wrap: wrap; /* Stack items on smaller screens */
+        gap: 10px;
+    }
+
+    .form-select, .search-button {
+        width: 100%;
+    }
+}
+@media (min-width: 1024px) {
+    .hero-video {
+        width: 100%;
+    }
+    .hero-slider-layout .hero-slide {
+        position: relative;
+        padding: 80px 0 120px;
+    }
+}
+</style>
 <!-- Hero Slider Section Start -->
 <div class="hero hero-slider">
     <div class="hero-section bg-section hero-slider-layout">
@@ -11,7 +98,9 @@
                     <div class="hero-slide">
                         <!-- Slider Image Start -->
                         <div class="hero-slider-image">
-                            <img src="{{asset('assets/images/5.jpg')}}" alt="">
+                            <video autoplay muted loop id="heroVideo" class="hero-video">
+                                <source src="{{asset('assets/images/videos.mp4')}}" type="video/mp4">
+                            </video>
                         </div>
                         <!-- Slider Image End -->
 
@@ -20,16 +109,45 @@
                             <div class="row align-items-center">
                                 <div class="col-lg-12">
                                     <!-- Hero Content Start -->
-                                    <div class="hero-content">
+                                    <div class="hero-content text-center">
                                         <div class="section-title">
-                                            <h3 class="wow fadeInUp">Welcome to Carline Car Rental</h3>
-                                            <h1 class="text-anime-style-3">Dubai’s Trusted Car Rental Experts</h1>
-                                            
-                                            <p class="wow fadeInUp" data-wow-delay="0.25s">Whether you're planning a weekend getaway, a business trip, or just need a reliable ride for the day, we offers a wide range of vehicles to suit your needs.</p>
+                                            <h3 class="fadeInUp">Welcome to Carline Car Rental</h3>
+                                            <h1 class="text-highlight">Dubai’s Trusted Car Rental Experts</h1>
+                                            <p class="fadeInUp" data-wow-delay="0.25s">
+                                                Whether you're planning a weekend getaway, a business trip, or just need a reliable ride for the day, we offer a wide range of vehicles to suit your needs.
+                                            </p>
+                                            <!-- Search Form Start -->
+                                            <div class="search-form-container">
+                                                <form action="#" method="get" class="search-form">
+                                                    <!-- Car Icon -->
+                                                    <div class="form-icon-wrapper">
+                                                        <img src="{{asset('assets/images/icon-rent-details-1.svg')}}" alt="Car Icon" class="form-icon">
+                                                    </div>
+                                                    <!-- Car Types Dropdown -->
+                                                    <div class="form-field">
+                                                        <select class="rent-details-form form-select select-type" aria-label="Choose Car Type">
+                                                            <option value="" disabled selected>Choose Car Type</option>
+                                                                @foreach($carType as $key => $value)
+                                                                    <option value="{{$value->id}}">{{$value->name}}</option>
+                                                                @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <!-- Search Button -->
+                                                    <div class="form-field">
+                                                        <!-- <button type="button" class="search-button type-button">
+                                                            <i class="fa-solid fa-magnifying-glass"></i>
+                                                        </button> -->
+                                                        <div class="rent-details-item rent-details-search">
+                                                            <a class="type-button"><i class="fa-solid fa-magnifying-glass"></i></a>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </form>
+                                            </div>
+                                            <!-- Search Form End -->
                                         </div>
-                
                                     </div>
-                                    <!-- Hero Content End -->                    
+                                    <!-- Hero Content End -->
                                 </div>
                             </div>
                         </div>
@@ -37,115 +155,14 @@
                     </div>
                 </div>
                 <!-- Hero Slide End -->
-
-                
             </div>
             <div class="hero-pagination"></div>
-        </div>  
-    </div>
-
-    <!-- Rent Details Section Start -->
-    <div class="rent-details wow fadeInUp" data-wow-delay="0.75s">
-        <div class="container">
-            <!-- Filter Form Start -->
-            <form action="#" method="get">
-                <div class="row no-gutters align-items-center">
-                    <div class="col-md-12">
-                        <div class="rent-details-box">
-                            <div class="rent-details-form">
-                                <!-- Rent Details Item Start -->
-                                <div class="rent-details-item">
-                                    <div class="icon-box">
-                                        <img src="{{asset('assets/images/icon-rent-details-1.svg')}}" alt="">
-                                    </div>
-                                    <div class="rent-details-content">
-                                        <h3>car </h3>
-                                        <select class="rent-details-form form-select">
-                                            <option value="" disabled selected>Choose Car</option>
-                                            <option value="sport_car">sport car</option>
-                                            <option value="convertible_car">convertible car</option>
-                                            <option value="sedan_car">sedan car</option>
-                                            <option value="luxury_car">luxury car</option>
-                                            <option value="electric_car">electric car</option>
-                                            <option value="coupe_car">coupe car</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <!-- Rent Details Item End -->
-
-                                <!-- Rent Details Item Start -->
-                                <div class="rent-details-item">
-                                    <div class="icon-box">
-                                        <img src="{{asset('assets/images/icon-rent-details-2.svg')}}" alt="">
-                                    </div>
-                                    <div class="rent-details-content">
-                                        <h3>pickup location</h3>
-                                        <select class="rent-details-form form-select">
-                                            <option value="" disabled selected>Pick Up Location</option>
-                                            <option value="abu_dhabi">abu dhabi</option>
-                                            <option value="alain">alain</option>
-                                            <option value="dubai">dubai</option>
-                                            <option value="sharjah">sharjah</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <!-- Rent Details Item End -->
-
-                                <!-- Rent Details Item Start -->
-                                <div class="rent-details-item">
-                                    <div class="icon-box">
-                                        <img src="{{asset('assets/images/icon-rent-details-3.svg')}}" alt="">
-                                    </div>
-                                    <div class="rent-details-content">
-                                        <h3>pickup date</h3>
-                                        <p><input type="text" name="date" placeholder="mm/dd/yyyy" class="rent-details-form datepicker" required></p>
-                                    </div>
-                                </div>
-                                <!-- Rent Details Item End -->
-
-                                <!-- Rent Details Item Start -->
-                                <div class="rent-details-item">
-                                    <div class="icon-box">
-                                        <img src="{{asset('assets/images/icon-rent-details-4.svg')}}" alt="">
-                                    </div>
-                                    <div class="rent-details-content">
-                                        <h3>Dropoff location</h3>
-                                        <select class="rent-details-form form-select">
-                                            <option value="" disabled selected>Drop Off Location</option>
-                                            <option value="abu_dhabi">abu dhabi</option>
-                                            <option value="alain">alain</option>
-                                            <option value="sharjah">sharjah</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <!-- Rent Details Item End -->
-
-                                <!-- Rent Details Item Start -->
-                                <div class="rent-details-item">
-                                    <div class="icon-box">
-                                        <img src="{{asset('assets/images/icon-rent-details-5.svg')}}" alt="">
-                                    </div>
-                                    <div class="rent-details-content">
-                                        <h3>Return Date</h3>
-                                        <p><input type="text" name="date" placeholder="mm/dd/yyyy" class="rent-details-form datepicker" required></p>
-                                    </div>
-                                </div>
-                                <!-- Rent Details Item End -->
-                                    
-                                <div class="rent-details-item rent-details-search">
-                                    <a href="#"><i class="fa-solid fa-magnifying-glass"></i></a>
-                                </div>
-                            </div>                                
-                        </div>                               
-                    </div>
-                </div>
-            </form>
-            <!-- Filter Form End -->              
         </div>
     </div>
-    <!-- Rent Details Section End -->
 </div>
-<!-- Hero Slider Section End -->
+<!-- Hero Slider Section End -->
+
+
 
 <div class="perfect-fleet bg-section">
     <div class="container-fluid">
@@ -167,13 +184,19 @@
                     <div class="swiper">
                         <div class="swiper-wrapper" data-cursor-text="Drag">
 
+                            @foreach($cars as $key => $value)
                             <!-- Testimonial Slide Start -->
                             <div class="swiper-slide">
                                 <!-- Perfect Fleets Item Start -->
                                 <div class="perfect-fleet-item">
+
+                                    @php $imgArr = explode(',',$value->image); @endphp
                                     <!-- Image Box Start -->
                                     <div class="image-box">
-                                        <img src="{{asset('assets/images/car/1.jpg')}}" alt="">
+                                        @foreach($imgArr as $keys => $values)
+                                            <a href="{{url('/car-details')}}?id={{base64_encode($value->id)}}"><img src="{{asset($values)}}" alt=""></a>
+                                            @if($keys==0) @break @endif
+                                        @endforeach
                                     </div>
                                     <!-- Image Box End -->
 
@@ -181,18 +204,30 @@
                                     <div class="perfect-fleet-content">
                                         <!-- Perfect Fleets Title Start -->
                                         <div class="perfect-fleet-title">
-                                            <h3>Crossover</h3>
-                                            <h2>Hyundai Creta 2024</h2>
+                                            <h3>{{$value->car_type}}</h3>
+                                            <a href="{{url('/car-details')}}?id={{base64_encode($value->id)}}"><h2>{{$value->brand_name}} {{$value->name}} {{$value->model}}</h2></a>
                                         </div>
                                         <!-- Perfect Fleets Content End -->
 
                                         <!-- Perfect Fleets Body Start -->
                                         <div class="perfect-fleet-body">
                                             <ul>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-1.svg')}}" alt="">4 passenger</li>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-2.svg')}}" alt="">4 door</li>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-3.svg')}}" alt="">bags</li>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-4.svg')}}" alt="">auto</li>
+                                                @if(!empty($specs[$value->id]))
+                                                    @foreach($specs[$value->id] as $keys => $values)
+                                                        <li class="break-word"><img src="{{asset($values->image)}}" alt="" width="21">
+                                                        @if($values->name=='Transmission')
+                                                            {{$values->details}}
+                                                        @else
+                                                            @if($values->details!='Yes')
+                                                                {{$values->details}}
+                                                            @endif 
+                                                            {{$values->name}}
+                                                        @endif
+                                                        
+                                                        </li>
+                                                        @if($keys==3) @break @endif
+                                                    @endforeach
+                                                @endif
                                             </ul>
                                         </div>
                                         <!-- Perfect Fleets Body End -->
@@ -201,13 +236,18 @@
                                         <div class="perfect-fleet-footer">
                                             <!-- Perfect Fleets Pricing Start -->
                                             <div class="perfect-fleet-pricing">
-                                                <h2>AED 280<span>/day</span></h2>
+                                                @if($value->offer_flag==1) 
+                                                    <del><h6>AED {{$value->rent}}<span>/day</span></h6></del>
+                                                    <h2>AED {{$value->offer_price}} <span>/day</span></h2>
+                                                @else
+                                                    <h2>AED {{$value->rent}} <span>/day</span></h2>
+                                                @endif
                                             </div>
                                             <!-- Perfect Fleets Pricing End -->
 
                                             <!-- Perfect Fleets Btn Start -->
                                             <div class="perfect-fleet-btn">
-                                                <a href="#" class="section-icon-btn"><img src="{{asset('assets/images/arrow-white.svg')}}" alt=""></a>
+                                                <a href="{{url('/car-details')}}?id={{base64_encode($value->id)}}" class="section-icon-btn"><img src="{{asset('assets/images/arrow-white.svg')}}" alt=""></a>
                                             </div>
                                             <!-- Perfect Fleets Btn End -->
                                         </div>
@@ -218,684 +258,8 @@
                                 <!-- Perfect Fleets Item End -->                                    
                             </div>
                             <!-- Testimonial Slide End -->
-
-                            <!-- Testimonial Slide Start -->
-                            <div class="swiper-slide">
-                                <!-- Perfect Fleets Item Start -->
-                                <div class="perfect-fleet-item">
-                                    <!-- Image Box Start -->
-                                    <div class="image-box">
-                                        <img src="{{asset('assets/images/car/2.jpg')}}" alt="">
-                                    </div>
-                                    <!-- Image Box End -->
-
-                                    <!-- Perfect Fleets Content Start -->
-                                    <div class="perfect-fleet-content">
-                                        <!-- Perfect Fleets Title Start -->
-                                        <div class="perfect-fleet-title">
-                                            <h3>Sedan</h3>
-                                            <h2>Toyota Corolla 2024</h2>
-                                        </div>
-                                        <!-- Perfect Fleets Content End -->
-
-                                        <!-- Perfect Fleets Body Start -->
-                                        <div class="perfect-fleet-body">
-                                            <ul>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-1.svg')}}" alt="">4 passenger</li>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-2.svg')}}" alt="">4 door</li>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-3.svg')}}" alt="">bags</li>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-4.svg')}}" alt="">auto</li>
-                                            </ul>
-                                        </div>
-                                        <!-- Perfect Fleets Body End -->
-
-                                        <!-- Perfect Fleets Footer Start -->
-                                        <div class="perfect-fleet-footer">
-                                            <!-- Perfect Fleets Pricing Start -->
-                                            <div class="perfect-fleet-pricing">
-                                                <h2>AED 280<span>/day</span></h2>
-                                            </div>
-                                            <!-- Perfect Fleets Pricing End -->
-
-                                            <!-- Perfect Fleets Btn Start -->
-                                            <div class="perfect-fleet-btn">
-                                                <a href="#" class="section-icon-btn"><img src="{{asset('assets/images/arrow-white.svg')}}" alt=""></a>
-                                            </div>
-                                            <!-- Perfect Fleets Btn End -->
-                                        </div>
-                                        <!-- Perfect Fleets Footer End -->
-                                    </div>
-                                    <!-- Perfect Fleets Content End -->
-                                </div>
-                                <!-- Perfect Fleets Item End -->                                    
-                            </div>
-                            <!-- Testimonial Slide End -->
-
-                            <!-- Testimonial Slide Start -->
-                            <div class="swiper-slide">
-                                <!-- Perfect Fleets Item Start -->
-                                <div class="perfect-fleet-item">
-                                    <!-- Image Box Start -->
-                                    <div class="image-box">
-                                        <img src="{{asset('assets/images/car/3.jpg')}}" alt="">
-                                    </div>
-                                    <!-- Image Box End -->
-
-                                    <!-- Perfect Fleets Content Start -->
-                                    <div class="perfect-fleet-content">
-                                        <!-- Perfect Fleets Title Start -->
-                                        <div class="perfect-fleet-title">
-                                            <h3>Sedan</h3>
-                                            <h2>Nissan Sunny 2024</h2>
-                                        </div>
-                                        <!-- Perfect Fleets Content End -->
-
-                                        <!-- Perfect Fleets Body Start -->
-                                        <div class="perfect-fleet-body">
-                                            <ul>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-1.svg')}}" alt="">4 passenger</li>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-2.svg')}}" alt="">4 door</li>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-3.svg')}}" alt="">bags</li>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-4.svg')}}" alt="">auto</li>
-                                            </ul>
-                                        </div>
-                                        <!-- Perfect Fleets Body End -->
-
-                                        <!-- Perfect Fleets Footer Start -->
-                                        <div class="perfect-fleet-footer">
-                                            <!-- Perfect Fleets Pricing Start -->
-                                            <div class="perfect-fleet-pricing">
-                                                <h2>AED 280<span>/day</span></h2>
-                                            </div>
-                                            <!-- Perfect Fleets Pricing End -->
-
-                                            <!-- Perfect Fleets Btn Start -->
-                                            <div class="perfect-fleet-btn">
-                                                <a href="#" class="section-icon-btn"><img src="{{asset('assets/images/arrow-white.svg')}}" alt=""></a>
-                                            </div>
-                                            <!-- Perfect Fleets Btn End -->
-                                        </div>
-                                        <!-- Perfect Fleets Footer End -->
-                                    </div>
-                                    <!-- Perfect Fleets Content End -->
-                                </div>
-                                <!-- Perfect Fleets Item End -->                                    
-                            </div>
-                            <!-- Testimonial Slide End -->
-
-
-                            <!-- Testimonial Slide Start -->
-                            <div class="swiper-slide">
-                                <!-- Perfect Fleets Item Start -->
-                                <div class="perfect-fleet-item">
-                                    <!-- Image Box Start -->
-                                    <div class="image-box">
-                                        <img src="{{asset('assets/images/car/4.jpg')}}" alt="">
-                                    </div>
-                                    <!-- Image Box End -->
-
-                                    <!-- Perfect Fleets Content Start -->
-                                    <div class="perfect-fleet-content">
-                                        <!-- Perfect Fleets Title Start -->
-                                        <div class="perfect-fleet-title">
-                                            <h3>Hatchback</h3>
-                                            <h2>Kia picanto 2024</h2>
-                                        </div>
-                                        <!-- Perfect Fleets Content End -->
-
-                                        <!-- Perfect Fleets Body Start -->
-                                        <div class="perfect-fleet-body">
-                                            <ul>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-1.svg')}}" alt="">4 passenger</li>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-2.svg')}}" alt="">4 door</li>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-3.svg')}}" alt="">bags</li>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-4.svg')}}" alt="">auto</li>
-                                            </ul>
-                                        </div>
-                                        <!-- Perfect Fleets Body End -->
-
-                                        <!-- Perfect Fleets Footer Start -->
-                                        <div class="perfect-fleet-footer">
-                                            <!-- Perfect Fleets Pricing Start -->
-                                            <div class="perfect-fleet-pricing">
-                                                <h2>AED 280<span>/day</span></h2>
-                                            </div>
-                                            <!-- Perfect Fleets Pricing End -->
-
-                                            <!-- Perfect Fleets Btn Start -->
-                                            <div class="perfect-fleet-btn">
-                                                <a href="#" class="section-icon-btn"><img src="{{asset('assets/images/arrow-white.svg')}}" alt=""></a>
-                                            </div>
-                                            <!-- Perfect Fleets Btn End -->
-                                        </div>
-                                        <!-- Perfect Fleets Footer End -->
-                                    </div>
-                                    <!-- Perfect Fleets Content End -->
-                                </div>
-                                <!-- Perfect Fleets Item End -->                                    
-                            </div>
-                            <!-- Testimonial Slide End -->
-
-                            <!-- Testimonial Slide Start -->
-                            <div class="swiper-slide">
-                                <!-- Perfect Fleets Item Start -->
-                                <div class="perfect-fleet-item">
-                                    <!-- Image Box Start -->
-                                    <div class="image-box">
-                                        <img src="{{asset('assets/images/car/5.jpg')}}" alt="">
-                                    </div>
-                                    <!-- Image Box End -->
-
-                                    <!-- Perfect Fleets Content Start -->
-                                    <div class="perfect-fleet-content">
-                                        <!-- Perfect Fleets Title Start -->
-                                        <div class="perfect-fleet-title">
-                                            <h3>Crossover</h3>
-                                            <h2>Kia Sportage 2024</h2>
-                                        </div>
-                                        <!-- Perfect Fleets Content End -->
-
-                                        <!-- Perfect Fleets Body Start -->
-                                        <div class="perfect-fleet-body">
-                                            <ul>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-1.svg')}}" alt="">4 passenger</li>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-2.svg')}}" alt="">4 door</li>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-3.svg')}}" alt="">bags</li>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-4.svg')}}" alt="">auto</li>
-                                            </ul>
-                                        </div>
-                                        <!-- Perfect Fleets Body End -->
-
-                                        <!-- Perfect Fleets Footer Start -->
-                                        <div class="perfect-fleet-footer">
-                                            <!-- Perfect Fleets Pricing Start -->
-                                            <div class="perfect-fleet-pricing">
-                                                <h2>AED 280<span>/day</span></h2>
-                                            </div>
-                                            <!-- Perfect Fleets Pricing End -->
-
-                                            <!-- Perfect Fleets Btn Start -->
-                                            <div class="perfect-fleet-btn">
-                                                <a href="#" class="section-icon-btn"><img src="{{asset('assets/images/arrow-white.svg')}}" alt=""></a>
-                                            </div>
-                                            <!-- Perfect Fleets Btn End -->
-                                        </div>
-                                        <!-- Perfect Fleets Footer End -->
-                                    </div>
-                                    <!-- Perfect Fleets Content End -->
-                                </div>
-                                <!-- Perfect Fleets Item End -->                                    
-                            </div>
-                            <!-- Testimonial Slide End -->
-
-                            <!-- Testimonial Slide Start -->
-                            <div class="swiper-slide">
-                                <!-- Perfect Fleets Item Start -->
-                                <div class="perfect-fleet-item">
-                                    <!-- Image Box Start -->
-                                    <div class="image-box">
-                                        <img src="{{asset('assets/images/car/6.jpg')}}" alt="">
-                                    </div>
-                                    <!-- Image Box End -->
-
-                                    <!-- Perfect Fleets Content Start -->
-                                    <div class="perfect-fleet-content">
-                                        <!-- Perfect Fleets Title Start -->
-                                        <div class="perfect-fleet-title">
-                                            <h3>Sedan</h3>
-                                            <h2>Hyundai Accent 2024</h2>
-                                        </div>
-                                        <!-- Perfect Fleets Content End -->
-
-                                        <!-- Perfect Fleets Body Start -->
-                                        <div class="perfect-fleet-body">
-                                            <ul>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-1.svg')}}" alt="">4 passenger</li>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-2.svg')}}" alt="">4 door</li>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-3.svg')}}" alt="">bags</li>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-4.svg')}}" alt="">auto</li>
-                                            </ul>
-                                        </div>
-                                        <!-- Perfect Fleets Body End -->
-
-                                        <!-- Perfect Fleets Footer Start -->
-                                        <div class="perfect-fleet-footer">
-                                            <!-- Perfect Fleets Pricing Start -->
-                                            <div class="perfect-fleet-pricing">
-                                                <h2>AED 280<span>/day</span></h2>
-                                            </div>
-                                            <!-- Perfect Fleets Pricing End -->
-
-                                            <!-- Perfect Fleets Btn Start -->
-                                            <div class="perfect-fleet-btn">
-                                                <a href="#" class="section-icon-btn"><img src="{{asset('assets/images/arrow-white.svg')}}" alt=""></a>
-                                            </div>
-                                            <!-- Perfect Fleets Btn End -->
-                                        </div>
-                                        <!-- Perfect Fleets Footer End -->
-                                    </div>
-                                    <!-- Perfect Fleets Content End -->
-                                </div>
-                                <!-- Perfect Fleets Item End -->                                    
-                            </div>
-                            <!-- Testimonial Slide End -->
-
+                            @endforeach
                             
-                            <!-- Testimonial Slide Start -->
-                            <div class="swiper-slide">
-                                <!-- Perfect Fleets Item Start -->
-                                <div class="perfect-fleet-item">
-                                    <!-- Image Box Start -->
-                                    <div class="image-box">
-                                        <img src="{{asset('assets/images/car/7.jpg')}}" alt="">
-                                    </div>
-                                    <!-- Image Box End -->
-
-                                    <!-- Perfect Fleets Content Start -->
-                                    <div class="perfect-fleet-content">
-                                        <!-- Perfect Fleets Title Start -->
-                                        <div class="perfect-fleet-title">
-                                            <h3>Sedan</h3>
-                                            <h2>Hyundai Elantra 2024</h2>
-                                        </div>
-                                        <!-- Perfect Fleets Content End -->
-
-                                        <!-- Perfect Fleets Body Start -->
-                                        <div class="perfect-fleet-body">
-                                            <ul>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-1.svg')}}" alt="">4 passenger</li>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-2.svg')}}" alt="">4 door</li>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-3.svg')}}" alt="">bags</li>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-4.svg')}}" alt="">auto</li>
-                                            </ul>
-                                        </div>
-                                        <!-- Perfect Fleets Body End -->
-
-                                        <!-- Perfect Fleets Footer Start -->
-                                        <div class="perfect-fleet-footer">
-                                            <!-- Perfect Fleets Pricing Start -->
-                                            <div class="perfect-fleet-pricing">
-                                                <h2>AED 280<span>/day</span></h2>
-                                            </div>
-                                            <!-- Perfect Fleets Pricing End -->
-
-                                            <!-- Perfect Fleets Btn Start -->
-                                            <div class="perfect-fleet-btn">
-                                                <a href="#" class="section-icon-btn"><img src="{{asset('assets/images/arrow-white.svg')}}" alt=""></a>
-                                            </div>
-                                            <!-- Perfect Fleets Btn End -->
-                                        </div>
-                                        <!-- Perfect Fleets Footer End -->
-                                    </div>
-                                    <!-- Perfect Fleets Content End -->
-                                </div>
-                                <!-- Perfect Fleets Item End -->                                    
-                            </div>
-                            <!-- Testimonial Slide End -->
-
-                            <!-- Testimonial Slide Start -->
-                            <div class="swiper-slide">
-                                <!-- Perfect Fleets Item Start -->
-                                <div class="perfect-fleet-item">
-                                    <!-- Image Box Start -->
-                                    <div class="image-box">
-                                        <img src="{{asset('assets/images/car/8.jpg')}}" alt="">
-                                    </div>
-                                    <!-- Image Box End -->
-
-                                    <!-- Perfect Fleets Content Start -->
-                                    <div class="perfect-fleet-content">
-                                        <!-- Perfect Fleets Title Start -->
-                                        <div class="perfect-fleet-title">
-                                            <h3>Hatchback</h3>
-                                            <h2>Suzuki Baleno 2024</h2>
-                                        </div>
-                                        <!-- Perfect Fleets Content End -->
-
-                                        <!-- Perfect Fleets Body Start -->
-                                        <div class="perfect-fleet-body">
-                                            <ul>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-1.svg')}}" alt="">4 passenger</li>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-2.svg')}}" alt="">4 door</li>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-3.svg')}}" alt="">bags</li>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-4.svg')}}" alt="">auto</li>
-                                            </ul>
-                                        </div>
-                                        <!-- Perfect Fleets Body End -->
-
-                                        <!-- Perfect Fleets Footer Start -->
-                                        <div class="perfect-fleet-footer">
-                                            <!-- Perfect Fleets Pricing Start -->
-                                            <div class="perfect-fleet-pricing">
-                                                <h2>AED 320<span>/day</span></h2>
-                                            </div>
-                                            <!-- Perfect Fleets Pricing End -->
-
-                                            <!-- Perfect Fleets Btn Start -->
-                                            <div class="perfect-fleet-btn">
-                                                <a href="#" class="section-icon-btn"><img src="{{asset('assets/images/arrow-white.svg')}}" alt=""></a>
-                                            </div>
-                                            <!-- Perfect Fleets Btn End -->
-                                        </div>
-                                        <!-- Perfect Fleets Footer End -->
-                                    </div>
-                                    <!-- Perfect Fleets Content End -->
-                                </div>
-                                <!-- Perfect Fleets Item End -->                                    
-                            </div>
-                            <!-- Testimonial Slide End -->
-
-                            <!-- Testimonial Slide Start -->
-                            <div class="swiper-slide">
-                                <!-- Perfect Fleets Item Start -->
-                                <div class="perfect-fleet-item">
-                                    <!-- Image Box Start -->
-                                    <div class="image-box">
-                                        <img src="{{asset('assets/images/car/3.png')}}" alt="">
-                                    </div>
-                                    <!-- Image Box End -->
-
-                                    <!-- Perfect Fleets Content Start -->
-                                    <div class="perfect-fleet-content">
-                                        <!-- Perfect Fleets Title Start -->
-                                        <div class="perfect-fleet-title">
-                                            <h3>luxury car</h3>
-                                            <h2>Mercedes Benz S-Class</h2>
-                                        </div>
-                                        <!-- Perfect Fleets Content End -->
-
-                                        <!-- Perfect Fleets Body Start -->
-                                        <div class="perfect-fleet-body">
-                                            <ul>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-1.svg')}}" alt="">4 passenger</li>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-2.svg')}}" alt="">4 door</li>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-3.svg')}}" alt="">bags</li>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-4.svg')}}" alt="">auto</li>
-                                            </ul>
-                                        </div>
-                                        <!-- Perfect Fleets Body End -->
-
-                                        <!-- Perfect Fleets Footer Start -->
-                                        <div class="perfect-fleet-footer">
-                                            <!-- Perfect Fleets Pricing Start -->
-                                            <div class="perfect-fleet-pricing">
-                                                <h2>AED 450<span>/day</span></h2>
-                                            </div>
-                                            <!-- Perfect Fleets Pricing End -->
-
-                                            <!-- Perfect Fleets Btn Start -->
-                                            <div class="perfect-fleet-btn">
-                                                <a href="#" class="section-icon-btn"><img src="{{asset('assets/images/arrow-white.svg')}}" alt=""></a>
-                                            </div>
-                                            <!-- Perfect Fleets Btn End -->
-                                        </div>
-                                        <!-- Perfect Fleets Footer End -->
-                                    </div>
-                                    <!-- Perfect Fleets Content End -->
-                                </div>
-                                <!-- Perfect Fleets Item End -->                                    
-                            </div>
-                            <!-- Testimonial Slide End -->
-
-                            <!-- Testimonial Slide Start -->
-                            <div class="swiper-slide">
-                                <!-- Perfect Fleets Item Start -->
-                                <div class="perfect-fleet-item">
-                                    <!-- Image Box Start -->
-                                    <div class="image-box">
-                                        <img src="{{asset('assets/images/car/4.png')}}" alt="">
-                                    </div>
-                                    <!-- Image Box End -->
-
-                                    <!-- Perfect Fleets Content Start -->
-                                    <div class="perfect-fleet-content">
-                                        <!-- Perfect Fleets Title Start -->
-                                        <div class="perfect-fleet-title">
-                                            <h3>luxury car</h3>
-                                            <h2>GMC Yukon </h2>
-                                        </div>
-                                        <!-- Perfect Fleets Content End -->
-
-                                        <!-- Perfect Fleets Body Start -->
-                                        <div class="perfect-fleet-body">
-                                            <ul>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-1.svg')}}" alt="">4 passenger</li>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-2.svg')}}" alt="">4 door</li>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-3.svg')}}" alt="">bags</li>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-4.svg')}}" alt="">auto</li>
-                                            </ul>
-                                        </div>
-                                        <!-- Perfect Fleets Body End -->
-
-                                        <!-- Perfect Fleets Footer Start -->
-                                        <div class="perfect-fleet-footer">
-                                            <!-- Perfect Fleets Pricing Start -->
-                                            <div class="perfect-fleet-pricing">
-                                                <h2>AED 220<span>/day</span></h2>
-                                            </div>
-                                            <!-- Perfect Fleets Pricing End -->
-
-                                            <!-- Perfect Fleets Btn Start -->
-                                            <div class="perfect-fleet-btn">
-                                                <a href="#" class="section-icon-btn"><img src="{{asset('assets/images/arrow-white.svg')}}" alt=""></a>
-                                            </div>
-                                            <!-- Perfect Fleets Btn End -->
-                                        </div>
-                                        <!-- Perfect Fleets Footer End -->
-                                    </div>
-                                    <!-- Perfect Fleets Content End -->
-                                </div>
-                                <!-- Perfect Fleets Item End -->                                    
-                            </div>
-                            <!-- Testimonial Slide End -->
-
-                            <!-- Testimonial Slide Start -->
-                            <div class="swiper-slide">
-                                <!-- Perfect Fleets Item Start -->
-                                <div class="perfect-fleet-item">
-                                    <!-- Image Box Start -->
-                                    <div class="image-box">
-                                        <img src="{{asset('assets/images/car/9.jpg')}}" alt="">
-                                    </div>
-                                    <!-- Image Box End -->
-
-                                    <!-- Perfect Fleets Content Start -->
-                                    <div class="perfect-fleet-content">
-                                        <!-- Perfect Fleets Title Start -->
-                                        <div class="perfect-fleet-title">
-                                            <h3>Sedan</h3>
-                                            <h2>Nissan Altima</h2>
-                                        </div>
-                                        <!-- Perfect Fleets Content End -->
-
-                                        <!-- Perfect Fleets Body Start -->
-                                        <div class="perfect-fleet-body">
-                                            <ul>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-1.svg')}}" alt="">4 passenger</li>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-2.svg')}}" alt="">4 door</li>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-3.svg')}}" alt="">bags</li>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-4.svg')}}" alt="">auto</li>
-                                            </ul>
-                                        </div>
-                                        <!-- Perfect Fleets Body End -->
-
-                                        <!-- Perfect Fleets Footer Start -->
-                                        <div class="perfect-fleet-footer">
-                                            <!-- Perfect Fleets Pricing Start -->
-                                            <div class="perfect-fleet-pricing">
-                                                <h2>AED 320<span>/day</span></h2>
-                                            </div>
-                                            <!-- Perfect Fleets Pricing End -->
-
-                                            <!-- Perfect Fleets Btn Start -->
-                                            <div class="perfect-fleet-btn">
-                                                <a href="#" class="section-icon-btn"><img src="{{asset('assets/images/arrow-white.svg')}}" alt=""></a>
-                                            </div>
-                                            <!-- Perfect Fleets Btn End -->
-                                        </div>
-                                        <!-- Perfect Fleets Footer End -->
-                                    </div>
-                                    <!-- Perfect Fleets Content End -->
-                                </div>
-                                <!-- Perfect Fleets Item End -->                                    
-                            </div>
-                            <!-- Testimonial Slide End -->
-
-                            <!-- Testimonial Slide Start -->
-                            <div class="swiper-slide">
-                                <!-- Perfect Fleets Item Start -->
-                                <div class="perfect-fleet-item">
-                                    <!-- Image Box Start -->
-                                    <div class="image-box">
-                                        <img src="{{asset('assets/images/car/10.jpg')}}" alt="">
-                                    </div>
-                                    <!-- Image Box End -->
-
-                                    <!-- Perfect Fleets Content Start -->
-                                    <div class="perfect-fleet-content">
-                                        <!-- Perfect Fleets Title Start -->
-                                        <div class="perfect-fleet-title">
-                                            <h3>Crossover</h3>
-                                            <h2>Toyota RAV4 2024</h2>
-                                        </div>
-                                        <!-- Perfect Fleets Content End -->
-
-                                        <!-- Perfect Fleets Body Start -->
-                                        <div class="perfect-fleet-body">
-                                            <ul>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-1.svg')}}" alt="">4 passenger</li>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-2.svg')}}" alt="">4 door</li>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-3.svg')}}" alt="">bags</li>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-4.svg')}}" alt="">auto</li>
-                                            </ul>
-                                        </div>
-                                        <!-- Perfect Fleets Body End -->
-
-                                        <!-- Perfect Fleets Footer Start -->
-                                        <div class="perfect-fleet-footer">
-                                            <!-- Perfect Fleets Pricing Start -->
-                                            <div class="perfect-fleet-pricing">
-                                                <h2>AED 450<span>/day</span></h2>
-                                            </div>
-                                            <!-- Perfect Fleets Pricing End -->
-
-                                            <!-- Perfect Fleets Btn Start -->
-                                            <div class="perfect-fleet-btn">
-                                                <a href="#" class="section-icon-btn"><img src="{{asset('assets/images/arrow-white.svg')}}" alt=""></a>
-                                            </div>
-                                            <!-- Perfect Fleets Btn End -->
-                                        </div>
-                                        <!-- Perfect Fleets Footer End -->
-                                    </div>
-                                    <!-- Perfect Fleets Content End -->
-                                </div>
-                                <!-- Perfect Fleets Item End -->                                    
-                            </div>
-                            <!-- Testimonial Slide End -->
-
-                            <!-- Testimonial Slide Start -->
-                            <div class="swiper-slide">
-                                <!-- Perfect Fleets Item Start -->
-                                <div class="perfect-fleet-item">
-                                    <!-- Image Box Start -->
-                                    <div class="image-box">
-                                        <img src="{{asset('assets/images/car/15.jpg')}}" alt="">
-                                    </div>
-                                    <!-- Image Box End -->
-
-                                    <!-- Perfect Fleets Content Start -->
-                                    <div class="perfect-fleet-content">
-                                        <!-- Perfect Fleets Title Start -->
-                                        <div class="perfect-fleet-title">
-                                            <h3>luxury car</h3>
-                                            <h2>Mercedes C300</h2>
-                                        </div>
-                                        <!-- Perfect Fleets Content End -->
-
-                                        <!-- Perfect Fleets Body Start -->
-                                        <div class="perfect-fleet-body">
-                                            <ul>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-1.svg')}}" alt="">4 passenger</li>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-2.svg')}}" alt="">4 door</li>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-3.svg')}}" alt="">bags</li>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-4.svg')}}" alt="">auto</li>
-                                            </ul>
-                                        </div>
-                                        <!-- Perfect Fleets Body End -->
-
-                                        <!-- Perfect Fleets Footer Start -->
-                                        <div class="perfect-fleet-footer">
-                                            <!-- Perfect Fleets Pricing Start -->
-                                            <div class="perfect-fleet-pricing">
-                                                <h2>AED 220<span>/day</span></h2>
-                                            </div>
-                                            <!-- Perfect Fleets Pricing End -->
-
-                                            <!-- Perfect Fleets Btn Start -->
-                                            <div class="perfect-fleet-btn">
-                                                <a href="#" class="section-icon-btn"><img src="{{asset('assets/images/arrow-white.svg')}}" alt=""></a>
-                                            </div>
-                                            <!-- Perfect Fleets Btn End -->
-                                        </div>
-                                        <!-- Perfect Fleets Footer End -->
-                                    </div>
-                                    <!-- Perfect Fleets Content End -->
-                                </div>
-                                <!-- Perfect Fleets Item End -->                                    
-                            </div>
-                            <!-- Testimonial Slide End -->
-
-                                <!-- Testimonial Slide Start -->
-                                <div class="swiper-slide">
-                                <!-- Perfect Fleets Item Start -->
-                                <div class="perfect-fleet-item">
-                                    <!-- Image Box Start -->
-                                    <div class="image-box">
-                                        <img src="{{asset('assets/images/car/16.jpg')}}" alt="">
-                                    </div>
-                                    <!-- Image Box End -->
-
-                                    <!-- Perfect Fleets Content Start -->
-                                    <div class="perfect-fleet-content">
-                                        <!-- Perfect Fleets Title Start -->
-                                        <div class="perfect-fleet-title">
-                                            <h3>luxury car</h3>
-                                            <h2>Range Rover</h2>
-                                        </div>
-                                        <!-- Perfect Fleets Content End -->
-
-                                        <!-- Perfect Fleets Body Start -->
-                                        <div class="perfect-fleet-body">
-                                            <ul>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-1.svg')}}" alt="">4 passenger</li>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-2.svg')}}" alt="">4 door</li>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-3.svg')}}" alt="">bags</li>
-                                                <li><img src="{{asset('assets/images/icon-fleet-list-4.svg')}}" alt="">auto</li>
-                                            </ul>
-                                        </div>
-                                        <!-- Perfect Fleets Body End -->
-
-                                        <!-- Perfect Fleets Footer Start -->
-                                        <div class="perfect-fleet-footer">
-                                            <!-- Perfect Fleets Pricing Start -->
-                                            <div class="perfect-fleet-pricing">
-                                                <h2>AED 220<span>/day</span></h2>
-                                            </div>
-                                            <!-- Perfect Fleets Pricing End -->
-
-                                            <!-- Perfect Fleets Btn Start -->
-                                            <div class="perfect-fleet-btn">
-                                                <a href="#" class="section-icon-btn"><img src="{{asset('assets/images/arrow-white.svg')}}" alt=""></a>
-                                            </div>
-                                            <!-- Perfect Fleets Btn End -->
-                                        </div>
-                                        <!-- Perfect Fleets Footer End -->
-                                    </div>
-                                    <!-- Perfect Fleets Content End -->
-                                </div>
-                                <!-- Perfect Fleets Item End -->                                    
-                            </div>
-                            <!-- Testimonial Slide End -->
 
 
                         </div>
@@ -911,8 +275,8 @@
     </div>
 </div>
 
-    <!-- Exclusive Partners Section Start -->
-    <div class="exclusive-partners bg-section">
+<!-- Exclusive Partners Section Start -->
+<div class="exclusive-partners bg-section">
     <div class="container">
         <div class="row section-row">
             <div class="col-lg-12">
@@ -926,239 +290,81 @@
         </div>
 
         <div class="row">
-            <div class="col-lg-3 col-6">
-                <!-- Partners Logo Start -->
-                <div class="partners-logo wow fadeInUp" data-wow-delay="0.2s">
-                    <img src="{{asset('assets/images/benz.png')}}" alt="">
-                </div>
-                <!-- Partners Logo End -->
-            </div>
+            <div class="brand-details-slider">
+                <div class="swiper swiper-initialized swiper-horizontal">
+                    <div class="swiper-wrapper" data-cursor-text="Drag" id="swiper-wrapper-9ebdd264537877106" aria-live="off" style="transition-duration: 0ms; transform: translate3d(-3805px, 0px, 0px); transition-delay: 0ms;">
+                        
+                        @foreach($brands as $key => $value)
+                        <!-- Testimonial Slide Start -->
+                        <div class="swiper-slide" role="group" aria-label="1 / 14" data-swiper-slide-index="1" style="width: 350.5px; margin-right: 30px;">
+                            <div class="partners-logo wow fadeInUp brand-click" data-wow-delay="0.2s" data-id="{{$value->id}}">
+                                <img src="{{asset($value->image)}}" alt="{{asset($value->name)}}">
+                            </div>                             
+                        </div>
+                        <!-- Testimonial Slide End -->
+                        @endforeach
 
-            <div class="col-lg-3 col-6">
-                <!-- Partners Logo Start -->
-                <div class="partners-logo wow fadeInUp" data-wow-delay="0.4s">
-                    <img src="{{asset('assets/images/nissan.png')}}" alt="">
-                </div>
-                <!-- Partners Logo End -->
-            </div>
-
-            <div class="col-lg-3 col-6">
-                <!-- Partners Logo Start -->
-                <div class="partners-logo wow fadeInUp" data-wow-delay="0.6s">
-                    <img src="{{asset('assets/images/toyota.png')}}" alt="">
-                </div>
-                <!-- Partners Logo End -->
-            </div>
-
-            <div class="col-lg-3 col-6">
-                <!-- Partners Logo Start -->
-                <div class="partners-logo wow fadeInUp" data-wow-delay="0.8s">
-                    <img src="{{asset('assets/images/mg.png')}}" alt="">
-                </div>
-                <!-- Partners Logo End -->
-            </div>
-
-            <div class="col-lg-3 col-6">
-                <!-- Partners Logo Start -->
-                <div class="partners-logo wow fadeInUp" data-wow-delay="1s">
-                    <img src="{{asset('assets/images/kia.png')}}" alt="">
-                </div>
-                <!-- Partners Logo End -->
-            </div>
-
-            <div class="col-lg-3 col-6">
-                <!-- Partners Logo Start -->
-                <div class="partners-logo wow fadeInUp" data-wow-delay="1.2s">
-                    <img src="{{asset('assets/images/hyndai.png')}}" alt="">
-                </div>
-                <!-- Partners Logo End -->
-            </div>
-
-            <div class="col-lg-3 col-6">
-                <!-- Partners Logo Start -->
-                <div class="partners-logo wow fadeInUp" data-wow-delay="1.4s">
-                    <img src="{{asset('assets/images/suzuki.png')}}" alt="">
-                </div>
-                <!-- Partners Logo End -->
-            </div>
-
-            <div class="col-lg-3 col-6">
-                <!-- Partners Logo Start -->
-                <div class="partners-logo wow fadeInUp" data-wow-delay="1.6s">
-                    <img src="{{asset('assets/images/lambo.png')}}" alt="">
-                </div>
-                <!-- Partners Logo End -->
-            </div>
-
-            <div class="col-lg-3 col-6">
-                <!-- Partners Logo Start -->
-                <div class="partners-logo wow fadeInUp" data-wow-delay="1.6s">
-                    <img src="{{asset('assets/images/mazda.png')}}" alt="">
-                </div>
-                <!-- Partners Logo End -->
-            </div>
-
-            <div class="col-lg-3 col-6">
-                <!-- Partners Logo Start -->
-                <div class="partners-logo wow fadeInUp" data-wow-delay="1.6s">
-                    <img src="{{asset('assets/images/proche.png')}}" alt="">
-                </div>
-                <!-- Partners Logo End -->
-            </div>
-
-            <div class="col-lg-3 col-6">
-                <!-- Partners Logo Start -->
-                <div class="partners-logo wow fadeInUp" data-wow-delay="1.6s">
-                    <img src="{{asset('assets/images/landrover.png')}}" alt="">
-                </div>
-                <!-- Partners Logo End -->
-            </div>
-
-            <div class="col-lg-3 col-6">
-                <!-- Partners Logo Start -->
-                <div class="partners-logo wow fadeInUp" data-wow-delay="1.6s">
-                    <img src="{{asset('assets/images/gmc.png')}}" alt="">
-                </div>
-                <!-- Partners Logo End -->
+                        </div>
+                    <div class="car-details-btn">
+                        <div class="brand-button-prev" tabindex="0" role="button" aria-label="Previous slide" aria-controls="swiper-wrapper-871148932a4101eae"></div>
+                        <div class="brand-button-next" tabindex="0" role="button" aria-label="Next slide" aria-controls="swiper-wrapper-871148932a4101eae"></div>
+                    </div>
+                <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span></div>
             </div>
         </div>
     </div>
 </div>
-<!-- Exclusive Partners Section End -->
+<!-- Exclusive Partners Section End -->
 
-    <!-- Luxury Collection Section Start -->
-    <div class="luxury-collection">
+<!-- Hero Slider Section End -->
+<div class="perfect-fleet bg-section">
     <div class="container-fluid">
-        <div class="row no-gutters">
+        <div class="row section-row">
             <div class="col-lg-12">
-                <div class="row section-row ">
-                    <div class="col-lg-12">
-                        <!-- Section Title Start -->
-                        <div class="section-title">
-                            <h3 class="wow fadeInUp">Choose Your Car Type</h3>
-                            <h2 class="text-anime-style-3">Find the Perfect Fit</h2>
+                <!-- Section Title Start -->
+                <div class="section-title">
+                    <h3 class="wow fadeInUp">Choose Your Car Type</h3>
+                    <h2 class="text-anime-style-3">Find the Perfect Fit</h2>
+                </div>
+                <!-- Section Title End -->
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <!-- Testimonial Slider Start -->
+                <div class="car-details-slider">
+                    <div class="swiper">
+                        <div class="swiper-wrapper" data-cursor-text="Drag">
+
+                            @foreach($carType as $key => $value)
+                                <!-- Testimonial Slide Start -->
+                                <div class="swiper-slide type-click" data-id="{{$value->id}}">
+                                    <div class="luxury-collection-image" data-cursor-text="View">
+                                        <a ><figure><img src="{{asset($value->image)}}" alt=""></figure></a>
+                                    </div>
+                                    <div class="luxury-collection-title"><h2>{{$value->name}}</h2></div>
+                                    <div class="luxury-collection-btn"><a  class="section-icon-btn"><img src="{{asset('assets/images/arrow-white.svg')}}" alt=""></a></div>                               
+                                </div>
+                                <!-- Testimonial Slide End -->
+                            @endforeach
+
+                            
+
+                            
+                            </div>
                         </div>
-                        <!-- Section Title End -->
+                        <div class="car-details-btn">
+                            <div class="car-button-prev"></div>
+                            <div class="car-button-next"></div>
+                        </div>
                     </div>
                 </div>
-                <div class="luxury-collection-box">
-                    <!-- Luxury Collection Item Start -->
-                    <div class="luxury-collection-item wow fadeInUp">
-                        <!-- Luxury Collection Image Start -->
-                        <div class="luxury-collection-image" data-cursor-text="View">
-                            <a href="#">
-                                <figure>
-                                    <img src="{{asset('assets/images/111.jpg')}}" alt="">
-                                </figure>
-                            </a>
-                        </div>
-                        <!-- Luxury Collection Image End -->
-
-                        <!-- Luxury Collection Title Start -->
-                        <div class="luxury-collection-title">
-                            <h2>Hatchback</h2>
-                        </div>
-                        <!-- Luxury Collection Title End -->
-                        
-                        <!-- Luxury Collection Btn Start -->
-                        <div class="luxury-collection-btn">
-                            <a href="#" class="section-icon-btn"><img src="{{asset('assets/images/arrow-white.svg')}}" alt=""></a>
-                        </div>
-                        <!-- Luxury Collection Btn End -->
-                    </div>
-                    <!-- Luxury Collection Item End -->
-
-                    <!-- Luxury Collection Item Start -->
-                    <div class="luxury-collection-item wow fadeInUp" data-wow-delay="0.25s">
-                        <!-- Luxury Collection Image Start -->
-                        <div class="luxury-collection-image" data-cursor-text="View">
-                            <a href="#">
-                                <figure>
-                                    <img src="{{asset('assets/images/222.jpg')}}" alt="">
-                                </figure>
-                            </a>
-                        </div>
-                        <!-- Luxury Collection Image End -->
-
-                        <!-- Luxury Collection Title Start -->
-                        <div class="luxury-collection-title">
-                            <h2>Sedan</h2>
-                        </div>
-                        <!-- Luxury Collection Title End -->
-                        
-                        <!-- Luxury Collection Footer Start -->
-                        <div class="luxury-collection-btn">
-                            <a href="#" class="section-icon-btn"><img src="{{asset('assets/images/arrow-white.svg')}}" alt=""></a>
-                        </div>
-                        <!-- Luxury Collection Footer End -->
-                    </div>
-                    <!-- Luxury Collection Item End -->
-
-                    <!-- Luxury Collection Item Start -->
-                    <div class="luxury-collection-item wow fadeInUp" data-wow-delay="0.5s">
-                        <!-- Luxury Collection Image Start -->
-                        <div class="luxury-collection-image" data-cursor-text="View">
-                            <a href="#">
-                                <figure>
-                                    <img src="{{asset('assets/images/333.jpg')}}" alt="">
-                                </figure>
-                            </a>
-                        </div>
-                        <!-- Luxury Collection Image End -->
-
-                        <!-- Luxury Collection Title Start -->
-                        <div class="luxury-collection-title">
-                            <h2>SUV</h2>
-                        </div>
-                        <!-- Luxury Collection Title End -->
-                        
-                        <!-- Luxury Collection Footer Start -->
-                        <div class="luxury-collection-btn">
-                            <a href="#" class="section-icon-btn"><img src="{{asset('assets/images/arrow-white.svg')}}" alt=""></a>
-                        </div>
-                        <!-- Luxury Collection Footer End -->
-                    </div>
-                    <!-- Luxury Collection Item End -->
-
-                    <!-- Luxury Collection Item Start -->
-                    <div class="luxury-collection-item wow fadeInUp" data-wow-delay="0.75s">
-                        <!-- Luxury Collection Image Start -->
-                        <div class="luxury-collection-image" data-cursor-text="View">
-                            <a href="#">
-                                <figure>
-                                    <img src="{{asset('assets/images/444.jpg')}}" alt="">
-                                </figure>
-                            </a>
-                        </div>
-                        <!-- Luxury Collection Image End -->
-
-                        <!-- Luxury Collection Title Start -->
-                        <div class="luxury-collection-title">
-                            <h2>luxury car</h2>
-                        </div>
-                        <!-- Luxury Collection Title End -->
-                        
-                        <!-- Luxury Collection Footer Start -->
-                        <div class="luxury-collection-btn">
-                            <a href="#" class="section-icon-btn"><img src="{{asset('assets/images/arrow-white.svg')}}" alt=""></a>
-                        </div>
-                        <!-- Luxury Collection Footer End -->
-                    </div>
-                    <!-- Luxury Collection Item End -->
-                </div>    
-                <div class="col-lg-12">
-                    <!-- Service Box Footer Start -->
-                    <div class="services-box-footer wow fadeInUp" data-wow-delay="1s">
-                        <a href="#" class="btn-default">view all Cars</a>
-                    </div>
-                    <!-- Service Box Footer End -->
-                </div>                
+                <!-- Testimonial Slider End -->
             </div>
         </div>
     </div>
 </div>
-<!-- Luxury Collection Section End -->
-
 
 
 <!-- Our Services Section Start -->
@@ -1180,12 +386,12 @@
                 <!-- Service Item Start -->
                 <div class="service-item wow fadeInUp">
                     <div class="service-content">
-                        <img src="{{asset('assets/images/destination/1.jpg')}}" alt="" style="padding-bottom: 15px;">
-                        <h3>Dubai</h3>
-                        <p>Home to the opulent Burj Khalifa, Dubai is leading the list of the best places to visit in UAE with family.</p>
+                        <a href="{{ url('/destinations') }}?place=dubai"><img src="{{asset('assets/images/destination/1.jpg')}}" alt="" style="padding-bottom: 15px;"></a>
+                        <a href="{{ url('/destinations') }}?place=dubai"><h3>Dubai</h3></a>
+                        <p>Home to the opulent Burj Khalifa, Palm Jumeirah, and Dubai Mall, Dubai is a top destination for luxury, shopping, and adventure.</p>
                     </div>
                     <div class="service-footer">
-                        <a href="#" class="section-icon-btn"><img src="{{asset('assets/images/arrow-white.svg')}}" alt=""></a>
+                        <a href="{{ url('/destinations') }}?place=dubai" class="section-icon-btn"><img src="{{asset('assets/images/arrow-white.svg')}}" alt=""></a>
                     </div>
                 </div>
                 <!-- Service Item End -->
@@ -1195,12 +401,12 @@
                 <!-- Service Item Start -->
                 <div class="service-item wow fadeInUp" data-wow-delay="0.25s">
                     <div class="service-content">
-                        <img src="{{asset('assets/images/destination/2.jpg')}}" alt="" style="padding-bottom: 15px;">
-                        <h3>Sharjah</h3>
-                        <p>A wonderful city to explore the heritage of UAE, Sharjah is packed with a number of sites giving you a rich culture. </p>
+                        <a href="{{ url('/destinations') }}?place=sharjah"><img src="{{asset('assets/images/destination/2.jpg')}}" alt="" style="padding-bottom: 15px;"></a>
+                        <a href="{{ url('/destinations') }}?place=sharjah"><h3>Sharjah</h3></a>
+                        <p>A wonderful city to explore the heritage and culture of the UAE, Sharjah is known for its museums, art galleries, and Islamic architecture.</p>
                     </div>
                     <div class="service-footer">
-                        <a href="#" class="section-icon-btn"><img src="{{asset('assets/images/arrow-white.svg')}}" alt=""></a>
+                        <a href="{{ url('/destinations') }}?place=sharjah" class="section-icon-btn"><img src="{{asset('assets/images/arrow-white.svg')}}" alt=""></a>
                     </div>
                 </div>
                 <!-- Service Item End -->
@@ -1210,12 +416,29 @@
                 <!-- Service Item Start -->
                 <div class="service-item wow fadeInUp" data-wow-delay="0.5s">
                     <div class="service-content">
-                        <img src="{{asset('assets/images/destination/3.jpg')}}" alt="" style="padding-bottom: 15px;">
-                        <h3>Abu Dhabi</h3>
-                        <p>One of the best places to visit in UAE during summer as it has a number of waterparks, and a stunning shore.</p>
+                        <a href="{{ url('/destinations') }}?place=abu-dhabi"><img src="{{asset('assets/images/destination/3.jpg')}}" alt="" style="padding-bottom: 15px;"></a>
+                        <a href="{{ url('/destinations') }}?place=abu-dhabi"><h3>Abu Dhabi</h3></a>
+                        <p>The capital of the UAE, Abu Dhabi is famous for the Sheikh Zayed Grand Mosque, Louvre Abu Dhabi, and Yas Island's theme parks and beaches.</p>
                     </div>
                     <div class="service-footer">
-                        <a href="#" class="section-icon-btn"><img src="{{asset('assets/images/arrow-white.svg')}}" alt=""></a>
+                        <a href="{{ url('/destinations') }}?place=abu-dhabi" class="section-icon-btn"><img src="{{asset('assets/images/arrow-white.svg')}}" alt=""></a>
+                    </div>
+                </div>
+                <!-- Service Item End -->
+            </div>
+
+            
+
+            <div class="col-lg-3 col-md-6">
+                <!-- Service Item Start -->
+                <div class="service-item wow fadeInUp" data-wow-delay="0.75s">
+                    <div class="service-content">
+                        <a href="{{ url('/destinations') }}?place=ajman"><img src="{{asset('assets/images/destination/4.jpg')}}" alt="" style="padding-bottom: 15px;"></a>
+                        <a href="{{ url('/destinations') }}?place=ajman"><h3>Ajman</h3></a>
+                        <p>The smallest emirate, Ajman is known for its relaxed coastal vibes, Ajman Beach, and Al Zorah Nature Reserve, perfect for kayaking and birdwatching.</p>
+                    </div>
+                    <div class="service-footer">
+                        <a href="{{ url('/destinations') }}?place=ajman" class="section-icon-btn"><img src="{{asset('assets/images/arrow-white.svg')}}" alt=""></a>
                     </div>
                 </div>
                 <!-- Service Item End -->
@@ -1225,24 +448,63 @@
                 <!-- Service Item Start -->
                 <div class="service-item wow fadeInUp" data-wow-delay="0.75s">
                     <div class="service-content">
-                        <img src="{{asset('assets/images/destination/4.jpg')}}" alt="" style="padding-bottom: 15px;">
-                        <h3>Al Ain</h3>
-                        <p>Also known as the Garden city of the Gulf, Al Ain is known to be one of the greenest cities of UAE.</p>
+                        <a href="{{ url('/destinations') }}?place=ummalquwain"><img src="{{asset('assets/images/destination/20.jpg')}}" alt="" style="padding-bottom: 15px;"></a>
+                        <a href="{{ url('/destinations') }}?place=ummalquwain"><h3>Umm Al Quwain</h3></a>
+                        <p>A peaceful emirate with a laid-back charm, Umm Al Quwain is known for its mangroves, Dreamland Aqua Park, and traditional dhow boat-building heritage.</p>
                     </div>
                     <div class="service-footer">
-                        <a href="#" class="section-icon-btn"><img src="{{asset('assets/images/arrow-white.svg')}}" alt=""></a>
+                        <a href="{{ url('/destinations') }}?place=ummalquwain" class="section-icon-btn"><img src="{{asset('assets/images/arrow-white.svg')}}" alt=""></a>
                     </div>
                 </div>
                 <!-- Service Item End -->
             </div>
 
-            <div class="col-lg-12">
-                <!-- Service Box Footer Start -->
-                <div class="services-box-footer wow fadeInUp" data-wow-delay="1s">
-                    <a href="#" class="btn-default">view all Destinations</a>
+            <div class="col-lg-3 col-md-6">
+                <!-- Service Item Start -->
+                <div class="service-item wow fadeInUp" data-wow-delay="0.75s">
+                    <div class="service-content">
+                        <a href="{{ url('/destinations') }}?place=rasalkhaimah"><img src="{{asset('assets/images/destination/21.jpg')}}" alt="" style="padding-bottom: 15px;"></a>
+                        <a href="{{ url('/destinations') }}?place=rasalkhaimah"><h3>Ras Al Khaimah</h3></a>
+                        <p>A paradise for adventure lovers, Ras Al Khaimah boasts Jebel Jais (UAE's highest mountain), the world's longest zipline, and desert experiences.</p>
+                    </div>
+                    <div class="service-footer">
+                        <a href="{{ url('/destinations') }}?place=rasalkhaimah" class="section-icon-btn"><img src="{{asset('assets/images/arrow-white.svg')}}" alt=""></a>
+                    </div>
                 </div>
-                <!-- Service Box Footer End -->
+                <!-- Service Item End -->
             </div>
+
+            <div class="col-lg-3 col-md-6">
+                <!-- Service Item Start -->
+                <div class="service-item wow fadeInUp" data-wow-delay="0.75s">
+                    <div class="service-content">
+                        <a href="{{ url('/destinations') }}?place=fujairah"><img src="{{asset('assets/images/destination/22.jpg')}}" alt="" style="padding-bottom: 15px;"></a>
+                        <a href="{{ url('/destinations') }}?place=fujairah"><h3>Fujairah</h3></a>
+                        <p>The only emirate on the Gulf of Oman, Fujairah is perfect for diving, snorkeling, and exploring ancient forts like Fujairah Fort and Al Bidyah Mosque.</p>
+                    </div>
+                    <div class="service-footer">
+                        <a href="{{ url('/destinations') }}?place=fujairah" class="section-icon-btn"><img src="{{asset('assets/images/arrow-white.svg')}}" alt=""></a>
+                    </div>
+                </div>
+                <!-- Service Item End -->
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <!-- Service Item Start -->
+                <div class="service-item wow fadeInUp" data-wow-delay="0.75s">
+                    <div class="service-content">
+                        <a href="{{ url('/destinations') }}?place=alain"><img src="{{asset('assets/images/destination/23.jpg')}}" alt="" style="padding-bottom: 15px;"></a>
+                        <a href="{{ url('/destinations') }}?place=alain"><h3>Al Ain</h3></a>
+                        <p>Known as the "Garden City" of the UAE, Al Ain is famous for its lush oases, Jebel Hafeet mountain, Al Ain Zoo, and rich heritage sites like Al Jahili Fort.</p>
+                    </div>
+                    <div class="service-footer">
+                        <a href="{{ url('/destinations') }}?place=alain" class="section-icon-btn"><img src="{{asset('assets/images/arrow-white.svg')}}" alt=""></a>
+                    </div>
+                </div>
+                <!-- Service Item End -->
+            </div>
+
+            
         </div>
     </div>
 </div>
@@ -1317,7 +579,7 @@
 
                     <!-- About Content Footer Start -->
                     <div class="about-content-footer wow fadeInUp" data-wow-delay="1s">
-                        <a href="#" class="btn-default">contact us</a>
+                        <a href="{{ url('/contact') }}" class="btn-default">contact us</a>
                     </div>
                     <!-- About Content Footer End -->
                 </div>
@@ -1328,141 +590,75 @@
 </div>
 <!-- About Us Section End -->
 
+<!-- CTA Box Section Start -->
+<div class="cta-box bg-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-12 col-md-12">
+                <!-- Cta Box Content Start -->
+                <center><div class="cta-box-content">
+                    <!-- Section Title Start -->
+                    <div class="section-title">
+                        <h2 class="text-anime-style-3">Ready to hit the road? <br>Book your car today !</h2>
+                        <p class="wow fadeInUp">Our friendly customer service team is here to help. Contact us anytime for support and inquiries.</p>
+                    </div>
+                    <!-- Section Title End -->
+
+                    <!-- Cta Box Btn Start -->
+                    <div class="cta-box-btn wow fadeInUp" data-wow-delay="0.5s">
+                        <a href="{{ url('/cars') }}" class="btn-default">Book Now</a>
+                    </div>
+                    <!-- Cta Box Btn End -->
+                </div></center>
+                <!-- Cta Box Content End -->
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- CTA Box Section End -->
+
 <!-- Intro Video Section Start -->
-<div class="intro-video bg-section parallaxie">
+<!-- <div class="intro-video bg-section parallaxie">
     <div class="container">
         <div class="row section-row">
             <div class="col-lg-12">
-                <!-- Section Title Start -->
                 <div class="section-title">
                     <h3 class="wow fadeInUp">watch full video</h3>
                     <h2 class="text-anime-style-3">Discover the ease and convenience of renting with Us</h2>
                 </div>
-                <!-- Section Title End -->
             </div>
         </div>
 
         <div class="row">
             <div class="col-lg-12">
-                <!-- Intro Video Box Start -->
                 <div class="intro-video-box">
-                    <!-- Video Play Button Start -->
                     <div class="video-play-button">
-                        <a href="https://www.youtube.com/watch?v=TE2tfavIo3E" class="popup-video" data-cursor-text="Play">
+                        <a href="https://www.youtube.com/watch?v=IdejM6wCkxA" class="popup-video" data-cursor-text="Play">
                             <i class="fa-solid fa-play"></i>
                         </a>
                     </div>
-                    <!-- Video Play Button End -->
-
-                    <!-- Client Slider Start -->
+                    
                     <div class="client-slider">
                         <div class="swiper client_logo_slider">
                             <div class="swiper-wrapper">
-                                <!-- company Logo Start -->
-                                <div class="swiper-slide">
-                                    <div class="company-logo">
-                                        <img src="{{asset('assets/images/benz.png')}}" alt="">
-                                    </div>
-                                </div>
-                                <!-- company Logo End -->
 
-                                <!-- company Logo Start -->
-                                <div class="swiper-slide">
-                                    <div class="company-logo">
-                                        <img src="{{asset('assets/images/nissan.png')}}" alt="">
+                                @foreach($brands as $key => $value)
+                                    <div class="swiper-slide brand-click" data-id="{{$value->id}}" style="cursor:pointer;">
+                                        <div class="company-logo">
+                                            <img src="{{asset($value->image)}}" alt="">
+                                        </div>
                                     </div>
-                                </div>
-                                <!-- company Logo End -->
+                                @endforeach
 
-                                <!-- company Logo Start -->
-                                <div class="swiper-slide">
-                                    <div class="company-logo">
-                                        <img src="{{asset('assets/images/toyota.png')}}" alt="">
-                                    </div>
-                                </div>
-                                <!-- company Logo End -->
-                                
-                                <!-- company Logo Start -->
-                                <div class="swiper-slide">
-                                    <div class="company-logo">
-                                        <img src="{{asset('assets/images/mg.png')}}" alt="">
-                                    </div>
-                                </div>
-                                <!-- company Logo End -->
-                                
-                                <!-- company Logo Start -->
-                                <div class="swiper-slide">
-                                    <div class="company-logo">
-                                        <img src="{{asset('assets/images/mazda.png')}}" alt="">
-                                    </div>
-                                </div>
-                                <!-- company Logo End -->
-                                
-                                <!-- company Logo Start -->
-                                <div class="swiper-slide">
-                                    <div class="company-logo">
-                                        <img src="{{asset('assets/images/hyndai.png')}}" alt="">
-                                    </div>
-                                </div>
-                                <!-- company Logo End -->
-                                    
-                                <!-- company Logo Start -->
-                                <div class="swiper-slide">
-                                    <div class="company-logo">
-                                        <img src="{{asset('assets/images/landrover.png')}}" alt="">
-                                    </div>
-                                </div>
-                                <!-- company Logo End -->
-                                
-                                <!-- company Logo Start -->
-                                <div class="swiper-slide">
-                                    <div class="company-logo">
-                                        <img src="{{asset('assets/images/lambo.png')}}" alt="">
-                                    </div>
-                                </div>
-                                <!-- company Logo End -->
-
-                                <!-- company Logo Start -->
-                                <div class="swiper-slide">
-                                    <div class="company-logo">
-                                        <img src="{{asset('assets/images/kia.png')}}" alt="">
-                                    </div>
-                                </div>
-                                <!-- company Logo End -->
-
-                                <!-- company Logo Start -->
-                                <div class="swiper-slide">
-                                    <div class="company-logo">
-                                        <img src="{{asset('assets/images/proche.png')}}" alt="">
-                                    </div>
-                                </div>
-                                <!-- company Logo End -->
-
-                                <!-- company Logo Start -->
-                                <div class="swiper-slide">
-                                    <div class="company-logo">
-                                        <img src="{{asset('assets/images/suzuki.png')}}" alt="">
-                                    </div>
-                                </div>
-                                <!-- company Logo End -->
-
-                                <!-- company Logo Start -->
-                                <div class="swiper-slide">
-                                    <div class="company-logo">
-                                        <img src="{{asset('assets/images/gmc.png')}}" alt="">
-                                    </div>
-                                </div>
-                                <!-- company Logo End -->
                             </div>
                         </div>
                     </div>
-                    <!-- Client Slider End -->
                 </div>
-                <!-- Intro Video Box End -->
             </div>
         </div>
     </div>
-</div>
+</div> -->
 <!-- Intro Video Section End -->
 
 <!-- Why Choose Us Section Start -->
@@ -1790,63 +986,22 @@
     </div>
 </div>
 <!-- Our Testiminial End -->
-    
-<!-- CTA Box Section Start -->
-<div class="cta-box bg-section">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-6 col-md-7">
-                <!-- Cta Box Content Start -->
-                <div class="cta-box-content">
-                    <!-- Section Title Start -->
-                    <div class="section-title">
-                        <h2 class="text-anime-style-3">Ready to hit the road? Book your car today !</h2>
-                        <p class="wow fadeInUp">Our friendly customer service team is here to help. Contact us anytime for support and inquiries.</p>
-                    </div>
-                    <!-- Section Title End -->
-
-                    <!-- Cta Box Btn Start -->
-                    <div class="cta-box-btn wow fadeInUp" data-wow-delay="0.5s">
-                        <a href="#" class="btn-default">contact us</a>
-                    </div>
-                    <!-- Cta Box Btn End -->
-                </div>
-                <!-- Cta Box Content End -->
-            </div>
-
-            <div class="col-lg-6 col-md-5">
-                <!-- Cta Box Image Start -->
-                <div class="cat-box-image">
-                    <figure>
-                        <img src="{{asset('assets/images/car/lam1.png')}}" alt="">
-                    </figure>
-                </div>
-                <!-- Cta Box Image End -->
-            </div>
-        </div>
-    </div>
-</div>
-<!-- CTA Box Section End -->
 
 <!-- Our Latest Article Start -->
-<div class="latest-article">
+<!-- <div class="latest-article">
     <div class="container">
         <div class="row section-row">
             <div class="col-lg-12">
-                <!-- Section Title Start -->
                 <div class="section-title">
                     <h3 class="wow fadeInUp">latest articles</h3>
                     <h2 class="text-anime-style-3">Stay informed and inspired for your next journey</h2>
                 </div>
-                <!-- Section Title End -->
             </div>
         </div>
 
         <div class="row">
             <div class="col-lg-6">
-                <!-- Highlighted Article Post Start -->
                 <div class="highlighted-article-post wow fadeInUp">
-                    <!-- Highlighted Article Featured Image Start -->
                     <div class="highlighted-article-featured-img">
                         <figure>
                             <a href="#" class="image-anime" data-cursor-text="View">
@@ -1854,33 +1009,24 @@
                             </a>
                         </figure>
                     </div>
-                    <!-- Highlighted Article Featured Image End -->
-
-                    <!-- Highlighted Article Body Start -->
+                    
                     <div class="highlighted-article-body">
-                        <!-- Article Meta Start -->
                         <div class="article-meta">
                             <ul>
                                 <li><a href="#"><i class="fa-solid fa-calendar-days"></i> sep 19, 2024</a></li>
                             </ul>
                         </div>
-                        <!-- Article Meta End -->
-
-                        <!-- Highlighted Article Content Start -->
+                        
                         <div class="highlighted-article-content">
                             <h3><a href="#">Road Trip Essentials: What to Pack for a Smooth Journey</a></h3>
-                            <a href="#" class="section-icon-btn">
+                            <a href="news1.html" class="section-icon-btn">
                                 <img src="{{asset('assets/images/arrow-white.svg')}}" alt="">
                             </a>
                         </div>
-                        <!-- Highlighted Article Content End -->
                     </div>
-                    <!-- Highlighted Article Body End -->
                 </div>
-                <!-- Highlighted Article Post End -->
             </div>
             <div class="col-lg-6">
-                <!-- Article Post Start -->
                 <div class="article-post wow fadeInUp">
                     <div class="article-featured-img">
                         <figure>
@@ -1891,23 +1037,19 @@
                     </div>
 
                     <div class="article-post-body">
-                        <!-- Article Meta Start -->
                         <div class="article-meta">
                             <ul>
                                 <li><a href="#"><i class="fa-solid fa-calendar-days"></i> sep 20, 2024</a></li>
                             </ul>
                         </div>
-                        <!-- Article Meta End -->
 
                         <div class="article-post-content">
                             <h3><a href="#">Exploring the City: Best Urban Destinations for a Weekend Getaway</a></h3>
-                            <a href="#" class="read-story-btn">read story</a>
+                            <a href="news1.html" class="read-story-btn">read story</a>
                         </div>
                     </div>
                 </div>
-                <!-- Article Post End -->
-
-                <!-- Article Post Start -->
+                
                 <div class="article-post wow fadeInUp" data-wow-delay="0.25s">
                     <div class="article-featured-img">
                         <figure>
@@ -1918,23 +1060,19 @@
                     </div>
 
                     <div class="article-post-body">
-                        <!-- Article Meta Start -->
                         <div class="article-meta">
                             <ul>
                                 <li><a href="#"><i class="fa-solid fa-calendar-days"></i> sep 21, 2024</a></li>
                             </ul>
                         </div>
-                        <!-- Article Meta End -->
 
                         <div class="article-post-content">
                             <h3><a href="#">Exploring the City: Best Urban Destinations for a Weekend Getaway</a></h3>
-                            <a href="#" class="read-story-btn">read story</a>
+                            <a href="news1.html" class="read-story-btn">read story</a>
                         </div>
                     </div>
                 </div>
-                <!-- Article Post End -->
-
-                <!-- Article Post Start -->
+                
                 <div class="article-post wow fadeInUp" data-wow-delay="0.5s">
                     <div class="article-featured-img">
                         <figure>
@@ -1945,24 +1083,41 @@
                     </div>
 
                     <div class="article-post-body">
-                        <!-- Article Meta Start -->
                         <div class="article-meta">
                             <ul>
                                 <li><a href="#"><i class="fa-solid fa-calendar-days"></i> sep 22, 2024</a></li>
                             </ul>
                         </div>
-                        <!-- Article Meta End -->
 
                         <div class="article-post-content">
                             <h3><a href="#">Exploring the City: Best Urban Destinations for a Weekend Getaway</a></h3>
-                            <a href="#" class="read-story-btn">read story</a>
+                            <a href="news1.html" class="read-story-btn">read story</a>
                         </div>
                     </div>
                 </div>
-                <!-- Article Post End -->
             </div>
         </div>
     </div>
-</div>
+</div> -->
 <!-- Our Latest Article End -->
+<script src="{{asset('admin_assets/js/core/jquery-3.7.1.min.js')}}"></script> 
+<script>
+
+var source = new google.maps.places.Autocomplete(document.getElementById('source'));
+
+
+
+function fillInAddress() {
+  var place = source.getPlace();
+
+  // Get the latitude and longitude of the location
+  var lat = place.geometry.location.lat();
+  var lng = place.geometry.location.lng();
+//   console.log(lat)
+//   console.log(lng)
+}
+
+// Listen for when the user selects a location from the autocomplete dropdown
+source.addListener('place_changed', fillInAddress);
+</script>
 @endsection

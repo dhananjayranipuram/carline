@@ -91,6 +91,36 @@
 		});
 	}
 
+	if ($('.brand-details-slider').length) {
+		const testimonial_slider = new Swiper('.brand-details-slider .swiper', {
+			slidesPerView : 1,
+			speed: 1000,
+			spaceBetween: 30,
+			loop: true,
+			autoplay: {
+				delay: 3000,
+			},
+			navigation: {
+				nextEl: '.brand-button-next',
+				prevEl: '.brand-button-prev',
+			},
+			breakpoints: {
+				768:{
+				  	slidesPerView: 2,
+				},
+				991:{
+					slidesPerView: 3,
+			  	},
+				1300:{
+				  	slidesPerView: 4,
+				},
+				1600:{
+					slidesPerView: 5,
+			  }
+			}
+		});
+	}
+
 	/* client logo slider JS */
 	var swiper = new Swiper(".client_logo_slider", {
 		slidesPerView: 2,
