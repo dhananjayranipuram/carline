@@ -107,7 +107,7 @@
                     </table>
 
                     <div class="text-center mt-3">
-                        <a href="#" class="btn btn-success btn-lg">
+                        <a href="{{ route('signature.page') }}" class="btn btn-success btn-lg">
                             Sign Document
                         </a>
                     </div>
